@@ -11,6 +11,7 @@ public class Console : MonoBehaviour
 	static readonly List<Line> lines = new List<Line>();
 	static readonly StringBuilder stringBuilder = new StringBuilder();
 	public Text text;
+	public bool keepPlaceholderText;
 	
 	public static Line AddLine(string text = "")
 	{
@@ -22,6 +23,7 @@ public class Console : MonoBehaviour
 	private void Awake()
 	{
 		singleton = this;
+		if (keepPlaceholderText) AddLine(text.text);
 	}
 
 

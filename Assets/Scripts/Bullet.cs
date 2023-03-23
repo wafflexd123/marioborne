@@ -7,10 +7,11 @@ public class Bullet : BaseObject
 	public float speed;
 	public Vector3 direction;
 
-	public Bullet Initialise(float speed, Vector2 direction)
+	public Bullet Initialise(float speed, Vector3 direction)
 	{
 		this.speed = speed;
 		this.direction = direction;
+		transform.rotation = Quaternion.LookRotation(direction);
 		return this;
 	}
 
