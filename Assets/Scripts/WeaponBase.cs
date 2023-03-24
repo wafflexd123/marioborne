@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : MonoBehaviourPlus
+public class WeaponBase : MonoBehaviourPlus
 {
 	public Position holsterPos, guardPos;
+	public int mouseButton;
 	public float guardSpeed;
 
-	void Update()
+	protected virtual void Update()
 	{
 		//if pressing mouse 1, move sword to guard pos
 		//when mouse 1 releases, move sword to holder
-
-		if (Input.GetMouseButton(1))
+		if (Input.GetMouseButton(mouseButton))
 		{
 			if (transform.localPosition != guardPos.coords)
 			{

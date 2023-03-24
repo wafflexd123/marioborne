@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
 	void Camera()
 	{
 		float y = -Input.GetAxis("Mouse Y"), x = Input.GetAxis("Mouse X");
-		cameraVector = new Vector3(Mathf.Clamp((y * Time.deltaTime * cameraSensitivity) + cameraVector.x, -45, 45), ((x * Time.deltaTime * cameraSensitivity) + cameraVector.y) % 360f);
+		cameraVector = new Vector3(Mathf.Clamp((y * Time.unscaledDeltaTime * cameraSensitivity) + cameraVector.x, -45, 45), ((x * Time.unscaledDeltaTime * cameraSensitivity) + cameraVector.y) % 360f);
 		transform.localEulerAngles = new Vector3(0, cameraVector.y);
 		head.transform.localEulerAngles = new Vector3(cameraVector.x, 0);
 	}
