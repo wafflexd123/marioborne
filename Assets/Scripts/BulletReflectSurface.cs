@@ -4,4 +4,5 @@ using UnityEngine;
 
 public class BulletReflectSurface : MonoBehaviour
 {
+	public bool enableReflect;
 }

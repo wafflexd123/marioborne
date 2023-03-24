@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class BaseObject : MonoBehaviour
+[SelectionBase]
+public class MonoBehaviourPlus : MonoBehaviour
 {
-
 	public static bool GetAxisRaw(string axis, out float value)
 	{
 		value = Input.GetAxisRaw(axis);
@@ -24,6 +24,22 @@ public class BaseObject : MonoBehaviour
 	public static float[] VectorArray(Vector3 vector)
 	{
 		return new float[] { vector.x, vector.y, vector.z };
+	}
+
+	public static bool ApproxEquals(Vector3 a, Vector3 b, float sqrErrorMargin = 0.0000001f)
+	{
+		return (a - b).sqrMagnitude < sqrErrorMargin;
+	}
+
+	public IEnumerator LerpToPos(Transform transform, Position pos, float speed)
+	{
+		transform.localEulerAngles = pos.eulers;//temp
+		while (!ApproxEquals(transform.localPosition, pos.coords, 0.0001f))
+		{
+			transform.localPosition = Vector3.MoveTowards(transform.localPosition, pos.coords, Time.deltaTime * speed);
+			yield return null;
+		}
+		transform.localPosition = pos.coords;
 	}
 
 	public void ResetRoutine(IEnumerator routine, ref Coroutine variable)
@@ -90,5 +106,17 @@ public class BaseObject : MonoBehaviour
 		}
 		result = null;
 		return false;
+	}
+
+	[System.Serializable]
+	public struct Position
+	{
+		public Vector3 coords, eulers;
+
+		public Position(Vector3 coords, Vector3 eulers)
+		{
+			this.coords = coords;
+			this.eulers = eulers;
+		}
 	}
 }

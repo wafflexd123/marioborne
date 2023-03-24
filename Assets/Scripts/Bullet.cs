@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : BaseObject
+public class Bullet : MonoBehaviourPlus
 {
 	public float speed;
 	public Vector3 direction;
@@ -22,11 +22,11 @@ public class Bullet : BaseObject
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.gameObject.layer == 3)
-			Destroy(gameObject);
-		else if (FindComponent(collision.collider.transform, out BulletReflectSurface brs))
+		if (FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)
 		{
 			direction = Vector3.Reflect(direction, collision.contacts[0].normal);
 		}
+		else if (collision.gameObject.layer == 3)
+			Destroy(gameObject);
 	}
 }
