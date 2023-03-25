@@ -5,27 +5,41 @@ using UnityEngine;
 public class AdvPlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
+    private float moveSpeed;
     public float sprintSpeed;
     public float runSpeed;
+    public float groundDistance = 0.2f;
+    public float groundDrag;
+
+    [Header("Jumping")]
+    bool grounded;
+    bool readyToJump;
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    public float groundDistance = 0.4f;
-    public float playerHeight;
-    public float groundDrag;
 
+    [Header("Crouching")]
+    public float crouchSpeed;
+    public float crouchYScale;
+    private float startYScale;
+
+    [Header("Slope Handling")]
+    public float maxSlopeAngle;
+
+
+    [Header("Wallrunning")]
+    bool wallrunning;
+
+    [Header("Ground Check")]
+    public Transform groundCheck;
     public LayerMask whatIsGround;
 
-    bool grounded;
-    bool readyToJump;
-
     public Transform orientation;
-    public Transform groundCheck;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode crouchKey = KeyCode.C;
 
     float horizontalInput;
     float verticalInput;
@@ -34,12 +48,25 @@ public class AdvPlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    public enum MovementState
+    {
+        running,
+        sprinting,
+        crouching,
+        wallrunning,
+        air
+    }
+
+    public MovementState state;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
         readyToJump = true;
+
+        startYScale = transform.localScale.y;
     }
 
     private void Update()
@@ -47,6 +74,7 @@ public class AdvPlayerMovement : MonoBehaviour
         grounded = Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround);
 
         GetInput();
+        StateHandler();
 
         if (grounded)
         {
@@ -54,6 +82,7 @@ public class AdvPlayerMovement : MonoBehaviour
         }
         else
         {
+            state = MovementState.air;
             rb.drag = 0;
         }
 
@@ -69,7 +98,7 @@ public class AdvPlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-
+        
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
@@ -78,15 +107,17 @@ public class AdvPlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-        if (Input.GetKey(sprintKey))
+
+        if (Input.GetKeyDown(crouchKey))
         {
-            moveSpeed = sprintSpeed;
-        }
-        else
-        {
-            moveSpeed = runSpeed;
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         }
 
+        if (Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
     }
 
     private void MovePlayer()
@@ -95,6 +126,7 @@ public class AdvPlayerMovement : MonoBehaviour
 
         if (grounded)
         {
+            state = MovementState.running;
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
         }
         else if (!grounded)
@@ -124,5 +156,24 @@ public class AdvPlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void StateHandler()
+    {
+        if (Input.GetKey(crouchKey)) 
+        {
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
+        }
+
+        if (Input.GetKey(sprintKey))
+        {
+            state = MovementState.sprinting;
+            moveSpeed = sprintSpeed;
+        }
+        else
+        {
+            moveSpeed = runSpeed;
+        }
     }
 }
