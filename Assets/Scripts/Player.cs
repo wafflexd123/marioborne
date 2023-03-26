@@ -6,16 +6,20 @@ public class Player : Humanoid
 {
 	public float maxInteractDistance;
 	public new Camera camera;
+	RaycastHit raycast;
+
+	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
+	public override Vector3 LookingAt => raycast.point;
 
 	void Update()
 	{
-		Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, maxInteractDistance);
+		Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast);
 
 		if (GetAxisDown("Mouse", out float value) && value < 0 && hand.childCount == 0)//if clicked mouse button && left clicked && nothing in hand
 		{
 			if (FindComponent(raycast.transform, out WeaponBase weapon))
 			{
-				weapon.Pickup(this);
+				if (Vector3.Distance(transform.position, weapon.transform.position) <= maxInteractDistance) weapon.Pickup(this);
 			}
 		}
 	}

@@ -11,9 +11,9 @@ public class Gun : WeaponBase
 
     protected override void LeftMouse()
     {
-        if (crtDelay == null)//if not waiting for fireDelay
+        if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
         {
-            Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.raycast.point - firePosition.position).normalized);
+            Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized);
             crtDelay = StartCoroutine(Delay());
         }
 

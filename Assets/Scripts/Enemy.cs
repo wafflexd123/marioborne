@@ -11,7 +11,7 @@ public class Enemy : Humanoid
 		Ranged,
 		Melee
 	}
-
+	public Transform head;
 	public Transform[] points;
 	private int destPoint = 0;
 	private NavMeshAgent agent;
@@ -20,6 +20,10 @@ public class Enemy : Humanoid
 	public float sightRadius;
 	enum InputAxes { Vertical, Horizontal, Drop, Interact, Mouse };
 	List<InputAxis> inputAxes = new List<InputAxis>();
+
+	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
+	public override Vector3 LookingAt => lookingAt;
+	Vector3 lookingAt;
 
 	void Awake()
 	{
@@ -35,13 +39,14 @@ public class Enemy : Humanoid
 		{
 			agent.isStopped = true;
 			transform.LookAt(player.transform);
-
-			if (Physics.Raycast(transform.position, ray[0].transform.position - transform.position, out raycast, sightRadius)) //temporary raycast for later functionality. atm it just tells the gun where to shoot. it is also not very reliable atm.
-			{
-				if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
-			}
+			lookingAt = player.transform.position;
+			if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
 		}
-		else agent.isStopped = false;
+		else
+		{
+			lookingAt = Vector3.negativeInfinity;
+			agent.isStopped = false;
+		}
 		if (!agent.pathPending && agent.remainingDistance < 0.5f)
 		{
 			GoToNextPoint();
@@ -62,6 +67,11 @@ public class Enemy : Humanoid
 		InputAxis inputAxis = InputAxis.FindAxis(axis, inputAxes);
 		value = inputAxis.value;
 		return inputAxis.wasPressedThisFrame;
+	}
+
+	public override void Kill()//play death animation here
+	{
+		Destroy(gameObject);
 	}
 
 	public class InputAxis
@@ -87,7 +97,7 @@ public class Enemy : Humanoid
 			monoBehaviour.StartCoroutine(Routine());
 			IEnumerator Routine()
 			{
-				yield return null;
+				yield return new WaitForEndOfFrame();
 				wasPressedThisFrame = false;
 			}
 		}

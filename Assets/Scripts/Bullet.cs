@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviourPlus
 {
 	public float speed;
 	public Vector3 direction;
+	bool isFirstFrame = true;
 
 	public Bullet Initialise(float speed, Vector3 direction)
 	{
@@ -15,18 +16,33 @@ public class Bullet : MonoBehaviourPlus
 		return this;
 	}
 
-	void Update()
+	IEnumerator Start()
+	{
+		yield return null;
+		isFirstFrame = false;//only called once; so we don't have to continously set this every update
+	}
+
+	private void Update()
 	{
 		transform.position += Vector3.ClampMagnitude(direction * speed, speed * Time.deltaTime);
 	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)
+		if (!isFirstFrame)//prevent bullet from insta-killing the person that shot it
 		{
-			direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-		}
-		else if (collision.gameObject.layer == 3)
+			if (FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first (in case player/ai is holding one)
+			{
+				if (brs.enableReflect)
+				{
+					direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+				}
+			}
+			else if (FindComponent(collision.collider.transform, out Humanoid human))
+			{
+				human.Kill();
+			}
 			Destroy(gameObject);
+		}
 	}
 }
