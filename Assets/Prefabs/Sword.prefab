@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1879311153426993608}
   - component: {fileID: 1879311153426993615}
-  - component: {fileID: 1879311153426993609}
+  - component: {fileID: -1670203567389728386}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableReflect: 0
---- !u!114 &1879311153426993609
+--- !u!114 &-1670203567389728386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,14 +193,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1879311153426993614}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d09ffff5f4a9c334cb0af038d41940da, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d303d3056e19664db4c3039ee8d1207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holsterPos:
+  handPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
+  pickupSpeed: 3
+  dropForce: 2
+  colliders:
+  - {fileID: 1879311152175221465}
   guardPos:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  mouseButton: 1
-  guardSpeed: 1
+    coords: {x: 0.195, y: 0.594, z: 0.05900002}
+    eulers: {x: 0, y: -77.245, z: 0}
+  guardSpeed: 3

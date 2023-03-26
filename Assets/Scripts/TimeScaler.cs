@@ -2,21 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeScaler : WeaponBase
+public class TimeScaler : MonoBehaviourPlus
 {
 	public float timeScaleSpeed, minTimeScale;
 	Console.Line cnsTime;
 
-	private void Start()
+	void Start()
 	{
 		cnsTime = Console.AddLine();
 	}
 
-	protected override void Update()
+	void Update()
 	{
-		base.Update();
-
-		if (Input.GetMouseButton(mouseButton))
+		if (Input.GetButton("Ability"))
 		{
 			if (Time.timeScale > minTimeScale)
 			{
@@ -32,6 +30,6 @@ public class TimeScaler : WeaponBase
 			Time.timeScale = timeScale;
 		}
 
-		cnsTime.text = $"Timescale: {Time.timeScale}, Unity timescale (should always be 1): {UnityEngine.Time.timeScale}";
+		if (Console.Enabled) cnsTime.text = $"Hold ability button [E] to slow time\nTimescale: {Time.timeScale}, Unity timescale (should always be 1): {UnityEngine.Time.timeScale}";
 	}
 }

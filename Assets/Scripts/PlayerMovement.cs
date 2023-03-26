@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
 	//Inspector
 	public Transform head, bodyCollider;
-	public float speed, cameraSensitivity, crouchHeightReduction, crouchSpeed;
+	public float speed, cameraSensitivity, minCameraAngle, maxCameraAngle, crouchHeightReduction, crouchSpeed;
 
 	//Script
 	Vector3 cameraVector;
@@ -60,14 +60,14 @@ public class PlayerMovement : MonoBehaviour
 	void Camera()
 	{
 		float y = -Input.GetAxis("Mouse Y"), x = Input.GetAxis("Mouse X");
-		cameraVector = new Vector3(Mathf.Clamp((y * Time.unscaledDeltaTime * cameraSensitivity) + cameraVector.x, -45, 45), ((x * Time.unscaledDeltaTime * cameraSensitivity) + cameraVector.y) % 360f);
+		cameraVector = new Vector3(Mathf.Clamp((y * Time.unscaledDeltaTime * cameraSensitivity) + cameraVector.x, minCameraAngle, maxCameraAngle), ((x * Time.unscaledDeltaTime * cameraSensitivity) + cameraVector.y) % 360f);
 		transform.localEulerAngles = new Vector3(0, cameraVector.y);
 		head.transform.localEulerAngles = new Vector3(cameraVector.x, 0);
 	}
 
 	void LockCursor()
 	{
-		if (Input.GetKeyDown(KeyCode.Q)) Cursor.lockState = Cursor.lockState == CursorLockMode.None ? CursorLockMode.Locked : CursorLockMode.None;
+		if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.None ? CursorLockMode.Locked : CursorLockMode.None;
 	}
 
 	void Movement()
@@ -77,6 +77,6 @@ public class PlayerMovement : MonoBehaviour
 			rigidbody.velocity = transform.TransformDirection(speed * Time.fixedDeltaTime * Vector3.ClampMagnitude(new Vector3(hor, 0, ver), 1));
 		else if (rigidbody.velocity != Vector3.zero)
 			rigidbody.velocity = Vector3.zero;
-		if (Console.Enabled) cnsVelocity.text = $"Player velocity: {rigidbody.velocity}; Horizontal: {Mathf.Sqrt((rigidbody.velocity.x * rigidbody.velocity.x) + (rigidbody.velocity.z * rigidbody.velocity.z)):#.00}";
+		if (Console.Enabled) cnsVelocity.text = $"Press TAB to lock/unlock mouse\nPlayer velocity: {rigidbody.velocity}; Horizontal: {Mathf.Sqrt((rigidbody.velocity.x * rigidbody.velocity.x) + (rigidbody.velocity.z * rigidbody.velocity.z)):#.00}";
 	}
 }
