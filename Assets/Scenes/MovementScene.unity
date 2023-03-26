@@ -487,7 +487,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 247
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 304914012}
   - component: {fileID: 304914011}
   - component: {fileID: 304914010}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Prism
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -858,7 +858,7 @@ GameObject:
   - component: {fileID: 374192186}
   - component: {fileID: 374192185}
   - component: {fileID: 374192184}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1202,7 +1202,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-79346
+  m_Name: pb_Mesh22980
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1361,6 +1361,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &487979375 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5216613447229458757, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+  m_PrefabInstance: {fileID: 8939213948542013892}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &794703126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1538,7 +1543,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh33012
+  m_Name: pb_Mesh22942
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1703,7 +1708,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-97838
+  m_Name: pb_Mesh22966
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1876,7 +1881,7 @@ GameObject:
   - component: {fileID: 1481325007}
   - component: {fileID: 1481325006}
   - component: {fileID: 1481325005}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2266,7 +2271,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-78760
+  m_Name: pb_Mesh23018
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2631,6 +2636,35 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5216613447229458761, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
   m_PrefabInstance: {fileID: 8939213948542013892}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3777207218851747984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487979375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6deffc0dd08e634895596259f0de61b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 128
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  wallRunForce: 200
+  maxWallRunTime: 0.7
+  wallJumpUpForce: 7
+  wallJumpSideForce: 12
+  useGravity: 1
+  gravityCounterForce: 15
+  jumpKey: 32
+  wallCheckDistance: 0.7
+  minJumpHeight: 1.5
+  exitWallTime: 0.2
+  orientation: {fileID: 1873712889}
 --- !u!1001 &8939213948542013892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2695,8 +2729,31 @@ PrefabInstance:
       propertyPath: crouchYScale
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8939213948325491126, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: playerHeight
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939213948325491126, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: wallRunSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939213948325491126, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: maxSlopeAngle
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939213948325491126, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: groundDistance
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939213948739407859, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: m_Height
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5216613447229458757, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3777207218851747984}
   m_SourcePrefab: {fileID: 100100000, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
