@@ -6,24 +6,25 @@ using UnityEngine.AI;
 
 public class Enemy : Humanoid
 {
-	public enum EnemyType
-	{
-		Ranged,
-		Melee
-	}
+	public enum EnemyType { Ranged, Melee }
+	enum InputAxes { Vertical, Horizontal, Drop, Interact, Mouse }
+
+	//Inspector
 	public Transform head;
+	public Renderer[] renderers;//temporary, for death animation
 	public Transform[] points;
+	public EnemyType type;
+	public float sightRadius, deathAnimationSpeed;
+
+	//Script
+	List<InputAxis> inputAxes = new List<InputAxis>();
+	Coroutine crtDeath;
+	Vector3 lookingAt;
 	private int destPoint = 0;
 	private NavMeshAgent agent;
 
-	public EnemyType type;
-	public float sightRadius;
-	enum InputAxes { Vertical, Horizontal, Drop, Interact, Mouse };
-	List<InputAxis> inputAxes = new List<InputAxis>();
-
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => lookingAt;
-	Vector3 lookingAt;
 
 	void Awake()
 	{
@@ -34,22 +35,25 @@ public class Enemy : Humanoid
 
 	void Update()
 	{
-		Collider[] ray = Physics.OverlapSphere(transform.position, sightRadius, 1 << 3);
-		if (ray.Length > 0 && ray[0] != null && FindComponent(ray[0].transform, out PlayerMovement player))
+		if (crtDeath == null)//if not currently dying
 		{
-			agent.isStopped = true;
-			transform.LookAt(player.transform);
-			lookingAt = player.transform.position;
-			if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
-		}
-		else
-		{
-			lookingAt = Vector3.negativeInfinity;
-			agent.isStopped = false;
-		}
-		if (!agent.pathPending && agent.remainingDistance < 0.5f)
-		{
-			GoToNextPoint();
+			Collider[] ray = Physics.OverlapSphere(transform.position, sightRadius, 1 << 3);
+			if (ray.Length > 0 && ray[0] != null && FindComponent(ray[0].transform, out PlayerMovement player))
+			{
+				agent.isStopped = true;
+				transform.LookAt(player.transform);
+				lookingAt = player.transform.position;
+				if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
+			}
+			else
+			{
+				lookingAt = Vector3.negativeInfinity;
+				agent.isStopped = false;
+			}
+			if (!agent.pathPending && agent.remainingDistance < 0.5f)
+			{
+				GoToNextPoint();
+			}
 		}
 	}
 
@@ -69,9 +73,23 @@ public class Enemy : Humanoid
 		return inputAxis.wasPressedThisFrame;
 	}
 
-	public override void Kill()//play death animation here
+	public override void Kill()
 	{
-		Destroy(gameObject);
+		if (crtDeath == null) crtDeath = StartCoroutine(Animation());
+		IEnumerator Animation()
+		{
+			if (hand.childCount > 0) inputAxes[(int)InputAxes.Drop].Press(1, this);//drop weapon if holding one
+			while (true)
+			{
+				for (int i = 0; i < renderers.Length; i++)
+				{
+					renderers[i].material.color += new Color(0, 0, 0, -deathAnimationSpeed * Time.deltaTime);
+				}
+				if (renderers[0].material.color.a <= 0) break;
+				yield return null;
+			}
+			Destroy(gameObject);
+		}
 	}
 
 	public class InputAxis

@@ -123,9 +123,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 614581107202429830}
+  - component: {fileID: 941658141}
   - component: {fileID: 614581107202429829}
   - component: {fileID: 941658140}
-  - component: {fileID: 941658141}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -151,6 +151,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &941658141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614581107202429834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f6e61c782a5c742b8f5e0e57688a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 9208886631155602834}
+  head: {fileID: 614581106366106333}
+  renderers:
+  - {fileID: 614581106373796288}
+  points: []
+  type: 0
+  sightRadius: 5
+  deathAnimationSpeed: 3
 --- !u!54 &614581107202429829
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -200,23 +220,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &941658141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 614581107202429834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3f6e61c782a5c742b8f5e0e57688a72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hand: {fileID: 9208886631155602834}
-  head: {fileID: 614581106366106333}
-  points: []
-  type: 0
-  sightRadius: 5
 --- !u!1 &614581108126892840
 GameObject:
   m_ObjectHideFlags: 0
