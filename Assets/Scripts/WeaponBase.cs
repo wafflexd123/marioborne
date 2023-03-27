@@ -35,18 +35,17 @@ public class WeaponBase : MonoBehaviourPlus
 		return false;
 	}
 
-	protected virtual void OnPickup()
-	{
-		StartCoroutine(CheckDrop());
-		StartCoroutine(CheckMouseClick());
-	}
-
 	public virtual void Drop()
 	{
 		wielder = null;
 		transform.parent = null;
 		EnableRigidbody(true);
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
+	}
+
+	protected virtual void OnPickup()
+	{
+		StartCoroutine(CheckInputRoutine());
 	}
 
 	protected virtual void LeftMouse()
@@ -64,24 +63,21 @@ public class WeaponBase : MonoBehaviourPlus
 		return wielder != null;
 	}
 
-	protected IEnumerator CheckMouseClick()
+	protected virtual void CheckInput()
 	{
-		do
+		if (wielder.GetAxisDown("Mouse", out float mouseButton))
 		{
-			if (wielder.GetAxisDown("Mouse", out float mouseButton))
-			{
-				if (mouseButton < 0) LeftMouse();
-				else RightMouse();
-			}
-			yield return null;
-		} while (BeingHeld());
+			if (mouseButton < 0) LeftMouse();
+			else RightMouse();
+		}
+		if (wielder.GetAxisDown("Drop", out _)) Drop();
 	}
 
-	protected IEnumerator CheckDrop()
+	IEnumerator CheckInputRoutine()
 	{
 		do
 		{
-			if (wielder.GetAxis("Drop") != 0) Drop();
+			CheckInput();
 			yield return null;
 		} while (BeingHeld());
 	}

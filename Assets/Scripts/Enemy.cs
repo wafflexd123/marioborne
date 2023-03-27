@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Enemy : Humanoid
 {
 	public enum EnemyType { Ranged, Melee }
-	enum InputAxes { Vertical, Horizontal, Drop, Interact, Mouse }
+	enum InputAxes { Vertical, Horizontal, Drop, Interact, Mouse, Ability }
 
 	//Inspector
 	public Transform head;
