@@ -38,7 +38,7 @@ public class Enemy : Humanoid
 		if (crtDeath == null)//if not currently dying
 		{
 			Collider[] ray = Physics.OverlapSphere(transform.position, sightRadius, 1 << 3);
-			if (ray.Length > 0 && ray[0] != null && FindComponent(ray[0].transform, out PlayerMovement player))
+			if (ray.Length > 0 && ray[0] != null && FindComponent(ray[0].transform, out	Player player))
 			{
 				agent.isStopped = true;
 				transform.LookAt(player.transform);
