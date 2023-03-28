@@ -14,13 +14,14 @@ public class Enemy : Humanoid
 	public Renderer[] renderers;//temporary, for death animation
 	public Transform[] points;
 	public EnemyType type;
-	public float sightRadius, deathAnimationSpeed;
+	public float sightRadius, meleeRadius, deathAnimationSpeed;
+    public bool isPatrolling = false;
 
 	//Script
 	List<InputAxis> inputAxes = new List<InputAxis>();
 	Coroutine crtDeath;
 	Vector3 lookingAt;
-	private int destPoint = 0;
+	public int destPoint = 0;
 	private NavMeshAgent agent;
 
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
@@ -40,15 +41,44 @@ public class Enemy : Humanoid
 			Collider[] ray = Physics.OverlapSphere(transform.position, sightRadius, 1 << 3);
 			if (ray.Length > 0 && ray[0] != null && FindComponent(ray[0].transform, out	Player player))
 			{
-				agent.isStopped = true;
-				transform.LookAt(player.transform);
-				lookingAt = player.transform.position;
-				if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
+                isPatrolling = false;
+                switch (type)
+                {
+                    case EnemyType.Melee:
+                        agent.SetDestination(player.transform.position);
+                        Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
+                        if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out player))
+                        {
+                            if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);
+                        }
+                        break;
+
+                    case EnemyType.Ranged:
+                        agent.isStopped = true;
+                        transform.LookAt(player.transform);
+                        lookingAt = player.transform.position;
+                        if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
+                        break;
+                }
 			}
 			else
 			{
 				lookingAt = Vector3.negativeInfinity;
 				agent.isStopped = false;
+
+                if(!isPatrolling)
+                {
+                    int closestPoint = 0;
+                    float dist = Vector3.Distance(transform.position, points[0].transform.position);
+                    for(int i=0; i<points.Length; i++)
+                    {
+                        float tempDist = Vector3.Distance(transform.position, points[i].transform.position);
+                        if(tempDist < dist) closestPoint = i;
+                    }
+                    agent.destination = points[closestPoint].position;
+                    destPoint = closestPoint;
+                    isPatrolling = true;
+                }
 			}
 			if (!agent.pathPending && agent.remainingDistance < 0.5f)
 			{
@@ -59,10 +89,9 @@ public class Enemy : Humanoid
 
 	void GoToNextPoint()
 	{
+        isPatrolling = true;
 		if (points.Length == 0) return;
-
 		agent.destination = points[destPoint].position;
-
 		destPoint = (destPoint + 1) % points.Length;
 	}
 
