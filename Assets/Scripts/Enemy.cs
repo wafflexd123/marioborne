@@ -66,7 +66,7 @@ public class Enemy : Humanoid
 				lookingAt = Vector3.negativeInfinity;
 				agent.isStopped = false;
 
-                if(!isPatrolling)
+                if(!isPatrolling && points.Length > 0)
                 {
                     int closestPoint = 0;
                     float dist = Vector3.Distance(transform.position, points[0].transform.position);
