@@ -213,6 +213,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &82702148 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 614581108126892843, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+  m_PrefabInstance: {fileID: 207182091}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &117250165
 GameObject:
   m_ObjectHideFlags: 0
@@ -3935,6 +3940,10 @@ PrefabInstance:
       propertyPath: reflectWindow
       value: 
       objectReference: {fileID: 374821706}
+    - target: {fileID: 1174576085013501807, guid: 94c069c47af9d854db9b872180365764, type: 3}
+      propertyPath: windowPosition
+      value: 
+      objectReference: {fileID: 82702148}
     - target: {fileID: 3777207217959942385, guid: 94c069c47af9d854db9b872180365764, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4074,9 +4083,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3777207218178446871}
     m_Modifications:
+    - target: {fileID: 831409924876677034, guid: a089a346711197645b376f8904500be7, type: 3}
+      propertyPath: enableReflect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 831409924876677035, guid: a089a346711197645b376f8904500be7, type: 3}
       propertyPath: m_Name
       value: DeflectWindow
+      objectReference: {fileID: 0}
+    - target: {fileID: 831409924876677035, guid: a089a346711197645b376f8904500be7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 831409924876677037, guid: a089a346711197645b376f8904500be7, type: 3}
       propertyPath: m_RootOrder
