@@ -31,18 +31,23 @@ public class Bullet : MonoBehaviourPlus
 	{
 		if (!isFirstFrame)//prevent bullet from insta-killing the person that shot it
 		{
-			if (FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first (in case player/ai is holding one)
-			{
-				if (brs.enableReflect)
-				{
-					direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-				}
-			}
-			else if (FindComponent(collision.collider.transform, out Humanoid human))
-			{
-				human.Kill();
-			}
-			Destroy(gameObject);
+            if (FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first (in case player/ai is holding one)
+            {
+                if (brs.enableReflect)
+                {
+                    if (collision.gameObject.GetComponentInParent<Player>())
+                    {
+                        direction = collision.gameObject.transform.forward;
+                    }
+                    else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+                }
+            }
+            else if (FindComponent(collision.collider.transform, out Humanoid human))
+            {
+                human.Kill();
+                Destroy(gameObject);
+            }
+            else Destroy(gameObject);
 		}
 	}
 }

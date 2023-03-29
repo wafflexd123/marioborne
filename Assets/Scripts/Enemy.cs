@@ -56,7 +56,7 @@ public class Enemy : Humanoid
                     case EnemyType.Ranged:
                         agent.isStopped = true;
                         transform.LookAt(player.transform);
-                        lookingAt = player.transform.position;
+                        lookingAt = player.camera.transform.position;
                         if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
                         break;
                 }

@@ -6,6 +6,7 @@ public class Sword : WeaponBase
 	public Position guardPos;
 	public float guardSpeed;
 	Coroutine crtGuard;
+    public GameObject reflectWindow;
 
 	protected override void RightMouse()
 	{
@@ -21,13 +22,17 @@ public class Sword : WeaponBase
 						transform.localEulerAngles = guardPos.eulers;//temp
 						transform.localPosition = Vector3.MoveTowards(transform.localPosition, guardPos.coords, pickupSpeed * Time.deltaTime);
 					}
+
+                    reflectWindow.GetComponent<BulletReflectSurface>().enableReflect = true;
 				}
 				else if (transform.localPosition != handPosition.coords)
 				{
 					transform.localEulerAngles = handPosition.eulers;//temp
 					transform.localPosition = Vector3.MoveTowards(transform.localPosition, handPosition.coords, pickupSpeed * Time.deltaTime);
-				}
-				else break;//if not pressing mouse and not holstering
+
+                    reflectWindow.GetComponent<BulletReflectSurface>().enableReflect = false;
+                }
+                else break;//if not pressing mouse and not holstering
 				yield return null;
 			}
 			crtGuard = null;
