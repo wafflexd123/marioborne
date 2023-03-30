@@ -11,86 +11,88 @@ public class Enemy : Humanoid
 
 	//Inspector
 	public Transform head;
-	public Renderer[] renderers;//temporary, for death animation
 	public Transform[] points;
 	public EnemyType type;
 	public float sightRadius, meleeRadius, deathAnimationSpeed;
-    public bool isPatrolling = false;
+	public bool isPatrolling = false;
 
 	//Script
 	List<InputAxis> inputAxes = new List<InputAxis>();
-	Coroutine crtDeath;
 	Vector3 lookingAt;
-	public int destPoint = 0;
-	private NavMeshAgent agent;
-    public FieldOfView fov;
+	int destPoint = 0;
+	float agentSpeed;
+	NavMeshAgent agent;
+	FieldOfView fov;
 
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => lookingAt;
 
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
 		agent = GetComponent<NavMeshAgent>();
-        fov = GetComponent<FieldOfView>();
-		string[] names = Enum.GetNames(typeof(InputAxes));//must be in awake
-		for (int i = 0; i < names.Length; i++) inputAxes.Add(new InputAxis(names[i]));//create InputAxis classes from InputAxes enum
+		agentSpeed = agent.speed;
+		fov = GetComponent<FieldOfView>();
+		foreach (string name in Enum.GetNames(typeof(InputAxes))) inputAxes.Add(new InputAxis(name));
+
+		if (type == EnemyType.Ranged) animatorManager.holdingPistol = true;
+		else animatorManager.holdingKnife = true;
 	}
 
-    void Update()
+	void Update()
 	{
-		if (crtDeath == null)//if not currently dying
+		agent.speed = agentSpeed * Time.timeScale;
+		animatorManager.velocity = agent.velocity;
+		if (fov.canSeePlayer)
 		{
-			if(fov.canSeePlayer)
+			isPatrolling = false;
+			switch (type)
 			{
-                isPatrolling = false;
-                switch (type)
-                {
-                    case EnemyType.Melee:
-                        agent.SetDestination(fov.playerRef.transform.position);
-                        Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
-                        if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
-                        {
-                            if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);
-                        }
-                        break;
+				case EnemyType.Melee:
+					agent.SetDestination(fov.playerRef.transform.position);
+					Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
+					if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
+					{
+						if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);
+					}
+					break;
 
-                    case EnemyType.Ranged:
-                        agent.isStopped = true;
-                        transform.LookAt(fov.playerRef.transform);
-                        lookingAt = fov.playerRef.GetComponent<Player>().camera.transform.position;
-                        if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
-                        break;
-                }
+				case EnemyType.Ranged:
+					agent.isStopped = true;
+					transform.LookAt(fov.playerRef.transform);
+					lookingAt = fov.playerRef.GetComponent<Player>().camera.transform.position;
+					if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
+					break;
 			}
-			else
-			{
-				lookingAt = Vector3.negativeInfinity;
-				agent.isStopped = false;
+		}
+		else
+		{
+			lookingAt = Vector3.negativeInfinity;
+			agent.isStopped = false;
 
-                if(!isPatrolling && points.Length > 0)
-                {
-                    int closestPoint = 0;
-                    float dist = Vector3.Distance(transform.position, points[0].transform.position);
-                    for(int i=0; i<points.Length; i++)
-                    {
-                        float tempDist = Vector3.Distance(transform.position, points[i].transform.position);
-                        if(tempDist < dist) closestPoint = i;
-                    }
-                    agent.destination = points[closestPoint].position;
-                    destPoint = closestPoint;
-                    isPatrolling = true;
-                }
-			}
-			if (!agent.pathPending && agent.remainingDistance < 0.5f)
+			if (!isPatrolling && points.Length > 0)
 			{
-				GoToNextPoint();
+				int closestPoint = 0;
+				float dist = Vector3.Distance(transform.position, points[0].transform.position);
+				for (int i = 0; i < points.Length; i++)
+				{
+					float tempDist = Vector3.Distance(transform.position, points[i].transform.position);
+					if (tempDist < dist) closestPoint = i;
+				}
+				agent.destination = points[closestPoint].position;
+				destPoint = closestPoint;
+				isPatrolling = true;
 			}
+		}
+		if (!agent.pathPending && agent.remainingDistance < 0.5f)
+		{
+			GoToNextPoint();
 		}
 	}
 
 	void GoToNextPoint()
 	{
-        isPatrolling = true;
+		isPatrolling = true;
 		if (points.Length == 0) return;
 		agent.destination = points[destPoint].position;
 		destPoint = (destPoint + 1) % points.Length;
@@ -105,21 +107,9 @@ public class Enemy : Humanoid
 
 	public override void Kill()
 	{
-		if (crtDeath == null) crtDeath = StartCoroutine(Animation());
-		IEnumerator Animation()
-		{
-			if (hand.childCount > 0) inputAxes[(int)InputAxes.Drop].Press(1, this);//drop weapon if holding one
-			while (true)
-			{
-				for (int i = 0; i < renderers.Length; i++)
-				{
-					renderers[i].material.color += new Color(0, 0, 0, -deathAnimationSpeed * Time.deltaTime);
-				}
-				if (renderers[0].material.color.a <= 0) break;
-				yield return null;
-			}
-			Destroy(gameObject);
-		}
+		animatorManager.dying = true;
+		if (hand.childCount > 0) inputAxes[(int)InputAxes.Drop].Press(1, this);//drop weapon if holding one
+		enabled = false;
 	}
 
 	public class InputAxis

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Console : MonoBehaviour
@@ -12,7 +13,7 @@ public class Console : MonoBehaviour
 	static readonly StringBuilder stringBuilder = new StringBuilder();
 	public Text text;
 	public bool keepPlaceholderText;
-	
+
 	public static Line AddLine(string text = "")
 	{
 		Line line = new Line(text);
@@ -22,10 +23,10 @@ public class Console : MonoBehaviour
 
 	private void Awake()
 	{
+		stringBuilder.Clear();
 		singleton = this;
 		if (keepPlaceholderText) AddLine(text.text);
 	}
-
 
 	private void Update()
 	{

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Player : Humanoid
 {
+	public bool invincibility;
 	public float maxInteractDistance;
 	public new Camera camera;
+	public GameObject deathUI;
 	RaycastHit raycast;
 
 	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
@@ -28,5 +30,18 @@ public class Player : Humanoid
 	{
 		value = Input.GetAxis(axis);
 		return Input.GetButtonDown(axis);
+	}
+
+	public override void Kill()
+	{
+		if (invincibility) Debug.Log("You would have died, but no one can kill John Matrix.");
+		else
+		{
+			//animatorManager.dying = true;
+			deathUI.SetActive(true);
+			GetComponent<AdvPlayerMovement>().enabled = false;
+			Cursor.lockState = CursorLockMode.None;
+			enabled = false;
+		}
 	}
 }
