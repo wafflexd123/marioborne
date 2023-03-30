@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviourPlus
 {
+	public bool canReflect;
 	public float speed;
 	public Vector3 direction;
 	bool isFirstFrame = true;
@@ -31,7 +32,7 @@ public class Bullet : MonoBehaviourPlus
 	{
 		if (!isFirstFrame)//prevent bullet from insta-killing the person that shot it
 		{
-            if (FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first (in case player/ai is holding one)
+            if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first (in case player/ai is holding one)
             {
                 if (brs.enableReflect)
                 {

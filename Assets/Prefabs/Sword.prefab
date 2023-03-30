@@ -146,7 +146,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1879311153426993608}
-  - component: {fileID: 1879311153426993615}
   - component: {fileID: -1670203567389728386}
   m_Layer: 0
   m_Name: Sword
@@ -169,21 +168,8 @@ Transform:
   m_Children:
   - {fileID: 1879311152797145875}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1879311153426993615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1879311153426993614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c331ffb00a0f14409704455b3934507, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableReflect: 0
 --- !u!114 &-1670203567389728386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,3 +193,4 @@ MonoBehaviour:
     coords: {x: 0.195, y: 0.594, z: 0.05900002}
     eulers: {x: 0, y: -77.245, z: 0}
   guardSpeed: 3
+  reflectWindow: {fileID: 0}

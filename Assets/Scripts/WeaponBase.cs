@@ -58,7 +58,7 @@ public class WeaponBase : MonoBehaviourPlus
 
 	}
 
-	protected virtual bool BeingHeld()
+	public virtual bool BeingHeld()
 	{
 		return wielder != null;
 	}

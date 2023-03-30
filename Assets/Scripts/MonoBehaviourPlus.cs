@@ -1,6 +1,6 @@
-using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
+using UnityEngine;
 
 [SelectionBase]
 public class MonoBehaviourPlus : MonoBehaviour
@@ -107,6 +107,12 @@ public class MonoBehaviourPlus : MonoBehaviour
 		{
 			this.coords = coords;
 			this.eulers = eulers;
+		}
+
+		public Position(Transform transform, bool useLocal = false)
+		{
+			this.coords = useLocal ? transform.localPosition : transform.position;
+			this.eulers = useLocal ? transform.localEulerAngles : transform.eulerAngles;
 		}
 	}
 }
