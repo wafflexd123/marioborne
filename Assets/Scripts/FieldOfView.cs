@@ -11,7 +11,6 @@ public class FieldOfView : MonoBehaviour
     public GameObject playerRef;
 
     public LayerMask targetMask, obstacleMask;
-    public List<Transform> visibleTargets = new List<Transform>();
 
     public bool canSeePlayer;
 
