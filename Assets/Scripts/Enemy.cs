@@ -23,6 +23,7 @@ public class Enemy : Humanoid
 	Vector3 lookingAt;
 	public int destPoint = 0;
 	private NavMeshAgent agent;
+    public FieldOfView fov;
 
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => lookingAt;
@@ -30,24 +31,24 @@ public class Enemy : Humanoid
 	void Awake()
 	{
 		agent = GetComponent<NavMeshAgent>();
+        fov = GetComponent<FieldOfView>();
 		string[] names = Enum.GetNames(typeof(InputAxes));//must be in awake
 		for (int i = 0; i < names.Length; i++) inputAxes.Add(new InputAxis(names[i]));//create InputAxis classes from InputAxes enum
 	}
 
-	void Update()
+    void Update()
 	{
 		if (crtDeath == null)//if not currently dying
 		{
-			Collider[] ray = Physics.OverlapSphere(transform.position, sightRadius, 1 << 3);
-			if (ray.Length > 0 && ray[0] != null && FindComponent(ray[0].transform, out	Player player))
+			if(fov.canSeePlayer)
 			{
                 isPatrolling = false;
                 switch (type)
                 {
                     case EnemyType.Melee:
-                        agent.SetDestination(player.transform.position);
+                        agent.SetDestination(fov.playerRef.transform.position);
                         Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
-                        if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out player))
+                        if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
                         {
                             if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);
                         }
@@ -55,8 +56,8 @@ public class Enemy : Humanoid
 
                     case EnemyType.Ranged:
                         agent.isStopped = true;
-                        transform.LookAt(player.transform);
-                        lookingAt = player.camera.transform.position;
+                        transform.LookAt(fov.playerRef.transform);
+                        lookingAt = fov.playerRef.GetComponent<Player>().camera.transform.position;
                         if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
                         break;
                 }
