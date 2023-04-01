@@ -19,12 +19,12 @@ public class WatchScript : MonoBehaviour
         float secondAngle = time.Second * 6f;
 
         // angle for rotation
-        Transform hourHand = transform.Find("HourHand");
-        Transform minuteHand = transform.Find("MinuteHand");
-        Transform secondHand = transform.Find("SecondHand");
-        hourHand.localRotation = Quaternion.Euler(0f, hourAngle, 0f);
-        minuteHand.localRotation = Quaternion.Euler(0f, minuteAngle, 0f);
-        secondHand.localRotation = Quaternion.Euler(0f, secondAngle, 0f);
+        GameObject hourHand = GameObject.Find("HourHand");
+        GameObject minuteHand = GameObject.Find("MinuteHand");
+        GameObject secondHand = GameObject.Find("SecondHand");
+        hourHand.transform.localRotation = Quaternion.Euler(0f, hourAngle, 0f);
+        minuteHand.transform.localRotation = Quaternion.Euler(0f, minuteAngle, 0f);
+        secondHand.transform.localRotation = Quaternion.Euler(0f, secondAngle, 0f);
     }
 
 }
