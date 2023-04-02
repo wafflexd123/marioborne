@@ -18,6 +18,9 @@ public class PlayerLook : MonoBehaviour
 
     float xRotation;
     float yRotation;
+    float zRotation;
+
+    [SerializeField] AdvPlayerMovementV2 pm;
 
     private void Start()
     {
@@ -29,9 +32,9 @@ public class PlayerLook : MonoBehaviour
     {
         MyInput();
 
-        cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        playerTransform.localRotation = Quaternion.Euler(0, yRotation, 0);
+        cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, zRotation);
+        orientation.transform.rotation = Quaternion.Euler(0, yRotation, zRotation);
+        playerTransform.localRotation = Quaternion.Euler(0, yRotation, zRotation);
     }
 
     void MyInput()

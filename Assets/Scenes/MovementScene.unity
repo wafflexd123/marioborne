@@ -858,7 +858,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh82028
+  m_Name: pb_Mesh23060
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1837,16 +1837,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 6
-  sprintSpeed: 8
+  sprintSpeed: 10
   movementMultiplier: 10
   playerHeight: 2
-  acceleration: 0
+  acceleration: 1
   airMultiplier: 0.8
   jumpCooldown: 0.2
+  dashCooldown: 1.5
   orientation: {fileID: 377509482}
   jumpForce: 15
+  dashForce: 30
   jumpKey: 32
   sprintKey: 304
+  dashkey: 118
   groundCheck: {fileID: 651563339}
   groundDistance: 0.2
   whatIsGround:
@@ -1870,6 +1873,7 @@ MonoBehaviour:
   cam: {fileID: 1868928792}
   orientation: {fileID: 377509482}
   playerTransform: {fileID: 1096563122}
+  pm: {fileID: 1096563123}
 --- !u!54 &1096563125
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1911,7 +1915,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 377509482}
   wallDistance: 0.6
-  minimumJumpHeight: 1.5
   groundCheck: {fileID: 651563339}
   groundDistance: 0.2
   whatIsWall:
@@ -1920,9 +1923,9 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  wallRunGravity: 1
+  wallRunGravity: 0.7
   wallJumpForce: 6
-  wallRunSpeed: 4
+  wallRunSpeed: 5
   isWallrunning: 0
 --- !u!43 &1323891940
 Mesh:
@@ -1930,7 +1933,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh82014
+  m_Name: pb_Mesh23046
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2521,7 +2524,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh82104
+  m_Name: pb_Mesh23150
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2783,7 +2786,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-308690
+  m_Name: pb_Mesh23082
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

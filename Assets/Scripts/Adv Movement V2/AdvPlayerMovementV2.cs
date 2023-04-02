@@ -13,9 +13,12 @@ public class AdvPlayerMovementV2 : MonoBehaviour
     [SerializeField] float acceleration;
     [SerializeField] float airMultiplier = 0.8f;
     [SerializeField] float jumpCooldown = 0.2f;
+    [SerializeField] float dashCooldown = 2f;
     [SerializeField] Transform orientation;
-    public float jumpForce = 10f;
+    [SerializeField] float jumpForce = 50f;
+    [SerializeField] float dashForce = 8f;
     private bool canJump = true;
+    private bool canDash = true;
     
     [Header("Drag")]
     float groundDrag = 6f;
@@ -27,6 +30,7 @@ public class AdvPlayerMovementV2 : MonoBehaviour
     [Header("Keybinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] KeyCode dashkey = KeyCode.V;
 
     [Header("Ground Detection")]
     [SerializeField] Transform groundCheck;
@@ -74,6 +78,15 @@ public class AdvPlayerMovementV2 : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
+        if (Input.GetKeyDown(dashkey) && canDash && isGrounded)
+        {
+            canDash = false;
+
+            Dash();
+
+            Invoke(nameof(ResetDash), dashCooldown);
+        }
+
         if (Input.GetKey(sprintKey) && isGrounded)
         {
             moveSpeed = sprintSpeed;
@@ -114,6 +127,21 @@ public class AdvPlayerMovementV2 : MonoBehaviour
     void ResetJump()
     {
         canJump = true;
+    }
+
+    void Dash()
+    {
+        rb.AddForce(orientation.forward * dashForce, ForceMode.Impulse);
+    }
+
+    void ResetDash()
+    {
+        canDash = true;
+    }
+
+    void Crouch()
+    {
+        // Crouch
     }
 
     void ControlDrag()
