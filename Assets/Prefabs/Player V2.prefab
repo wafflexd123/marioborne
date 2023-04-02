@@ -113,8 +113,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hand: {fileID: 8110813074823590688}
+  invincibility: 0
   maxInteractDistance: 3
   camera: {fileID: 0}
+  deathUI: {fileID: 0}
 --- !u!114 &8939213948325491126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +220,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5216613447340726759}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b5b3302c966270f47a48e00e683b857f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
