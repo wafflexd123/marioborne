@@ -27,22 +27,20 @@ public class Enemy : Humanoid
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => lookingAt;
 
-	protected override void Awake()
+	protected void Awake()
 	{
-		base.Awake();
 		agent = GetComponent<NavMeshAgent>();
 		agentSpeed = agent.speed;
 		fov = GetComponent<FieldOfView>();
 		foreach (string name in Enum.GetNames(typeof(InputAxes))) inputAxes.Add(new InputAxis(name));
 
-		if (type == EnemyType.Ranged) animatorManager.holdingPistol = true;
-		else animatorManager.holdingKnife = true;
+		if (hand.childCount > 0) model.holdingWeapon = true;
 	}
 
 	void Update()
 	{
 		agent.speed = agentSpeed * Time.timeScale;
-		animatorManager.velocity = agent.velocity;
+		model.velocity = agent.velocity;
 		if (fov.canSeePlayer)
 		{
 			isPatrolling = false;
@@ -107,9 +105,10 @@ public class Enemy : Humanoid
 
 	public override void Kill()
 	{
-		animatorManager.dying = true;
+		model.dying = true;
 		if (hand.childCount > 0) inputAxes[(int)InputAxes.Drop].Press(1, this);//drop weapon if holding one
-		enabled = false;
+		model.transform.SetParent(null);
+		Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
 	}
 
 	public class InputAxis

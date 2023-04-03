@@ -37,6 +37,7 @@ public class WeaponBase : MonoBehaviourPlus
 
 	public virtual void Drop()
 	{
+		OnDrop();
 		wielder = null;
 		transform.parent = null;
 		EnableRigidbody(true);
@@ -46,6 +47,11 @@ public class WeaponBase : MonoBehaviourPlus
 	protected virtual void OnPickup()
 	{
 		StartCoroutine(CheckInputRoutine());
+	}
+
+	protected virtual void OnDrop()
+	{
+
 	}
 
 	protected virtual void LeftMouse()
