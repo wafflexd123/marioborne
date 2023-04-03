@@ -34,15 +34,11 @@ public class Enemy : Humanoid
 		agentSpeed = agent.speed;
 		fov = GetComponent<FieldOfView>();
 		foreach (string name in Enum.GetNames(typeof(InputAxes))) inputAxes.Add(new InputAxis(name));
-
-		if (type == EnemyType.Ranged) animatorManager.holdingPistol = true;
-		else animatorManager.holdingKnife = true;
 	}
 
 	void Update()
 	{
 		agent.speed = agentSpeed * Time.timeScale;
-		animatorManager.velocity = agent.velocity;
 		if (fov.canSeePlayer)
 		{
 			isPatrolling = false;
@@ -107,7 +103,6 @@ public class Enemy : Humanoid
 
 	public override void Kill()
 	{
-		animatorManager.dying = true;
 		if (hand.childCount > 0) inputAxes[(int)InputAxes.Drop].Press(1, this);//drop weapon if holding one
 		enabled = false;
 	}

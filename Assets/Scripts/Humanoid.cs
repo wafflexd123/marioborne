@@ -3,8 +3,6 @@ using UnityEngine;
 public abstract class Humanoid : MonoBehaviourPlus
 {
 	public Transform hand;
-	protected AnimatorManager animatorManager;
-
 	public abstract Vector3 LookDirection { get; }
 	public abstract Vector3 LookingAt { get; }
 
@@ -22,7 +20,6 @@ public abstract class Humanoid : MonoBehaviourPlus
 
 	protected virtual void Awake()
 	{
-		animatorManager = new AnimatorManager(transform.Find("Body").GetChild(0).GetComponent<Animator>());
 	}
 
 	public class AnimatorManager
