@@ -22,11 +22,11 @@ public class FieldOfView : MonoBehaviour
     }
 
     // Update is called once per frame
-    //void Update()
-    //{
-    //    if (canSeePlayer) Debug.Log("can see player");
-    //    else Debug.Log("lost player");
-    //}
+    void Update()
+    {
+        //if (canSeePlayer) Debug.Log("can see player");
+        //else Debug.Log("lost player");
+    }
 
     IEnumerator FindTargetsWithDelay(float delay)
     {
@@ -49,7 +49,6 @@ public class FieldOfView : MonoBehaviour
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
                 float distToTarget = Vector3.Distance(transform.position, target.position);
-
 
                 if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleMask))
                 {

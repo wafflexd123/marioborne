@@ -5,13 +5,16 @@ using UnityEngine;
 public class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
-	public float pickupSpeed, dropForce;
+	public float pickupSpeed, dropForce, throwForce;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
+    bool isMoving;
+    bool isFirstFrame = true;
 
-	protected virtual void Start()
+
+    protected virtual void Start()
 	{
 		rigidbody = GetComponent<Rigidbody>();
 		FindComponent(transform, out wielder);//set wielder and subsequent BeingHeld() value
@@ -21,6 +24,12 @@ public class WeaponBase : MonoBehaviourPlus
 			OnPickup();//simulate being picked up if already held
 		}
 	}
+
+    protected virtual void Update()
+    {
+        if (rigidbody != null && rigidbody.velocity != Vector3.zero) isMoving = true;
+        else isMoving = false;
+    }
 
 	public virtual bool Pickup(Humanoid humanoid)
 	{
@@ -42,6 +51,18 @@ public class WeaponBase : MonoBehaviourPlus
 		EnableRigidbody(true);
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
 	}
+
+    public virtual void Throw()
+    {
+        isFirstFrame = false;
+        Vector3 tempDir = wielder.LookDirection;
+        Vector3 tempPos = wielder.transform.position + wielder.transform.forward + new Vector3(0, 1.75f, 0);
+        wielder = null;
+        transform.parent = null;
+        EnableRigidbody(true);
+        transform.position = tempPos;
+        rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
+    }
 
 	protected virtual void OnPickup()
 	{
@@ -71,7 +92,8 @@ public class WeaponBase : MonoBehaviourPlus
 			else RightMouse();
 		}
 		if (wielder.GetAxisDown("Drop", out _)) Drop();
-	}
+        //if (wielder.GetAxisDown("Throw", out _)) Throw(); //throws a NullReference exception?? pls tell me why
+    }
 
 	IEnumerator CheckInputRoutine()
 	{
@@ -100,4 +122,16 @@ public class WeaponBase : MonoBehaviourPlus
 			for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = true;
 		}
 	}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (rigidbody != null && isMoving)
+        {
+            if (FindComponent(collision.collider.transform, out Humanoid human) && !isFirstFrame)
+            {
+                human.Kill();
+                Destroy(gameObject);
+            }
+        }
+    }
 }
