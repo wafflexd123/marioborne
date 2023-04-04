@@ -10,11 +10,11 @@ public class WeaponBase : MonoBehaviourPlus
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
-    bool isMoving;
-    bool isFirstFrame = true;
+	bool isMoving;
+	bool isFirstFrame = true;
 
 
-    protected virtual void Start()
+	protected virtual void Start()
 	{
 		rigidbody = GetComponent<Rigidbody>();
 		FindComponent(transform, out wielder);//set wielder and subsequent BeingHeld() value
@@ -25,11 +25,11 @@ public class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-    protected virtual void Update()
-    {
-        if (rigidbody != null && rigidbody.velocity != Vector3.zero) isMoving = true;
-        else isMoving = false;
-    }
+	protected virtual void Update()
+	{
+		if (rigidbody != null && rigidbody.velocity != Vector3.zero) isMoving = true;
+		else isMoving = false;
+	}
 
 	public virtual bool Pickup(Humanoid humanoid)
 	{
@@ -53,23 +53,35 @@ public class WeaponBase : MonoBehaviourPlus
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
 	}
 
-    public virtual void Throw()
-    {
-        isFirstFrame = false;
-        Vector3 tempDir = wielder.LookDirection;
-        Vector3 tempPos = wielder.transform.position + wielder.transform.forward + new Vector3(0, 1.75f, 0);
-        wielder = null;
-        transform.parent = null;
-        EnableRigidbody(true);
-        transform.position = tempPos;
-        rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
-    }
-
-	protected virtual void OnPickup()
+	public virtual void Throw()
 	{
-		StartCoroutine(CheckInputRoutine());
+		isFirstFrame = false;
+		Vector3 tempDir = wielder.LookDirection;
+		Vector3 tempPos = wielder.transform.position + wielder.transform.forward + new Vector3(0, 1.75f, 0);
+		wielder = null;
+		transform.parent = null;
+		EnableRigidbody(true);
+		transform.position = tempPos;
+		rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
 	}
 
+	/// <summary>
+	/// Called when item is picked up by a humanoid. Set input listeners here.
+	/// </summary>
+	protected virtual void OnPickup()
+	{
+		wielder.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
+		{
+			if (direction < 0) LeftMouse();
+			else RightMouse();
+		});
+		wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop());
+		wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw());
+	}
+
+	/// <summary>
+	/// Called when item is dropped by a humanoid. Remove input listeners here.
+	/// </summary>
 	protected virtual void OnDrop()
 	{
 
@@ -88,26 +100,6 @@ public class WeaponBase : MonoBehaviourPlus
 	public virtual bool BeingHeld()
 	{
 		return wielder != null;
-	}
-
-	protected virtual void CheckInput()
-	{
-		if (wielder.GetAxisDown("Mouse", out float mouseButton))
-		{
-			if (mouseButton < 0) LeftMouse();
-			else RightMouse();
-		}
-		if (wielder.GetAxisDown("Drop", out _)) Drop();
-        //if (wielder.GetAxisDown("Throw", out _)) Throw(); //throws a NullReference exception?? pls tell me why
-    }
-
-	IEnumerator CheckInputRoutine()
-	{
-		do
-		{
-			CheckInput();
-			yield return null;
-		} while (BeingHeld());
 	}
 
 	/// <summary>
@@ -129,15 +121,15 @@ public class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (rigidbody != null && isMoving)
-        {
-            if (FindComponent(collision.collider.transform, out Humanoid human) && !isFirstFrame)
-            {
-                human.Kill();
-                Destroy(gameObject);
-            }
-        }
-    }
+	private void OnCollisionEnter(Collision collision)
+	{
+		if (rigidbody != null && isMoving)
+		{
+			if (FindComponent(collision.collider.transform, out Humanoid human) && !isFirstFrame)
+			{
+				human.Kill();
+				Destroy(gameObject);
+			}
+		}
+	}
 }
