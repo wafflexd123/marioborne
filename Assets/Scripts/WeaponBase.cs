@@ -12,6 +12,7 @@ public class WeaponBase : MonoBehaviourPlus
 	protected RigidbodyStore rigidbodyStore;
 	bool isMoving;
 	bool isFirstFrame = true;
+	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 
 
 	protected virtual void Start()
@@ -70,13 +71,13 @@ public class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		wielder.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
+		inputActions.Add(wielder.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
 		{
 			if (direction < 0) LeftMouse();
 			else RightMouse();
-		});
-		wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop());
-		wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw());
+		}));
+		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop()));
+		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw()));
 	}
 
 	/// <summary>
@@ -84,7 +85,8 @@ public class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnDrop()
 	{
-
+		foreach (UniInput.InputAction action in inputActions) action.RemoveListener();
+		inputActions.Clear();
 	}
 
 	protected virtual void LeftMouse()

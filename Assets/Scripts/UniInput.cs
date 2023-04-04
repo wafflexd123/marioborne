@@ -63,7 +63,7 @@ public class UniInput
 
 		public void RemoveListener()
 		{
-			if (!axis.actions[(int)type].Remove(action)) Debug.Log("Could not remove input listener!");
+			if (!axis.actions[(int)type].Remove(action)) Debug.LogWarning("Could not remove input listener!");
 		}
 	}
 
@@ -88,9 +88,9 @@ public class UniInput
 		public void Press()
 		{
 			direction = 1f;
-			foreach (Action<float> item in actions[(int)InputType.OnPress]) item(1);
-			foreach (Action<float> item in actions[(int)InputType.OnHold]) item(1);
-			foreach (Action<float> item in actions[(int)InputType.OnRelease]) item(1);
+			foreach (Action<float> item in new List<Action<float>>(actions[(int)InputType.OnPress])) item(1);
+			foreach (Action<float> item in new List<Action<float>>(actions[(int)InputType.OnHold])) item(1);
+			foreach (Action<float> item in new List<Action<float>>(actions[(int)InputType.OnRelease])) item(1);
 
 			if (crtEndPress != null) monoBehaviour.StopCoroutine(crtEndPress);
 			crtEndPress = monoBehaviour.StartCoroutine(EndPress());
@@ -115,14 +115,14 @@ public class UniInput
 			IEnumerator Hold()
 			{
 				direction = value();
-				foreach (Action<float> item in actions[(int)InputType.OnPress]) item(value());
+				foreach (Action<float> item in new List<Action<float>>(actions[(int)InputType.OnPress])) item(value());
 				do
 				{
-					foreach (Action<float> item in actions[(int)InputType.OnHold]) item(value());
+					foreach (Action<float> item in new List<Action<float>>(actions[(int)InputType.OnHold])) item(value());
 					direction = value();
 					yield return null;
 				} while (hold());
-				foreach (Action<float> item in actions[(int)InputType.OnRelease]) item(value());
+				foreach (Action<float> item in new List<Action<float>>(actions[(int)InputType.OnRelease])) item(value());
 				direction = 0f;
 				crtHold = null;
 			}

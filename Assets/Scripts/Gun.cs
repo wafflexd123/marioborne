@@ -17,6 +17,7 @@ public class Gun : WeaponBase
 
 	protected override void OnDrop()
 	{
+        base.OnDrop();
         wielder.model.holdingWeapon = false;
 	}
 
