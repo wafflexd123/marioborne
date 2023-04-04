@@ -41,9 +41,9 @@ GameObject:
   m_Component:
   - component: {fileID: 614581107202429830}
   - component: {fileID: 941658141}
+  - component: {fileID: -6666721045559162365}
   - component: {fileID: 614581107202429829}
   - component: {fileID: 941658140}
-  - component: {fileID: -6666721045559162365}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -83,7 +83,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hand: {fileID: 9208886631155602834}
   model: {fileID: 454927881951953529}
-  weaponInHand: {fileID: 0}
   head: {fileID: 614581106366106333}
   points: []
   type: 0
@@ -91,6 +90,28 @@ MonoBehaviour:
   meleeRadius: 0
   deathAnimationSpeed: 3
   isPatrolling: 0
+--- !u!114 &-6666721045559162365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614581107202429834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657317f491bd9314081209e37d71aec4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewRadius: 40
+  viewAngle: 170
+  eyes: {fileID: 614581106366106333}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 247
+  canSeePlayer: 0
 --- !u!54 &614581107202429829
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -140,28 +161,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &-6666721045559162365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 614581107202429834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 657317f491bd9314081209e37d71aec4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewRadius: 40
-  viewAngle: 170
-  playerRef: {fileID: 0}
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 8
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 247
-  canSeePlayer: 0
 --- !u!1 &614581108126892840
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 0.1
+  runSpeed: 0
 --- !u!4 &997610877331058443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8ad3f6ad348b874dbc09c0496e4a89f, type: 3}

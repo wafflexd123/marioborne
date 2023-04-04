@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : Humanoid
 {
+	public static Player singlePlayer;
 	public bool invincibility;
 	public float maxInteractDistance;
 	public new Camera camera;
@@ -13,6 +14,12 @@ public class Player : Humanoid
 
 	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => raycast.point;
+
+	protected override void Awake()
+	{
+		base.Awake();
+		singlePlayer = this;
+	}
 
 	private void Start()
 	{

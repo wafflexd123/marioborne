@@ -45,7 +45,7 @@ public class Enemy : Humanoid
 			switch (type)
 			{
 				case EnemyType.Melee:
-					agent.SetDestination(fov.playerRef.transform.position);
+					agent.SetDestination(Player.singlePlayer.transform.position);
 					Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
 					if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
 					{
@@ -55,9 +55,13 @@ public class Enemy : Humanoid
 
 				case EnemyType.Ranged:
 					agent.isStopped = true;
-					transform.LookAt(fov.playerRef.transform);
-					lookingAt = fov.playerRef.GetComponent<Player>().camera.transform.position;
-					if (hand.childCount > 0) input.Press("Mouse", () => -1, () => false);//if holding something, left click (shoot)
+					transform.LookAt(Player.singlePlayer.transform);
+					lookingAt = Player.singlePlayer.camera.transform.position;
+					if (hand.childCount > 0)
+					{
+						hand.GetChild(0).LookAt(lookingAt);
+						input.Press("Mouse", () => -1, () => false);//if holding something, left click (shoot)
+					}
 					break;
 			}
 		}

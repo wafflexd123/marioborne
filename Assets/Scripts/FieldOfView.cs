@@ -1,66 +1,50 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
-    public float viewRadius;
-    [Range(0, 360)]
-    public float viewAngle;
+	public float viewRadius;
+	[Range(0, 360)]
+	public float viewAngle;
+	public Transform eyes;
+	public LayerMask targetMask, obstacleMask;
+	public bool canSeePlayer;
 
-    public GameObject playerRef;
+	//void Start()
+	//{
+	//	StartCoroutine(FindTargetsWithDelay(.2f));
+	//}
 
-    public LayerMask targetMask, obstacleMask;
+	//IEnumerator FindTargetsWithDelay(float delay)
+	//{
+	//	while (true)
+	//	{
+	//		yield return new WaitForSeconds(delay);
+	//		FieldOfViewCheck();
+	//	}
+	//}
 
-    public bool canSeePlayer;
+	void Update()
+	{
+		FieldOfViewCheck();
+	}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerRef = GameObject.FindGameObjectWithTag("Player");
-        StartCoroutine("FindTargetsWithDelay", 0.2f);
-    }
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    if (canSeePlayer) Debug.Log("can see player");
-    //    else Debug.Log("lost player");
-    //}
-
-    IEnumerator FindTargetsWithDelay(float delay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(delay);
-            FieldOfViewCheck();
-        }
-    }
-
-    void FieldOfViewCheck()
-    {
-        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-
-        if(rangeChecks.Length > 0)
-        {
-            Transform target = rangeChecks[0].transform;
-            Vector3 dirToTarget = (target.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
-            {
-                float distToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleMask))
-                {
-                    canSeePlayer = true;
-                }
-                else canSeePlayer = false;
-            }
-            else canSeePlayer = false;
-        }
-        else if (canSeePlayer)
-        {
-            canSeePlayer = false;
-        }
-    }
+	void FieldOfViewCheck()
+	{
+		Collider[] rangeChecks = Physics.OverlapSphere(eyes.position, viewRadius, targetMask);
+		if (rangeChecks.Length > 0)
+		{
+			//If transform.position instead of eyes.position is used as the ray origin, it goes through the ground. If the eye height isn't added to the target position, the ray will angle too steeply towards the ground.
+			Vector3 dirToTarget = (rangeChecks[0].transform.position + new Vector3(0, eyes.position.y) - eyes.position).normalized;
+			if (Vector3.Angle(eyes.forward, dirToTarget) < viewAngle / 2)
+			{
+				if (!Physics.Raycast(eyes.position, dirToTarget, Vector3.Distance(eyes.position, rangeChecks[0].transform.position), obstacleMask))
+				{
+					canSeePlayer = true;
+					return;
+				}
+			}
+		}
+		canSeePlayer = false;
+	}
 }
