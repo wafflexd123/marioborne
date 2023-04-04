@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviourPlus
 
 	private void Update()
 	{
-		transform.position += Vector3.ClampMagnitude(direction * speed, speed * Time.deltaTime);
+		transform.position += speed * Time.deltaTime * direction;
 	}
 
 	private void OnCollisionEnter(Collision collision)

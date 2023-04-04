@@ -22,11 +22,11 @@ public class FieldOfView : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        //if (canSeePlayer) Debug.Log("can see player");
-        //else Debug.Log("lost player");
-    }
+    //void Update()
+    //{
+    //    if (canSeePlayer) Debug.Log("can see player");
+    //    else Debug.Log("lost player");
+    //}
 
     IEnumerator FindTargetsWithDelay(float delay)
     {
