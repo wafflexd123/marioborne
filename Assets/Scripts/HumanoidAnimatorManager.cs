@@ -4,30 +4,36 @@ using UnityEngine;
 
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
-	public float walkSpeed;
+	public float walkSpeed, runSpeed;
 	Animator animator;
 
 	private void Awake()
 	{
 		animator = GetComponent<Animator>();
+		if (transform.localPosition != Vector3.zero)
+		{
+			transform.localPosition = Vector3.zero;
+			Debug.LogWarning("The model position of " + name + " is not zero. Resetting.");
+		}
+		if (transform.localEulerAngles != Vector3.zero)
+		{
+			transform.localEulerAngles = Vector3.zero;
+			Debug.LogWarning("The model rotation of " + name + " is not zero. Resetting.");
+		}
 	}
 
 	public Vector3 velocity
 	{
 		set
 		{
-			animator.SetFloat("xMagnitude", Mathf.Abs(value.x));
-			animator.SetInteger("xDirection", (int)Mathf.Sign(value.x));
-			animator.SetFloat("yMagnitude", Mathf.Abs(value.y));
-			animator.SetInteger("yDirection", (int)Mathf.Sign(value.y));
-			animator.SetFloat("zMagnitude", Mathf.Abs(value.z));
-			animator.SetInteger("zDirection", (int)Mathf.Sign(value.z));
-			animator.SetBool("walking", value.x != 0 || value.z != 0);
-			animator.SetLayerWeight(1, Mathf.InverseLerp(0, walkSpeed, Mathf.Abs(value.x)));
+			float magnitude = Mathf.Sqrt((value.x * value.x) + (value.z * value.z));
+			magnitude = ((int)(magnitude * 100)) / 100f;//round to 2 decimals
+			animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
+			animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
 		}
 	}
-	public bool holdingWeapon { set => animator.SetLayerWeight(2, value ? 1 : 0); }
-	public bool triggerWeapon { set => animator.SetBool("triggerWeapon", value); }
+	public bool holdingWeapon { set => animator.SetLayerWeight(1, value ? 1 : 0); }
+	public bool attacking { set => animator.SetBool("attacking", value); }
 	public bool crouching { set => animator.SetBool("crouching", value); }
 	public bool dying { set => animator.SetBool("dying", value); }
 }

@@ -24,8 +24,7 @@ public class Gun : WeaponBase
     {
         if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
         {
-            Debug.Log("pew pew");
-            wielder.model.triggerWeapon = true;
+            wielder.model.attacking = true;
             Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized);
             crtDelay = StartCoroutine(Delay());
         }
