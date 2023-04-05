@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-
-[SelectionBase]
 public class MonoBehaviourPlus : MonoBehaviour
 {
 	public static Vector3 VectorArray(float[] array)

@@ -10,7 +10,7 @@ public class Enemy : Humanoid
 
 	//Inspector
 	public Transform head;
-	public Transform[] points;
+	public Transform points;
 	public EnemyType type;
 	public float sightRadius, meleeRadius, deathAnimationSpeed;
 	public bool isPatrolling = false;
@@ -70,16 +70,16 @@ public class Enemy : Humanoid
 			lookingAt = Vector3.negativeInfinity;
 			agent.isStopped = false;
 
-			if (!isPatrolling && points.Length > 0)
+			if (!isPatrolling && points != null && points.childCount > 0)
 			{
 				int closestPoint = 0;
-				float dist = Vector3.Distance(transform.position, points[0].transform.position);
-				for (int i = 0; i < points.Length; i++)
+				float dist = Vector3.Distance(transform.position, points.GetChild(0).position);
+				for (int i = 0; i < points.childCount; i++)
 				{
-					float tempDist = Vector3.Distance(transform.position, points[i].transform.position);
+					float tempDist = Vector3.Distance(transform.position, points.GetChild(i).position);
 					if (tempDist < dist) closestPoint = i;
 				}
-				agent.destination = points[closestPoint].position;
+				agent.destination = points.GetChild(closestPoint).position;
 				destPoint = closestPoint;
 				isPatrolling = true;
 			}
@@ -93,9 +93,9 @@ public class Enemy : Humanoid
 	void GoToNextPoint()
 	{
 		isPatrolling = true;
-		if (points.Length == 0) return;
-		agent.destination = points[destPoint].position;
-		destPoint = (destPoint + 1) % points.Length;
+		if (points == null || points.childCount == 0) return;
+		agent.destination = points.GetChild(destPoint).position;
+		destPoint = (destPoint + 1) % points.childCount;
 	}
 
 	public override void Kill()
