@@ -75,7 +75,7 @@ public class AdvPlayerMovementV2 : MonoBehaviour
 
         moveDirection = orientation.forward * verticalMovement + orientation.right * horizontalMovement;
 
-        if (Input.GetKeyDown(jumpKey) && canJump && isGrounded)
+        if (Input.GetKey(jumpKey) && canJump && isGrounded)
         {
             canJump = false;
 
@@ -144,7 +144,7 @@ public class AdvPlayerMovementV2 : MonoBehaviour
 
     void Dash()
     {
-        rb.AddForce(orientation.forward * dashForce, ForceMode.Impulse);
+        rb.AddForce(moveDirection.normalized * dashForce, ForceMode.Impulse);
     }
 
     void ResetDash()
