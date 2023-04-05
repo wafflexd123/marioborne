@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
+    public float Sensitivity { set { sensX = value; sensY = value; } }
+
     [SerializeField] private float sensX;
     [SerializeField] private float sensY;
 
@@ -26,12 +28,13 @@ public class PlayerLook : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Console.AddLine("Press TAB to lock/unlock mouse");
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
+
         MyInput();
 
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
