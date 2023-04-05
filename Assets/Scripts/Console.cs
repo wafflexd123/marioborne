@@ -23,6 +23,7 @@ public class Console : MonoBehaviour
 
 	private void Awake()
 	{
+		lines.Clear();
 		stringBuilder.Clear();
 		singleton = this;
 		if (keepPlaceholderText) AddLine(text.text);

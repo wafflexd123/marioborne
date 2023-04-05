@@ -38,7 +38,7 @@ public class FieldOfView : MonoBehaviour
 			Vector3 dirToTarget = (rangeChecks[0].transform.position + new Vector3(0, eyes.position.y) - eyes.position).normalized;
 			if (Vector3.Angle(eyes.forward, dirToTarget) < viewAngle / 2)
 			{
-				if (!Physics.Raycast(eyes.position, dirToTarget, Vector3.Distance(eyes.position, rangeChecks[0].transform.position), obstacleMask))
+				if (!Physics.Linecast(eyes.position, rangeChecks[0].transform.position, obstacleMask))
 				{
 					canSeePlayer = true;
 					return;

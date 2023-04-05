@@ -66,6 +66,7 @@ public class Player : Humanoid
 			//deathUI.SetActive(true);
 			GetComponent<AdvPlayerMovement>().enabled = false;
 			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
 			enabled = false;
 		}
 	}
