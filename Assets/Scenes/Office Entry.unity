@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1220480202}
-  m_IndirectSpecularColor: {r: 0.4366756, g: 0.48427194, b: 0.5645252, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667555, g: 0.48427123, b: 0.5645229, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31304
+  m_Name: pb_Mesh61068
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 37045662}
   - component: {fileID: 37045661}
   - component: {fileID: 37045660}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -654,7 +654,7 @@ GameObject:
   - component: {fileID: 42765849}
   - component: {fileID: 42765848}
   - component: {fileID: 42765847}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +1006,7 @@ GameObject:
   - component: {fileID: 56018819}
   - component: {fileID: 56018818}
   - component: {fileID: 56018817}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elevator pillars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1580,7 +1580,7 @@ GameObject:
   - component: {fileID: 62579215}
   - component: {fileID: 62579214}
   - component: {fileID: 62579213}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2011,7 +2011,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30858
+  m_Name: pb_Mesh60620
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2176,7 +2176,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31048
+  m_Name: pb_Mesh60808
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2567,7 +2567,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30978
+  m_Name: pb_Mesh60738
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2732,7 +2732,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31080
+  m_Name: pb_Mesh60842
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2928,7 +2928,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30844
+  m_Name: pb_Mesh60606
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3282,7 +3282,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31256
+  m_Name: pb_Mesh61020
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3447,7 +3447,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31478
+  m_Name: pb_Mesh61240
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3620,7 +3620,7 @@ GameObject:
   - component: {fileID: 218180860}
   - component: {fileID: 218180859}
   - component: {fileID: 218180858}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4018,6 +4018,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: fireDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: bulletSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.9190004
@@ -4028,15 +4040,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.55269414
+      value: 0.5526942
+      objectReference: {fileID: 0}
+    - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5526932
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.4410553
+      value: 0.44105524
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.44105512
+      value: 0.44105518
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4375,7 +4391,7 @@ GameObject:
   - component: {fileID: 389342010}
   - component: {fileID: 389342009}
   - component: {fileID: 389342008}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elevator pillars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4581,7 +4597,7 @@ GameObject:
   - component: {fileID: 393657746}
   - component: {fileID: 393657745}
   - component: {fileID: 393657744}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elevator pillars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4952,7 +4968,7 @@ GameObject:
   - component: {fileID: 418152303}
   - component: {fileID: 418152302}
   - component: {fileID: 418152301}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5866,7 +5882,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30734
+  m_Name: pb_Mesh60494
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6118,7 +6134,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31144
+  m_Name: pb_Mesh60904
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6291,7 +6307,7 @@ GameObject:
   - component: {fileID: 577517145}
   - component: {fileID: 577517144}
   - component: {fileID: 577517143}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elevator pillars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6718,7 +6734,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31018
+  m_Name: pb_Mesh60778
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6883,7 +6899,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30720
+  m_Name: pb_Mesh60480
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7048,7 +7064,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31000
+  m_Name: pb_Mesh60760
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7876,7 +7892,7 @@ GameObject:
   - component: {fileID: 739860571}
   - component: {fileID: 739860570}
   - component: {fileID: 739860569}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8220,7 +8236,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31412
+  m_Name: pb_Mesh61174
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -8440,6 +8456,18 @@ PrefabInstance:
       value: Enemy (3)
       objectReference: {fileID: 0}
     - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: fireDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: bulletSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 1470589054315451325, guid: c2771fc669d62c049907bd223e87118a, type: 3}
@@ -8461,7 +8489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.44105512
+      value: 0.44105515
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9290,7 +9318,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31442
+  m_Name: pb_Mesh61206
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9463,7 +9491,7 @@ GameObject:
   - component: {fileID: 928137503}
   - component: {fileID: 928137502}
   - component: {fileID: 928137501}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9879,7 +9907,7 @@ GameObject:
   - component: {fileID: 943737186}
   - component: {fileID: 943737185}
   - component: {fileID: 943737184}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10231,7 +10259,7 @@ GameObject:
   - component: {fileID: 957484362}
   - component: {fileID: 957484361}
   - component: {fileID: 957484360}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10655,6 +10683,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1044067982175564610, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: fireDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1044067982175564610, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: bulletSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -10714,7 +10750,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30706
+  m_Name: pb_Mesh60466
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -10953,7 +10989,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30690
+  m_Name: pb_Mesh60452
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -11291,7 +11327,7 @@ GameObject:
   - component: {fileID: 1140406622}
   - component: {fileID: 1140406621}
   - component: {fileID: 1140406620}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11871,7 +11907,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31206
+  m_Name: pb_Mesh60968
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12036,7 +12072,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31130
+  m_Name: pb_Mesh60890
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12295,7 +12331,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31182
+  m_Name: pb_Mesh60944
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12718,7 +12754,7 @@ GameObject:
   - component: {fileID: 1259334277}
   - component: {fileID: 1259334276}
   - component: {fileID: 1259334275}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13013,7 +13049,7 @@ GameObject:
   - component: {fileID: 1275219068}
   - component: {fileID: 1275219067}
   - component: {fileID: 1275219066}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13273,7 +13309,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31456
+  m_Name: pb_Mesh61220
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13932,7 +13968,7 @@ GameObject:
   - component: {fileID: 1390512616}
   - component: {fileID: 1390512615}
   - component: {fileID: 1390512614}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14550,7 +14586,7 @@ GameObject:
   - component: {fileID: 1420436190}
   - component: {fileID: 1420436189}
   - component: {fileID: 1420436188}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15374,7 +15410,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31284
+  m_Name: pb_Mesh61048
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -16193,7 +16229,7 @@ GameObject:
   - component: {fileID: 1551331642}
   - component: {fileID: 1551331641}
   - component: {fileID: 1551331640}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16607,6 +16643,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: fireDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: bulletSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.004899919
@@ -16621,11 +16669,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.44105545
+      value: 0.44105542
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.44105506
+      value: 0.44105512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16724,7 +16772,7 @@ GameObject:
   - component: {fileID: 1572353155}
   - component: {fileID: 1572353154}
   - component: {fileID: 1572353153}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16927,7 +16975,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30874
+  m_Name: pb_Mesh60636
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -17092,7 +17140,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30822
+  m_Name: pb_Mesh60584
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -17265,7 +17313,7 @@ GameObject:
   - component: {fileID: 1625592286}
   - component: {fileID: 1625592285}
   - component: {fileID: 1625592284}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17774,7 +17822,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31526
+  m_Name: pb_Mesh61288
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -17947,7 +17995,7 @@ GameObject:
   - component: {fileID: 1666590336}
   - component: {fileID: 1666590335}
   - component: {fileID: 1666590334}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pillar (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18654,7 +18702,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30960
+  m_Name: pb_Mesh60722
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19262,6 +19310,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -1670203567389728386, guid: a913904ba7559d748a9b3168c8da0aad, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 1879311153426993608, guid: a913904ba7559d748a9b3168c8da0aad, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -19496,7 +19548,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31034
+  m_Name: pb_Mesh60794
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19692,7 +19744,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31234
+  m_Name: pb_Mesh60996
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19896,7 +19948,7 @@ GameObject:
   - component: {fileID: 1913790312}
   - component: {fileID: 1913790311}
   - component: {fileID: 1913790310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elevator pillars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20462,7 +20514,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31094
+  m_Name: pb_Mesh60856
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -20686,6 +20738,18 @@ PrefabInstance:
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: fireDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: bulletSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 1470589054315451325, guid: c2771fc669d62c049907bd223e87118a, type: 3}
@@ -20720,7 +20784,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30918
+  m_Name: pb_Mesh60680
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -21142,7 +21206,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31342
+  m_Name: pb_Mesh61106
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -21315,7 +21379,7 @@ GameObject:
   - component: {fileID: 1986803407}
   - component: {fileID: 1986803406}
   - component: {fileID: 1986803405}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21583,7 +21647,7 @@ GameObject:
   - component: {fileID: 2010781327}
   - component: {fileID: 2010781326}
   - component: {fileID: 2010781325}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22108,7 +22172,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30806
+  m_Name: pb_Mesh60568
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -22281,7 +22345,7 @@ GameObject:
   - component: {fileID: 2028850141}
   - component: {fileID: 2028850140}
   - component: {fileID: 2028850139}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22533,6 +22597,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: fireDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: throwForce
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148893105827432353, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: bulletSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.9190005
@@ -22543,7 +22619,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.55269414
+      value: 0.55269426
+      objectReference: {fileID: 0}
+    - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5526932
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.y
@@ -22551,7 +22631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9208886631155602834, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.44105512
+      value: 0.4410551
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22661,7 +22741,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30748
+  m_Name: pb_Mesh60508
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -22834,7 +22914,7 @@ GameObject:
   - component: {fileID: 2056145077}
   - component: {fileID: 2056145076}
   - component: {fileID: 2056145075}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Elevator pillars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23032,7 +23112,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31324
+  m_Name: pb_Mesh61088
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -23362,7 +23442,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh31506
+  m_Name: pb_Mesh61268
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

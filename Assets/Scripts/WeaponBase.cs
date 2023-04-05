@@ -56,6 +56,7 @@ public class WeaponBase : MonoBehaviourPlus
 
 	public virtual void Throw()
 	{
+        OnDrop();
 		isFirstFrame = false;
 		Vector3 tempDir = wielder.LookDirection;
 		Vector3 tempPos = wielder.transform.position + wielder.transform.forward + new Vector3(0, 1.75f, 0);
