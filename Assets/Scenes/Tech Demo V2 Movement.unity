@@ -6263,6 +6263,12 @@ MonoBehaviour:
   wallRunGravity: 2
   wallJumpForce: 5
   wallRunSpeed: 6
+  cam: {fileID: 1889886327}
+  fov: 90
+  wallRunfov: 100
+  wallRunfovTime: 20
+  camTilt: 20
+  camTiltTime: 20
   isWallrunning: 1
 --- !u!114 &1519665507
 MonoBehaviour:
@@ -6285,7 +6291,7 @@ MonoBehaviour:
   jumpCooldown: 0.2
   dashCooldown: 2
   orientation: {fileID: 1519665504}
-  jumpForce: 20
+  jumpForce: 15
   dashForce: 30
   jumpKey: 32
   sprintKey: 304
@@ -6854,7 +6860,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28344
+  m_Name: pb_Mesh60080
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -8592,6 +8598,7 @@ MonoBehaviour:
   cam: {fileID: 1889886324}
   orientation: {fileID: 1519665504}
   playerTransform: {fileID: 1228753976}
+  wallRun: {fileID: 1519665506}
   pm: {fileID: 1519665507}
 --- !u!1 &1906577869
 GameObject:

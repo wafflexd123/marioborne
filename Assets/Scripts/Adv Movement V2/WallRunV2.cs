@@ -18,6 +18,16 @@ public class WallRunV2 : MonoBehaviour
     [SerializeField] private float wallJumpForce;
     [SerializeField] private float wallRunSpeed;
 
+    [Header("Camera")]
+    [SerializeField] private Camera cam;
+    [SerializeField] private float fov;
+    [SerializeField] private float wallRunfov;
+    [SerializeField] private float wallRunfovTime;
+    [SerializeField] private float camTilt;
+    [SerializeField] private float camTiltTime;
+
+    public float tilt { get; private set; }
+
     private bool wallLeft = false;
     private bool wallRight = false;
     public bool isWallrunning = false;
@@ -77,6 +87,18 @@ public class WallRunV2 : MonoBehaviour
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
         rb.AddForce(orientation.forward * wallRunSpeed, ForceMode.Acceleration);
 
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, wallRunfov, wallRunfovTime * Time.deltaTime);
+
+
+        if (wallLeft)
+        {
+            tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
+        }
+
+        else if (wallRight) {
+            tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (wallLeft)
@@ -98,5 +120,8 @@ public class WallRunV2 : MonoBehaviour
     {
         isWallrunning = false;
         rb.useGravity = true;
+
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, wallRunfovTime * Time.deltaTime);
+            tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
     }
 }

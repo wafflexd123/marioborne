@@ -17,8 +17,9 @@ public class AdvPlayerMovementV2 : MonoBehaviour
     [SerializeField] Transform orientation;
     [SerializeField] float jumpForce = 50f;
     [SerializeField] float dashForce = 8f;
-    private bool canJump = true;
+    [SerializeField] private bool canJump = true;
     private bool canDash = true;
+    [SerializeField] private bool canDoubleJump = true;
     
     [Header("Drag")]
     float groundDrag = 6f;
@@ -59,6 +60,11 @@ public class AdvPlayerMovementV2 : MonoBehaviour
         MyInput();
         ControlDrag();
 
+        if (isGrounded)
+        {
+            canDoubleJump = true;
+        }
+
         slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
     }
 
@@ -69,13 +75,20 @@ public class AdvPlayerMovementV2 : MonoBehaviour
 
         moveDirection = orientation.forward * verticalMovement + orientation.right * horizontalMovement;
 
-        if (Input.GetKey(jumpKey) && canJump && isGrounded)
+        if (Input.GetKeyDown(jumpKey) && canJump && isGrounded)
         {
             canJump = false;
 
             Jump();
 
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+        
+        if (Input.GetKeyDown(jumpKey) && !isGrounded && canDoubleJump && !wr.isWallrunning)
+        {
+            canDoubleJump = false;
+
+            Jump();
         }
 
         if (Input.GetKeyDown(dashkey) && canDash && isGrounded)
