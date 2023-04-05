@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class Enemy : Humanoid
 {
 	public enum EnemyType { Ranged, Melee }
-	enum InputAxes { Vertical, Horizontal, Drop, Interact, Mouse, Ability }
 
 	//Inspector
 	public Transform head;
@@ -17,7 +16,6 @@ public class Enemy : Humanoid
 	public bool isPatrolling = false;
 
 	//Script
-	List<InputAxis> inputAxes = new List<InputAxis>();
 	Vector3 lookingAt;
 	int destPoint = 0;
 	float agentSpeed;
@@ -33,35 +31,37 @@ public class Enemy : Humanoid
 		agent = GetComponent<NavMeshAgent>();
 		agentSpeed = agent.speed;
 		fov = GetComponent<FieldOfView>();
-		foreach (string name in Enum.GetNames(typeof(InputAxes))) inputAxes.Add(new InputAxis(name));
 
-		if (type == EnemyType.Ranged) animatorManager.holdingPistol = true;
-		else animatorManager.holdingKnife = true;
+		if (hand.childCount > 0) model.holdingWeapon = true;
 	}
 
 	void Update()
 	{
 		agent.speed = agentSpeed * Time.timeScale;
-		animatorManager.velocity = agent.velocity;
+		model.velocity = agent.velocity;
 		if (fov.canSeePlayer)
 		{
 			isPatrolling = false;
 			switch (type)
 			{
 				case EnemyType.Melee:
-					agent.SetDestination(fov.playerRef.transform.position);
+					agent.SetDestination(Player.singlePlayer.transform.position);
 					Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
 					if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
 					{
-						if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);
+						if (hand.childCount > 0) input.Press("Mouse", () => -1, () => false);
 					}
 					break;
 
 				case EnemyType.Ranged:
 					agent.isStopped = true;
-					transform.LookAt(fov.playerRef.transform);
-					lookingAt = fov.playerRef.GetComponent<Player>().camera.transform.position;
-					if (hand.childCount > 0) inputAxes[(int)InputAxes.Mouse].Press(-1, this);//if holding something, left click (shoot)
+					transform.LookAt(Player.singlePlayer.transform);
+					lookingAt = Player.singlePlayer.camera.transform.position;
+					if (hand.childCount > 0)
+					{
+						hand.GetChild(0).LookAt(lookingAt);
+						input.Press("Mouse", () => -1, () => false);//if holding something, left click (shoot)
+					}
 					break;
 			}
 		}
@@ -98,46 +98,11 @@ public class Enemy : Humanoid
 		destPoint = (destPoint + 1) % points.Length;
 	}
 
-	public override bool GetAxisDown(string axis, out float value)
-	{
-		InputAxis inputAxis = InputAxis.FindAxis(axis, inputAxes);
-		value = inputAxis.value;
-		return inputAxis.wasPressedThisFrame;
-	}
-
 	public override void Kill()
 	{
-		animatorManager.dying = true;
-		if (hand.childCount > 0) inputAxes[(int)InputAxes.Drop].Press(1, this);//drop weapon if holding one
-		enabled = false;
-	}
-
-	public class InputAxis
-	{
-		public readonly string axis;
-		public float value;
-		public bool wasPressedThisFrame;
-
-		public InputAxis(string axis)
-		{
-			this.axis = axis;
-		}
-
-		public static InputAxis FindAxis(string axis, List<InputAxis> list)
-		{
-			return list.Find(x => x.axis == axis);
-		}
-
-		public void Press(float axisValue, MonoBehaviour monoBehaviour)
-		{
-			value = axisValue;
-			wasPressedThisFrame = true;
-			monoBehaviour.StartCoroutine(Routine());
-			IEnumerator Routine()
-			{
-				yield return new WaitForEndOfFrame();
-				wasPressedThisFrame = false;
-			}
-		}
+		model.dying = true;
+		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
+		model.transform.SetParent(null);
+		Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
 	}
 }
