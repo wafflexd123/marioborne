@@ -64,7 +64,7 @@ public class Player : Humanoid
 		{
 			//animatorManager.dying = true;
 			deathUI.SetActive(true);
-			GetComponent<AdvPlayerMovement>().enabled = false;
+			GetComponent<AdvPlayerMovementV2>().enabled = false;
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
 			enabled = false;
