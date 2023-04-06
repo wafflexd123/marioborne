@@ -22,6 +22,9 @@ public class Enemy : Humanoid
 	NavMeshAgent agent;
 	FieldOfView fov;
 
+    float timeToReachTarget;
+
+
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => lookingAt;
 
@@ -55,8 +58,10 @@ public class Enemy : Humanoid
 
 				case EnemyType.Ranged:
 					agent.isStopped = true;
-					transform.LookAt(Player.singlePlayer.transform);
-					lookingAt = Player.singlePlayer.camera.transform.position;
+                    
+					transform.LookAt(Player.singlePlayer.camera.transform.position);
+					lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
+                    Debug.DrawLine(transform.position, lookingAt);
 					if (hand.childCount > 0)
 					{
 						hand.GetChild(0).LookAt(lookingAt);
@@ -97,6 +102,51 @@ public class Enemy : Humanoid
 		agent.destination = points.GetChild(destPoint).position;
 		destPoint = (destPoint + 1) % points.childCount;
 	}
+
+    public static Vector3 FirstOrderIntercept(Vector3 shooterPos, Vector3 shooterVelocity, float bulletSpeed, Vector3 targetPos, Vector3 targetVelocity)
+    {
+        Vector3 targetRelativePos = targetPos - shooterPos;
+        Vector3 targetRelativeVelocity = targetVelocity - shooterVelocity;
+        float t = FirstOrderInterceptTime(bulletSpeed, targetRelativePos, targetRelativeVelocity);
+        return targetPos + t * (targetRelativeVelocity);
+    }
+
+    public static float FirstOrderInterceptTime(float bulletSpeed, Vector3 targetRelativePosition, Vector3 targetRelativeVelocity)
+    {
+        float velocitySqr = targetRelativeVelocity.sqrMagnitude;
+        if (velocitySqr < 0.001f) return 0f;
+
+        float a = velocitySqr - bulletSpeed * bulletSpeed;
+
+        if(Mathf.Abs(a) < 0.001f)
+        {
+            float t = -targetRelativePosition.sqrMagnitude / (2f * Vector3.Dot(targetRelativeVelocity, targetRelativePosition));
+            return Mathf.Max(t, 0f);
+        }
+
+        float b = 2f * Vector3.Dot(targetRelativeVelocity, targetRelativePosition);
+        float c = targetRelativePosition.sqrMagnitude;
+        float determinant = b * b - 4f * a * c;
+
+        if (determinant > 0f)
+        {
+            float t1 = (-b + Mathf.Sqrt(determinant)) / (2f * a), t2 = (-b - Mathf.Sqrt(determinant)) / (2f * a);
+            if (t1 > 0f)
+            {
+                if (t2 > 0f)
+                {
+                    return Mathf.Min(t1, t2);
+                }
+                else return t1;
+            }
+            else return Mathf.Max(t2, 0f);
+        }
+        else if (determinant < 0f)
+        {
+            return 0f;
+        }
+        else return Mathf.Max(-b / (2f * a), 0f);
+    }
 
 	public override void Kill()
 	{
