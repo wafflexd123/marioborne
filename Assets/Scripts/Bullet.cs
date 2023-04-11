@@ -19,13 +19,13 @@ public class Bullet : MonoBehaviourPlus
 
 	IEnumerator Start()
 	{
-		yield return null;
+		yield return new WaitForFixedUpdate();
 		isFirstFrame = false;//only called once; so we don't have to continously set this every update
 	}
 
-	private void Update()
+	private void FixedUpdate()
 	{
-		transform.position += speed * Time.deltaTime * direction;
+		transform.position += speed * Time.fixedDeltaTime * direction;
 	}
 
 	private void OnCollisionEnter(Collision collision)
