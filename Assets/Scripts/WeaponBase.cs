@@ -60,12 +60,12 @@ public class WeaponBase : MonoBehaviourPlus
         OnDrop();
 		isFirstFrame = false;
 		Vector3 tempDir = wielder.LookDirection;
-		Vector3 tempPos = wielder.transform.position + wielder.transform.forward + new Vector3(0, 1.75f, 0);
+		Vector3 tempPos = wielder.GetComponent<Player>().camera.transform.position + wielder.GetComponent<Player>().camera.transform.forward;
 		wielder = null;
 		transform.parent = null;
 		EnableRigidbody(true);
-		transform.position = tempPos;
-		rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
+        transform.position = tempPos;
+        rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
 	}
 
 	/// <summary>

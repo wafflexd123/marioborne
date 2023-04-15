@@ -8,7 +8,7 @@ public class FieldOfView : MonoBehaviour
 	public float viewAngle;
 	public Transform eyes;
 	public LayerMask targetMask, obstacleMask;
-	public bool canSeePlayer;
+    public bool canSeePlayer;
 
 	//void Start()
 	//{

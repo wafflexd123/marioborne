@@ -48,7 +48,7 @@ public class Bullet : MonoBehaviourPlus
                 human.Kill();
                 Destroy(gameObject);
             }
-            else Destroy(gameObject);
+            else if (collision.gameObject.tag != "Bullet") Destroy(gameObject);
 		}
 	}
 }

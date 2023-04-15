@@ -22,9 +22,6 @@ public class Enemy : Humanoid
 	NavMeshAgent agent;
 	FieldOfView fov;
 
-    float timeToReachTarget;
-
-
 	public override Vector3 LookDirection => head.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => lookingAt;
 
