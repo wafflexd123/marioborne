@@ -93,23 +93,25 @@ public class WallRunV2 : MonoBehaviour
         if (wallLeft)
         {
             tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
+            rb.AddForce(-leftWallHit.normal * wallRunSpeed);
         }
 
         else if (wallRight) {
             tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
+            rb.AddForce(-rightWallHit.normal * wallRunSpeed);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (wallLeft)
             {
-                Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + orientation.forward + leftWallHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                 rb.AddForce(wallRunJumpDirection * wallJumpForce * 100, ForceMode.Force);
             }
             else if (wallRight)
             {
-                Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
+                Vector3 wallRunJumpDirection = transform.up + orientation.forward + rightWallHit.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                 rb.AddForce(wallRunJumpDirection * wallJumpForce * 100, ForceMode.Force);
             }
