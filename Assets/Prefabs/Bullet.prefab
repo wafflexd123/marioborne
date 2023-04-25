@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 7866365536060916841}
   - component: {fileID: 2213469304298971146}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Bullet Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1171,21 +1171,21 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.1891861
-          inSlope: 0.000021160919
-          outSlope: 0.000021160919
+          value: 0.12162018
+          inSlope: 0.000010413283
+          outSlope: 0.000010413283
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.14506172
+          outWeight: 0.15740739
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: -0.6108406
-          outSlope: -0.6108406
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.20285556
+          inWeight: 0.1635803
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -4961,7 +4961,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2578469ab5dfcf543a664b985b0b15ed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4996,13 +4996,13 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
+  m_UseCustomVertexStreams: 1
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
-  m_VertexStreams: 00010304
+  m_VertexStreams: 000304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
