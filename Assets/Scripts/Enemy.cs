@@ -56,7 +56,7 @@ public class Enemy : Humanoid
 				case EnemyType.Ranged:
 					agent.isStopped = true;
                     
-					transform.LookAt(Player.singlePlayer.camera.transform.position);
+					transform.LookAt(new Vector3(Player.singlePlayer.camera.transform.position.x, transform.position.y, Player.singlePlayer.camera.transform.position.z));
 					lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
                     Debug.DrawLine(transform.position, lookingAt);
 					if (hand.childCount > 0)

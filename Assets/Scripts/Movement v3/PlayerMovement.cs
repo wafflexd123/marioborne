@@ -18,12 +18,19 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] float groundDistance = 0.2f;
 	[SerializeField] LayerMask whatIsGround;
 
+    [Header("Wall Jump")]
+    [SerializeField] float wallDistance = 0.6f;
+    public float wallJumpDelay = 0.1f;
+    private bool wall;
+
 	float mass;
-	bool queueJump, queueDash, canDoubleJump = true, isGrounded;
+    bool queueJump, queueDash, canDoubleJump = true;
+    public bool isGrounded, canWallJump;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	WallRunV2 wallRun;
 	Coroutine crtDash;
+    Coroutine crtWallJump;
 
 	private void Start()
 	{
@@ -38,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 		if (Input.GetButtonDown("Jump")) queueJump = true;
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 		rigidbody.mass = mass / Time.timeScale;
+        CheckWall();
 	}
 
 	void FixedUpdate()
@@ -65,7 +73,12 @@ public class PlayerMovement : MonoBehaviour
 
 	void Jump()
 	{
-		if (isGrounded) canDoubleJump = true;
+        if (isGrounded)
+        {
+            canDoubleJump = true;
+            canWallJump = false;
+            if (crtWallJump == null && !wallRun.isWallrunning) crtWallJump = StartCoroutine(Routine());
+        }
 
 		if (queueJump)
 		{
@@ -81,11 +94,27 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 
-		void Force()
+        if (canWallJump)
+        {
+            if (wall)
+            {
+                Force();
+                canWallJump = false;
+            }
+        }
+
+        void Force()
 		{
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
 			rigidbody.AddForce(transform.up * jumpForce, ForceMode.VelocityChange);
 		}
+
+        IEnumerator Routine()
+        {
+            yield return new WaitForSeconds(wallJumpDelay);
+            canWallJump = true;
+            crtWallJump = null;
+        }
 	}
 
 	void Dash()
@@ -113,4 +142,9 @@ public class PlayerMovement : MonoBehaviour
 	{
 		return Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight / 2 + 0.5f) && slopeHit.normal != Vector3.up;
 	}
+
+    void CheckWall()
+    {
+        wall = Physics.Raycast(transform.position + transform.up, orientation.forward, wallDistance);
+    }
 }
