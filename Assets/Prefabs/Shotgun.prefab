@@ -68,7 +68,7 @@ Transform:
   - {fileID: 1905472386001170277}
   - {fileID: 6145841889053400759}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5597803632041872796
 MonoBehaviour:
@@ -83,17 +83,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handPosition:
-    coords: {x: 0.021, y: 0.82, z: 0.071}
+    coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
   pickupSpeed: 10
   dropForce: 2
   throwForce: 0
   colliders:
-  - {fileID: 0}
   - {fileID: 4578517409330646398}
+  - {fileID: 4412213440300048879}
+  - {fileID: 4338336094530979257}
+  - {fileID: 4776462803641553781}
   fireDelay: 0.2
-  bulletSpeed: 5
-  maxSpread: 0.002
+  bulletSpeed: 15
+  maxSpread: 0.2
   ammo: 2
   shotgunPellets: 10
   type: 1

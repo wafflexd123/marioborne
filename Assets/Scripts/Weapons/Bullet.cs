@@ -38,7 +38,7 @@ public class Bullet : MonoBehaviourPlus
                 {
                     if (collision.gameObject.GetComponentInParent<Player>())
                     {
-                        direction = collision.gameObject.transform.forward;
+                        direction = collision.gameObject.GetComponentInParent<Player>().LookDirection;
                     }
                     else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
                 }
