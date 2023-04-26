@@ -2,42 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviourPlus
 {
-	[SerializeField] Transform orientation;
 	[Header("Movement")]
-	public float walkSpeed = 6f;
-	public float walkMultiplier = 10f, airMultiplier = 0.8f, dashCooldown = 2f, dashForce = 30f, jumpForce = 15f, playerHeight = 1.8f;
+	public float minWalkForce;
+	public float maxWalkForce, velocityAtMaxWalkForce;
+	public AnimationCurve walkForceCurve;
+	public float jumpForce, dashForce, dashCooldown, airMultiplier;
+
+	[Header("Wall Running")]
+	public float wallRunGravity;
+	public float wallJumpForce, wallRunForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, minWallRunVelocity;
 
 	[Header("Drag")]
-	public float groundDrag = 6f;
-	public float airDrag = 0.8f;
+	public float minGroundDrag;
+	public float maxGroundDrag, velocityAtMaxGroundDrag;
+	public AnimationCurve groundDragCurve;
+	public float airDrag = .8f, wallDrag = .8f;
 
-	[Header("Ground Detection")]
-	[SerializeField] Transform groundCheck;
-	[SerializeField] float groundDistance = 0.2f;
-	[SerializeField] LayerMask whatIsGround;
+	[Header("FOV")]
+	public float velocityAtMaxFov;
+	public float fovAtMaxSpeed;
 
-    [Header("Wall Jump")]
-    [SerializeField] float wallDistance = 0.6f;
-    public float wallJumpDelay = 0.1f;
-    private bool wall;
+	[Header("Layers")]
+	public LayerMask layerGround;
+	public LayerMask layerWall;
 
-	float mass;
-    bool queueJump, queueDash, canDoubleJump = true;
-    public bool isGrounded, canWallJump;
+	//Private
+	float mass, startFov, wallDistance = .6f, _tilt;
+	bool queueJump, queueDash, canDoubleJump = true, isGrounded, isWallrunning;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
-	WallRunV2 wallRun;
+	new Camera camera;
+	Wall wall = new Wall();
 	Coroutine crtDash;
-    Coroutine crtWallJump;
+	Transform tfmBody, tfmGround, tfmSlope;
+	Coroutine crtTilt;
+	Console.Line cnsDebug;
+
+	//Properties
+	public float currentTilt { get => _tilt; private set { _tilt = value; camera.GetComponent<PlayerCamera>().rotationOffset = new Vector3(0, 0, _tilt); } }
 
 	private void Start()
 	{
-		wallRun = GetComponent<WallRunV2>();
+		tfmBody = transform.Find("Body");
+		tfmGround = tfmBody.Find("Ground Detection");
+		tfmSlope = tfmBody.Find("Slope Detection");
 		rigidbody = GetComponent<Rigidbody>();
 		rigidbody.freezeRotation = true;
 		mass = rigidbody.mass;
+		camera = transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+		startFov = camera.fieldOfView;
+		cnsDebug = Console.AddLine();
 	}
 
 	void Update()
@@ -45,76 +61,118 @@ public class PlayerMovement : MonoBehaviour
 		if (Input.GetButtonDown("Jump")) queueJump = true;
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 		rigidbody.mass = mass / Time.timeScale;
-        CheckWall();
 	}
 
 	void FixedUpdate()
 	{
-		isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround);
-		moveDirection = (orientation.forward * Input.GetAxisRaw("Vertical") + orientation.right * Input.GetAxisRaw("Horizontal")).normalized;
+		moveDirection = (tfmBody.forward * Input.GetAxisRaw("Vertical") + tfmBody.right * Input.GetAxisRaw("Horizontal")).normalized;
+		CheckContacts();
 		ControlDrag();
 		MovePlayer();
 		Jump();
 		Dash();
+		camera.fieldOfView = Mathf.Lerp(startFov, fovAtMaxSpeed, rigidbody.velocity.magnitude / velocityAtMaxFov);
+
+		cnsDebug.text = $"Velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}, grounded: {isGrounded}, drag: {rigidbody.drag}\n" +
+			$"On wall: {wall.IsOnWall}, direction: {wall.direction}, wallrunning: {isWallrunning}";
+	}
+
+	void CheckContacts()
+	{
+		//ground check
+		foreach (Transform t in tfmGround)
+		{
+			if (Physics.CheckSphere(t.position, .01f, layerGround))
+			{
+				isGrounded = true;
+				return;
+			}
+		}
+		isGrounded = false;
+
+		//Wall check
+		if (Physics.Raycast(transform.position, tfmBody.right, out wall.hit, wallDistance, layerWall))
+		{
+			wall.direction = 1;
+		}
+		else
+		{
+			Physics.Raycast(transform.position, -tfmBody.right, out wall.hit, wallDistance, layerWall);
+			wall.direction = -1;
+		}
 	}
 
 	void MovePlayer()
 	{
-		if (isGrounded)
+		if (isGrounded)//on ground
 		{
-			if (OnSlope(out RaycastHit slopeHit)) rigidbody.AddForce(walkMultiplier * walkSpeed * Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized, ForceMode.Force);
-			else rigidbody.AddForce(walkMultiplier * walkSpeed * moveDirection, ForceMode.Force);
+			if (isWallrunning) WallRun(false);
+			Physics.Raycast(tfmSlope.position + Vector3.up, Vector3.down, out RaycastHit slopeHit, 1.1f, layerGround + layerWall);
+			rigidbody.AddForce(Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxWalkForce))) * Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized, ForceMode.Force);
 		}
-		else
+		else if (wall.IsOnWall && LateralVelocity() >= minWallRunVelocity)//on wall and going fast enough
 		{
-			rigidbody.AddForce(airMultiplier * walkSpeed * moveDirection, ForceMode.Force);
+			if (!isWallrunning) WallRun(true);
+			rigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+			rigidbody.AddForce(Input.GetAxisRaw("Vertical") * wallRunForce * Vector3.ProjectOnPlane(tfmBody.forward, wall.hit.normal).normalized, ForceMode.Force);
 		}
+		else//in air
+		{
+			if (isWallrunning) WallRun(false);
+			rigidbody.AddForce(airMultiplier * Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxWalkForce))) * moveDirection, ForceMode.Force);
+		}
+	}
+
+	float LateralVelocity()
+	{
+		return Mathf.Sqrt((rigidbody.velocity.x * rigidbody.velocity.x) + (rigidbody.velocity.z * rigidbody.velocity.z));//mostly functional, doesnt account for any y velocity added because of ramps yet
+	}
+
+	void WallRun(bool enable)
+	{
+		isWallrunning = enable;
+		rigidbody.useGravity = !enable;
+		if (enable && rigidbody.velocity.y > maxWallUpwardsVelocity) rigidbody.velocity = new Vector3(rigidbody.velocity.x, maxWallUpwardsVelocity, rigidbody.velocity.z);//prevent player from going over wall when hitting it
+																																										  //ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
+		ResetRoutine(LerpFloat(() => currentTilt, (float tilt) => currentTilt = tilt, enable ? wallTilt * wall.direction : 0, tiltPerSecond), ref crtTilt);
 	}
 
 	void Jump()
 	{
-        if (isGrounded)
-        {
-            canDoubleJump = true;
-            canWallJump = false;
-            if (crtWallJump == null && !wallRun.isWallrunning) crtWallJump = StartCoroutine(Routine());
-        }
+		if (isGrounded) canDoubleJump = true;
+		else if (isWallrunning) canDoubleJump = false;
 
 		if (queueJump)
 		{
 			queueJump = false;
-			if (isGrounded)
+			if (isGrounded || isWallrunning)
 			{
 				Force();
 			}
-			else if (canDoubleJump && !wallRun.isWallrunning)
+			else if (canDoubleJump)
 			{
 				Force();
 				canDoubleJump = false;
 			}
 		}
 
-        if (canWallJump)
-        {
-            if (wall)
-            {
-                Force();
-                canWallJump = false;
-            }
-        }
-
         void Force()
 		{
+			Vector3 direction;
+			float force;
+			if (isWallrunning)
+			{
+				direction = transform.up + wall.hit.normal;
+				force = wallJumpForce;
+			}
+			else
+			{
+				direction = transform.up;
+				force = jumpForce;
+			}
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
-			rigidbody.AddForce(transform.up * jumpForce, ForceMode.VelocityChange);
+			rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
 		}
-
-        IEnumerator Routine()
-        {
-            yield return new WaitForSeconds(wallJumpDelay);
-            canWallJump = true;
-            crtWallJump = null;
-        }
 	}
 
 	void Dash()
@@ -135,16 +193,18 @@ public class PlayerMovement : MonoBehaviour
 
 	void ControlDrag()
 	{
-		rigidbody.drag = isGrounded || wallRun.isWallrunning ? groundDrag : airDrag;
+		if (isGrounded)
+			rigidbody.drag = Mathf.Lerp(minGroundDrag, maxGroundDrag, groundDragCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxGroundDrag)));
+		else if (isWallrunning)
+			rigidbody.drag = wallDrag;
+		else
+			rigidbody.drag = airDrag;
 	}
 
-	bool OnSlope(out RaycastHit slopeHit)
+	class Wall
 	{
-		return Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight / 2 + 0.5f) && slopeHit.normal != Vector3.up;
+		public RaycastHit hit;
+		public int direction;
+		public bool IsOnWall => hit.transform != null;
 	}
-
-    void CheckWall()
-    {
-        wall = Physics.Raycast(transform.position + transform.up, orientation.forward, wallDistance);
-    }
 }

@@ -2,126 +2,151 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallRunV2 : MonoBehaviour
+public class WallRunV2 : MonoBehaviourPlus
 {
-    [SerializeField] Transform orientation;
+	[SerializeField] Transform orientation;
 
-    [Header("Detection")]
-    [SerializeField] float wallDistance = 0.6f;
-    [SerializeField] Transform groundCheck;
-    [SerializeField] float groundDistance;
-    [SerializeField] LayerMask whatIsWall;
-    [SerializeField] LayerMask whatIsGround;
+	[Header("Detection")]
+	[SerializeField] float wallDistance = 0.6f;
+	[SerializeField] Transform groundCheck;
+	[SerializeField] float groundDistance;
+	[SerializeField] LayerMask whatIsWall;
+	[SerializeField] LayerMask whatIsGround;
 
-    [Header("Wall Running")]
-    [SerializeField] private float wallRunGravity;
-    [SerializeField] private float wallJumpForce;
-    [SerializeField] private float wallRunSpeed;
+	[Header("Wall Running")]
+	[SerializeField] private float wallRunGravity;
+	[SerializeField] private float wallJumpForce;
+	[SerializeField] private float wallRunSpeed;
 
-    [Header("Camera")]
-    [SerializeField] private Camera cam;
-    [SerializeField] private float fov;
-    [SerializeField] private float wallRunfov;
-    [SerializeField] private float wallRunfovTime;
-    [SerializeField] private float camTilt;
-    [SerializeField] private float camTiltTime;
+	[Header("Camera")]
+	public float wallFov, fovPerSecond, wallTilt, tiltPerSecond;
+	new Camera camera;
+	float startFov;
 
-    public float tilt { get; private set; }
+	public float currentTilt { get => _tilt; private set { _tilt = value; camera.GetComponent<PlayerCamera>().rotationOffset = new Vector3(0, 0, _tilt); } }
+	float _tilt;
 
-    private bool wallLeft = false;
-    private bool wallRight = false;
-    public bool isWallrunning = false;
+	private bool wallLeft = false;
+	private bool wallRight = false;
+	public bool isWallrunning = false;
 
-    RaycastHit leftWallHit;
-    RaycastHit rightWallHit;
+	RaycastHit leftWallHit;
+	RaycastHit rightWallHit;
 
-    private Rigidbody rb;
-    private AdvPlayerMovementV2 playerMovement;
+	new Rigidbody rigidbody;
+	Coroutine crtFOV, crtTilt;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
+	private void Start()
+	{
+		rigidbody = GetComponent<Rigidbody>();
+		camera = transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+		startFov = camera.fieldOfView;
+	}
 
-    private void Update()
-    {
-        CheckWall();
+	private void Update()
+	{
+		CheckWall();
 
-        if (CanWallRun())
-        {
-            if (wallLeft)
-            {
-                StartWallRun();
-            }
-            else if (wallRight)
-            {
-                StartWallRun();
-            }
-            else
-            {
-                StopWallRun();
-            }
-        }
-        else
-        {
-            StopWallRun();
-        }
-    }
+		if (CanWallRun())
+		{
+			if (wallLeft)
+			{
+				WallRun();
+				//StartWallRun();
+			}
+			else if (wallRight)
+			{
+				WallRun();
+				//StartWallRun();
+			}
+			else
+			{
+				StopWallRun();
+			}
+		}
+		else
+		{
+			StopWallRun();
+		}
+	}
 
-    void CheckWall()
-    {
-        wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallDistance, whatIsWall);
-        wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallDistance, whatIsWall);
-    }
+	void CheckWall()
+	{
+		wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallDistance, whatIsWall);
+		wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallDistance, whatIsWall);
+	}
 
-    bool CanWallRun()
-    {  
-        return !Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround); ;
-    }
-
-    void StartWallRun()
-    {
-        rb.useGravity = false;
-        isWallrunning = true;
-
-        rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
-        rb.AddForce(orientation.forward * wallRunSpeed, ForceMode.Acceleration);
-
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, wallRunfov, wallRunfovTime * Time.deltaTime);
+	bool CanWallRun()
+	{
+		return !Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround); ;
+	}
 
 
-        if (wallLeft)
-        {
-            tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
-        }
+	void WallRun()
+	{
+		rigidbody.useGravity = false;
+		isWallrunning = true;
+		ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, wallFov, fovPerSecond), ref crtFOV);
+		ResetRoutine(LerpFloat(() => currentTilt, (float tilt) => currentTilt = tilt, wallLeft ? -wallTilt : wallTilt, tiltPerSecond), ref crtTilt);
+		StartCoroutine(Run());
+		IEnumerator Run()
+		{
+			while (true)
+			{
+				rigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+				rigidbody.AddForce(orientation.forward * wallRunSpeed, ForceMode.Acceleration);
 
-        else if (wallRight) {
-            tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
-        }
+				yield return new WaitForFixedUpdate();
+			}
+		}
+	}
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (wallLeft)
-            {
-                Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * 100, ForceMode.Force);
-            }
-            else if (wallRight)
-            {
-                Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallJumpForce * 100, ForceMode.Force);
-            }
-        }
-    }
+	void StopWallRun()
+	{
+		isWallrunning = false;
+		rigidbody.useGravity = true;
 
-    void StopWallRun()
-    {
-        isWallrunning = false;
-        rb.useGravity = true;
+		camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, startFov, fovPerSecond * Time.deltaTime);
+		currentTilt = Mathf.Lerp(currentTilt, 0, tiltPerSecond * Time.deltaTime);
+		currentTilt = 0;
+	}
 
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, wallRunfovTime * Time.deltaTime);
-            tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
-    }
+	void StartWallRun()
+	{
+		rigidbody.useGravity = false;
+		isWallrunning = true;
+
+		rigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+		rigidbody.AddForce(orientation.forward * wallRunSpeed, ForceMode.Acceleration);
+
+		camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, wallFov, fovPerSecond * Time.deltaTime);
+
+		if (wallLeft)
+		{
+			currentTilt = -wallTilt;
+			//tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
+		}
+
+		else if (wallRight)
+		{
+			currentTilt = wallTilt;
+			// tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
+		}
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			if (wallLeft)
+			{
+				Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal;
+				rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
+				rigidbody.AddForce(wallRunJumpDirection * wallJumpForce * 100, ForceMode.Force);
+			}
+			else if (wallRight)
+			{
+				Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal;
+				rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
+				rigidbody.AddForce(wallRunJumpDirection * wallJumpForce * 100, ForceMode.Force);
+			}
+		}
+	}
 }

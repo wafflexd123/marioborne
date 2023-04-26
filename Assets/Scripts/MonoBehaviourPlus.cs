@@ -3,6 +3,30 @@ using System.Collections;
 using UnityEngine;
 public class MonoBehaviourPlus : MonoBehaviour
 {
+	public IEnumerator LerpFloat(Func<float> inFloat, Action<float> outFloat, float target, float speed)
+	{
+		if (inFloat() != target)
+		{
+			int direction = inFloat() > target ? -1 : 1;
+			while (true)
+			{
+				outFloat(inFloat() + Time.deltaTime * speed * direction);
+				if (inFloat() * direction >= target * direction)
+				{
+					outFloat(target);
+					yield break;
+				}
+				yield return new WaitForFixedUpdate();
+			}
+		}
+	}
+
+	public class RefWrap<T>
+	{
+		public T value;
+		public static implicit operator T(RefWrap<T> d) => d.value;
+	}
+
 	public static Vector3 VectorArray(float[] array)
 	{
 		return new Vector3(array[0], array[1], array[2]);

@@ -37,7 +37,7 @@ public class PlayerLook : MonoBehaviour
 
         MyInput();
 
-        cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
+        cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, wallRun.currentTilt);
         orientation.transform.rotation = Quaternion.Euler(0, yRotation, zRotation);
         playerTransform.localRotation = Quaternion.Euler(0, yRotation, zRotation);
     }

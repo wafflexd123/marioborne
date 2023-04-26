@@ -8,8 +8,8 @@ public class Player : Humanoid
 	public static Player singlePlayer;
 	public bool invincibility;
 	public float maxInteractDistance;
-	public new Camera camera;
 	public GameObject deathUI;
+	[HideInInspector] public new Camera camera;
 	RaycastHit raycast;
 
 	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
@@ -18,6 +18,7 @@ public class Player : Humanoid
 	protected override void Awake()
 	{
 		base.Awake();
+		camera = transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		singlePlayer = this;
 	}
 

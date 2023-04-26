@@ -6,8 +6,8 @@ using UnityEngine;
 [SelectionBase]
 public abstract class Humanoid : MonoBehaviourPlus
 {
-	public Transform hand;
-	public HumanoidAnimatorManager model;
+	[HideInInspector] public Transform hand;
+	[HideInInspector] public HumanoidAnimatorManager model;
 	public UniInput input;
 
 	public abstract Vector3 LookDirection { get; }
@@ -17,5 +17,8 @@ public abstract class Humanoid : MonoBehaviourPlus
 	protected virtual void Awake()
 	{
 		input = new UniInput(this);
+		Transform t = transform.Find("Body");
+		hand = t.Find("Hand");
+		model = t.Find("Model").GetComponent<HumanoidAnimatorManager>();
 	}
 }
