@@ -2980,6 +2980,7 @@ Transform:
   - {fileID: 5216613447340726756}
   - {fileID: 5216613447995396114}
   - {fileID: 6678995958104038493}
+  - {fileID: 6602282576373397723}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3172,7 +3173,6 @@ Transform:
   - {fileID: 7984483028906799755}
   - {fileID: 2011926580915239831}
   - {fileID: 4804367515834522961}
-  - {fileID: 6602282576373397723}
   - {fileID: 8110813074823590688}
   m_Father: {fileID: 5216613447229458761}
   m_RootOrder: -1
@@ -3713,13 +3713,14 @@ GameObject:
   - component: {fileID: 6602282576373397723}
   - component: {fileID: 6602282576373397724}
   - component: {fileID: 1048758096202355003}
+  - component: {fileID: 5605082360091409541}
   m_Layer: 3
   m_Name: ReflectWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6602282576373397723
 Transform:
   m_ObjectHideFlags: 0
@@ -3732,7 +3733,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1.5, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5216613447340726756}
+  m_Father: {fileID: 5216613447229458761}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6602282576373397724
@@ -3769,6 +3770,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1773428102 &5605082360091409541
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6602282576373397725}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 1, z: 0.5}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffsets:
+  - {x: 0, y: 1, z: 0.5}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 5216613447340726756}
+    weight: 1
 --- !u!1 &6620171246213321547
 GameObject:
   m_ObjectHideFlags: 0
