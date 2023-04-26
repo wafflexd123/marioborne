@@ -86,8 +86,8 @@ public class WallRunV2 : MonoBehaviourPlus
 	{
 		rigidbody.useGravity = false;
 		isWallrunning = true;
-		ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, wallFov, fovPerSecond), ref crtFOV);
-		ResetRoutine(LerpFloat(() => currentTilt, (float tilt) => currentTilt = tilt, wallLeft ? -wallTilt : wallTilt, tiltPerSecond), ref crtTilt);
+		ResetRoutine(TweenFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, wallFov, fovPerSecond), ref crtFOV);
+		ResetRoutine(TweenFloat(() => currentTilt, (float tilt) => currentTilt = tilt, wallLeft ? -wallTilt : wallTilt, tiltPerSecond), ref crtTilt);
 		StartCoroutine(Run());
 		IEnumerator Run()
 		{
