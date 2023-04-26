@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviourPlus
 	{
 		this.speed = speed;
 		this.direction = direction;
-		transform.rotation = Quaternion.LookRotation(direction);
+		transform.LookAt(transform.position + direction);
 		return this;
 	}
 
@@ -28,27 +28,37 @@ public class Bullet : MonoBehaviourPlus
 		transform.position += speed * Time.fixedDeltaTime * direction;
 	}
 
+	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces
+	{
+		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs))
+		{
+			if (brs.enableReflect && FindComponent(brs.transform, out Humanoid humanoid))
+			{
+				direction = humanoid.LookDirection;
+				transform.LookAt(transform.position + direction);
+			}
+		}
+	}
+
 	private void OnCollisionEnter(Collision collision)
 	{
 		if (!isFirstFrame)//prevent bullet from insta-killing the person that shot it
 		{
-            if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first (in case player/ai is holding one)
-            {
-                if (brs.enableReflect)
-                {
-                    if (collision.gameObject.GetComponentInParent<Player>())
-                    {
-                        direction = collision.gameObject.GetComponentInParent<Player>().LookDirection;
-                    }
-                    else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-                }
-            }
-            else if (FindComponent(collision.collider.transform, out Humanoid human))
-            {
-                human.Kill();
-                Destroy(gameObject);
-            }
-            else if (collision.gameObject.tag != "Bullet") Destroy(gameObject);
+			if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first
+			{
+				if (brs.enableReflect)
+				{
+					if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
+					else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+					transform.LookAt(transform.position + direction);
+				}
+			}
+			else if (FindComponent(collision.collider.transform, out Humanoid human))
+			{
+				human.Kill();
+				Destroy(gameObject);
+			}
+			else Destroy(gameObject);
 		}
 	}
 }
