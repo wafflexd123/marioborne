@@ -953,7 +953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30101622ca6c6264c9e7fa3c470278ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWalkForce: 10
+  minWalkForce: 60
   maxWalkForce: 60
   velocityAtMaxWalkForce: 8
   walkForceCurve:
@@ -961,9 +961,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -971,8 +971,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -991,7 +991,7 @@ MonoBehaviour:
   tiltPerSecond: 60
   maxWallUpwardsVelocity: 2
   minWallRunVelocity: 2
-  minGroundDrag: 0.2
+  minGroundDrag: 6
   maxGroundDrag: 6
   velocityAtMaxGroundDrag: 8
   groundDragCurve:
@@ -999,9 +999,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -1009,8 +1009,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -1021,7 +1021,32 @@ MonoBehaviour:
   airDrag: 0.8
   wallDrag: 0.8
   velocityAtMaxFov: 8
-  fovAtMaxSpeed: 100
+  fovAtMaxVelocity: 100
+  fovPerSecond: 20
+  fovCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.015105994
+      outSlope: -0.015105994
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21993673
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   layerGround:
     serializedVersion: 2
     m_Bits: 64

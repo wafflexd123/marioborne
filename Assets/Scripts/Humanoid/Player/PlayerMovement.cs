@@ -22,7 +22,8 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	[Header("FOV")]
 	public float velocityAtMaxFov;
-	public float fovAtMaxSpeed;
+	public float fovAtMaxVelocity, fovPerSecond;
+	public AnimationCurve fovCurve;
 
 	[Header("Layers")]
 	public LayerMask layerGround;
@@ -37,7 +38,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Wall wall = new Wall();
 	Coroutine crtDash;
 	Transform tfmBody, tfmGround, tfmSlope;
-	Coroutine crtTilt;
+	Coroutine crtTilt, crtFOV;
 	Console.Line cnsDebug;
 
 	//Properties
@@ -71,10 +72,17 @@ public class PlayerMovement : MonoBehaviourPlus
 		MovePlayer();
 		Jump();
 		Dash();
-		camera.fieldOfView = Mathf.Lerp(startFov, fovAtMaxSpeed, rigidbody.velocity.magnitude / velocityAtMaxFov);
+		ControlFOV();
 
+		//Console
 		cnsDebug.text = $"Velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}, grounded: {isGrounded}, drag: {rigidbody.drag}\n" +
 			$"On wall: {wall.IsOnWall}, direction: {wall.direction}, wallrunning: {isWallrunning}";
+	}
+
+	void ControlFOV()
+	{
+		float targetFov = Mathf.Lerp(startFov, fovAtMaxVelocity, fovCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxFov)));
+		ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, targetFov, fovPerSecond), ref crtFOV);
 	}
 
 	void CheckContacts()
@@ -133,8 +141,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		isWallrunning = enable;
 		rigidbody.useGravity = !enable;
 		if (enable && rigidbody.velocity.y > maxWallUpwardsVelocity) rigidbody.velocity = new Vector3(rigidbody.velocity.x, maxWallUpwardsVelocity, rigidbody.velocity.z);//prevent player from going over wall when hitting it
-																																										  //ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
 		ResetRoutine(LerpFloat(() => currentTilt, (float tilt) => currentTilt = tilt, enable ? wallTilt * wall.direction : 0, tiltPerSecond), ref crtTilt);
+		//ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
 	}
 
 	void Jump()
