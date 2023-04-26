@@ -15,6 +15,11 @@ public class Gun : WeaponBase
 	{
 		base.OnPickup();
         wielder.model.holdingWeapon = true;
+        if(wielder.name == "Player")
+        {
+            if (type == GunType.Pistol) ammo = 10;
+            if (type == GunType.Shotgun) ammo = 2;
+        }
 	}
 
 	protected override void OnDrop()
