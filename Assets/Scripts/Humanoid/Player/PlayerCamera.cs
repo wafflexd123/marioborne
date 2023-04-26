@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
-	public float sensitivity;
+	public float sensitivity, minAngle, maxAngle;
 	public Transform body;
 	[HideInInspector] public Vector3 rotationOffset;
 	Vector3 rotation;
@@ -20,7 +20,7 @@ public class PlayerCamera : MonoBehaviour
 
 	void Update()
 	{
-		rotation.x = Mathf.Clamp(rotation.x - (Input.GetAxis("Mouse Y") * sensitivity), -90, 90);
+		rotation.x = Mathf.Clamp(rotation.x - (Input.GetAxis("Mouse Y") * sensitivity), minAngle, maxAngle);
 		rotation.y += Input.GetAxisRaw("Mouse X") * sensitivity % 360;
 		transform.eulerAngles = rotation + rotationOffset;
 		body.localEulerAngles = new Vector3(0, rotation.y);

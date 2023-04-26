@@ -18,7 +18,7 @@ public class Player : Humanoid
 	protected override void Awake()
 	{
 		base.Awake();
-		camera = transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+		camera = transform.Find("Head").Find("Eyes").Find("Camera").GetComponent<Camera>();
 		singlePlayer = this;
 	}
 

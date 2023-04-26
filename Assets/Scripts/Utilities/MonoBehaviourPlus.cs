@@ -3,14 +3,14 @@ using System.Collections;
 using UnityEngine;
 public class MonoBehaviourPlus : MonoBehaviour
 {
-	public IEnumerator LerpFloat(Func<float> inFloat, Action<float> outFloat, float target, float speed)
+	public IEnumerator TweenFloat(Func<float> inFloat, Action<float> outFloat, float target, float speed)
 	{
 		if (inFloat() != target)
 		{
 			int direction = inFloat() > target ? -1 : 1;
 			while (true)
 			{
-				outFloat(inFloat() + Time.deltaTime * speed * direction);
+				outFloat(inFloat() + Time.fixedDeltaTime * speed * direction);
 				if (inFloat() * direction >= target * direction)
 				{
 					outFloat(target);
@@ -21,10 +21,15 @@ public class MonoBehaviourPlus : MonoBehaviour
 		}
 	}
 
-	public class RefWrap<T>
+	public float TweenFloat(float value, float target, float speed)
 	{
-		public T value;
-		public static implicit operator T(RefWrap<T> d) => d.value;
+		if (value != target)
+		{
+			int direction = value > target ? -1 : 1;
+			value += Time.fixedDeltaTime * speed * direction;
+			if (value * direction >= target * direction) value = target;
+		}
+		return value;
 	}
 
 	public static Vector3 VectorArray(float[] array)

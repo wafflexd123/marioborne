@@ -151,7 +151,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304914009}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b5b3302c966270f47a48e00e683b857f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1282,105 +1282,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: minWalkForce
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: fovAtMaxSpeed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: maxGroundDrag
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: minGroundDrag
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: velocityAtMaxFov
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: velocityAtMaxGroundDrag
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[0].value
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[0].inSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[1].inSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[0].inSlope
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[1].inSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[0].outSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[1].inWeight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[1].outSlope
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[0].outSlope
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[1].outSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[0].outWeight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[0].tangentMode
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: walkForceCurve.m_Curve.Array.data[1].tangentMode
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[0].tangentMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7731276297294501347, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: groundDragCurve.m_Curve.Array.data[1].tangentMode
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8939213948325491126, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-    - {fileID: 729779064659108985, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1391,7 +1293,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29758
+  m_Name: pb_Mesh71346
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1908,7 +1810,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29772
+  m_Name: pb_Mesh71360
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2073,7 +1975,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29794
+  m_Name: pb_Mesh71376
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2238,7 +2140,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29862
+  m_Name: pb_Mesh71394
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

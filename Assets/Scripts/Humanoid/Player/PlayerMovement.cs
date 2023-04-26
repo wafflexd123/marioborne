@@ -35,24 +35,28 @@ public class PlayerMovement : MonoBehaviourPlus
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
+	PlayerCamera playerCamera;
 	Wall wall = new Wall();
 	Coroutine crtDash;
 	Transform tfmBody, tfmGround, tfmSlope;
-	Coroutine crtTilt, crtFOV;
+	Coroutine crtTilt;
+	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 
 	//Properties
-	public float currentTilt { get => _tilt; private set { _tilt = value; camera.GetComponent<PlayerCamera>().rotationOffset = new Vector3(0, 0, _tilt); } }
+	public float currentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
 
 	private void Start()
 	{
 		tfmBody = transform.Find("Body");
 		tfmGround = tfmBody.Find("Ground Detection");
 		tfmSlope = tfmBody.Find("Slope Detection");
+		animator = tfmBody.Find("Model").GetComponent<HumanoidAnimatorManager>();
 		rigidbody = GetComponent<Rigidbody>();
 		rigidbody.freezeRotation = true;
 		mass = rigidbody.mass;
-		camera = transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
+		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		startFov = camera.fieldOfView;
 		cnsDebug = Console.AddLine();
 	}
@@ -74,6 +78,9 @@ public class PlayerMovement : MonoBehaviourPlus
 		Dash();
 		ControlFOV();
 
+		//Animation
+		animator.velocity = rigidbody.velocity;
+
 		//Console
 		cnsDebug.text = $"Velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}, grounded: {isGrounded}, drag: {rigidbody.drag}\n" +
 			$"On wall: {wall.IsOnWall}, direction: {wall.direction}, wallrunning: {isWallrunning}";
@@ -82,7 +89,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	void ControlFOV()
 	{
 		float targetFov = Mathf.Lerp(startFov, fovAtMaxVelocity, fovCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxFov)));
-		ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, targetFov, fovPerSecond), ref crtFOV);
+		camera.fieldOfView = TweenFloat(camera.fieldOfView, targetFov, fovPerSecond);
 	}
 
 	void CheckContacts()
@@ -141,7 +148,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		isWallrunning = enable;
 		rigidbody.useGravity = !enable;
 		if (enable && rigidbody.velocity.y > maxWallUpwardsVelocity) rigidbody.velocity = new Vector3(rigidbody.velocity.x, maxWallUpwardsVelocity, rigidbody.velocity.z);//prevent player from going over wall when hitting it
-		ResetRoutine(LerpFloat(() => currentTilt, (float tilt) => currentTilt = tilt, enable ? wallTilt * wall.direction : 0, tiltPerSecond), ref crtTilt);
+		ResetRoutine(TweenFloat(() => currentTilt, (float tilt) => currentTilt = tilt, enable ? wallTilt * wall.direction : 0, tiltPerSecond), ref crtTilt);
 		//ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
 	}
 
