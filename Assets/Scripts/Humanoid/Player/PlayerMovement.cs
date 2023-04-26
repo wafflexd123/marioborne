@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
+	PlayerCamera playerCamera;
 	Wall wall = new Wall();
 	Coroutine crtDash;
 	Transform tfmBody, tfmGround, tfmSlope;
@@ -43,7 +44,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Console.Line cnsDebug;
 
 	//Properties
-	public float currentTilt { get => _tilt; private set { _tilt = value; camera.GetComponent<PlayerCamera>().rotationOffset = new Vector3(0, 0, _tilt); } }
+	public float currentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
 
 	private void Start()
 	{
@@ -54,7 +55,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		rigidbody = GetComponent<Rigidbody>();
 		rigidbody.freezeRotation = true;
 		mass = rigidbody.mass;
-		camera = transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
+		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		startFov = camera.fieldOfView;
 		cnsDebug = Console.AddLine();
 	}
