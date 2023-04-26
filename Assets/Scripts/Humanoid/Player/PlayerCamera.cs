@@ -16,7 +16,6 @@ public class PlayerCamera : MonoBehaviour
 	void Start()
 	{
 		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
 	}
 
 	void Update()
@@ -25,5 +24,7 @@ public class PlayerCamera : MonoBehaviour
 		rotation.y += Input.GetAxisRaw("Mouse X") * sensitivity % 360;
 		transform.eulerAngles = rotation + rotationOffset;
 		body.localEulerAngles = new Vector3(0, rotation.y);
+
+		if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
 	}
 }
