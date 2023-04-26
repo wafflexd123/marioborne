@@ -894,8 +894,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5216613447229458761}
-  - component: {fileID: 1938220572}
-  - component: {fileID: 7731276297294501347}
+  - component: {fileID: 1348240585787059525}
+  - component: {fileID: 5516079215156044915}
   - component: {fileID: 5216613447229458762}
   m_Layer: 3
   m_Name: Player
@@ -923,7 +923,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1938220572
+--- !u!114 &1348240585787059525
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -935,13 +935,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eff7614580ff394ab5b751e01636eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: {fileID: 8110813074823590688}
-  model: {fileID: 1137386820807274095}
+  hand: {fileID: 0}
+  model: {fileID: 0}
   invincibility: 1
-  maxInteractDistance: 3
+  maxInteractDistance: 5
   deathUI: {fileID: 8152147435226054013}
   camera: {fileID: 0}
---- !u!114 &7731276297294501347
+--- !u!114 &5516079215156044915
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -953,7 +953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30101622ca6c6264c9e7fa3c470278ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWalkForce: 0
+  minWalkForce: 0.2
   maxWalkForce: 60
   velocityAtMaxWalkForce: 8
   walkForceCurve:
@@ -961,49 +961,67 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.3
-      inSlope: 0.7
-      outSlope: 0.7
+      value: 0
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.7
-      outSlope: 0.7
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   jumpForce: 15
-  dashForce: 30
-  dashCooldown: 2
+  dashForce: 3
+  dashCooldown: 3
   airMultiplier: 0.08
-  wallRunGravity: 9.8
+  wallRunGravity: 10
   wallJumpForce: 7
-  wallRunForce: 10
+  wallRunForce: 2
   wallTilt: 10
-  tiltPerSecond: 90
+  tiltPerSecond: 60
   maxWallUpwardsVelocity: 2
   minWallRunVelocity: 2
-  minGroundDrag: 0
-  maxGroundDrag: 0
-  velocityAtMaxGroundDrag: 0
+  minGroundDrag: 0.2
+  maxGroundDrag: 6
+  velocityAtMaxGroundDrag: 8
   groundDragCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   airDrag: 0.8
   wallDrag: 0.8
-  velocityAtMaxFov: 0
-  fovAtMaxSpeed: 110
+  velocityAtMaxFov: 8
+  fovAtMaxSpeed: 100
   layerGround:
     serializedVersion: 2
     m_Bits: 64
