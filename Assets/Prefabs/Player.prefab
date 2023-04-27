@@ -3014,7 +3014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30101622ca6c6264c9e7fa3c470278ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWalkForce: 10
+  minWalkForce: 60
   maxWalkForce: 60
   velocityAtMaxWalkForce: 8
   walkForceCurve:
@@ -3051,7 +3051,8 @@ MonoBehaviour:
   wallTilt: 10
   tiltPerSecond: 60
   maxWallUpwardsVelocity: 15
-  minWallRunVelocity: 2
+  minWallRunLateralVelocity: 2
+  wallCatchDistance: 0.6
   minGroundDrag: 6
   maxGroundDrag: 6
   velocityAtMaxGroundDrag: 8
@@ -4264,7 +4265,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 3
-  runSpeed: 8
+  runSpeed: 6.5
+  airSpeed: 1
+  landSpeed: 5
 --- !u!1 &7371621566100557771
 GameObject:
   m_ObjectHideFlags: 0

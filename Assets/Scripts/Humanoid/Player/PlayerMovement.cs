@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	[Header("Wall Running")]
 	public float wallRunGravity;
-	public float wallJumpForce, wallRunForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, minWallRunVelocity;
+	public float wallJumpForce, wallRunForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, minWallRunLateralVelocity, wallCatchDistance = .6f;
 
 	[Header("Drag")]
 	public float minGroundDrag;
@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public LayerMask layerWall;
 
 	//Private
-	float mass, startFov, wallDistance = .6f, wallJumpDistance = 0.3f, wallJumpDelay = .1f, _tilt;
+	float mass, startFov, wallJumpDistance = 0.3f, wallJumpDelay = .1f, _tilt;
 	bool queueJump, queueDash, canDoubleJump = true, canWallJump, hitWall, isGrounded, isWallrunning;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Coroutine crtDash;
 	Transform tfmBody, tfmGround, tfmSlope;
 	Coroutine crtTilt;
-    Coroutine crtWallJump;
+	Coroutine crtWallJump;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 
@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (Input.GetButtonDown("Jump")) queueJump = true;
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 		rigidbody.mass = mass / Time.timeScale;
-        CheckWall();
+		CheckWall();
 	}
 
 	void FixedUpdate()
@@ -101,20 +101,24 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			if (Physics.CheckSphere(t.position, .01f, layerGround))
 			{
-				isGrounded = true;
+				if (!isGrounded)
+				{
+					animator.Land();
+					isGrounded = true;
+				}
 				return;
 			}
 		}
 		isGrounded = false;
 
 		//Wall check
-		if (Physics.Raycast(transform.position, tfmBody.right, out wall.hit, wallDistance, layerWall))
+		if (Physics.Raycast(transform.position, tfmBody.right, out wall.hit, wallCatchDistance, layerWall))
 		{
 			wall.direction = 1;
 		}
 		else
 		{
-			Physics.Raycast(transform.position, -tfmBody.right, out wall.hit, wallDistance, layerWall);
+			Physics.Raycast(transform.position, -tfmBody.right, out wall.hit, wallCatchDistance, layerWall);
 			wall.direction = -1;
 		}
 	}
@@ -127,7 +131,7 @@ public class PlayerMovement : MonoBehaviourPlus
 			Physics.Raycast(tfmSlope.position + Vector3.up, Vector3.down, out RaycastHit slopeHit, 1.1f, layerGround + layerWall);
 			rigidbody.AddForce(Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxWalkForce))) * Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized, ForceMode.Force);
 		}
-		else if (wall.IsOnWall && LateralVelocity() >= minWallRunVelocity)//on wall and going fast enough
+		else if (wall.IsOnWall && (LateralVelocity() >= minWallRunLateralVelocity || Mathf.Abs(rigidbody.velocity.y) > jumpForce))//on wall and going fast enough in lateral OR y direction
 		{
 			if (!isWallrunning) WallRun(true);
 			rigidbody.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
@@ -156,13 +160,13 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void Jump()
 	{
-        if (isGrounded)
-        {
-            canDoubleJump = true;
-            canWallJump = false;
-            if (crtWallJump == null && !isWallrunning) crtWallJump = StartCoroutine(Routine());
-        }
-        else if (isWallrunning) canDoubleJump = false;
+		if (isGrounded)
+		{
+			canDoubleJump = true;
+			canWallJump = false;
+			if (crtWallJump == null && !isWallrunning) crtWallJump = StartCoroutine(Routine());
+		}
+		else if (isWallrunning) canDoubleJump = false;
 
 		if (queueJump)
 		{
@@ -178,16 +182,16 @@ public class PlayerMovement : MonoBehaviourPlus
 			}
 		}
 
-        if (canWallJump)
-        {
-            if (hitWall)
-            {
-                Force();
-                canWallJump = false;
-            }
-        }
+		if (canWallJump)
+		{
+			if (hitWall)
+			{
+				Force();
+				canWallJump = false;
+			}
+		}
 
-        void Force()
+		void Force()
 		{
 			Vector3 direction;
 			float force;
@@ -205,12 +209,12 @@ public class PlayerMovement : MonoBehaviourPlus
 			rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
 		}
 
-        IEnumerator Routine()
-        {
-            yield return new WaitForSeconds(wallJumpDelay);
-            canWallJump = true;
-            crtWallJump = null;
-        }
+		IEnumerator Routine()
+		{
+			yield return new WaitForSeconds(wallJumpDelay);
+			canWallJump = true;
+			crtWallJump = null;
+		}
 	}
 
 	void Dash()
@@ -246,8 +250,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		public bool IsOnWall => hit.transform != null;
 	}
 
-    void CheckWall()
-    {
-        hitWall = Physics.Raycast(transform.position + transform.up, tfmBody.transform.forward, wallJumpDistance);
-    }
+	void CheckWall()
+	{
+		hitWall = Physics.Raycast(transform.position + transform.up, tfmBody.transform.forward, wallJumpDistance);
+	}
 }
