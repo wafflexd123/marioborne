@@ -17,6 +17,7 @@ public class Enemy : Humanoid
 
 	//Script
 	Vector3 lookingAt;
+    Vector3 velocity = Vector3.zero;
 	int destPoint = 0;
 	float agentSpeed;
 	NavMeshAgent agent;
@@ -29,6 +30,7 @@ public class Enemy : Humanoid
 	{
 		base.Awake();
 		agent = GetComponent<NavMeshAgent>();
+        agent.updatePosition = false;
 		agentSpeed = agent.speed;
 		fov = GetComponent<FieldOfView>();
 
@@ -69,7 +71,7 @@ public class Enemy : Humanoid
 		}
 		else
 		{
-			lookingAt = Vector3.negativeInfinity;
+            lookingAt = Vector3.negativeInfinity;
 			agent.isStopped = false;
 
 			if (!isPatrolling && points != null && points.childCount > 0)
@@ -92,12 +94,18 @@ public class Enemy : Humanoid
 		}
 	}
 
-	void GoToNextPoint()
+    private void FixedUpdate()
+    {
+        transform.position = Vector3.SmoothDamp(transform.position, agent.nextPosition, ref velocity, 0.1f);
+    }
+
+    void GoToNextPoint()
 	{
 		isPatrolling = true;
 		if (points == null || points.childCount == 0) return;
 		agent.destination = points.GetChild(destPoint).position;
-		destPoint = (destPoint + 1) % points.childCount;
+        //lookingAt = points.GetChild(destPoint).position;
+        destPoint = (destPoint + 1) % points.childCount;
 	}
 
     public static Vector3 FirstOrderIntercept(Vector3 shooterPos, Vector3 shooterVelocity, float bulletSpeed, Vector3 targetPos, Vector3 targetVelocity)

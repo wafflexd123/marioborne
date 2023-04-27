@@ -12,7 +12,6 @@ public class WeaponBase : MonoBehaviourPlus
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	bool isMoving;
-	bool isFirstFrame = true;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 
 
@@ -55,10 +54,9 @@ public class WeaponBase : MonoBehaviourPlus
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
 	}
 
-	/*public virtual void Throw()
+	public virtual void Throw()
 	{
         OnDrop();
-		isFirstFrame = false;
 		Vector3 tempDir = wielder.LookDirection;
 		Vector3 tempPos = wielder.GetComponent<Player>().camera.transform.position + wielder.GetComponent<Player>().camera.transform.forward;
 		wielder = null;
@@ -66,7 +64,7 @@ public class WeaponBase : MonoBehaviourPlus
 		EnableRigidbody(true);
         transform.position = tempPos;
         rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
-	}*/
+	}
 
 	/// <summary>
 	/// Called when item is picked up by a humanoid. Set input listeners here.
@@ -79,7 +77,7 @@ public class WeaponBase : MonoBehaviourPlus
 			else RightMouse();
 		}));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop()));
-		//inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw()));
+		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw()));
 	}
 
 	/// <summary>
@@ -126,14 +124,14 @@ public class WeaponBase : MonoBehaviourPlus
 	}
 
 	private void OnCollisionEnter(Collision collision)
-	{/*
+	{
 		if (rigidbody != null && isMoving)
 		{
-			if (FindComponent(collision.collider.transform, out Humanoid human) && !isFirstFrame)
+			if (FindComponent(collision.collider.transform, out Enemy enemy))
 			{
-				human.Kill();
+				enemy.Kill();
 				Destroy(gameObject);
 			}
-		}*/
+		}
 	}
 }
