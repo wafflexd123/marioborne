@@ -55,7 +55,7 @@ public class Bullet : MonoBehaviourPlus
 			}
 			else if (FindComponent(collision.collider.transform, out Humanoid human))
 			{
-				human.Kill();
+				human.Kill(DeathType.Bullet);
 				Destroy(gameObject);
 			}
 			else Destroy(gameObject);

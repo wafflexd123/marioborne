@@ -9,6 +9,7 @@ public class Player : Humanoid
 	public bool invincibility;
 	public float maxInteractDistance;
 	public GameObject deathUI;
+	public WickUI wickUI;
 	[HideInInspector] public new Camera camera;
 	RaycastHit raycast;
 
@@ -58,11 +59,12 @@ public class Player : Humanoid
 		}
 	}
 
-	public override void Kill()
+	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		if (invincibility) Debug.Log("You would have died, but no one can kill John Matrix.");
-		else
+		else if (enabled)//if havent already died
 		{
+			wickUI.DisplayRandom(deathType);
 			//animatorManager.dying = true;
 			deathUI.SetActive(true);
 			GetComponent<PlayerMovement>().enabled = false;

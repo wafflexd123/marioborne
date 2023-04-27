@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class RespawnOnPlayerTouch : MonoBehaviourPlus
 {
+	public DeathType deathType;
+
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (FindComponent(collision.transform, out Player _))
+		if (FindComponent(collision.transform, out Player p))
 		{
-			SceneLoadTools.singleton.ReloadCurrentScene();
+			p.Kill(deathType);
 		}
 	}
 }

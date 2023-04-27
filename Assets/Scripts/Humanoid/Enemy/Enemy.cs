@@ -153,7 +153,7 @@ public class Enemy : Humanoid
         else return Mathf.Max(-b / (2f * a), 0f);
     }
 
-	public override void Kill()
+	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		model.dying = true;
 		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one

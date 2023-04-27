@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DeathType { General, Fall, Bullet, Melee }
+
 [SelectionBase]
 public abstract class Humanoid : MonoBehaviourPlus
 {
@@ -12,7 +14,7 @@ public abstract class Humanoid : MonoBehaviourPlus
 
 	public abstract Vector3 LookDirection { get; }
 	public abstract Vector3 LookingAt { get; }
-	public abstract void Kill();
+	public abstract void Kill(DeathType deathType = DeathType.General);
 
 	protected virtual void Awake()
 	{

@@ -90,6 +90,36 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 		}
 	}
 
+	public void DisplayRandom(DeathType deathType = DeathType.General)
+	{
+		gameObject.SetActive(true);
+		switch (deathType)
+		{
+			case DeathType.General:
+				Display(general[Random.Range(0, general.Length)]);
+				break;
+			case DeathType.Fall:
+				Display(fall[Random.Range(0, fall.Length)]);
+				break;
+			case DeathType.Bullet:
+				Display(bullet[Random.Range(0, bullet.Length)]);
+				break;
+			case DeathType.Melee:
+				Display(melee[Random.Range(0, melee.Length)]);
+				break;
+			default:
+				break;
+		}
+	}
+
+	public void Display(string[] strings)
+	{
+		for (int f = 0; f < 3; f++)
+		{
+			textBoxes[f].text = f < strings.Length ? strings[f] : "";
+		}
+	}
+
 	IEnumerator Start()
 	{
 		if (demoMode)
@@ -98,37 +128,25 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 			{
 				for (int i = 0; i < general.Length; i++)
 				{
-					for (int f = 0; f < 3; f++)
-					{
-						textBoxes[f].text = f < general[i].Length ? general[i][f] : "";
-					}
+					Display(general[i]);
 					yield return new WaitForSeconds(demoDelay);
 				}
 
 				for (int i = 0; i < bullet.Length; i++)
 				{
-					for (int f = 0; f < 3; f++)
-					{
-						textBoxes[f].text = f < bullet[i].Length ? bullet[i][f] : "";
-					}
+					Display(bullet[i]);
 					yield return new WaitForSeconds(demoDelay);
 				}
 
 				for (int i = 0; i < melee.Length; i++)
 				{
-					for (int f = 0; f < 3; f++)
-					{
-						textBoxes[f].text = f < melee[i].Length ? melee[i][f] : "";
-					}
+					Display(melee[i]);
 					yield return new WaitForSeconds(demoDelay);
 				}
 
 				for (int i = 0; i < fall.Length; i++)
 				{
-					for (int f = 0; f < 3; f++)
-					{
-						textBoxes[f].text = f < fall[i].Length ? fall[i][f] : "";
-					}
+					Display(fall[i]);
 					yield return new WaitForSeconds(demoDelay);
 				}
 			}
