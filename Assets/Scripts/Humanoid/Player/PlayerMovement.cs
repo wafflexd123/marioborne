@@ -30,8 +30,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	public LayerMask layerWall;
 
 	//Private
-	float mass, startFov, wallDistance = .6f, _tilt;
-	bool queueJump, queueDash, canDoubleJump = true, isGrounded, isWallrunning;
+	float mass, startFov, wallDistance = .6f, wallJumpDistance = 0.3f, wallJumpDelay = .1f, _tilt;
+	bool queueJump, queueDash, canDoubleJump = true, canWallJump, hitWall, isGrounded, isWallrunning;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Coroutine crtDash;
 	Transform tfmBody, tfmGround, tfmSlope;
 	Coroutine crtTilt;
+    Coroutine crtWallJump;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 
@@ -66,6 +67,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (Input.GetButtonDown("Jump")) queueJump = true;
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 		rigidbody.mass = mass / Time.timeScale;
+        CheckWall();
 	}
 
 	void FixedUpdate()
@@ -154,8 +156,13 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void Jump()
 	{
-		if (isGrounded) canDoubleJump = true;
-		else if (isWallrunning) canDoubleJump = false;
+        if (isGrounded)
+        {
+            canDoubleJump = true;
+            canWallJump = false;
+            if (crtWallJump == null && !isWallrunning) crtWallJump = StartCoroutine(Routine());
+        }
+        else if (isWallrunning) canDoubleJump = false;
 
 		if (queueJump)
 		{
@@ -170,6 +177,15 @@ public class PlayerMovement : MonoBehaviourPlus
 				canDoubleJump = false;
 			}
 		}
+
+        if (canWallJump)
+        {
+            if (hitWall)
+            {
+                Force();
+                canWallJump = false;
+            }
+        }
 
         void Force()
 		{
@@ -188,6 +204,13 @@ public class PlayerMovement : MonoBehaviourPlus
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
 			rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
 		}
+
+        IEnumerator Routine()
+        {
+            yield return new WaitForSeconds(wallJumpDelay);
+            canWallJump = true;
+            crtWallJump = null;
+        }
 	}
 
 	void Dash()
@@ -222,4 +245,9 @@ public class PlayerMovement : MonoBehaviourPlus
 		public int direction;
 		public bool IsOnWall => hit.transform != null;
 	}
+
+    void CheckWall()
+    {
+        hitWall = Physics.Raycast(transform.position + transform.up, tfmBody.transform.forward, wallJumpDistance);
+    }
 }
