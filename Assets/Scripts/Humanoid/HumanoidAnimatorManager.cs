@@ -27,7 +27,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	public void Collide(Vector3 velocity)
 	{
-		if (previousVelocity.y < 0f && (velocity.y < 0.01f && velocity.y > -0.01f))//if hit the ground
+		if (previousVelocity.y <= -landSpeed && (velocity.y < 0.01f && velocity.y > -0.01f))//if hit the ground
 		{
 			animator.SetTrigger("land");
 		}
