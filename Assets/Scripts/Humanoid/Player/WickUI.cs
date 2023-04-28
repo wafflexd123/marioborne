@@ -92,20 +92,19 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 
 	public void DisplayRandom(DeathType deathType = DeathType.General)
 	{
-		gameObject.SetActive(true);
 		switch (deathType)
 		{
 			case DeathType.General:
 				Display(general[Random.Range(0, general.Length)]);
 				break;
 			case DeathType.Fall:
-				Display(fall[Random.Range(0, fall.Length)]);
+				Display(Random.Range(0f, 1f) > .5f ? fall[Random.Range(0, fall.Length)] : general[Random.Range(0, general.Length)]);
 				break;
 			case DeathType.Bullet:
-				Display(bullet[Random.Range(0, bullet.Length)]);
+				Display(Random.Range(0f, 1f) > .5f ? bullet[Random.Range(0, bullet.Length)] : general[Random.Range(0, general.Length)]);
 				break;
 			case DeathType.Melee:
-				Display(melee[Random.Range(0, melee.Length)]);
+				Display(Random.Range(0f, 1f) > .5f ? melee[Random.Range(0, melee.Length)] : general[Random.Range(0, general.Length)]);
 				break;
 			default:
 				break;
@@ -114,6 +113,7 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 
 	public void Display(string[] strings)
 	{
+		gameObject.SetActive(true);
 		for (int f = 0; f < 3; f++)
 		{
 			textBoxes[f].text = f < strings.Length ? strings[f] : "";
