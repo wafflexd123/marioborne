@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
-	public float walkSpeed, runSpeed, airSpeed, fallCrouchEngageSpeed, fallRollEngageSpeed;
+	public float walkSpeed, runSpeed, fallCrouchEngageSpeed, fallRollEngageSpeed, colliderCrouchTime, crouchHeightMultiplier;
+
+	float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
 	bool _wallRunning, _grounded, queueRoll;
+	Vector3 previousVelocity, colliderCentre;
 	Animator animator;
-	Vector3 previousVelocity;
-	Coroutine crtGroundState, crtQueueRoll;
+	Coroutine crtGroundState, crtQueueRoll, crtCrouch;
+	new CapsuleCollider collider;
 
 	private void Awake()
 	{
 		animator = GetComponent<Animator>();
+		collider = transform.parent.GetComponent<CapsuleCollider>();
+		colliderHeight = collider.height;
+		colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
+		colliderCentre = collider.center;
+		colliderCentreCrouch = colliderCentre.y * crouchHeightMultiplier;
+
 		if (transform.localPosition != Vector3.zero)
 		{
 			transform.localPosition = Vector3.zero;
@@ -78,13 +87,38 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		}
 	}
 
+	IEnumerator Crouch(bool crouch)
+	{
+		animator.SetBool("sliding", crouch);
+		float percent, timer = 0;
+		float centreStart = collider.center.y, centreEnd;
+		float heightStart = collider.height, heightEnd;
+		if (crouch)
+		{
+			centreEnd = colliderCentreCrouch;
+			heightEnd = colliderHeightCrouch;
+		}
+		else
+		{
+			centreEnd = colliderCentre.y;
+			heightEnd = colliderHeight;
+		}
+		do
+		{
+			timer += Time.fixedDeltaTime;
+			percent = Mathf.Clamp01(timer / colliderCrouchTime);
+			collider.center = new Vector3(colliderCentre.x, Mathf.Lerp(centreStart, centreEnd, percent), colliderCentre.z);
+			collider.height = Mathf.Lerp(heightStart, heightEnd, percent);
+			yield return new WaitForFixedUpdate();
+		} while (percent != 1);
+	}
+
 	public bool holdingWeapon { set => animator.SetLayerWeight(1, value ? 1 : 0); }
 	public bool attacking { set => animator.SetBool("attacking", value); }
-	public bool crouching { set => animator.SetBool("crouching", value); }
 	public bool dying { set => animator.SetBool("dying", value); }
 	public bool grounded { set { _grounded = value; CheckGroundState(); } }
 	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
-	public bool sliding { set => animator.SetBool("sliding", value); }
+	public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
 	public Vector3 velocity
 	{
 		set

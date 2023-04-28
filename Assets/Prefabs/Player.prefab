@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19143304028857081}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7133317, y: 1.4406136, z: -0.0554849}
+  m_LocalPosition: {x: 0.71333313, y: 1.4406128, z: -0.055480957}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1864,7 +1864,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2649988205086432466}
-  m_LocalRotation: {x: -0.024616214, y: -0.0025623553, z: 0.10349849, w: 0.99432164}
+  m_LocalRotation: {x: -0.024616215, y: -0.0025623553, z: 0.103498496, w: 0.99432164}
   m_LocalPosition: {x: 0.0000000023841857, y: 0.1083818, z: -0.00000002564388}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_ConstrainProportionsScale: 0
@@ -3503,7 +3503,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5216613447995396109}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.5992944, z: -0.015195336}
+  m_LocalPosition: {x: 0, y: 1.5992928, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4594,11 +4594,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a45499e1875f3e4a91844562a15e3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
+  walkSpeed: 1
   runSpeed: 6.5
   airSpeed: 1
   fallCrouchEngageSpeed: 15
   fallRollEngageSpeed: 5
+  colliderCrouchTime: 0.25
+  crouchHeightMultiplier: 0.55
 --- !u!1 &7371621566100557771
 GameObject:
   m_ObjectHideFlags: 0
