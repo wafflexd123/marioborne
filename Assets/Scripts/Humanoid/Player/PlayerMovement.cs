@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	public AnimationCurve walkForceCurve;
 	public float jumpForce, dashForce, dashCooldown, airMultiplier;
 
+	[Header("Slide & Roll")]
+	public float rollQueueTime;
+	public float rollRequeueTime;
+
 	[Header("Wall Running")]
 	public float wallRunGravity;
 	public float wallJumpForce, wallRunForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, minWallRunLateralVelocity, wallCatchDistance = .6f;
@@ -67,6 +71,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	void Update()
 	{
 		if (Input.GetButtonDown("Jump")) queueJump = true;
+		if (Input.GetButtonDown("Crouch")) animator.QueueRoll(rollQueueTime, rollRequeueTime);
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 		rigidbody.mass = mass / Time.timeScale;
 		CheckWall();

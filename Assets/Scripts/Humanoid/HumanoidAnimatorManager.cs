@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
-	public float walkSpeed, runSpeed, airSpeed, landSpeed;
-	bool _wallRunning, _grounded;
+	public float walkSpeed, runSpeed, airSpeed, fallCrouchEngageSpeed, fallRollEngageSpeed;
+	bool _wallRunning, _grounded, queueRoll;
 	Animator animator;
 	Vector3 previousVelocity;
-	Coroutine crtGroundState;
+	Coroutine crtGroundState, crtQueueRoll;
 
 	private void Awake()
 	{
@@ -27,9 +27,27 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	public void Collide(Vector3 velocity)
 	{
-		if (previousVelocity.y <= -landSpeed && (velocity.y < 0.01f && velocity.y > -0.01f))//if hit the ground
+		if (queueRoll)
 		{
-			animator.SetTrigger("land");
+			if (previousVelocity.y <= -fallRollEngageSpeed && Mathf.Abs(velocity.y) < 0.01f)//if hit the ground at roll speed
+			{
+				animator.SetTrigger("roll");
+				queueRoll = false;
+				StopCoroutine(crtQueueRoll);
+				crtQueueRoll = null;
+			}
+		}
+		else //if not queueing a roll or rolls are disabled
+		{
+			if (previousVelocity.y <= -fallCrouchEngageSpeed && Mathf.Abs(velocity.y) < 0.01f) //if hit the ground at crouch speed
+			{
+				animator.SetTrigger("land");
+				if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
+				{
+					StopCoroutine(crtQueueRoll);
+					crtQueueRoll = null;
+				}
+			}
 		}
 	}
 
@@ -41,6 +59,22 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 			yield return new WaitForFixedUpdate();
 			animator.SetBool("falling", !_grounded && !_wallRunning);
 			crtGroundState = null;
+		}
+	}
+
+	/// <summary>
+	/// Will let a roll initiate when you hit the ground if the button was pressed during queueTime, will not let a roll initiate afterwards during requeueTime or until the frame after you hit the ground
+	/// </summary>
+	public void QueueRoll(float queueTime, float requeueTime)
+	{
+		if (crtQueueRoll == null) crtQueueRoll = StartCoroutine(Routine());
+		IEnumerator Routine()
+		{
+			queueRoll = true;
+			yield return new WaitForSeconds(queueTime);
+			queueRoll = false;
+			yield return new WaitForSeconds(requeueTime);
+			crtQueueRoll = null;
 		}
 	}
 

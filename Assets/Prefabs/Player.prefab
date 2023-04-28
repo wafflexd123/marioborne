@@ -3274,6 +3274,7 @@ MonoBehaviour:
   deathUI: {fileID: 8152147435226054013}
   wickUI: {fileID: 1504019228705347093}
   camera: {fileID: 0}
+  playerEyes: {fileID: 0}
 --- !u!114 &5516079215156044915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3317,6 +3318,8 @@ MonoBehaviour:
   dashForce: 3
   dashCooldown: 3
   airMultiplier: 0.08
+  rollQueueTime: 0.3
+  rollRequeueTime: 1
   wallRunGravity: 1
   wallJumpForce: 7
   wallRunForce: 15
@@ -4571,7 +4574,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 5953ed99b2be1e2468d024cb384ca286, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -4593,7 +4596,8 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 6.5
   airSpeed: 1
-  landSpeed: 5
+  fallCrouchEngageSpeed: 15
+  fallRollEngageSpeed: 5
 --- !u!1 &7371621566100557771
 GameObject:
   m_ObjectHideFlags: 0
