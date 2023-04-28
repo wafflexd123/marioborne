@@ -84,6 +84,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public bool dying { set => animator.SetBool("dying", value); }
 	public bool grounded { set { _grounded = value; CheckGroundState(); } }
 	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
+	public bool sliding { set => animator.SetBool("sliding", value); }
 	public Vector3 velocity
 	{
 		set
