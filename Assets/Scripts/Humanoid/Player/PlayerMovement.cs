@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	//Private
 	float mass, startFov, wallJumpDistance = 0.3f, wallJumpDelay = .1f, _tilt;
-	bool queueJump, queueDash, canDoubleJump = true, canWallJump, hitWall, isGrounded, isWallrunning;
+	bool queueJump, queueDash, canDoubleJump = true, canWallJump, hitWall, _isGrounded, _isWallrunning;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
@@ -46,6 +46,8 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	//Properties
 	public float currentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
+	public bool isGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
+	public bool isWallrunning { get => _isWallrunning; private set { _isWallrunning = value; animator.wallRunning = value; } }
 
 	private void Start()
 	{
@@ -90,7 +92,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void ControlFOV()
 	{
-		float targetFov = Mathf.Lerp(startFov, fovAtMaxVelocity, fovCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxFov)));
+		float targetFov = Mathf.Lerp(startFov, fovAtMaxVelocity, fovCurve.Evaluate(Mathf.Clamp01(LateralVelocity() / velocityAtMaxFov)));
 		camera.fieldOfView = TweenFloat(camera.fieldOfView, targetFov, fovPerSecond);
 	}
 
@@ -101,11 +103,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			if (Physics.CheckSphere(t.position, .01f, layerGround))
 			{
-				if (!isGrounded)
-				{
-					animator.Land();
-					isGrounded = true;
-				}
+				if (!isGrounded) isGrounded = true;
 				return;
 			}
 		}
@@ -253,5 +251,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	void CheckWall()
 	{
 		hitWall = Physics.Raycast(transform.position + transform.up, tfmBody.transform.forward, wallJumpDistance);
+	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		animator.Collide(rigidbody.velocity);
 	}
 }
