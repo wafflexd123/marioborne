@@ -134,7 +134,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!195 &941658140
@@ -241,7 +241,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6268412495155633877}
-  m_LocalRotation: {x: 0.5526933, y: 0.44105536, z: 0.44105518, w: 0.5526941}
+  m_LocalRotation: {x: 0.55269325, y: 0.44105533, z: 0.441055, w: 0.55269414}
   m_LocalPosition: {x: 0.919, y: 1.393, z: -0.00489999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -411,6 +411,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 0.1
   runSpeed: 0
+  airSpeed: 0
+  landSpeed: 0
 --- !u!4 &997610877331058443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8ad3f6ad348b874dbc09c0496e4a89f, type: 3}

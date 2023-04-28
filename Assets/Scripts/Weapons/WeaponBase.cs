@@ -12,6 +12,7 @@ public class WeaponBase : MonoBehaviourPlus
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	bool isMoving;
+    Coroutine crtDelay;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 
 
@@ -56,14 +57,16 @@ public class WeaponBase : MonoBehaviourPlus
 
 	public virtual void Throw()
 	{
-        OnDrop();
+        //OnDrop();
 		Vector3 tempDir = wielder.LookDirection;
 		Vector3 tempPos = wielder.GetComponent<Player>().camera.transform.position + wielder.GetComponent<Player>().camera.transform.forward;
-		wielder = null;
-		transform.parent = null;
-		EnableRigidbody(true);
-        transform.position = tempPos;
+        Drop();
+        //wielder = null;
+        //transform.parent = null;
+        //EnableRigidbody(true);
+        transform.position = tempPos; //it goes back to the wielder's hand before adding force below. not sure why when the wielder is null
         rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
+
 	}
 
 	/// <summary>

@@ -12,6 +12,7 @@ public class Player : Humanoid
 	public WickUI wickUI;
 	[HideInInspector] public new Camera camera;
 	RaycastHit raycast;
+    public Transform playerEyes;
 
 	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => raycast.point;
