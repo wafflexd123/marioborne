@@ -254,7 +254,18 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (IsGrounded)
 		{
 			if (IsSliding) rigidbody.drag = slideDrag;
-			else rigidbody.drag = Mathf.Lerp(minGroundDrag, maxGroundDrag, groundDragCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxGroundDrag)));
+			else
+			{
+				if (moveDirection != Vector3.zero)//Ground drag is always max while player is accelerating
+				{
+					//rigidbody.drag = Mathf.Lerp(minGroundDrag, maxGroundDrag, groundDragCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxGroundDrag)));
+					rigidbody.drag = maxGroundDrag;
+				}
+				else//Ground drag follows a curve when there is no input so deceleration is slower
+				{
+					rigidbody.drag = Mathf.Lerp(minGroundDrag, maxGroundDrag, groundDragCurve.Evaluate(Mathf.Clamp01(LateralVelocity() / velocityAtMaxGroundDrag)));
+				}
+			}
 		}
 		else if (IsWallrunning)
 			rigidbody.drag = wallDrag;
