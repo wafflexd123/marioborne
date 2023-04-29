@@ -31,7 +31,7 @@ Transform:
   m_Children:
   - {fileID: 5044320275980088377}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7354719415509492162
 MonoBehaviour:
@@ -48,10 +48,21 @@ MonoBehaviour:
   handPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  pickupSpeed: 0
-  dropForce: 0
-  colliders: []
-  hitDelay: 0
+  pickupSpeed: 10
+  dropForce: 2
+  throwForce: 50
+  colliders:
+  - {fileID: 5044320276870145523}
+  hitDelay: 0.5
+  eyes: {fileID: 0}
+  meleeRadius: 2
+  meleeAngle: 45
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 192
 --- !u!1 &5044320275980088376
 GameObject:
   m_ObjectHideFlags: 0

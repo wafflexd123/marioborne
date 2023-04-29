@@ -12,7 +12,7 @@ public class Enemy : Humanoid
 	public Transform head;
 	public Transform points;
 	public EnemyType type;
-	public float sightRadius, meleeRadius, deathAnimationSpeed;
+	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed;
 	public bool isPatrolling = false;
 
 	//Script
@@ -31,6 +31,7 @@ public class Enemy : Humanoid
 		base.Awake();
 		agent = GetComponent<NavMeshAgent>();
         agent.updatePosition = false;
+        agent.speed = patrolSpeed;
 		agentSpeed = agent.speed;
 		fov = GetComponent<FieldOfView>();
 
@@ -47,6 +48,7 @@ public class Enemy : Humanoid
 			switch (type)
 			{
 				case EnemyType.Melee:
+                    agent.speed = meleeSpeed;
 					agent.SetDestination(Player.singlePlayer.transform.position);
 					Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
 					if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
@@ -60,7 +62,7 @@ public class Enemy : Humanoid
                     
 					transform.LookAt(new Vector3(Player.singlePlayer.camera.transform.position.x, transform.position.y, Player.singlePlayer.camera.transform.position.z));
 					lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
-                    Debug.DrawLine(transform.position, lookingAt);
+                    Debug.DrawLine(hand.position, lookingAt);
 					if (hand.childCount > 0)
 					{
 						hand.GetChild(0).LookAt(lookingAt);
@@ -72,6 +74,7 @@ public class Enemy : Humanoid
 		else
 		{
             lookingAt = Vector3.negativeInfinity;
+            agent.speed = patrolSpeed;
 			agent.isStopped = false;
 
 			if (!isPatrolling && points != null && points.childCount > 0)

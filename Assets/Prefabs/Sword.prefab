@@ -187,10 +187,21 @@ MonoBehaviour:
     eulers: {x: 0, y: 0, z: 0}
   pickupSpeed: 3
   dropForce: 2
+  throwForce: 0
   colliders:
   - {fileID: 1879311152175221465}
   guardPos:
     coords: {x: 0.195, y: 0.594, z: 0.05900002}
     eulers: {x: 0, y: -77.245, z: 0}
   guardSpeed: 3
-  reflectWindow: {fileID: 0}
+  reflectDelay: 3
+  hitDelay: 1
+  eyes: {fileID: 0}
+  meleeRadius: 4
+  meleeAngle: 60
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 192

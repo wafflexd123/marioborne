@@ -37,7 +37,7 @@ public class FieldOfView : MonoBehaviour
 		{
 			//If transform.position instead of eyes.position is used as the ray origin, it goes through the ground. If the eye height isn't added to the target position, the ray will angle too steeply towards the ground.
 			Vector3 dirToTarget = (rangeChecks[0].transform.position + new Vector3(0, eyes.position.y) - eyes.position).normalized;
-            playerEyes = rangeChecks[0].transform.GetComponentInParent<Player>().playerEyes;
+            playerEyes = rangeChecks[0].transform.GetComponentInParent<Player>().eyes;
             if (Vector3.Angle(eyes.forward, dirToTarget) < viewAngle / 2)
             {
                 //Debug.DrawLine(eyes.position, playerEyes.position);
