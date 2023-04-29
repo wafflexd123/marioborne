@@ -16,13 +16,14 @@ public class PlayerCamera : MonoBehaviour
 	void Start()
 	{
 		Cursor.lockState = CursorLockMode.Locked;
+		rotation = transform.localEulerAngles;
 	}
 
 	void Update()
 	{
 		rotation.x = Mathf.Clamp(rotation.x - (Input.GetAxis("Mouse Y") * sensitivity), minAngle, maxAngle);
 		rotation.y += Input.GetAxisRaw("Mouse X") * sensitivity % 360;
-		transform.eulerAngles = rotation + rotationOffset;
+		transform.localEulerAngles = rotation + rotationOffset;
 		body.localEulerAngles = new Vector3(0, rotation.y);
 
 		if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
