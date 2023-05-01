@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		cnsDebug = Console.AddLine();
 		minWalkForce *= rigidbody.mass;
 		maxWalkForce *= rigidbody.mass;
+		jumpForce *= rigidbody.mass;
 	}
 
 	void Update()
@@ -230,7 +231,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				force = jumpForce;
 			}
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
-			rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
+			rigidbody.AddForce(direction * force, ForceMode.Impulse);
 		}
 
 		IEnumerator Routine()
