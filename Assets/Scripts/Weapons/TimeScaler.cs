@@ -54,3 +54,4 @@ public class TimeScaler : MonoBehaviourPlus
 					$"Scale duration: {currentScaleDuration:#.00}, time to recover: {recoveryDelay - recoveryTimer:#.00}";
 	}
 }
+

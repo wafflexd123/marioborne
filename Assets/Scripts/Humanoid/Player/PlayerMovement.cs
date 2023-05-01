@@ -19,8 +19,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	public float wallJumpForce, wallRunForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, minWallRunLateralVelocity, wallCatchDistance = .6f;
 
 	[Header("Drag")]
-	public float minGroundDrag;
-	public float maxGroundDrag, velocityAtMaxGroundDrag;
+	public float groundDragInput;
+	public float minGroundDragNoInput, maxGroundDragNoInput, velocityAtMaxGroundDrag;
 	public AnimationCurve groundDragCurve;
 	public float airDrag = .8f, wallDrag = .8f, slideDrag;
 
@@ -65,6 +65,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		startFov = camera.fieldOfView;
 		cnsDebug = Console.AddLine();
+		minWalkForce *= rigidbody.mass;
+		maxWalkForce *= rigidbody.mass;
 	}
 
 	void Update()
@@ -91,8 +93,14 @@ public class PlayerMovement : MonoBehaviourPlus
 		animator.velocity = rigidbody.velocity;
 
 		//Console
-		cnsDebug.text = $"Velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}, grounded: {IsGrounded}, drag: {rigidbody.drag}\n" +
-			$"On wall: {wall.IsOnWall}, direction: {wall.direction}, wallrunning: {IsWallrunning}";
+		if (Console.Enabled)
+		{
+			float velocity = rigidbody.velocity.magnitude;
+			float velocityPercent = velocity / velocityAtMaxWalkForce;
+			float walkForce = Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(velocityPercent)));
+			cnsDebug.text = $"Force: {walkForce / rigidbody.mass:#.00} ({Mathf.InverseLerp(minWalkForce, maxWalkForce, walkForce) * 100:#0}%), velocity: {velocity:#.00} ({velocityPercent * 100:#0}%) {rigidbody.velocity}, drag: {rigidbody.drag}\n" +
+			$"Grounded: {IsGrounded}, on wall: {wall.IsOnWall}, direction: {wall.direction}, wallrunning: {IsWallrunning}";
+		}
 	}
 
 	void Slide()
@@ -256,15 +264,7 @@ public class PlayerMovement : MonoBehaviourPlus
 			if (IsSliding) rigidbody.drag = slideDrag;
 			else
 			{
-				if (moveDirection != Vector3.zero)//Ground drag is always max while player is accelerating
-				{
-					//rigidbody.drag = Mathf.Lerp(minGroundDrag, maxGroundDrag, groundDragCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxGroundDrag)));
-					rigidbody.drag = maxGroundDrag;
-				}
-				else//Ground drag follows a curve when there is no input so deceleration is slower
-				{
-					rigidbody.drag = Mathf.Lerp(minGroundDrag, maxGroundDrag, groundDragCurve.Evaluate(Mathf.Clamp01(LateralVelocity() / velocityAtMaxGroundDrag)));
-				}
+				rigidbody.drag = (moveDirection != Vector3.zero) ? groundDragInput : Mathf.Lerp(minGroundDragNoInput, maxGroundDragNoInput, groundDragCurve.Evaluate(Mathf.Clamp01(LateralVelocity() / velocityAtMaxGroundDrag)));
 			}
 		}
 		else if (IsWallrunning)

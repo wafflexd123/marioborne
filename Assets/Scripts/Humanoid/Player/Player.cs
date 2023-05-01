@@ -11,9 +11,7 @@ public class Player : Humanoid
 	public GameObject deathUI;
 	public WickUI wickUI;
 	[HideInInspector] public new Camera camera;
-	RaycastHit raycast;
-    public Transform eyes;
-    public Transform head;
+	public RaycastHit raycast;
 
 	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
 	public override Vector3 LookingAt => raycast.point;
@@ -34,6 +32,7 @@ public class Player : Humanoid
 	{
 		HandleInput();
 		Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast);
+		if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 	}
 
 	/// <summary>

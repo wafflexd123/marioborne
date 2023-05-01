@@ -23,7 +23,7 @@ public class Sword : WeaponBase
         wielder.model.holdingWeapon = true;
         if (wielder.GetComponent<Player>())
         {
-            eyes = wielder.GetComponentInParent<Player>().eyes;
+            eyes = wielder.GetComponentInParent<Player>().camera.transform;
             targetMask = LayerMask.GetMask("Enemy", "Bullet");
         }
         else
