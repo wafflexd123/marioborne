@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	[Header("Jump, Roll & Dash")]
 	public float rollQueueTime;
-	public float rollRequeueTime, jumpForce, dashForce, dashCooldown;
+	public float rollRequeueTime, jumpForce, airMovementForce, dashForce, dashCooldown;
 
 	[Header("Wall Running")]
 	public float wallRunGravity;
@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Transform tfmBody, tfmGround, tfmSlope;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
+	[HideInInspector] public LeapObject closestLeapObject;
 
 	//Properties
 	public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
@@ -96,7 +97,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		//Console
 		if (Console.Enabled)
 		{
-			float velocity = rigidbody.velocity.magnitude;
+			float velocity = IsGrounded || IsWallrunning ? rigidbody.velocity.magnitude : LateralVelocity();
 			float velocityPercent = velocity / velocityAtMaxWalkForce;
 			float walkForce = Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(velocityPercent)));
 			cnsDebug.text = $"Force: {walkForce / rigidbody.mass:#.00} ({Mathf.InverseLerp(minWalkForce, maxWalkForce, walkForce) * 100:#0}%), velocity: {velocity:#.00} ({velocityPercent * 100:#0}%) {rigidbody.velocity}, drag: {rigidbody.drag}\n" +
@@ -128,7 +129,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		//ground check
 		foreach (Transform t in tfmGround)
 		{
-			if (Physics.CheckSphere(t.position, .01f, layerGround))
+			if (Physics.CheckSphere(t.position, .01f, layerGround, QueryTriggerInteraction.Ignore))
 			{
 				if (!IsGrounded) IsGrounded = true;
 				return;
@@ -165,7 +166,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		else//in air
 		{
 			if (IsWallrunning) WallRun(false);
-			rigidbody.AddForce(airMultiplier * Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(rigidbody.velocity.magnitude / velocityAtMaxWalkForce))) * moveDirection, ForceMode.Force);
+			rigidbody.AddForce(airMovementForce * moveDirection, ForceMode.Force);
+			//rigidbody.AddForce(airMultiplier * Mathf.Lerp(minWalkForce, maxWalkForce, walkForceCurve.Evaluate(Mathf.Clamp01(LateralVelocity() / velocityAtMaxWalkForce))) * moveDirection, ForceMode.Force);
 		}
 	}
 
@@ -189,49 +191,45 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			canDoubleJump = true;
 			canWallJump = false;
-			if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine());
+			//if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine()); --doesnt work well with small walls
 		}
 		else if (IsWallrunning) canDoubleJump = false;
 
 		if (queueJump)
 		{
 			queueJump = false;
-			if (IsGrounded || IsWallrunning)
+			if (closestLeapObject != null && closestLeapObject.CanLeap(camera.transform))
 			{
-				Force();
-			}
-			else if (canDoubleJump)
-			{
-				Force();
-				canDoubleJump = false;
-			}
-		}
-
-		if (canWallJump)
-		{
-			if (hitWall)
-			{
-				Force();
-				canWallJump = false;
-			}
-		}
-
-		void Force()
-		{
-			Vector3 direction;
-			float force;
-			if (IsWallrunning)
-			{
-				direction = transform.up + wall.hit.normal;
-				force = wallJumpForce;
+				Force(closestLeapObject.GetLeapForce(rigidbody.mass, walkForceCurve.Evaluate(Mathf.Clamp01(LateralVelocity() / velocityAtMaxWalkForce))));
 			}
 			else
 			{
-				direction = transform.up;
-				force = jumpForce;
+				if (IsGrounded)
+				{
+					Force(transform.up * jumpForce);
+				}
+				else if (IsWallrunning)
+				{
+					Force((transform.up + wall.hit.normal).normalized * wallJumpForce);
+				}
+				else if (canDoubleJump)
+				{
+					Force(transform.up * jumpForce);
+					canDoubleJump = false;
+				}
 			}
+		}
+
+		if (canWallJump && hitWall)
+		{
+			Force(transform.up * jumpForce);
+			canWallJump = false;
+		}
+
+		void Force(Vector3 force)
+		{
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
-			rigidbody.AddForce(direction * force, ForceMode.Impulse);
+			rigidbody.AddForce(force, ForceMode.Impulse);
 		}
 
 		IEnumerator Routine()
