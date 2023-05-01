@@ -221,6 +221,10 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: velocityAtMaxFov
+      value: 10.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: layerGround.m_Bits
       value: 65
       objectReference: {fileID: 0}
@@ -246,7 +250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.size
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: walkForceCurve.m_Curve.Array.size
@@ -258,15 +262,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[0].time
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-      propertyPath: fovCurve.m_Curve.Array.data[1].time
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: fovCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[2].time
-      value: 0.8056301
+      value: 0.8240627
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[3].time
@@ -286,11 +290,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[1].value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[2].value
-      value: 0.08952844
+      value: 0.26396692
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[3].value
@@ -306,15 +310,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[0].inSlope
-      value: 0.057263665
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[1].inSlope
-      value: -0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[2].inSlope
-      value: 0.35194877
+      value: Infinity
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[3].inSlope
@@ -334,19 +338,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[1].inWeight
-      value: 0.33333334
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[1].outSlope
-      value: 0.108077295
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[2].inWeight
-      value: 0.10636398
+      value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[2].outSlope
-      value: 0.35194877
+      value: Infinity
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[3].inWeight
@@ -374,11 +378,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[0].outWeight
-      value: 0.058016878
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[1].outWeight
-      value: 0.33333334
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[2].outWeight
@@ -430,11 +434,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[0].tangentMode
-      value: 65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: fovCurve.m_Curve.Array.data[1].tangentMode
-      value: 5
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: fovCurve.m_Curve.Array.data[2].tangentMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: groundDragCurve.m_Curve.Array.data[1].time
@@ -495,6 +503,10 @@ PrefabInstance:
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: walkForceCurve.m_Curve.Array.data[9].value
       value: 0.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
+      propertyPath: fovCurve.m_Curve.Array.data[2].weightedMode
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5516079215156044915, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
       propertyPath: groundDragCurve.m_Curve.Array.data[1].value
