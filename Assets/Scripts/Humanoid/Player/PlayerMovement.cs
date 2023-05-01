@@ -191,7 +191,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			canDoubleJump = true;
 			canWallJump = false;
-			//if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine()); --doesnt work well with small walls
+			//if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine()); --doesnt work well with small walls. we will use a wall-catch animation system instead
 		}
 		else if (IsWallrunning) canDoubleJump = false;
 
