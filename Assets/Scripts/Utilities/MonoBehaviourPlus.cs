@@ -32,6 +32,11 @@ public class MonoBehaviourPlus : MonoBehaviour
 		return value;
 	}
 
+	public static Vector3 MultiplyVector(Vector3 a, Vector3 b)
+	{
+		return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+	}
+
 	public static Vector3 VectorArray(float[] array)
 	{
 		return new Vector3(array[0], array[1], array[2]);

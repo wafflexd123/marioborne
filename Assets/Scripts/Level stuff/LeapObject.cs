@@ -14,7 +14,7 @@ public class LeapObject : MonoBehaviourPlus
 		return playerInTrigger && Mathf.Abs(leapDirection.eulerAngles.y - lookDirection.eulerAngles.y) <= maxLookAngleDifference;//player is in trigger and looking in the right direction
 	}
 
-	public Vector3 GetLeapForce(float mass, float currentWalkForceMagnitude)
+	public Vector3 GetLeapForce(float mass)
 	{
 		collisionCollider.isTrigger = true;//stop player from colliding with box while leaping
 		//return Mathf.Lerp(minLeapForce, maxLeapForce, currentWalkForceMagnitude) * mass * leapDirection.forward;

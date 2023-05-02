@@ -13,10 +13,21 @@ public class PlayerCamera : MonoBehaviour
 	//for the UI slider
 	public float Sensitivity { set => sensitivity = value; }
 
-	void Start()
+	IEnumerator Start()
 	{
 		Cursor.lockState = CursorLockMode.Locked;
-		rotation = transform.localEulerAngles;
+		rotation = transform.localEulerAngles + body.parent.localEulerAngles;
+
+		if (body.localPosition != Vector3.zero)
+		{
+			Debug.LogWarning("Body (child transform of player) must have a localPosition of 0,0,0. Resetting...");
+			body.localPosition = Vector3.zero;
+		}
+
+		yield return new WaitForFixedUpdate();//rotation adjustments don't work without this
+		Quaternion quaternion = body.parent.rotation;//rotation of root object
+		body.parent.rotation = Quaternion.identity;
+		body.rotation = quaternion;//apply any pre-existing rotation to the camera
 	}
 
 	void Update()
