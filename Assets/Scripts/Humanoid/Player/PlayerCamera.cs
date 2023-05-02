@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -10,12 +9,9 @@ public class PlayerCamera : MonoBehaviour
 	public Transform body;
 	[HideInInspector] public Vector3 rotationOffset;
 	Vector3 rotation;
-   
 
-
-
-    //for the UI slider
-    public float Sensitivity { set => sensitivity = value; }
+	//for the UI slider
+	public float Sensitivity { set => sensitivity = value; }
 
 	void Start()
 	{
@@ -23,9 +19,7 @@ public class PlayerCamera : MonoBehaviour
 		rotation = transform.localEulerAngles;
 	}
 
-   
-
-    void Update()
+	void Update()
 	{
 		rotation.x = Mathf.Clamp(rotation.x - (Input.GetAxis("Mouse Y") * sensitivity), minAngle, maxAngle);
 		rotation.y += Input.GetAxisRaw("Mouse X") * sensitivity % 360;
