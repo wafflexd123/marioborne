@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Floor Tiles
+  m_Name: Concrete Wall
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -21,12 +21,12 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: :m_LightmapFlags
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: f90411d76f9fb28489f91c35ed13d0d3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 16fabfcae7b5ef945b8d6b78f57de84b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -43,22 +43,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 0.2, y: 0.2}
+        m_Scale: {x: 0.2, y: 0.15}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 0.2, y: 0.2}
+        m_Texture: {fileID: 2800000, guid: 8f330aad3ec4d0a49a0de7a58fd55070, type: 3}
+        m_Scale: {x: 0.2, y: 0.15}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: fa0f034257ea18841aa8eda2d50fdaf8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 255b412e08d7afe4d9653e9bba269f08, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: aeee4c4b8855cf3468ed5204a2e59aa9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9aa502dc56e10a8409730848cf5a3d99, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -68,12 +68,12 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.079
+    - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Metallic: 0.066
+    - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Parallax: 0.0542
+    - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

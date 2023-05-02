@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Floor Tiles
+  m_Name: Building Facade
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -21,12 +21,12 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: :m_LightmapFlags
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: f90411d76f9fb28489f91c35ed13d0d3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 79e04c5061273a440959917334be9806, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -46,7 +46,7 @@ Material:
         m_Scale: {x: 0.2, y: 0.2}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: bec88191d9f4f5b499a6fe61f34210c7, type: 3}
         m_Scale: {x: 0.2, y: 0.2}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -54,11 +54,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: fa0f034257ea18841aa8eda2d50fdaf8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3a88d95968afa8044a662033e1094951, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: aeee4c4b8855cf3468ed5204a2e59aa9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 344e5e8077ddaa14daf454d60391a4d7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -68,12 +68,12 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.079
+    - _Glossiness: 0.441
     - _GlossyReflections: 1
-    - _Metallic: 0.066
+    - _Metallic: 0.047
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Parallax: 0.0542
+    - _Parallax: 0.0125
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
