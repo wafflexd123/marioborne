@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviourPlus
 		this.speed = speed;
 		this.direction = direction;
 		this.shooter = shooter;
-		transform.LookAt(transform.position + direction);
+		transform.rotation = Quaternion.LookRotation(direction);
 		return this;
 	}
 
