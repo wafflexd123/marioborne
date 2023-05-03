@@ -13,7 +13,7 @@ public class Player : Humanoid
 	[HideInInspector] public new Camera camera;
 	public RaycastHit raycast;
 
-	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
+	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
 
 	protected override void Awake()

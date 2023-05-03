@@ -58,14 +58,14 @@ public class Gun : WeaponBase
 			switch (type)
 			{
 				case GunType.Pistol:
-					Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized);
+					Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder);
 					break;
 
 				case GunType.Shotgun:
 					for (int i = 0; i <= shotgunPellets; i++)
 					{
 						Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise
-							(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized + new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread)));
+							(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized + new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread)), wielder);
 					}
 					break;
 			}
