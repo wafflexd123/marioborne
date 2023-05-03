@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +11,10 @@ public class PlayerCamera : MonoBehaviour
 	public Transform body;
 	[HideInInspector] public Vector3 rotationOffset;
 	Vector3 rotation;
+    public Text senText;
 
-	//for the UI slider
-	public float Sensitivity { set => sensitivity = value; }
+    //for the UI slider
+    public float Sensitivity { set => sensitivity = value; }
 
 	IEnumerator Start()
 	{
@@ -38,5 +41,7 @@ public class PlayerCamera : MonoBehaviour
 		body.localEulerAngles = new Vector3(0, rotation.y);
 
 		if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
-	}
+          senText.text = sensitivity.ToString();
+
+    }
 }
