@@ -10,6 +10,9 @@ public class ElevatorDoor : MonoBehaviourPlus
 	Position leftOpen, leftClosed, rightOpen, rightClosed;
 	Coroutine crtLeft, crtRight;
 
+	public bool IsFullyOpen => isOpen && crtRight == null;
+	public bool IsFullyClosed => !isOpen && crtRight == null;
+
 	private void Start()
 	{
 		if (isOpen)
@@ -27,11 +30,13 @@ public class ElevatorDoor : MonoBehaviourPlus
 			rightOpen = new Position(rightDoor.localPosition + new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles);
 		}
 
-		if (animateOnFirstFrame)
-		{
-			if (isOpen) Close();
-			else Open();
-		}
+		if (animateOnFirstFrame) Toggle();
+	}
+
+	public void Toggle()
+	{
+		if (isOpen) Close();
+		else Open();
 	}
 
 	public void Open()
@@ -39,7 +44,7 @@ public class ElevatorDoor : MonoBehaviourPlus
 		if (!isOpen)
 		{
 			ResetRoutine(LerpToPos(leftDoor, leftOpen, speed), ref crtLeft);
-			ResetRoutine(LerpToPos(rightDoor, rightOpen, speed, () => isOpen = true), ref crtRight);
+			ResetRoutine(LerpToPos(rightDoor, rightOpen, speed, () => { isOpen = true; crtRight = null; }), ref crtRight);
 		}
 	}
 
@@ -48,7 +53,7 @@ public class ElevatorDoor : MonoBehaviourPlus
 		if (isOpen)
 		{
 			ResetRoutine(LerpToPos(leftDoor, leftClosed, speed), ref crtLeft);
-			ResetRoutine(LerpToPos(rightDoor, rightClosed, speed, () => isOpen = false), ref crtRight);
+			ResetRoutine(LerpToPos(rightDoor, rightClosed, speed, () => { isOpen = false; crtRight = null; }), ref crtRight);
 		}
 	}
 }

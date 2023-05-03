@@ -7,21 +7,22 @@ public class Bullet : MonoBehaviourPlus
 	public bool canReflect;
 	public float speed;
 	public Vector3 direction;
-	bool isFirstFrame = true;
+	Humanoid shooter;
 
-	public Bullet Initialise(float speed, Vector3 direction)
+	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter)
 	{
 		this.speed = speed;
 		this.direction = direction;
-		transform.LookAt(transform.position + direction);
+		this.shooter = shooter;
+		transform.rotation = Quaternion.LookRotation(direction);
 		return this;
 	}
 
-	IEnumerator Start()
-	{
-		yield return new WaitForFixedUpdate();
-		isFirstFrame = false;//only called once; so we don't have to continously set this every update
-	}
+	//IEnumerator Start()
+	//{
+	//	yield return new WaitForFixedUpdate();
+	//	isFirstFrame = false;//only called once; so we don't have to continously set this every update
+	//}
 
 	private void FixedUpdate()
 	{
@@ -42,23 +43,23 @@ public class Bullet : MonoBehaviourPlus
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (!isFirstFrame)//prevent bullet from insta-killing the person that shot it
+		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first
 		{
-			if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first
+			if (brs.enableReflect)
 			{
-				if (brs.enableReflect)
-				{
-					if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
-					else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-					transform.LookAt(transform.position + direction);
-				}
+				if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
+				else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+				transform.LookAt(transform.position + direction);
 			}
-			else if (FindComponent(collision.collider.transform, out Humanoid human))
+		}
+		else if (FindComponent(collision.collider.transform, out Humanoid human))
+		{
+			if (human != shooter)//prevent bullet from killing the guy that shot it
 			{
 				human.Kill(DeathType.Bullet);
 				Destroy(gameObject);
 			}
-			else Destroy(gameObject);
 		}
+		else Destroy(gameObject);
 	}
 }
