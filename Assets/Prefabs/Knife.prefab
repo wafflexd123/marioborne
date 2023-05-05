@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5044320275483770594}
   - component: {fileID: 7354719415509492162}
+  - component: {fileID: -7971240911961255196}
   m_Layer: 0
   m_Name: Knife
   m_TagString: Untagged
@@ -47,22 +48,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handPosition:
     coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
+    eulers: {x: -30, y: 0, z: 0}
   pickupSpeed: 10
   dropForce: 2
   throwForce: 50
   colliders:
   - {fileID: 5044320276870145523}
   hitDelay: 0.5
-  eyes: {fileID: 0}
-  meleeRadius: 2
-  meleeAngle: 45
-  targetMask:
+--- !u!54 &-7971240911961255196
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5044320275483770596}
+  serializedVersion: 4
+  m_Mass: 5
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  obstacleMask:
+  m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 2147483647
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &5044320275980088376
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,7 +213,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

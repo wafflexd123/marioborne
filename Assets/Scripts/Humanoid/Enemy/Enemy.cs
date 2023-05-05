@@ -33,7 +33,12 @@ public class Enemy : Humanoid
 		agentSpeed = agent.speed;
 		fov = GetComponent<FieldOfView>();
 
-		if (hand.childCount > 0) model.holdingWeapon = true;
+        if (hand.childCount > 0)
+        {
+            if(type == EnemyType.Melee) model.holdingMelee = true;
+            if(type == EnemyType.Ranged) model.holdingGun = true;
+        }
+        
 	}
 
 	void Update()
@@ -47,21 +52,24 @@ public class Enemy : Humanoid
 			{
 				case EnemyType.Melee:
 					agent.speed = meleeSpeed;
-					agent.SetDestination(Player.singlePlayer.transform.position);
+                    model.holdingMelee = true;
+                    agent.SetDestination(Player.singlePlayer.transform.position);
 					if (!passive)
 					{
 						Collider[] meleeRay = Physics.OverlapSphere(transform.position, meleeRadius, 1 << 3);
-						if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
-						{
-							if (hand.childCount > 0) input.Press("Mouse", () => -1, () => false);
-						}
+                        if (meleeRay.Length > 0 && meleeRay[0] != null && FindComponent(meleeRay[0].transform, out Player player))
+                        {
+                            agent.isStopped = true;
+                            if (hand.childCount > 0) input.Press("Mouse", () => -1, () => false);
+                        }
+                        else agent.isStopped = false;
 					}
 					break;
 
 				case EnemyType.Ranged:
 					agent.isStopped = true;
-
-					transform.LookAt(new Vector3(Player.singlePlayer.camera.transform.position.x, transform.position.y, Player.singlePlayer.camera.transform.position.z));
+                    model.holdingGun = true;
+                    transform.LookAt(new Vector3(Player.singlePlayer.camera.transform.position.x, transform.position.y, Player.singlePlayer.camera.transform.position.z));
 					lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
 					Debug.DrawLine(hand.position, lookingAt);
 					if (!passive && hand.childCount > 0)
@@ -159,6 +167,7 @@ public class Enemy : Humanoid
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
+        model.attacking = false;
 		model.dying = true;
 		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
 		model.transform.SetParent(null);

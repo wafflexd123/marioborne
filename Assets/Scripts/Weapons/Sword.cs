@@ -3,109 +3,63 @@ using UnityEngine;
 
 public class Sword : WeaponBase
 {
-	public Position guardPos;
-	public float guardSpeed;
-	Coroutine crtGuard;
-    Coroutine crtDelay;
-	GameObject reflectWindow;
-    public float reflectDelay;
     public float hitDelay;
-    public Transform eyes;
-    public float meleeRadius;
-    [Range(0, 360)]
-    public float meleeAngle;
-    public LayerMask targetMask, obstacleMask;
+    Coroutine crtDelay;
+    private bool holding = false;
 
     protected override void OnPickup()
-	{
-		base.OnPickup();
-		reflectWindow = wielder.transform.Find("ReflectWindow").gameObject;
-        wielder.model.holdingWeapon = true;
-        if (wielder.GetComponent<Player>())
+    {
+        base.OnPickup();
+        wielder.model.holdingMelee = true;
+        holding = true;
+    }
+
+    protected override void OnDrop()
+    {
+        base.OnDrop();
+        wielder.model.holdingMelee = false;
+        holding = false;
+    }
+
+    protected override void Update()
+    {
+        if (rigidbody != null && wielder != null)
         {
-            eyes = wielder.GetComponentInParent<Player>().camera.transform;
-            targetMask = LayerMask.GetMask("Enemy", "Bullet");
+            if (wielder.GetComponent<Player>()) rigidbody.excludeLayers = LayerMask.GetMask("Player");
+            else if (wielder.GetComponent<Enemy>()) rigidbody.excludeLayers = LayerMask.GetMask("Enemy");
         }
-        else
-        {
-            eyes = wielder.GetComponentInParent<Enemy>().head;
-            targetMask = LayerMask.GetMask("Player", "Bullet");
-        }
+
+        if (holding) transform.position = wielder.hand.position;
     }
 
     protected override void LeftMouse()
     {
         if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
         {
-            Collider collider = MeleeCheck();
-            if (collider != null)
-            {
-                Debug.Log(collider.name);
-                if (collider.transform.gameObject.GetComponentInParent<Player>()) collider.transform.gameObject.GetComponentInParent<Player>().Kill(DeathType.General);
-                else if (collider.transform.gameObject.GetComponentInParent<Enemy>()) collider.transform.gameObject.GetComponentInParent<Enemy>().Kill(DeathType.General);
-            }
+            wielder.model.attacking = true;
             crtDelay = StartCoroutine(Delay());
         }
 
         IEnumerator Delay()
         {
+            EnableRigidbody(true);
+            rigidbody.isKinematic = true;
             yield return new WaitForSeconds(hitDelay);
+            if (wielder != null)
+            {
+                wielder.model.attacking = false;
+            }
+            EnableRigidbody(false);
             crtDelay = null;
         }
     }
 
-    Collider MeleeCheck()
+    void OnCollisionEnter(Collision collision)
     {
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(eyes.position, meleeRadius, targetMask);
-        for (int i = 0; i < targetsInViewRadius.Length; i++)
+        Debug.Log(collision.gameObject.transform.name);
+        if (crtDelay != null && FindComponent(collision.collider.transform, out Humanoid humanoid))
         {
-            Debug.Log(targetsInViewRadius[i].transform.parent.name);
-            Transform target = targetsInViewRadius[i].transform;
-            Vector3 dirToTarget = target.position + new Vector3(0, 1.5f) - eyes.position;
-            //target is within fow?
-            //Debug.DrawLine(eyes.position, target.position + new Vector3(0, 1.5f));
-            if (Vector3.Angle(eyes.forward, dirToTarget) < meleeAngle / 2)
-            {
-                //Debug.Log("within angle");
-                if (!Physics.Linecast(eyes.position, target.position + new Vector3(0, 1.5f), obstacleMask))
-                {
-                    return targetsInViewRadius[i];
-                }
-            }
+            humanoid.Kill();
         }
-        return null;
-    }
-
-    protected override void RightMouse()
-    {
-        if (crtDelay == null) crtGuard = StartCoroutine(Guard());
-        IEnumerator Guard()
-        {
-            if (transform.localPosition != guardPos.coords)
-            {
-                transform.localEulerAngles = guardPos.eulers;//temp
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, guardPos.coords, pickupSpeed * Time.deltaTime);
-            }
-
-            reflectWindow.SetActive(true);
-            yield return new WaitForSeconds(0.75f);
-
-            if (transform.localPosition != handPosition.coords)
-            {
-                transform.localEulerAngles = handPosition.eulers;//temp
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, handPosition.coords, pickupSpeed * Time.deltaTime);
-
-                reflectWindow.SetActive(false);
-            }
-            crtGuard = null;
-            crtDelay = StartCoroutine(Delay());
-            yield return null;
-        }
-    }
-
-    IEnumerator Delay()
-    {
-        yield return new WaitForSeconds(reflectDelay);
-        crtDelay = null;
     }
 }

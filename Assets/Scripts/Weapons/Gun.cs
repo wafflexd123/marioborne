@@ -14,7 +14,7 @@ public class Gun : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-        wielder.model.holdingWeapon = true;
+        wielder.model.holdingGun = true;
         if(wielder.GetComponent<Player>())
         {
             if (type == GunType.Pistol) ammo = 10;
@@ -25,7 +25,7 @@ public class Gun : WeaponBase
 	protected override void OnDrop()
 	{
         base.OnDrop();
-        wielder.model.holdingWeapon = false;
+        wielder.model.holdingGun = false;
 	}
 
 	protected override void LeftMouse()

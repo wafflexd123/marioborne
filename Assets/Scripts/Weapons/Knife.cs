@@ -3,72 +3,73 @@ using UnityEngine;
 
 public class Knife : WeaponBase
 {
-	public float hitDelay;
-	Coroutine crtDelay;
-    public Transform eyes;
-    //public float meleeRange;
-    public float meleeRadius;
-    [Range(0, 360)]
-    public float meleeAngle;
-    public LayerMask targetMask, obstacleMask;
-
+    public float hitDelay;
+    Coroutine crtDelay;
 
     protected override void OnPickup()
     {
         base.OnPickup();
-        //wielder.model.holdingWeapon = true;
-        if (wielder.GetComponent<Player>())
+        wielder.model.holdingMelee = true;
+    }
+
+    protected override void OnDrop()
+    {
+        base.OnDrop();
+        wielder.model.holdingMelee = false;
+    }
+
+    protected override void Update()
+    {
+        if (rigidbody != null && wielder != null)
         {
-            eyes = wielder.GetComponentInParent<Player>().camera.transform;
-            targetMask = LayerMask.GetMask("Enemy", "Bullet");
+            //if (wielder.GetComponent<Player>()) rigidbody.excludeLayers = LayerMask.GetMask("Player");
+            //if (wielder.GetComponent<Enemy>()) rigidbody.excludeLayers = LayerMask.GetMask("Enemy");
         }
-        else
-        {
-            eyes = wielder.GetComponentInParent<Enemy>().head;
-            targetMask = LayerMask.GetMask("Player", "Bullet");
-        }
+
+        if (BeingHeld()) transform.position = wielder.hand.position;
     }
 
     protected override void LeftMouse()
-	{
-		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
-		{
-            Collider collider = MeleeCheck();
-            if (collider != null)
-            {
-                Debug.Log(collider.name);
-                if (collider.transform.gameObject.GetComponentInParent<Player>()) collider.transform.gameObject.GetComponentInParent<Player>().Kill(DeathType.General);
-                else if (collider.transform.gameObject.GetComponentInParent<Enemy>()) collider.transform.gameObject.GetComponentInParent<Enemy>().Kill(DeathType.General);
-            }
+    {
+        if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
+        {
+            Debug.Log("attacking");
+            wielder.model.attacking = true;
             crtDelay = StartCoroutine(Delay());
         }
 
-		IEnumerator Delay()
-		{
-			yield return new WaitForSeconds(hitDelay);
-			crtDelay = null;
-		}
-	}
-
-    Collider MeleeCheck()
-    {
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(eyes.position, meleeRadius, targetMask);
-        for (int i = 0; i < targetsInViewRadius.Length; i++)
+        IEnumerator Delay()
         {
-            Debug.Log(targetsInViewRadius[i].transform.parent.name);
-            Transform target = targetsInViewRadius[i].transform;
-            Vector3 dirToTarget = target.position + new Vector3(0, 1.5f) - eyes.position;
-            //target is within fow?
-            //Debug.DrawLine(eyes.position, target.position + new Vector3(0, 1.5f));
-            if (Vector3.Angle(eyes.forward, dirToTarget) < meleeAngle / 2)
+            EnableRigidbody(true);
+            yield return new WaitForSeconds(hitDelay);
+            if(wielder != null)
             {
-                //Debug.Log("within angle");
-                if (!Physics.Linecast(eyes.position, target.position + new Vector3(0, 1.5f), obstacleMask))
+                wielder.model.attacking = false;
+            }
+            EnableRigidbody(false);
+            crtDelay = null;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.transform.name);
+        if (crtDelay != null)
+        {
+            if (wielder.GetComponent<Player>())
+            {
+                if (FindComponent(collision.collider.transform, out Enemy enemy))
                 {
-                    return targetsInViewRadius[i];
+                    enemy.Kill();
+                }
+            }
+            else if (wielder.GetComponent<Enemy>())
+            {
+                if (FindComponent(collision.collider.transform, out Player player))
+                {
+                    player.Kill();
                 }
             }
         }
-        return null;
     }
 }
