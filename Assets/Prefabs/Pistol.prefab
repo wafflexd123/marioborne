@@ -195,9 +195,15 @@ MonoBehaviour:
   fireDelay: 0.5
   bulletSpeed: 15
   maxSpread: 0
-  ammo: 999
-  maxAmmo: 10
-  shotgunPellets: 999
+  playerAmmo:
+    isInfinite: 0
+    startAmount: 10
+    amount: 0
+  aiAmmo:
+    isInfinite: 1
+    startAmount: 10
+    amount: 0
+  shotgunPellets: 0
   type: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
   firePosition: {fileID: 1628130774508101737}
