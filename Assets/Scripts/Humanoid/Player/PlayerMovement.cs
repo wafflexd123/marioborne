@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	[Header("Air")]
 	public ForceCurve airForce;
-	public float airDrag, jumpForce;
+	public float airDrag, jumpForce, doubleJumpForce;
 
 	[Header("Roll & Slide")]
 	public float rollQueueTime;
@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Header("Wall Running")]
 	public ForceCurve wallForce;
 	public float wallRunGravity, wallJumpForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, wallCatchDistance = .6f, wallDrag, wallCatchHeight;
+	public Vector3 wallJumpAngle;
 
 	[Header("Layers")]
 	public LayerMask layerGround;
@@ -29,7 +30,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	//Private
 	float mass, wallJumpDistance = 0.3f, wallJumpDelay = .1f, _tilt;
-	bool queueJump, queueDash, canDoubleJump = true, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding;
+	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
@@ -66,6 +67,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		jumpForce *= rigidbody.mass;
 		wallRunGravity *= rigidbody.mass;
 		wallJumpForce *= rigidbody.mass;
+		doubleJumpForce *= rigidbody.mass;
 		walkForce.Multiply(rigidbody.mass);
 		wallForce.Multiply(rigidbody.mass);
 		airForce.Multiply(rigidbody.mass);
@@ -111,7 +113,8 @@ public class PlayerMovement : MonoBehaviourPlus
 			float velocity = IsWallrunning ? LateralVelocity() : rigidbody.velocity.magnitude;
 			cnsDebug.text = $"Force: {totalForce.magnitude:#.00} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve) {totalForce}\n" +
 				$"Drag: {rigidbody.drag}\n" +
-				$"Grounded: {IsGrounded}, wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: ({wall.IsTouchingWall}, direction: {wall.direction})";
+				$"Grounded: {IsGrounded}, wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: ({wall.IsTouchingWall}, direction: {wall.direction})\n" +
+				$"Can doublejump: {canDoubleJump}";
 		}
 	}
 
@@ -207,13 +210,13 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void Jump()
 	{
-		if (IsGrounded)
-		{
-			canDoubleJump = true;
-			canWallJump = false;
-			//if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine()); --doesnt work well with small walls. we will use a wall-catch animation system instead
-		}
-		else if (IsWallrunning) canDoubleJump = false;
+		//if (IsGrounded)
+		//{
+		//	canDoubleJump = true;
+		//	canWallJump = false;
+		//	//if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine()); --doesnt work well with small walls. we will use a wall-catch animation system instead
+		//}
+		//else if (IsWallrunning) canDoubleJump = false;
 
 		if (queueJump)
 		{
@@ -221,20 +224,23 @@ public class PlayerMovement : MonoBehaviourPlus
 			if (closestLeapObject != null && closestLeapObject.CanLeap(camera.transform))
 			{
 				Force(closestLeapObject.GetLeapForce(rigidbody.mass));
+				canDoubleJump = false;
 			}
 			else
 			{
 				if (IsGrounded)
 				{
 					Force(tfmBody.up * jumpForce);
+					canDoubleJump = false;
 				}
 				else if (IsWallrunning)
 				{
-					Force((tfmBody.up + wall.hit.normal).normalized * wallJumpForce);
+					Force((tfmBody.up + wall.hit.normal + wallJumpAngle).normalized * wallJumpForce);
+					canDoubleJump = true;//only double jump if we jumped off a wall
 				}
 				else if (canDoubleJump)
 				{
-					Force(tfmBody.up * jumpForce);
+					Force(tfmBody.up * doubleJumpForce);
 					canDoubleJump = false;
 				}
 			}
