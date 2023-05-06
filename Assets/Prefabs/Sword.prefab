@@ -169,7 +169,7 @@ Transform:
   m_Children:
   - {fileID: 1879311152797145875}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-1670203567389728386
 MonoBehaviour:
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1879311153426993614}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d303d3056e19664db4c3039ee8d1207, type: 3}
+  m_Script: {fileID: 11500000, guid: 081258793bf398a44864fad001ca554e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   handPosition:
@@ -190,8 +190,8 @@ MonoBehaviour:
   dropForce: 2
   throwForce: 50
   colliders:
-  - {fileID: 1879311152175221465}
-  hitDelay: 1
+  - {fileID: 5044320276870145523, guid: 6f135384b5e59b44a8f42a1240d670c8, type: 3}
+  hitDelay: 0.5
 --- !u!54 &170543770905169419
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -211,7 +211,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 3903
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

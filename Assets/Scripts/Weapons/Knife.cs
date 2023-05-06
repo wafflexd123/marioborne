@@ -5,28 +5,25 @@ public class Knife : WeaponBase
 {
     public float hitDelay;
     Coroutine crtDelay;
+    private Player player;
 
     protected override void OnPickup()
     {
         base.OnPickup();
         wielder.model.holdingMelee = true;
+        if (wielder.GetComponent<Player>()) player = wielder.GetComponent<Player>();
     }
 
     protected override void OnDrop()
     {
         base.OnDrop();
+        Attack(false);
         wielder.model.holdingMelee = false;
     }
 
     protected override void Update()
     {
-        if (rigidbody != null && wielder != null)
-        {
-            //if (wielder.GetComponent<Player>()) rigidbody.excludeLayers = LayerMask.GetMask("Player");
-            //if (wielder.GetComponent<Enemy>()) rigidbody.excludeLayers = LayerMask.GetMask("Enemy");
-        }
-
-        if (BeingHeld()) transform.position = wielder.hand.position;
+        //if (BeingHeld()) transform.position = wielder.hand.position;
     }
 
     protected override void LeftMouse()
@@ -41,20 +38,40 @@ public class Knife : WeaponBase
         IEnumerator Delay()
         {
             EnableRigidbody(true);
+            Attack(true);
             yield return new WaitForSeconds(hitDelay);
-            if(wielder != null)
-            {
-                wielder.model.attacking = false;
-            }
+            if(wielder) wielder.model.attacking = false;
+            Attack(false);
             EnableRigidbody(false);
             crtDelay = null;
+        }
+    }
+
+    protected override void RightMouse()
+    {
+        if (wielder.GetComponent<Player>() && crtDelay == null)
+        {
+            if (player.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
+            {
+                wielder.model.deflect = true;
+                player.crtDeflectDelay = StartCoroutine(Delay());
+            }
+
+            IEnumerator Delay()
+            {
+                player.deflectWindow.SetActive(true);
+                yield return new WaitForSeconds(player.deflectDelay);
+                player.deflectWindow.SetActive(false);
+                wielder.model.deflect = false;
+                player.crtDeflectDelay = null;
+            }
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log(collision.gameObject.transform.name);
-        if (crtDelay != null)
+        if (crtDelay != null && wielder != null)
         {
             if (wielder.GetComponent<Player>())
             {

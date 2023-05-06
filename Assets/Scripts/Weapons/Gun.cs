@@ -10,13 +10,15 @@ public class Gun : WeaponBase
     public Bullet bulletPrefab;
     public Transform firePosition;
     Coroutine crtDelay;
+    private Player player;
 
-	protected override void OnPickup()
+    protected override void OnPickup()
 	{
 		base.OnPickup();
         wielder.model.holdingGun = true;
         if(wielder.GetComponent<Player>())
         {
+            player = wielder.GetComponent<Player>();
             if (type == GunType.Pistol) ammo = 10;
             if (type == GunType.Shotgun) ammo = 2;
         }
@@ -61,7 +63,29 @@ public class Gun : WeaponBase
         IEnumerator Delay()
         {
             yield return new WaitForSeconds(fireDelay);
+            if (wielder) wielder.model.attacking = false;
             crtDelay = null;
+        }
+    }
+
+    protected override void RightMouse()
+    {
+        if (wielder.GetComponent<Player>() && crtDelay == null)
+        {
+            if (player.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
+            {
+                wielder.model.deflect = true;
+                player.crtDeflectDelay = StartCoroutine(Delay());
+            }
+
+            IEnumerator Delay()
+            {
+                player.deflectWindow.SetActive(true);
+                yield return new WaitForSeconds(player.deflectDelay);
+                player.deflectWindow.SetActive(false);
+                wielder.model.deflect = false;
+                player.crtDeflectDelay = null;
+            }
         }
     }
 }

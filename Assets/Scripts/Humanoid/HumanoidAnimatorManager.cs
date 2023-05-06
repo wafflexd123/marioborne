@@ -116,6 +116,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public bool holdingMelee { set => animator.SetLayerWeight(1, value ? 1 : 0); }
     public bool holdingGun { set => animator.SetLayerWeight(2, value ? 1 : 0); }
     public bool attacking { set => animator.SetBool("attacking", value); }
+    public bool deflect { set => animator.SetBool("deflect", value); }
 	public bool dying { set => animator.SetBool("dying", value); }
 	public bool grounded { set { _grounded = value; CheckGroundState(); } }
 	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }

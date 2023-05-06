@@ -6,13 +6,15 @@ using UnityEngine;
 public class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
-	public float pickupSpeed, dropForce, throwForce;
+    public float pickupSpeed, dropForce, throwForce;
+    private float deflectDelay = 1f;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	bool isMoving;
     Coroutine crtDelay;
+    Coroutine crtDeflectDelay;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 
 
@@ -100,7 +102,7 @@ public class WeaponBase : MonoBehaviourPlus
 	protected virtual void RightMouse()
 	{
 
-	}
+    }
 
 	public virtual bool BeingHeld()
 	{
@@ -125,6 +127,15 @@ public class WeaponBase : MonoBehaviourPlus
 			for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = true;
 		}
 	}
+
+    public void Attack(bool enable)
+    {
+        if (rigidbody)
+        {
+            if (enable) rigidbody.isKinematic = true;
+            else rigidbody.isKinematic = false;
+        }
+    }
 
 	private void OnCollisionEnter(Collision collision)
 	{
