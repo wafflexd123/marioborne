@@ -77,6 +77,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public void QueueRoll(float queueTime, float requeueTime)
 	{
 		if (crtQueueRoll == null) crtQueueRoll = StartCoroutine(Routine());
+		else queueRoll = false;//player cannot spam roll button, must only press once
 		IEnumerator Routine()
 		{
 			queueRoll = true;

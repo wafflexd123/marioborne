@@ -17,7 +17,8 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	[Header("Roll & Slide")]
 	public float rollQueueTime;
-	public float rollRequeueTime, slideDrag;
+	public float rollRequeueTime;
+	public ForceCurve slideDrag;
 
 	[Header("Wall Running")]
 	public ForceCurve wallForce;
@@ -171,11 +172,12 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (IsGrounded)//on ground
 		{
 			if (IsWallrunning) WallRun(false);
-			if (IsSliding) rigidbody.drag = slideDrag;
-			else if (moveDirection == Vector3.zero) rigidbody.drag = noInputGroundDrag.Evaluate(LateralVelocity());
+
+			if (moveDirection == Vector3.zero) rigidbody.drag = noInputGroundDrag.Evaluate(LateralVelocity());
 			else
 			{
-				rigidbody.drag = walkDrag;
+				if (IsSliding) rigidbody.drag = slideDrag.Evaluate(LateralVelocity());
+				else rigidbody.drag = walkDrag;
 				Physics.Raycast(tfmSlope.position + Vector3.up, Vector3.down, out RaycastHit slopeHit, 1.1f, layerGround + layerWall);
 				AddForce(walkForce.Evaluate(rigidbody.velocity.magnitude, Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized), ForceMode.Force);
 			}
