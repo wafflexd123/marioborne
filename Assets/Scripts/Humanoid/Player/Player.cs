@@ -12,11 +12,9 @@ public class Player : Humanoid
 	public WickUI wickUI;
 	[HideInInspector] public new Camera camera;
 	public RaycastHit raycast;
-    public Coroutine crtDeflectDelay;
-    public GameObject deflectWindow;
-    public float deflectDelay;
+	Console.Line cnsRaycast;
 
-	public override Vector3 LookDirection => camera.transform.TransformDirection(Vector3.forward);
+	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
 
 	protected override void Awake()
@@ -24,6 +22,7 @@ public class Player : Humanoid
 		base.Awake();
 		camera = transform.Find("Head").Find("Eyes").Find("Camera").GetComponent<Camera>();
 		singlePlayer = this;
+		cnsRaycast = Console.AddLine();
 	}
 
 	private void Start()
@@ -35,7 +34,8 @@ public class Player : Humanoid
 	{
 		HandleInput();
 		Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast);
-		if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
+		if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.collider.transform != null ? raycast.collider.transform.name : null)}";
+		if (FindComponent(raycast.collider.transform, out Raycastable hit)) hit.OnRaycast(this);
 	}
 
 	/// <summary>
