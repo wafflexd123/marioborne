@@ -17,37 +17,22 @@ public class Knife : WeaponBase
     protected override void OnDrop()
     {
         base.OnDrop();
-        Attack(false);
         wielder.model.holdingMelee = false;
-    }
-
-    protected override void Update()
-    {
-        //if (BeingHeld()) transform.position = wielder.hand.position;
     }
 
     protected override void LeftMouse()
     {
-        if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
+        if (wielder.GetComponent<Player>())
         {
-            Debug.Log("attacking");
-            wielder.model.attacking = true;
-            crtDelay = StartCoroutine(Delay());
+            if (player.crtDeflectDelay == null)
+            {
+                Swing();
+            }
         }
-
-        IEnumerator Delay()
-        {
-            EnableRigidbody(true);
-            Attack(true);
-            yield return new WaitForSeconds(hitDelay);
-            if(wielder) wielder.model.attacking = false;
-            Attack(false);
-            EnableRigidbody(false);
-            crtDelay = null;
-        }
+        else Swing();
     }
 
-    protected override void RightMouse()
+    protected override void RightMouse() //handles deflection while holding weapon
     {
         if (wielder.GetComponent<Player>() && crtDelay == null)
         {
@@ -68,25 +53,40 @@ public class Knife : WeaponBase
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        Debug.Log(collision.gameObject.transform.name);
         if (crtDelay != null && wielder != null)
         {
             if (wielder.GetComponent<Player>())
             {
-                if (FindComponent(collision.collider.transform, out Enemy enemy))
+                if (FindComponent(collider.transform, out Enemy enemy))
                 {
                     enemy.Kill();
                 }
             }
             else if (wielder.GetComponent<Enemy>())
             {
-                if (FindComponent(collision.collider.transform, out Player player))
+                if (FindComponent(collider.transform, out Player player))
                 {
                     player.Kill();
                 }
             }
+        }
+    }
+
+    protected void Swing()
+    {
+        if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
+        {
+            wielder.model.attacking = true;
+            crtDelay = StartCoroutine(Delay());
+        }
+
+        IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(hitDelay);
+            if (wielder) wielder.model.attacking = false;
+            crtDelay = null;
         }
     }
 }

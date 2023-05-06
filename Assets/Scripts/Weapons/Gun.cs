@@ -5,7 +5,7 @@ public class Gun : WeaponBase
 {
     public enum GunType { Pistol, Shotgun }
     public float fireDelay, bulletSpeed, maxSpread;
-    public int ammo, shotgunPellets;
+    public int ammo, maxAmmo, shotgunPellets;
     public GunType type;
     public Bullet bulletPrefab;
     public Transform firePosition;
@@ -19,8 +19,11 @@ public class Gun : WeaponBase
         if(wielder.GetComponent<Player>())
         {
             player = wielder.GetComponent<Player>();
-            if (type == GunType.Pistol) ammo = 10;
-            if (type == GunType.Shotgun) ammo = 2;
+            if(ammo >= maxAmmo) //if player picks up weapon and it's higher than mag size, set it to mag size
+            {                   //prevents dropping/picking up weapon to scum infinite ammo
+                if (type == GunType.Pistol) ammo = maxAmmo;
+                if (type == GunType.Shotgun) ammo = maxAmmo;
+            }
         }
 	}
 
@@ -32,9 +35,43 @@ public class Gun : WeaponBase
 
 	protected override void LeftMouse()
     {
+        if (wielder.GetComponent<Player>())
+        {
+            if (player.crtDeflectDelay == null)
+            {
+                Shoot();
+            }
+        }
+        else Shoot();
+        
+    }
+
+    protected override void RightMouse() //handles deflection while holding weapon
+    {
+        if (wielder.GetComponent<Player>() && crtDelay == null)
+        {
+            if (player.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
+            {
+                wielder.model.deflect = true;
+                player.crtDeflectDelay = StartCoroutine(Delay());
+            }
+
+            IEnumerator Delay()
+            {
+                player.deflectWindow.SetActive(true);
+                yield return new WaitForSeconds(player.deflectDelay);
+                player.deflectWindow.SetActive(false);
+                wielder.model.deflect = false;
+                player.crtDeflectDelay = null;
+            }
+        }
+    }
+
+    protected void Shoot()
+    {
         if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
         {
-            if(ammo > 0)
+            if (ammo > 0)
             {
                 switch (type)
                 {
@@ -57,7 +94,6 @@ public class Gun : WeaponBase
                         break;
                 }
             }
-            
         }
 
         IEnumerator Delay()
@@ -65,27 +101,6 @@ public class Gun : WeaponBase
             yield return new WaitForSeconds(fireDelay);
             if (wielder) wielder.model.attacking = false;
             crtDelay = null;
-        }
-    }
-
-    protected override void RightMouse()
-    {
-        if (wielder.GetComponent<Player>() && crtDelay == null)
-        {
-            if (player.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
-            {
-                wielder.model.deflect = true;
-                player.crtDeflectDelay = StartCoroutine(Delay());
-            }
-
-            IEnumerator Delay()
-            {
-                player.deflectWindow.SetActive(true);
-                yield return new WaitForSeconds(player.deflectDelay);
-                player.deflectWindow.SetActive(false);
-                wielder.model.deflect = false;
-                player.crtDeflectDelay = null;
-            }
         }
     }
 }

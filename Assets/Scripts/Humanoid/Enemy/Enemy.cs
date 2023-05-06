@@ -38,7 +38,6 @@ public class Enemy : Humanoid
             if(type == EnemyType.Melee) model.holdingMelee = true;
             if(type == EnemyType.Ranged) model.holdingGun = true;
         }
-        
 	}
 
 	void Update()
@@ -116,7 +115,6 @@ public class Enemy : Humanoid
 		isPatrolling = true;
 		if (points == null || points.childCount == 0) return;
 		agent.destination = points.GetChild(destPoint).position;
-		//lookingAt = points.GetChild(destPoint).position;
 		destPoint = (destPoint + 1) % points.childCount;
 	}
 

@@ -7,14 +7,11 @@ public class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
     public float pickupSpeed, dropForce, throwForce;
-    private float deflectDelay = 1f;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	bool isMoving;
-    Coroutine crtDelay;
-    Coroutine crtDeflectDelay;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 
 
@@ -59,13 +56,9 @@ public class WeaponBase : MonoBehaviourPlus
 
 	public virtual void Throw()
 	{
-        //OnDrop();
 		Vector3 tempDir = wielder.LookDirection;
 		Vector3 tempPos = wielder.GetComponent<Player>().camera.transform.position + wielder.GetComponent<Player>().camera.transform.forward;
         Drop();
-        //wielder = null;
-        //transform.parent = null;
-        //EnableRigidbody(true);
         transform.position = tempPos; //it goes back to the wielder's hand before adding force below. not sure why when the wielder is null
         rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
 
@@ -127,15 +120,6 @@ public class WeaponBase : MonoBehaviourPlus
 			for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = true;
 		}
 	}
-
-    public void Attack(bool enable)
-    {
-        if (rigidbody)
-        {
-            if (enable) rigidbody.isKinematic = true;
-            else rigidbody.isKinematic = false;
-        }
-    }
 
 	private void OnCollisionEnter(Collision collision)
 	{
