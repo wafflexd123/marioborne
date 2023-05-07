@@ -78,14 +78,14 @@ public class Knife : WeaponBase
     {
         if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
         {
-            wielder.model.attacking = true;
+            wielder.model.melee = true;
             crtDelay = StartCoroutine(Delay());
         }
 
         IEnumerator Delay()
         {
             yield return new WaitForSeconds(hitDelay);
-            if (wielder) wielder.model.attacking = false;
+            if (wielder) wielder.model.melee = false;
             crtDelay = null;
         }
     }

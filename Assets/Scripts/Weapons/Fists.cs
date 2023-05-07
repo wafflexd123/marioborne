@@ -46,7 +46,7 @@ public class Fists : MonoBehaviourPlus
 
                 if (crtPunchDelay == null && player.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
                 {
-                    player.model.attacking = true;
+                    player.model.punching = true;
                     crtPunchDelay = StartCoroutine(Delay());
                 }
 
@@ -54,7 +54,7 @@ public class Fists : MonoBehaviourPlus
                 {
                     yield return new WaitForSeconds(hitDelay);
                     Enable(false);
-                    player.model.attacking = false;
+                    player.model.punching = false;
                     crtPunchDelay = null;
                 }
             }

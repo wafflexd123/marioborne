@@ -79,7 +79,7 @@ public class Gun : WeaponBase
 		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//if not waiting for fireDelay && wielder is looking at something && can shoot
 		{
 			if (wielder is Player) txtAmmo.text = $"{playerAmmo.amount}";
-			wielder.model.attacking = true;
+			//wielder.model.shooting = true;
 			crtDelay = StartCoroutine(Delay());
 			switch (type)
 			{
@@ -99,7 +99,7 @@ public class Gun : WeaponBase
 	IEnumerator Delay()
 	{
 		yield return new WaitForSeconds(fireDelay);
-		if (wielder) wielder.model.attacking = false;
+		//if (wielder) wielder.model.shooting = false;
 		crtDelay = null;
 	}
 

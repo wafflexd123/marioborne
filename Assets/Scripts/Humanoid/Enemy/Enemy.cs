@@ -165,7 +165,8 @@ public class Enemy : Humanoid
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-        model.attacking = false;
+        model.melee = false;
+        model.shooting = false;
 		model.dying = true;
 		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
 		model.transform.SetParent(null);
