@@ -11,9 +11,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	public ForceCurve fovCurve;
 	public float fovPerSecond;
 
-	[Header("Air")]
+	[Header("Air/Jump")]
 	public ForceCurve airForce;
-	public float airDrag, jumpForce, doubleJumpForce;
+	public float airDrag, jumpForce, doubleJumpForce, ledgeJumpForce;
 
 	[Header("Roll & Slide")]
 	public float rollQueueTime;
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	//Private
 	float mass, _tilt;
-	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, onLedge;
+	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public bool IsGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
 	public bool IsWallrunning { get => _isWallrunning; private set { _isWallrunning = value; animator.wallRunning = value; } }
 	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
+	bool OnLedge { get => _onLedge; set { _onLedge = value; animator.hanging = value; rigidbody.useGravity = !value; } }
 
 	void Start()
 	{
@@ -71,6 +72,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		wallRunGravity *= rigidbody.mass;
 		wallJumpForce *= rigidbody.mass;
 		doubleJumpForce *= rigidbody.mass;
+		ledgeJumpForce *= rigidbody.mass;
 		walkForce.Multiply(rigidbody.mass);
 		wallForce.Multiply(rigidbody.mass);
 		airForce.Multiply(rigidbody.mass);
@@ -117,7 +119,7 @@ public class PlayerMovement : MonoBehaviourPlus
 			cnsDebug.text = $"Force: {totalForce.magnitude:#.00} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve) {totalForce}\n" +
 				$"Drag: {rigidbody.drag}\n" +
 				$"Grounded: {IsGrounded}, wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: ({wallSide.IsTouchingWall}, direction: {wallSide.direction})\n" +
-				$"Can doublejump: {canDoubleJump}, on ledge: {onLedge}";
+				$"Can doublejump: {canDoubleJump}, on ledge: {OnLedge}";
 		}
 	}
 
@@ -125,9 +127,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		if (Input.GetButton("Crouch"))
 		{
-			if (onLedge)
+			if (OnLedge)
 			{
-				onLedge = false;
+				OnLedge = false;
 				rigidbody.useGravity = true;
 				canDoubleJump = false;
 				animator.hanging = false;
@@ -182,7 +184,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void MovePlayer()
 	{
-		if (!onLedge)
+		if (!OnLedge)
 		{
 			if (IsGrounded)//on ground
 			{
@@ -228,11 +230,9 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void CatchWall()
 	{
-		if (!onLedge && closestCatchLedge != null && closestCatchLedge != lastLedge)
+		if (!OnLedge && !IsGrounded && closestCatchLedge != null && closestCatchLedge != lastLedge)
 		{
-			animator.hanging = true;
-			onLedge = true;
-			rigidbody.useGravity = false;
+			OnLedge = true;
 			rigidbody.velocity = Vector3.zero;
 			lastLedge = closestCatchLedge;
 			transform.position = new Vector3(transform.position.x, lastLedge.bodyPos.position.y, transform.position.z);//stupid
@@ -261,18 +261,16 @@ public class PlayerMovement : MonoBehaviourPlus
 					Force((tfmBody.up + wallSide.hit.normal + wallJumpAngle).normalized * wallJumpForce);
 					canDoubleJump = true;//only double jump if we jumped off a wall
 				}
+				else if (OnLedge)
+				{
+					OnLedge = false;
+					Force(tfmBody.up * ledgeJumpForce);
+					canDoubleJump = false;
+				}
 				else if (canDoubleJump)
 				{
 					Force(tfmBody.up * doubleJumpForce);
 					canDoubleJump = false;
-				}
-				else if (onLedge)
-				{
-					onLedge = false;
-					rigidbody.useGravity = true;
-					Force(tfmBody.up * jumpForce);
-					canDoubleJump = false;
-					animator.hanging = false;
 				}
 			}
 		}
