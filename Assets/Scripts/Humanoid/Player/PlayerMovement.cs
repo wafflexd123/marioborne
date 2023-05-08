@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		//Control
 		CheckContacts();
-		CatchWall();
+		CatchWallLedge();
 		MovePlayer();
 		Jump();
 		Dash();
@@ -172,9 +172,9 @@ public class PlayerMovement : MonoBehaviourPlus
 		IsGrounded = false;
 
 		//Wall checks
-		if (!wallSide.CheckWall(transform, transform.right, wallCatchDistance, layerWall))//right
-			wallSide.CheckWall(transform, -transform.right, wallCatchDistance, layerWall);//left
-		wallForward.CheckWall(transform, transform.forward, wallCatchDistance, layerWall);//forward
+		if (!wallSide.CheckWall(tfmBody, tfmBody.right, wallCatchDistance, layerWall))//right
+			wallSide.CheckWall(tfmBody, -tfmBody.right, wallCatchDistance, layerWall, -1);//left
+		wallForward.CheckWall(tfmBody, tfmBody.forward, wallCatchDistance, layerWall);//forward
 	}
 
 	void AddForce(Vector3 force, ForceMode forceMode)
@@ -228,7 +228,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		//ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
 	}
 
-	void CatchWall()
+	void CatchWallLedge()
 	{
 		if (!OnLedge && !IsGrounded && closestCatchLedge != null && closestCatchLedge != lastLedge)
 		{
