@@ -30,14 +30,14 @@ public class PlayerMovement : MonoBehaviourPlus
 	public LayerMask layerWall;
 
 	//Private
-	float mass, wallJumpDistance = 0.3f, wallJumpDelay = .1f, _tilt;
+	float mass, _tilt;
 	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, onLedge;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
 	PlayerCamera playerCamera;
 	Wall wallSide = new Wall(), wallForward = new Wall();
-	Coroutine crtDash, crtTilt, crtWallJump, crtSlide;
+	Coroutine crtDash, crtTilt, crtSlide;
 	Transform tfmBody, tfmGround, tfmSlope;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
@@ -82,7 +82,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) animator.QueueRoll(rollQueueTime, rollRequeueTime);
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 		rigidbody.mass = mass / Time.timeScale;
-		CheckWall();
 	}
 
 	void FixedUpdate()
@@ -242,14 +241,6 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void Jump()
 	{
-		//if (IsGrounded)
-		//{
-		//	canDoubleJump = true;
-		//	canWallJump = false;
-		//	//if (crtWallJump == null && !IsWallrunning) crtWallJump = StartCoroutine(Routine()); --doesnt work well with small walls. we will use a wall-catch animation system instead
-		//}
-		//else if (IsWallrunning) canDoubleJump = false;
-
 		if (queueJump)
 		{
 			queueJump = false;
@@ -297,13 +288,6 @@ public class PlayerMovement : MonoBehaviourPlus
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
 			AddForce(force, ForceMode.Impulse);
 		}
-
-		IEnumerator Routine()
-		{
-			yield return new WaitForSeconds(wallJumpDelay);
-			canWallJump = true;
-			crtWallJump = null;
-		}
 	}
 
 	void Dash()
@@ -320,11 +304,6 @@ public class PlayerMovement : MonoBehaviourPlus
 			yield return new WaitForSeconds(dashCooldown);
 			crtDash = null;
 		}
-	}
-
-	void CheckWall()
-	{
-		hitWall = Physics.Raycast(transform.position + tfmBody.up, tfmBody.forward, wallJumpDistance);
 	}
 
 	private void OnCollisionEnter(Collision collision)
