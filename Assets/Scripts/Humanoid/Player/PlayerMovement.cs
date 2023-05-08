@@ -204,6 +204,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				if (!IsWallrunning) WallRun(true);
 				rigidbody.drag = wallDrag;
 				if (moveDirection != Vector3.zero) AddForce(wallForce.Evaluate(LateralVelocity(), Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(tfmBody.forward, wallSide.hit.normal).normalized), ForceMode.Force);
+				AddForce(new Vector3(0, -wallRunGravity), ForceMode.Force);
 			}
 			else//in air
 			{
