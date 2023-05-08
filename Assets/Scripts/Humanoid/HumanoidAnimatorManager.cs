@@ -124,6 +124,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public bool grounded { set { _grounded = value; CheckGroundState(); } }
 	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
 	public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
+	public bool hanging { set => animator.SetBool("hanging", value); }
 	public Vector3 velocity
 	{
 		set
