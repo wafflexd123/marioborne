@@ -12,8 +12,9 @@ public class PlayerCamera : MonoBehaviour
 
 	//for the UI slider
 	public float Sensitivity { set => sensitivity = value; }
+    public Text senText;
 
-	IEnumerator Start()
+    IEnumerator Start()
 	{
 		Cursor.lockState = CursorLockMode.Locked;
 		rotation = transform.localEulerAngles + body.parent.localEulerAngles;
@@ -38,5 +39,6 @@ public class PlayerCamera : MonoBehaviour
 		body.localEulerAngles = new Vector3(0, rotation.y);
 
 		if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
-	}
+        senText.text =  sensitivity.ToString();
+    }
 }
