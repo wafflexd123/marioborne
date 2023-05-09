@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class PlayerCamera : MonoBehaviour
 
 	//for the UI slider
 	public float Sensitivity { set => sensitivity = value; }
-    public Text senText;
+    public TextMeshProUGUI senText;
 
     IEnumerator Start()
 	{
