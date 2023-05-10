@@ -19,6 +19,7 @@ public class CarparkLevelManager : MonoBehaviour
 		yield return new WaitUntil(() => enemySpawns[0].AreDead());
 		enemySpawns[1].SetPaths();
 		elevator.Open();
+		yield return new WaitUntil(() => enemySpawns[1].AreDead());
 		yield return new WaitUntil(() => elevator.IsFullyClosed && elevatorTrigger.isTriggered);//elevator is closed and player is inside elevator
 		yield return new WaitForSeconds(sceneLoadDelay);
 		SceneManager.LoadSceneAsync("After Carpark Level", LoadSceneMode.Single);

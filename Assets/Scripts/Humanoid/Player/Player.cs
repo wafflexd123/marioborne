@@ -34,8 +34,8 @@ public class Player : Humanoid
 	{
 		HandleInput();
 		Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast);
-		if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.collider != null ? raycast.collider.transform.name : null)}";
-		if (raycast.collider != null && FindComponent(raycast.collider.transform, out Raycastable hit)) hit.OnRaycast(this);
+		if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
+		if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 	}
 
 	/// <summary>

@@ -9,6 +9,7 @@ public class InteractTutorial : Raycastable
 
 	public override void OnRaycast(Player player)
 	{
+		Debug.Log("raycast");
 		if (crtRaycast == null) crtRaycast = StartCoroutine(WaitForEndRaycast());
 		IEnumerator WaitForEndRaycast()
 		{

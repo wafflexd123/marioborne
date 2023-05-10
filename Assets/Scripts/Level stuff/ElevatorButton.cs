@@ -5,6 +5,8 @@ using UnityEngine;
 public class ElevatorButton : Raycastable
 {
 	public ElevatorDoor doors;
+	public GameObject ui;
+	Coroutine crtRaycast;
 
 	public override void OnRaycast(Player player)
 	{
@@ -12,5 +14,17 @@ public class ElevatorButton : Raycastable
 		{
 			doors.Toggle();
 		}
+		if (ui != null && crtRaycast == null) crtRaycast = StartCoroutine(WaitForEndRaycast(player));
+	}
+
+	IEnumerator WaitForEndRaycast(Player player)
+	{
+		ui.SetActive(true);
+		while (FindComponent(player.raycast.transform, out ElevatorButton _))//while looking at this
+		{
+			yield return null;
+		}
+		ui.SetActive(false);
+		crtRaycast = null;
 	}
 }
