@@ -15,7 +15,6 @@ public class Bullet : MonoBehaviourPlus
 		this.speed = speed;
 		this.direction = direction;
 		this.shooter = shooter;
-		transform.rotation = Quaternion.LookRotation(direction);
 		return this;
 	}
 
@@ -27,12 +26,13 @@ public class Bullet : MonoBehaviourPlus
 
 	private void FixedUpdate()
 	{
+		transform.rotation = Quaternion.LookRotation(direction);
 		transform.position += speed * Time.fixedDeltaTime * direction;
 		timer += Time.fixedDeltaTime;
 		if (timer >= maxLifetime) Destroy(gameObject);
 	}
 
-	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces
+	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces on player
 	{
 		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs))
 		{
@@ -46,14 +46,12 @@ public class Bullet : MonoBehaviourPlus
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs))//look for reflection surface first
+		Debug.Log(1);
+		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
 		{
-			if (brs.enableReflect)
-			{
-				if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
-				else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-				transform.LookAt(transform.position + direction);
-			}
+			if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
+			else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+			transform.LookAt(transform.position + direction);
 		}
 		else if (FindComponent(collision.collider.transform, out Humanoid human))
 		{
