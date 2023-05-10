@@ -7,7 +7,6 @@ public class CarparkLevelManager : MonoBehaviour
 {
 	public GunTutorial gunTutorial;
 	public EnemyPath[] enemySpawns;
-	public Transform path;
 	public ElevatorDoor elevator;
 	public TriggerCollider elevatorTrigger;
 	public float sceneLoadDelay;
