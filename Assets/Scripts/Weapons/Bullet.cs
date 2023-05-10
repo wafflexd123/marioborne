@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviourPlus
 	public Vector3 direction;
 	Humanoid shooter;
 	float timer;
+    public bool reflected;
 
 	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter)
 	{
@@ -49,17 +50,23 @@ public class Bullet : MonoBehaviourPlus
 		Debug.Log(1);
 		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
 		{
-			if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
+            reflected = true;
+            if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
 			else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
 			transform.LookAt(transform.position + direction);
 		}
 		else if (FindComponent(collision.collider.transform, out Humanoid human))
 		{
-			if (human != shooter)//prevent bullet from killing the guy that shot it
+			if (human != shooter && !reflected)//prevent bullet from killing the guy that shot it
 			{
 				human.Kill(DeathType.Bullet);
 				Destroy(gameObject);
 			}
+            else
+            {
+                human.Kill(DeathType.Bullet);
+                Destroy(gameObject);
+            }
 		}
 		else Destroy(gameObject);
 	}
