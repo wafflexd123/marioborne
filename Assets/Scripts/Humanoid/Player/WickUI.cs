@@ -74,6 +74,7 @@ new string[] {"It's only a couple broken bones.", "Walk it off."},
 new string[] {"Hint: There's a drop there."},
 new string[] {"Next time, do a flip."},
 new string[] {"A lifetime of training and you ate it into the pavement."},
+new string[] {"Gravity 1, you 0."},
 new string[] { "While you may think he could, John Matrix can't fly. But he should, someone", "write that down." }
 	};
 
