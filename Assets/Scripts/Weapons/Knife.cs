@@ -11,12 +11,14 @@ public class Knife : WeaponBase
     {
         base.OnPickup();
         wielder.model.holdingMelee = true;
+        GetComponent<Collider>().isTrigger = true;
         if (wielder.GetComponent<Player>()) player = wielder.GetComponent<Player>();
     }
 
     protected override void OnDrop()
     {
         base.OnDrop();
+        GetComponent<Collider>().isTrigger = false;
         wielder.model.holdingMelee = false;
     }
 
