@@ -141,6 +141,12 @@ public class MonoBehaviourPlus : MonoBehaviour
 			this.eulers = eulers;
 		}
 
+		public Position(float x, float y, float z)
+		{
+			this.coords = new Vector3(x, y, z);
+			this.eulers = Vector3.zero;
+		}
+
 		public Position(Transform transform, bool useLocal = false)
 		{
 			this.coords = useLocal ? transform.localPosition : transform.position;

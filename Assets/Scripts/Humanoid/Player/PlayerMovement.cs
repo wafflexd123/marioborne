@@ -29,9 +29,12 @@ public class PlayerMovement : MonoBehaviourPlus
 	public LayerMask layerGround;
 	public LayerMask layerWall;
 
+	[Header("Temporary until better solutions found")]
+	public float groundSphereRadius;
+
 	//Private
 	float mass, _tilt;
-	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge;
+	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge, allowMovement = true;
 	Vector3 moveDirection;
 	new Rigidbody rigidbody;
 	new Camera camera;
@@ -94,10 +97,13 @@ public class PlayerMovement : MonoBehaviourPlus
 		//Control
 		CheckContacts();
 		CatchWallLedge();
-		MovePlayer();
-		Jump();
-		Dash();
-		Slide();
+		if (allowMovement)
+		{
+			MovePlayer();
+			Jump();
+			Dash();
+			Slide();
+		}
 		ControlFOV();
 
 		//Interfacing
@@ -159,7 +165,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		//Ground check
 		foreach (Transform t in tfmGround)
 		{
-			if (Physics.CheckSphere(t.position, .01f, layerGround, QueryTriggerInteraction.Ignore))
+			if (Physics.CheckSphere(t.position, groundSphereRadius, layerGround, QueryTriggerInteraction.Ignore))
 			{
 				if (!IsGrounded)
 				{
@@ -236,7 +242,9 @@ public class PlayerMovement : MonoBehaviourPlus
 			OnLedge = true;
 			rigidbody.velocity = Vector3.zero;
 			lastLedge = closestCatchLedge;
-			transform.position = new Vector3(transform.position.x, lastLedge.bodyPos.position.y, transform.position.z);//stupid
+			allowMovement = false;
+			rigidbody.isKinematic = true;
+			StartCoroutine(LerpToPos(transform, new Position(transform.position.x, lastLedge.bodyPos.position.y, transform.position.z), 5, () => allowMovement = !(rigidbody.isKinematic = false)));
 		}
 	}
 
@@ -252,6 +260,12 @@ public class PlayerMovement : MonoBehaviourPlus
 			}
 			else
 			{
+				if (OnLedge)
+				{
+					OnLedge = false;
+					Force(tfmBody.up * ledgeJumpForce);
+					canDoubleJump = false;
+				}
 				if (IsGrounded)
 				{
 					Force(tfmBody.up * jumpForce);
@@ -261,12 +275,6 @@ public class PlayerMovement : MonoBehaviourPlus
 				{
 					Force((tfmBody.up + wallSide.hit.normal + wallJumpAngle).normalized * wallJumpForce);
 					canDoubleJump = true;//only double jump if we jumped off a wall
-				}
-				else if (OnLedge)
-				{
-					OnLedge = false;
-					Force(tfmBody.up * ledgeJumpForce);
-					canDoubleJump = false;
 				}
 				else if (canDoubleJump)
 				{

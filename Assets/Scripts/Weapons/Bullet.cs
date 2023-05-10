@@ -5,9 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviourPlus
 {
 	public bool canReflect;
-	public float speed;
+	public float speed, maxLifetime;
 	public Vector3 direction;
 	Humanoid shooter;
+	float timer;
 
 	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter)
 	{
@@ -27,6 +28,8 @@ public class Bullet : MonoBehaviourPlus
 	private void FixedUpdate()
 	{
 		transform.position += speed * Time.fixedDeltaTime * direction;
+		timer += Time.fixedDeltaTime;
+		if (timer >= maxLifetime) Destroy(gameObject);
 	}
 
 	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces
