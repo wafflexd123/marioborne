@@ -6,15 +6,19 @@ public class ElevatorButton : Raycastable
 {
 	public ElevatorDoor doors;
 	public GameObject ui;
+	public bool interactable = true;
 	Coroutine crtRaycast;
 
 	public override void OnRaycast(Player player)
 	{
-		if (Input.GetButtonDown("Interact"))
+		if (interactable)
 		{
-			doors.Toggle();
+			if (Input.GetButtonDown("Interact"))
+			{
+				doors.Toggle();
+			}
+			if (ui != null && crtRaycast == null) crtRaycast = StartCoroutine(WaitForEndRaycast(player));
 		}
-		if (ui != null && crtRaycast == null) crtRaycast = StartCoroutine(WaitForEndRaycast(player));
 	}
 
 	IEnumerator WaitForEndRaycast(Player player)

@@ -107,6 +107,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		ControlFOV();
 
 		//Interfacing
+		rigidbody.drag *= Time.timeScale;
 		for (int i = 0; i < forces.Count; i++) rigidbody.AddForce(forces[i].force, forces[i].forceMode);
 		PrintForce();
 		forces.Clear();

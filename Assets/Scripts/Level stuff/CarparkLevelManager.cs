@@ -9,6 +9,7 @@ public class CarparkLevelManager : MonoBehaviour
 	public EnemyPath[] enemySpawns;
 	public ElevatorDoor elevator;
 	public TriggerCollider elevatorTrigger;
+	public ElevatorButton elevatorButton;
 	public float sceneLoadDelay;
 
 	IEnumerator Start()
@@ -21,6 +22,7 @@ public class CarparkLevelManager : MonoBehaviour
 		elevator.Open();
 		yield return new WaitUntil(() => enemySpawns[1].AreDead());
 		yield return new WaitUntil(() => elevator.IsFullyClosed && elevatorTrigger.isTriggered);//elevator is closed and player is inside elevator
+		elevatorButton.interactable = false;
 		yield return new WaitForSeconds(sceneLoadDelay);
 		SceneManager.LoadSceneAsync("After Carpark Level", LoadSceneMode.Single);
 	}

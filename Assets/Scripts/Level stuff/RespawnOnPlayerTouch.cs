@@ -13,4 +13,12 @@ public class RespawnOnPlayerTouch : MonoBehaviourPlus
 			p.Kill(deathType);
 		}
 	}
+
+	private void OnTriggerEnter(Collider collision)
+	{
+		if (FindComponent(collision.transform, out Player p))
+		{
+			p.Kill(deathType);
+		}
+	}
 }
