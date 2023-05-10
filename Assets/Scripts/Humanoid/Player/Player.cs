@@ -2,17 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Humanoid
 {
 	public static Player singlePlayer;
 	public bool invincibility;
 	public float maxInteractDistance;
-	public GameObject deathUI;
 	public WickUI wickUI;
 	[HideInInspector] public new Camera camera;
 	public RaycastHit raycast;
 	Console.Line cnsRaycast;
+	bool enableInput = true, hasDied;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
@@ -32,10 +33,15 @@ public class Player : Humanoid
 
 	void Update()
 	{
-		HandleInput();
-		Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast);
-		if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
-		if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
+		if (enableInput)
+		{
+			HandleInput();
+			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast);
+			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
+			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
+		}
+
+		if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	/// <summary>
@@ -66,15 +72,15 @@ public class Player : Humanoid
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		if (invincibility) Debug.Log("You would have died, but no one can kill John Matrix.");
-		else if (enabled)//if havent already died
+		else if (!hasDied)
 		{
+			hasDied = true;
 			wickUI.DisplayRandom(deathType);
-			//animatorManager.dying = true;
-			deathUI.SetActive(true);
+			model.dying = true;
 			GetComponent<PlayerMovement>().enabled = false;
+			enableInput = false;
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
-			enabled = false;
 		}
 	}
 }
