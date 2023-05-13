@@ -6,7 +6,8 @@ public class FieldOfView : MonoBehaviour
 	public float viewRadius;
 	[Range(0, 360)]
 	public float viewAngle;
-	public Transform eyes;
+    public Transform eyes;
+    public Vector3 playerLocation;
     Transform playerEyes;
 	public LayerMask targetMask, obstacleMask;
     public bool canSeePlayer;
@@ -44,6 +45,7 @@ public class FieldOfView : MonoBehaviour
                 if (!Physics.Linecast(eyes.position, playerEyes.position, obstacleMask))
                 {
                     canSeePlayer = true;
+                    playerLocation = rangeChecks[0].transform.position;
                     return;
                 }
             }

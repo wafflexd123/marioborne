@@ -81,15 +81,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hand: {fileID: 9208886631155602834}
   model: {fileID: 454927881951953529}
+  deflectWindow: {fileID: 0}
+  deflectDelay: 0
   head: {fileID: 614581106366106333}
   points: {fileID: 0}
   type: 0
+  state: 0
   sightRadius: 5
   meleeRadius: 2
   deathAnimationSpeed: 3
   patrolSpeed: 1
   meleeSpeed: 4
-  isPatrolling: 0
+  investigateSpeed: 2
+  investigateTimer: 5
   passive: 0
 --- !u!114 &-6666721045559162365
 MonoBehaviour:
@@ -106,6 +110,7 @@ MonoBehaviour:
   viewRadius: 40
   viewAngle: 170
   eyes: {fileID: 614581106366106333}
+  playerLocation: {x: 0, y: 0, z: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 8
