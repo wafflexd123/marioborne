@@ -6,37 +6,39 @@ using UnityEngine.SceneManagement;
 
 public class ExitRestart : MonoBehaviour
 {
-    [SerializeField] private int currentSceneIndex;
+	[SerializeField] private int currentSceneIndex;
 
-    public KeyCode restartKey = KeyCode.R;
-    public KeyCode exitKey = KeyCode.Escape;
+	public KeyCode restartKey = KeyCode.R;
+	public KeyCode exitKey = KeyCode.Escape;
 
-    private void Start()
-    {
-        DontDestroyOnLoad(this);
-    }
+	private void Start()
+	{
+		DontDestroyOnLoad(this);
+		Debug.Log("Loaded (should only see this once)");
+		SceneManager.activeSceneChanged += (Scene a, Scene b) => Cursor.lockState = CursorLockMode.None;
+	}
 
-    private void Update()
-    {
-        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+	private void Update()
+	{
+		currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        if (Input.GetKeyDown(restartKey))
-        {
-            SceneManager.LoadScene(currentSceneIndex);
-        }
+		if (Input.GetKeyDown(restartKey))
+		{
+			SceneManager.LoadScene(currentSceneIndex);
+		}
 
-        if (Input.GetKeyDown(exitKey))
-        {
-            if (currentSceneIndex != 0)
-            {
-                SceneManager.LoadScene(0);
-                Cursor.lockState = CursorLockMode.Confined;
-            }
-            else
-            {
-                Debug.Log("Game Quit.");
-                Application.Quit();
-            }
-        }
-    }
+		if (Input.GetKeyDown(exitKey))
+		{
+			if (currentSceneIndex != 0)
+			{
+				SceneManager.LoadScene(0);
+				Cursor.lockState = CursorLockMode.None;
+			}
+			else
+			{
+				Debug.Log("Game Quit.");
+				Application.Quit();
+			}
+		}
+	}
 }
