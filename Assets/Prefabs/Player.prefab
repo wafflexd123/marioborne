@@ -3280,7 +3280,6 @@ MonoBehaviour:
   deflectDelay: 5
   invincibility: 1
   maxInteractDistance: 5
-  deathUI: {fileID: 0}
   wickUI: {fileID: 1504019228705347093}
   camera: {fileID: 0}
 --- !u!114 &5516079215156044915
@@ -3512,6 +3511,8 @@ MonoBehaviour:
   jumpForce: 10
   doubleJumpForce: 7.5
   ledgeJumpForce: 15
+  gravity: {x: 0, y: -30, z: 0}
+  useGravity: 1
   rollQueueTime: 0.3
   rollRequeueTime: 1
   slideDrag:

@@ -14,8 +14,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Header("Air/Jump")]
 	public ForceCurve airForce;
 	public float airDrag, jumpForce, doubleJumpForce, ledgeJumpForce;
+	public Vector3 gravity;
+	public bool useGravity;
 
-	[Header("Roll & Slide")]
+	[Header("Roll & Slide/Crouch")]
 	public float rollQueueTime;
 	public float rollRequeueTime;
 	public ForceCurve slideDrag;
@@ -35,7 +37,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	//Private
 	float mass, _tilt, currentDrag;
 	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge, allowMovement = true;
-	Vector3 moveDirection;
+	Vector3 moveDirection, velocity;
 	new Rigidbody rigidbody;
 	new Camera camera;
 	PlayerCamera playerCamera;
@@ -71,14 +73,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		cnsDebug = Console.AddLine();
-		//jumpForce *= rigidbody.mass;
-		//wallRunGravity *= rigidbody.mass;
-		//wallJumpForce *= rigidbody.mass;
-		//doubleJumpForce *= rigidbody.mass;
-		//ledgeJumpForce *= rigidbody.mass;
-		//walkForce.Multiply(rigidbody.mass);
-		//wallForce.Multiply(rigidbody.mass);
-		//airForce.Multiply(rigidbody.mass);
 	}
 
 	void Update()
@@ -86,7 +80,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (Input.GetButtonDown("Jump")) queueJump = true;
 		if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) animator.QueueRoll(rollQueueTime, rollRequeueTime);
 		if (Input.GetButtonDown("Dash")) queueDash = true;
-		//rigidbody.mass = mass / Time.timeScale;
 	}
 
 	void FixedUpdate()
@@ -104,13 +97,9 @@ public class PlayerMovement : MonoBehaviourPlus
 			Dash();
 			Slide();
 		}
-		ControlFOV();
 		ControlRigidbody();
+		ControlFOV();
 	}
-
-	Vector3 velocity;
-	public Vector3 gravity;
-	public bool useGravity;
 
 	void ControlRigidbody()
 	{
@@ -258,7 +247,12 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		IsWallrunning = enable;
 		useGravity = !enable;
-		if (enable && velocity.y > maxWallUpwardsVelocity) velocity = new Vector3(velocity.x, maxWallUpwardsVelocity, velocity.z);//prevent player from going over wall when hitting it
+		if (enable)
+		{
+			canDoubleJump = true;
+			if (velocity.y > maxWallUpwardsVelocity) 
+				velocity = new Vector3(velocity.x, maxWallUpwardsVelocity, velocity.z);//prevent player from going over wall when hitting it
+		}
 		ResetRoutine(TweenFloat(() => CurrentTilt, (float tilt) => CurrentTilt = tilt, enable ? wallTilt * wallSide.direction : 0, tiltPerSecond), ref crtTilt);
 		//ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
 	}
@@ -302,7 +296,6 @@ public class PlayerMovement : MonoBehaviourPlus
 				else if (IsWallrunning)
 				{
 					Force((tfmBody.up + wallSide.hit.normal + wallJumpAngle).normalized * wallJumpForce);
-					canDoubleJump = true;//only double jump if we jumped off a wall
 				}
 				else if (canDoubleJump)
 				{
