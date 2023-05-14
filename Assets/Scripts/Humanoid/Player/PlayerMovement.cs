@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviourPlus
@@ -46,6 +47,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	CatchLedge lastLedge;
+	TMP_Text txtWhereAmI;
 	List<Force> forces = new List<Force>();
 	[HideInInspector] public LeapObject closestLeapObject;
 	[HideInInspector] public CatchLedge closestCatchLedge;
@@ -64,6 +66,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		collider = transform.Find("Body").GetComponent<CapsuleCollider>();
 		animator = collider.transform.Find("Model").GetComponent<HumanoidAnimatorManager>();
+		txtWhereAmI = transform.Find("UI").Find("WhereAmI").GetComponent<TMP_Text>();
+		txtWhereAmI.text = "";
 		rigidbody = GetComponent<Rigidbody>();
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;
@@ -108,6 +112,13 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 		ControlRigidbody();
 		ControlFOV();
+		ControlText();
+	}
+
+	void ControlText()
+	{
+		if (wallSide.hit.transform != null) txtWhereAmI.text = wallSide.hit.transform.name;
+		else if (IsGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;
 	}
 
 	void ControlRigidbody()
