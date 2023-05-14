@@ -135,6 +135,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 			animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
 			//animator.SetBool("falling", Mathf.Abs(value.y) >= airSpeed);
 			previousVelocity = value;
+			animator.SetFloat("timeScale", Time.timeScale);
 		}
 	}
 }

@@ -8484,6 +8484,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.05548498
       objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: gravity.y
+      value: -30
+      objectReference: {fileID: 0}
     - target: {fileID: 8230165543452067333, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -18997,7 +19001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeScaleSpeed: 3
-  minTimeScale: 2.5
+  minTimeScale: 0.25
   scaleDuration: 999
   recoveryDelay: 0
 --- !u!1001 &1166288402
