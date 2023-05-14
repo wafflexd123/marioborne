@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviourPlus
 	public Vector3 direction;
 	Humanoid shooter;
 	float timer;
-    public bool reflected;
+	bool reflected;
 
 	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter)
 	{
@@ -18,12 +18,6 @@ public class Bullet : MonoBehaviourPlus
 		this.shooter = shooter;
 		return this;
 	}
-
-	//IEnumerator Start()
-	//{
-	//	yield return new WaitForFixedUpdate();
-	//	isFirstFrame = false;//only called once; so we don't have to continously set this every update
-	//}
 
 	private void FixedUpdate()
 	{
@@ -40,33 +34,25 @@ public class Bullet : MonoBehaviourPlus
 			if (brs.enableReflect && FindComponent(brs.transform, out Humanoid humanoid))
 			{
 				direction = humanoid.LookDirection;
-				transform.LookAt(transform.position + direction);
 			}
 		}
 	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		Debug.Log(1);
 		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
 		{
-            reflected = true;
-            if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
+			reflected = true;
+			if (FindComponent(brs.transform, out Humanoid humanoid)) direction = humanoid.LookDirection;
 			else direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-			transform.LookAt(transform.position + direction);
 		}
 		else if (FindComponent(collision.collider.transform, out Humanoid human))
 		{
-			if (human != shooter && !reflected)//prevent bullet from killing the guy that shot it
+			if (human != shooter || reflected)//if humanoid hit isn't the shooter, or the bullet has been reflected
 			{
 				human.Kill(DeathType.Bullet);
 				Destroy(gameObject);
 			}
-            else
-            {
-                human.Kill(DeathType.Bullet);
-                Destroy(gameObject);
-            }
 		}
 		else Destroy(gameObject);
 	}
