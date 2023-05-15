@@ -44,7 +44,19 @@ public class Player : Humanoid
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-		if (Input.GetKeyDown(KeyCode.Escape)) escMenu.SetActive(!escMenu.activeSelf);
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (escMenu.activeSelf)
+			{
+				escMenu.SetActive(false);
+				Cursor.lockState = CursorLockMode.Locked;
+			}
+			else
+			{
+				escMenu.SetActive(true);
+				Cursor.lockState = CursorLockMode.None;
+			}
+		}
 	}
 
 	/// <summary>
@@ -81,7 +93,9 @@ public class Player : Humanoid
 			wickUI.DisplayRandom(deathType);
 			model.dying = true;
 			Destroy(GetComponent<PlayerMovement>());
-			Destroy(GetComponent<Rigidbody>());
+			Rigidbody rb = GetComponent<Rigidbody>();
+			rb.velocity = Vector3.zero;
+			rb.useGravity = true;
 			Destroy(transform.Find("Head").GetComponent<PlayerCamera>());
 			enableInput = false;
 			Cursor.lockState = CursorLockMode.None;

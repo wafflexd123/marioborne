@@ -18,13 +18,14 @@ public class Time
 public class WaitForSeconds : CustomYieldInstruction
 {
     float time, waitTime;
-    public override bool keepWaiting { get => (time += Time.deltaTime) < waitTime; }
+    public override bool keepWaiting { get => (time += Time.fixedDeltaTime) < waitTime; }
     public WaitForSeconds(float waitTime) { this.waitTime = waitTime; }
 }
 
 public class WaitForSecondsRealtime : CustomYieldInstruction
 {
     float time, waitTime;
-    public override bool keepWaiting { get => (time += Time.unscaledDeltaTime) < waitTime; }
+    public override bool keepWaiting { get => (time += Time.fixedUnscaledDeltaTime) < waitTime; }
     public WaitForSecondsRealtime(float waitTime) { this.waitTime = waitTime; }
 }
+
