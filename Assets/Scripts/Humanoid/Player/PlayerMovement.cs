@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	public void Collide()
 	{
-		if (rigidbody.velocity.y > velocity.y)//rigidbody y velocity will differ from intended velocity if a collision occurred, but will not always equal 0 due to interpolation (i think)
+		if (rigidbody.velocity.y > velocity.y)//rigidbody y velocity will differ from intended velocity if a ground collision occurred, but will not always equal 0 due to interpolation (i think)
 		{
 			CheckGround();//this will call twice a frame but cant be bothered
 			if (IsGrounded)
@@ -146,6 +146,12 @@ public class PlayerMovement : MonoBehaviourPlus
 					queueRoll = false;
 					StopCoroutine(crtQueueRoll);
 					crtQueueRoll = null;
+
+					float y = -velocity.y;//store y value as positive
+					velocity.y = 0;
+					velocity = Vector3.ClampMagnitude(velocity + (y * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
+					rigidbody.velocity = velocity;//apply velocity change
+					return;//don't bother setting velocity again
 				}
 				else if (velocity.y <= -fallCrouchEngageSpeed)//if hit the ground at crouch speed
 				{
@@ -207,7 +213,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			ForceCurve curve = IsGrounded ? walkForce : IsWallrunning ? wallForce : airForce;
 			float velocity = IsWallrunning ? LateralVelocity() : this.velocity.magnitude;
-			cnsDebug.text = $"Force: {this.velocity.magnitude:#.00} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve)\n" +
+			cnsDebug.text = $"Force: {this.velocity.magnitude:#.00} {this.velocity} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve), actual velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}\n" +
 				$"Drag: {currentDrag}\n" +
 				$"Grounded: {IsGrounded}, last object walked on: {(groundHit.transform != null ? groundHit.transform.name : "not found")}\n" +
 				$"Wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: ({wallSide.IsTouchingWall}, direction: {wallSide.direction})\n" +
