@@ -23,6 +23,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	public float rollRequeueTime, fallRollEngageSpeed, fallCrouchEngageSpeed;
 	public ForceCurve slideDrag;
 
+	[Header("Fall Damage")]
+	public float minDamageVelocity;
+	public float maxDamageVelocity, maxHealth, healthRecoverDelay, healthPerSecond;
+
 	[Header("Wall Running")]
 	public ForceCurve wallForce;
 	public float wallRunGravity, wallJumpForce, wallTilt, tiltPerSecond, maxWallUpwardsVelocity, wallCatchDistance = .6f, wallDrag, wallCatchHeight;
@@ -34,7 +38,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public Vector3 groundCheckOffset;
 
 	//Private
-	float mass, _tilt, currentDrag;
+	float mass, _tilt, currentDrag, health;
 	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge, allowMovement = true, queueRoll;
 	Vector3 moveDirection, velocity;
 	RaycastHit groundHit;
@@ -42,18 +46,20 @@ public class PlayerMovement : MonoBehaviourPlus
 	new Camera camera;
 	new CapsuleCollider collider;
 	PlayerCamera playerCamera;
+	Player player;
 	Wall wallSide = new Wall(), wallForward = new Wall();
-	Coroutine crtDash, crtTilt, crtSlide, crtQueueRoll;
+	Coroutine crtDash, crtTilt, crtSlide, crtQueueRoll, crtHealth;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	CatchLedge lastLedge;
 	TMP_Text txtWhereAmI;
+	VignetteControl healthVignette;
 	List<Force> forces = new List<Force>();
 	[HideInInspector] public LeapObject closestLeapObject;
 	[HideInInspector] public CatchLedge closestCatchLedge;
 
 	//Temporary
-	float dashForce, dashCooldown;
+	float dashForce, dashCooldown, lastFallVelocity;
 
 	//Properties
 	public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
@@ -64,10 +70,14 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	IEnumerator Start()
 	{
+		health = maxHealth;
+		player = GetComponent<Player>();
 		collider = transform.Find("Body").GetComponent<CapsuleCollider>();
 		animator = collider.transform.Find("Model").GetComponent<HumanoidAnimatorManager>();
-		txtWhereAmI = transform.Find("UI").Find("WhereAmI").GetComponent<TMP_Text>();
+		Transform ui = transform.Find("UI");
+		txtWhereAmI = ui.Find("WhereAmI").GetComponent<TMP_Text>();
 		txtWhereAmI.text = "";
+		healthVignette = ui.Find("Health Vignette").GetComponent<VignetteControl>();
 		rigidbody = GetComponent<Rigidbody>();
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;
@@ -133,7 +143,31 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	public void Collide()
+	void Health(float amount, DeathType deathType)
+	{
+		if (amount > 0)
+		{
+			health -= amount;
+			healthVignette.SetVignetteAlpha(health, maxHealth);
+			if (health <= 0) player.Kill(deathType);
+			else ResetRoutine(Recover(), ref crtHealth);
+		}
+
+		IEnumerator Recover()
+		{
+			yield return new WaitForSeconds(healthRecoverDelay);
+			do
+			{
+				health += healthPerSecond * Time.fixedDeltaTime;
+				healthVignette.SetVignetteAlpha(health, maxHealth);
+				yield return new WaitForFixedUpdate();
+			} while (health < maxHealth);
+			health = maxHealth;
+			crtHealth = null;
+		}
+	}
+
+	void Collide()
 	{
 		if (rigidbody.velocity.y > velocity.y)//rigidbody y velocity will differ from intended velocity if a ground collision occurred, but will not always equal 0 due to interpolation (i think)
 		{
@@ -147,9 +181,9 @@ public class PlayerMovement : MonoBehaviourPlus
 					StopCoroutine(crtQueueRoll);
 					crtQueueRoll = null;
 
-					float y = -velocity.y;//store y value as positive
+					lastFallVelocity = -velocity.y;//store y value as positive
 					velocity.y = 0;
-					velocity = Vector3.ClampMagnitude(velocity + (y * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
+					velocity = Vector3.ClampMagnitude(velocity + (lastFallVelocity * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
 					rigidbody.velocity = velocity;//apply velocity change
 					return;//don't bother setting velocity again
 				}
@@ -162,6 +196,9 @@ public class PlayerMovement : MonoBehaviourPlus
 						StopCoroutine(crtQueueRoll);
 						crtQueueRoll = null;
 					}
+
+					lastFallVelocity = -velocity.y;
+					Health(Mathf.Lerp(0, maxHealth, Mathf.InverseLerp(minDamageVelocity, maxDamageVelocity, -velocity.y)), DeathType.Fall);
 				}
 			}
 		}
@@ -217,7 +254,8 @@ public class PlayerMovement : MonoBehaviourPlus
 				$"Drag: {currentDrag}\n" +
 				$"Grounded: {IsGrounded}, last object walked on: {(groundHit.transform != null ? groundHit.transform.name : "not found")}\n" +
 				$"Wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: ({wallSide.IsTouchingWall}, direction: {wallSide.direction})\n" +
-				$"Can doublejump: {canDoubleJump}, on ledge: {OnLedge}";
+				$"Can doublejump: {canDoubleJump}, on ledge: {OnLedge}\n" +
+				$"Health: {health:#0.00}, last fall velocity: {lastFallVelocity:#0.00}";
 		}
 	}
 

@@ -79,7 +79,9 @@ public class Player : Humanoid
 			hasDied = true;
 			wickUI.DisplayRandom(deathType);
 			model.dying = true;
-			GetComponent<PlayerMovement>().enabled = false;
+			Destroy(GetComponent<PlayerMovement>());
+			Destroy(GetComponent<Rigidbody>());
+			Destroy(transform.Find("Head").GetComponent<PlayerCamera>());
 			enableInput = false;
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;

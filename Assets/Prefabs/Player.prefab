@@ -3570,7 +3570,7 @@ GameObject:
   - component: {fileID: 6719197076485374080}
   - component: {fileID: 590480685230331330}
   m_Layer: 5
-  m_Name: Red Vignette
+  m_Name: Health Vignette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5871,6 +5871,11 @@ MonoBehaviour:
     minForce: 8
     maxForce: 12
     velocityAtMaxForce: 10.6
+  minDamageVelocity: 20
+  maxDamageVelocity: 30
+  maxHealth: 100
+  healthRecoverDelay: 2
+  healthPerSecond: 20
   wallForce:
     curve:
       serializedVersion: 2
