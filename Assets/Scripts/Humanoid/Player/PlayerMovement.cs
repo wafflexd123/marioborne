@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	[Header("Roll & Slide/Crouch")]
 	public float rollQueueTime;
-	public float rollRequeueTime;
+	public float rollRequeueTime, fallRollEngageSpeed, fallCrouchEngageSpeed;
 	public ForceCurve slideDrag;
 
 	[Header("Wall Running")]
@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	//Private
 	float mass, _tilt, currentDrag;
-	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge, allowMovement = true;
+	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge, allowMovement = true, queueRoll;
 	Vector3 moveDirection, velocity;
 	RaycastHit groundHit;
 	new Rigidbody rigidbody;
@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	new CapsuleCollider collider;
 	PlayerCamera playerCamera;
 	Wall wallSide = new Wall(), wallForward = new Wall();
-	Coroutine crtDash, crtTilt, crtSlide;
+	Coroutine crtDash, crtTilt, crtSlide, crtQueueRoll;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	CatchLedge lastLedge;
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	void Update()
 	{
 		if (Input.GetButtonDown("Jump")) queueJump = true;
-		if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) animator.QueueRoll(rollQueueTime, rollRequeueTime);
+		if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) QueueRoll();
 		if (Input.GetButtonDown("Dash")) queueDash = true;
 	}
 
@@ -101,7 +101,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		moveDirection = (collider.transform.forward * Input.GetAxis("Vertical") + collider.transform.right * Input.GetAxis("Horizontal")).normalized;
 
 		//Control
-		CheckContacts();
+		CheckGround();
+		CheckWalls();
 		CatchWallLedge();
 		if (allowMovement)
 		{
@@ -113,6 +114,53 @@ public class PlayerMovement : MonoBehaviourPlus
 		ControlRigidbody();
 		ControlFOV();
 		ControlText();
+	}
+
+	/// <summary>
+	/// Will let a roll initiate when you hit the ground if the button was pressed during queueTime, will not let a roll initiate afterwards during requeueTime or until the frame after you hit the ground
+	/// </summary>
+	public void QueueRoll()
+	{
+		if (crtQueueRoll == null) crtQueueRoll = StartCoroutine(Routine());
+		else queueRoll = false;//player cannot spam roll button, must only press once
+		IEnumerator Routine()
+		{
+			queueRoll = true;
+			yield return new WaitForSeconds(rollQueueTime);
+			queueRoll = false;
+			yield return new WaitForSeconds(rollRequeueTime);
+			crtQueueRoll = null;
+		}
+	}
+
+	public void Collide()
+	{
+		if (rigidbody.velocity.y > velocity.y)//rigidbody y velocity will differ from intended velocity if a collision occurred, but will not always equal 0 due to interpolation (i think)
+		{
+			CheckGround();//this will call twice a frame but cant be bothered
+			if (IsGrounded)
+			{
+				if (queueRoll && velocity.y <= -fallRollEngageSpeed)//if queueing a roll & hit the ground at roll speed
+				{
+					animator.roll = true;
+					queueRoll = false;
+					StopCoroutine(crtQueueRoll);
+					crtQueueRoll = null;
+				}
+				else if (velocity.y <= -fallCrouchEngageSpeed)//if hit the ground at crouch speed
+				{
+					animator.land = true;
+					if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
+					{
+						queueRoll = false;
+						StopCoroutine(crtQueueRoll);
+						crtQueueRoll = null;
+					}
+				}
+			}
+		}
+
+		velocity = rigidbody.velocity;//account for collisions
 	}
 
 	void ControlText()
@@ -198,9 +246,8 @@ public class PlayerMovement : MonoBehaviourPlus
 		camera.fieldOfView = TweenFloat(camera.fieldOfView, fovCurve.Evaluate(LateralVelocity()), fovPerSecond);
 	}
 
-	void CheckContacts()
+	void CheckGround()
 	{
-		//Ground check
 		if (Physics.CheckSphere(collider.transform.position + groundCheckOffset + new Vector3(0, collider.radius), collider.radius, layerGround, QueryTriggerInteraction.Ignore))
 		{
 			if (!IsGrounded)
@@ -210,8 +257,10 @@ public class PlayerMovement : MonoBehaviourPlus
 			}
 		}
 		else IsGrounded = false;
+	}
 
-		//Wall checks
+	void CheckWalls()
+	{
 		if (!wallSide.CheckWall(collider.transform, collider.transform.right, wallCatchDistance, layerWall))//right
 			wallSide.CheckWall(collider.transform, -collider.transform.right, wallCatchDistance, layerWall, -1);//left
 		wallForward.CheckWall(collider.transform, collider.transform.forward, wallCatchDistance, layerWall);//forward
@@ -353,7 +402,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		animator.Collide(rigidbody.velocity);
+		Collide();
 	}
 
 	void OnDrawGizmosSelected()

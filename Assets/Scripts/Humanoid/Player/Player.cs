@@ -10,6 +10,7 @@ public class Player : Humanoid
 	public bool invincibility;
 	public float maxInteractDistance;
 	public WickUI wickUI;
+	public GameObject escMenu;
 	[HideInInspector] public new Camera camera;
 	public RaycastHit raycast;
 	Console.Line cnsRaycast;
@@ -42,6 +43,7 @@ public class Player : Humanoid
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+		if (Input.GetKeyDown(KeyCode.Escape)) escMenu.SetActive(!escMenu.activeSelf);
 	}
 
 	/// <summary>
