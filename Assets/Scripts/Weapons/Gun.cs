@@ -11,16 +11,19 @@ public class Gun : WeaponBase
 	public GunType type;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
+
 	Coroutine crtDelay;
 	GameObject ui;
-	TextMeshProUGUI txtAmmo;
+	RectTransform tfmReloadPercent;
+	TMP_Text txtAmmo;
 	Ammo ammo;
 
 	protected override void Start()
 	{
 		base.Start();
 		ui = transform.Find("UI").gameObject;
-		txtAmmo = ui.transform.Find("Ammo").GetComponent<TextMeshProUGUI>();
+		tfmReloadPercent = (RectTransform)ui.transform.Find("Reload Mask").GetChild(0);
+		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
 		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
 		txtAmmo.text = $"{playerAmmo.amount}";
@@ -98,7 +101,15 @@ public class Gun : WeaponBase
 
 	IEnumerator Delay()
 	{
-		yield return new WaitForSeconds(fireDelay);
+		float timer = 0, startX = -tfmReloadPercent.rect.width;
+		tfmReloadPercent.parent.gameObject.SetActive(true);
+		while (timer < fireDelay)
+		{
+			timer += Time.fixedDeltaTime;
+			tfmReloadPercent.localPosition = new Vector3(Mathf.Lerp(startX, 0, timer / fireDelay), tfmReloadPercent.localPosition.y, tfmReloadPercent.localPosition.z);
+			yield return new WaitForFixedUpdate();
+		}
+		tfmReloadPercent.parent.gameObject.SetActive(false);
 		//if (wielder) wielder.model.shooting = false;
 		crtDelay = null;
 	}

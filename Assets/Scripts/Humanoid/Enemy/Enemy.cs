@@ -92,7 +92,7 @@ public class Enemy : Humanoid
                 agent.isStopped = true;
                 model.holdingGun = true;
                 transform.LookAt(new Vector3(Player.singlePlayer.camera.transform.position.x, transform.position.y, Player.singlePlayer.camera.transform.position.z));
-                lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity/1.5f);
+                if (!Player.singlePlayer.hasDied) lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity/1.5f);
                 Debug.DrawLine(hand.position, lookingAt);
                 if (!passive && hand.childCount > 0)
                 {
