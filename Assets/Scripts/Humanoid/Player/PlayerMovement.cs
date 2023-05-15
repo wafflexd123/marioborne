@@ -198,7 +198,12 @@ public class PlayerMovement : MonoBehaviourPlus
 					}
 
 					lastFallVelocity = -velocity.y;
-					Health(Mathf.Lerp(0, maxHealth, Mathf.InverseLerp(minDamageVelocity, maxDamageVelocity, -velocity.y)), DeathType.Fall);
+					velocity.y = 0;
+					float velocityPercent = Mathf.InverseLerp(minDamageVelocity, maxDamageVelocity, lastFallVelocity);
+					velocity *= 1 - velocityPercent;//reduce velocity according to percent of health decreased
+					Health(Mathf.Lerp(0, maxHealth, velocityPercent), DeathType.Fall);
+					rigidbody.velocity = velocity;//apply velocity change
+					return;//don't bother setting velocity again
 				}
 			}
 		}
