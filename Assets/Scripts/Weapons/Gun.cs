@@ -11,6 +11,7 @@ public class Gun : WeaponBase
 	public GunType type;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
+	new AudioSource audio;
 
 	Coroutine crtDelay;
 	GameObject ui;
@@ -27,6 +28,7 @@ public class Gun : WeaponBase
 		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
 		txtAmmo.text = $"{playerAmmo.amount}";
+		audio = GetComponent<AudioSource>();
 	}
 
 	protected override void OnPickup()
@@ -82,6 +84,7 @@ public class Gun : WeaponBase
 		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//if not waiting for fireDelay && wielder is looking at something && can shoot
 		{
 			if (wielder is Player) txtAmmo.text = $"{playerAmmo.amount}";
+			audio.Play();
 			//wielder.model.shooting = true;
 			crtDelay = StartCoroutine(Delay());
 			switch (type)
