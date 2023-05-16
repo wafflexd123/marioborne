@@ -5648,43 +5648,52 @@ MonoBehaviour:
         time: 0.5
         value: 0.175
         inSlope: 1.0500001
-        outSlope: 1.7499995
+        outSlope: 2.2499995
         tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.6
-        value: 0.35
-        inSlope: 1.7499995
-        outSlope: 1.7000005
+        value: 0.4
+        inSlope: 2.2499995
+        outSlope: 2.000001
         tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.7
-        value: 0.52
-        inSlope: 1.7000005
-        outSlope: 1.55
+        value: 0.6
+        inSlope: 2.000001
+        outSlope: 1.7499992
         tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.8
-        value: 0.675
-        inSlope: 1.55
-        outSlope: 1.6500002
+        value: 0.775
+        inSlope: 1.7499992
+        outSlope: 1.8500007
         tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.9
-        value: 0.84
-        inSlope: 1.6500002
-        outSlope: 1.5999999
+        value: 0.96
+        inSlope: 1.8500007
+        outSlope: 0.70000035
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.95
+        value: 0.995
+        inSlope: 0.70000035
+        outSlope: 0.09999988
         tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
@@ -5692,7 +5701,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1.5999999
+        inSlope: 0.09999988
         outSlope: 0
         tangentMode: 69
         weightedMode: 0
@@ -5701,10 +5710,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 45
+    minForce: 50
     maxForce: 100
-    velocityAtMaxForce: 10.6
-  walkDrag: 8
+    velocityAtMaxForce: 10
+  walkDrag: 10
   noInputGroundDrag:
     curve:
       serializedVersion: 2
@@ -5712,35 +5721,17 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -1
+        outSlope: -1
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.5
-        value: 1
-        inSlope: 0
-        outSlope: -1
-        tangentMode: 5
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.51
-        value: 0
-        inSlope: -1.4726064
-        outSlope: 0
-        tangentMode: 65
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: -1
+        outSlope: -1
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -5750,35 +5741,35 @@ MonoBehaviour:
       m_RotationOrder: 4
     minForce: 0.5
     maxForce: 12
-    velocityAtMaxForce: 10.6
+    velocityAtMaxForce: 10
   fovCurve:
     curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.5
+        time: 0.8
         value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
+        inSlope: 5.0000005
+        outSlope: 5.0000005
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
+        inSlope: 5.0000005
+        outSlope: 5.0000005
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     minForce: 60
     maxForce: 90
-    velocityAtMaxForce: 10.6
+    velocityAtMaxForce: 10
   fovPerSecond: 50
   airForce:
     curve:
@@ -5807,7 +5798,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     minForce: 7.2
     maxForce: 7.2
-    velocityAtMaxForce: 10.6
+    velocityAtMaxForce: 10
   airDrag: 0.8
   jumpForce: 10
   doubleJumpForce: 7.5
@@ -5863,7 +5854,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     minForce: 8
     maxForce: 12
-    velocityAtMaxForce: 10.6
+    velocityAtMaxForce: 10
   minDamageVelocity: 20
   maxDamageVelocity: 30
   maxHealth: 100
@@ -5977,7 +5968,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     minForce: 15
     maxForce: 100
-    velocityAtMaxForce: 10.6
+    velocityAtMaxForce: 10
   wallRunGravity: 10
   wallJumpForce: 13
   wallTilt: 10

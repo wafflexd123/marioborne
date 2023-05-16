@@ -255,7 +255,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			ForceCurve curve = IsGrounded ? walkForce : IsWallrunning ? wallForce : airForce;
 			float velocity = IsWallrunning ? LateralVelocity() : this.velocity.magnitude;
-			cnsDebug.text = $"Force: {this.velocity.magnitude:#.00} {this.velocity} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve), actual velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}\n" +
+			cnsDebug.text = $"Force: {velocity:#.00} {this.velocity} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve), actual velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}\n" +
 				$"Drag: {currentDrag}\n" +
 				$"Grounded: {IsGrounded}, last object walked on: {(groundHit.transform != null ? groundHit.transform.name : "not found")}\n" +
 				$"Wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: ({wallSide.IsTouchingWall}, direction: {wallSide.direction})\n" +
