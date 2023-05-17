@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class Fists : MonoBehaviourPlus
 {
-	public float hitDelay;
+    float punchTime = 0.3f;
+    float deflectTime = 0.3f;
+    public float punchDelay;
 	public float deflectDelay;
-	Coroutine crtPunchDelay;
-	Coroutine crtDeflectDelay;
+	Coroutine crtPunchDelay, crtDeflectDelay, crtPunchTime, crtDeflectTime;
 	public GameObject reflectWindow;
 	private Player player;
 
@@ -40,23 +41,32 @@ public class Fists : MonoBehaviourPlus
 	{
 		if (player.hand.childCount <= 0)
 		{
-			if (crtDeflectDelay == null)
+			if (crtDeflectTime == null)
 			{
-				Enable(true);
-
 				if (crtPunchDelay == null && player.LookingAt != Vector3.negativeInfinity)//if not waiting for fireDelay && wielder is looking at something
 				{
-					player.model.punching = true;
-					crtPunchDelay = StartCoroutine(Delay());
+                    if(crtPunchTime == null)
+                    {
+                        player.model.punching = true;
+                        Enable(true);
+                        crtPunchTime = StartCoroutine(Anim());
+
+                        IEnumerator Anim()
+                        {
+                            yield return new WaitForSeconds(punchTime);
+                            Enable(false);
+                            player.model.punching = false;
+                            crtPunchDelay = StartCoroutine(Delay());
+                            crtPunchTime = null;
+                        }
+                    }
 				}
 
-				IEnumerator Delay()
-				{
-					yield return new WaitForSeconds(hitDelay);
-					Enable(false);
-					player.model.punching = false;
-					crtPunchDelay = null;
-				}
+                IEnumerator Delay()
+                {
+                    yield return new WaitForSeconds(punchDelay);
+                    crtPunchDelay = null;
+                }
 			}
 		}
 	}
@@ -65,22 +75,32 @@ public class Fists : MonoBehaviourPlus
 	{
 		if (player.hand.childCount <= 0)
 		{
-			if (crtPunchDelay == null)
+			if (crtPunchTime == null)
 			{
 				if (crtDeflectDelay == null && player.LookingAt != Vector3.negativeInfinity)
 				{
-					player.model.deflect = true;
-					crtDeflectDelay = StartCoroutine(Delay());
+                    if(crtDeflectTime == null)
+                    {
+                        player.model.deflect = true;
+                        crtDeflectTime = StartCoroutine(Anim());
+
+                        IEnumerator Anim()
+                        {
+                            reflectWindow.SetActive(true);
+                            yield return new WaitForSeconds(deflectTime);
+                            reflectWindow.SetActive(false);
+                            player.model.deflect = false;
+                            crtDeflectDelay = StartCoroutine(Delay());
+                            crtDeflectTime = null;
+                        }
+                    }
 				}
 
-				IEnumerator Delay()
-				{
-					reflectWindow.SetActive(true);
-					yield return new WaitForSeconds(deflectDelay);
-					reflectWindow.SetActive(false);
-					player.model.deflect = false;
-					crtDeflectDelay = null;
-				}
+                IEnumerator Delay()
+                {
+                    yield return new WaitForSeconds(deflectDelay);
+                    crtDeflectDelay = null;
+                }
 			}
 		}
 	}
@@ -93,12 +113,9 @@ public class Fists : MonoBehaviourPlus
 
 	void OnTriggerEnter(Collider collider)
 	{
-		if (crtPunchDelay != null)
+		if (FindComponent(collider.transform, out Enemy enemy))
 		{
-			if (FindComponent(collider.transform, out Enemy enemy))
-			{
-				enemy.Kill();
-			}
+			enemy.Kill();
 		}
 	}
 }
