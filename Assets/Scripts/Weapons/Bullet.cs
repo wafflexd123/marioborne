@@ -36,6 +36,7 @@ public class Bullet : MonoBehaviourPlus
 			if (brs.enableReflect && FindComponent(brs.transform, out Humanoid humanoid))
 			{
 				Direction = humanoid.LookDirection;
+				reflected = true;
 			}
 		}
 	}
