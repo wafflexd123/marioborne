@@ -25,7 +25,7 @@ public class TimescalerTutorial : Raycastable
 
 					for (int i = 0; i < enemies.Length; i++)
 					{
-						enemies[i].points = path;
+						enemies[i].Points = path;
 					}
 
 					Destroy(gameObject);

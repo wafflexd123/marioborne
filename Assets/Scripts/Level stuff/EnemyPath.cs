@@ -20,7 +20,7 @@ public class EnemyPath
 	{
 		for (int i = 0; i < enemies.Count; i++)
 		{
-			if (enemies[i] != null) enemies[i].points = path;
+			if (enemies[i] != null) enemies[i].Points = path;
 		}
 	}
 }

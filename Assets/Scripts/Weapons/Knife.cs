@@ -97,14 +97,14 @@ public class Knife : WeaponBase
             {
                 if (FindComponent(collider.transform, out Enemy enemy))
                 {
-                    enemy.Kill();
+                    enemy.Kill(DeathType.Melee);
                 }
             }
             else if (wielder.GetComponent<Enemy>())
             {
                 if (FindComponent(collider.transform, out Player player))
                 {
-                    player.Kill();
+                    player.Kill(DeathType.Melee);
                 }
             }
         }

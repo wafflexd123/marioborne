@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 614581106366106333}
   m_Layer: 11
-  m_Name: Eyes
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ Transform:
   m_Children:
   - {fileID: 614581108126892843}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &941658141
 MonoBehaviour:
@@ -82,19 +82,14 @@ MonoBehaviour:
   hand: {fileID: 9208886631155602834}
   model: {fileID: 454927881951953529}
   deflectWindow: {fileID: 0}
-  deflectDelay: 0
-  head: {fileID: 614581106366106333}
-  points: {fileID: 0}
-  type: 0
-  state: 0
   sightRadius: 5
   meleeRadius: 2
   deathAnimationSpeed: 3
   patrolSpeed: 1
   meleeSpeed: 4
   investigateSpeed: 2
-  investigateTimer: 5
-  passive: 0
+  investigateSpotTime: 3
+  maxInvestigateTime: 10
 --- !u!114 &-6666721045559162365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +111,7 @@ MonoBehaviour:
     m_Bits: 8
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 247
+    m_Bits: 193
   canSeePlayer: 0
 --- !u!54 &614581107202429829
 Rigidbody:
@@ -160,13 +155,13 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
-  m_AutoRepath: 1
+  m_AutoRepath: 0
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!1 &614581108126892840
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,8 +244,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6268412495155633877}
-  m_LocalRotation: {x: 0.55269325, y: 0.44105533, z: 0.441055, w: 0.55269414}
-  m_LocalPosition: {x: 0.919, y: 1.393, z: -0.00489999}
+  m_LocalRotation: {x: 0.5526933, y: 0.44105536, z: 0.44105518, w: 0.5526941}
+  m_LocalPosition: {x: 0.91900015, y: 1.393, z: -0.0048999786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -691,8 +686,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 0.1
   runSpeed: 0
-  fallCrouchEngageSpeed: 0
-  fallRollEngageSpeed: 0
   colliderCrouchTime: 0
   crouchHeightMultiplier: 0
 --- !u!4 &997610877331058443 stripped
