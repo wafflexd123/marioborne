@@ -1,22 +1,35 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Fists : MonoBehaviourPlus
 {
-    float punchTime = 0.3f;
-    float deflectTime = 0.3f;
-    public float punchDelay;
-	public float deflectDelay;
+    float punchTime, deflectTime, punchDelay, deflectDelay;
 	Coroutine crtPunchDelay, crtDeflectDelay, crtPunchTime, crtDeflectTime;
 	public GameObject reflectWindow;
 	private Player player;
 
-	private void Awake()
+    GameObject ui;
+    Image deflectPercent;
+
+    private void Awake()
 	{
 		player = GetComponentInParent<Player>();
 	}
 
-	protected void Update()
+    private void Start()
+    {
+        punchTime = player.punchTime;
+        deflectTime = player.deflectTime;
+        punchDelay = player.punchDelay;
+        deflectDelay = player.deflectDelay;
+
+        ui = transform.parent.parent.Find("UI").gameObject;
+        deflectPercent = ui.transform.Find("Deflect").GetComponent<Image>();
+        ui.SetActive(true);
+    }
+
+    protected void Update()
 	{
 		if (player.hand.childCount > 0)
 		{
@@ -98,7 +111,16 @@ public class Fists : MonoBehaviourPlus
 
                 IEnumerator Delay()
                 {
-                    yield return new WaitForSeconds(deflectDelay);
+                    //yield return new WaitForSeconds(deflectDelay);
+                    float timer = 0;
+                    deflectPercent.gameObject.SetActive(true);
+                    while (timer < deflectDelay)
+                    {
+                        timer += Time.fixedDeltaTime;
+                        deflectPercent.fillAmount = timer / deflectDelay;
+                        yield return new WaitForFixedUpdate();
+                    }
+                    deflectPercent.gameObject.SetActive(false);
                     crtDeflectDelay = null;
                 }
 			}

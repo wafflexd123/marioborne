@@ -15,7 +15,9 @@ public class Player : Humanoid
 	public RaycastHit raycast;
 	Console.Line cnsRaycast;
 	bool enableInput = true;
-	[HideInInspector] public bool hasDied;
+    public float deflectDelay, punchDelay;
+    [HideInInspector] public float deflectTime, punchTime;
+    [HideInInspector] public bool hasDied;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;

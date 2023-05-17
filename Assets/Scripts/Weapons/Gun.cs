@@ -17,7 +17,8 @@ public class Gun : WeaponBase
 	Coroutine crtDelay;
 	GameObject ui;
 	Image imgReloadPercent;
-	TMP_Text txtAmmo;
+    Image deflectPercent;
+    TMP_Text txtAmmo;
 	Ammo ammo;
 
 	protected override void Start()
@@ -25,7 +26,8 @@ public class Gun : WeaponBase
 		base.Start();
 		ui = transform.Find("UI").gameObject;
 		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
-		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
+        deflectPercent = ui.transform.Find("Deflect").GetComponent<Image>();
+        txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
 		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
 		txtAmmo.text = $"{playerAmmo.amount}";
@@ -56,29 +58,51 @@ public class Gun : WeaponBase
 
 	protected override void LeftMouse()
 	{
-		if (wielder.crtDeflectDelay == null) Shoot();
+		if (wielder.crtDeflectTime == null) Shoot();
 	}
 
 	protected override void RightMouse() //handles deflection while holding weapon
 	{
-		if (crtDelay == null)
-		{
-			if (wielder.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
-			{
-				wielder.model.deflect = true;
-				wielder.crtDeflectDelay = wielder.StartCoroutine(Delay());
-			}
+        if(wielder is Player)
+        {
+            if (crtDelay == null)
+            {
+                if (wielder.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
+                {
+                    if (wielder.crtDeflectTime == null)
+                    {
+                        wielder.model.deflect = true;
+                        wielder.crtDeflectTime = StartCoroutine(Anim());
 
-			IEnumerator Delay()
-			{
-				wielder.deflectWindow.SetActive(true);
-				yield return new WaitForSeconds(wielder.deflectDelay);
-				wielder.deflectWindow.SetActive(false);
-				wielder.model.deflect = false;
-				wielder.crtDeflectDelay = null;
-			}
-		}
-	}
+                        IEnumerator Anim()
+                        {
+                            wielder.deflectWindow.SetActive(true);
+                            yield return new WaitForSeconds(wielder.GetComponent<Player>().deflectTime);
+                            wielder.deflectWindow.SetActive(false);
+                            wielder.model.deflect = false;
+                            wielder.crtDeflectDelay = StartCoroutine(Delay());
+                            wielder.crtDeflectTime = null;
+                        }
+                    }
+                }
+
+                IEnumerator Delay()
+                {
+                    //yield return new WaitForSeconds(wielder.deflectDelay);
+                    float timer = 0;
+                    deflectPercent.gameObject.SetActive(true);
+                    while (timer < wielder.GetComponent<Player>().deflectDelay)
+                    {
+                        timer += Time.fixedDeltaTime;
+                        deflectPercent.fillAmount = timer / wielder.GetComponent<Player>().deflectDelay;
+                        yield return new WaitForFixedUpdate();
+                    }
+                    deflectPercent.gameObject.SetActive(false);
+                    wielder.crtDeflectDelay = null;
+                }
+            }
+        }
+    }
 
 	protected void Shoot()
 	{
