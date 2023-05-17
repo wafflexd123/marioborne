@@ -2439,7 +2439,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 11, y: 11}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1203641613041655593
 CanvasRenderer:
@@ -2469,7 +2469,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5e1a79569c829204ab9d4d5315bba36c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e3f7c260f2850e44788ab4769061f0fa, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3388,7 +3388,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5498765480556624228}
   - component: {fileID: 4377762268928878075}
-  - component: {fileID: 87640579}
   - component: {fileID: 87640578}
   - component: {fileID: 87640577}
   m_Layer: 3
@@ -3406,7 +3405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4360871117464955069}
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.7133317, y: 1.4406128, z: -0.05548498}
+  m_LocalPosition: {x: 0.7133317, y: 1.4406136, z: -0.05548489}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3433,33 +3432,6 @@ PositionConstraint:
   m_Sources:
   - sourceTransform: {fileID: 8430021702123819788}
     weight: 1
---- !u!54 &87640579
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4360871117464955069}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 8
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!65 &87640578
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3493,8 +3465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a669cd8ca5ad6724997413449f99de3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  punchDelay: 0
-  deflectDelay: 2
   reflectWindow: {fileID: 7449211701570400921}
 --- !u!1 &4466325662335684791
 GameObject:
@@ -4119,7 +4089,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 45, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4479824883384989157
 CanvasRenderer:
@@ -4142,7 +4112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.4117647}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5007,7 +4977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &500889193891407661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5029,7 +4999,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0}
+  m_AnchoredPosition: {x: -10, y: -0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &2891229682573974609
@@ -5563,7 +5533,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8405350625105107529}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000033978722, y: 1.5992947, z: -0.015193463}
+  m_LocalPosition: {x: -0.00000024443796, y: 1.5992944, z: -0.015195336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5720,12 +5690,15 @@ MonoBehaviour:
   hand: {fileID: 0}
   model: {fileID: 0}
   deflectWindow: {fileID: 7449211701570400921}
-  deflectDelay: 1
   invincibility: 1
   maxInteractDistance: 5
   wickUI: {fileID: 2891229682573974609}
   escMenu: {fileID: 5215094790818108704}
   camera: {fileID: 0}
+  deflectDelay: 1
+  punchDelay: 0
+  deflectTime: 0
+  punchTime: 0
   hasDied: 0
 --- !u!114 &8092373990879751735
 MonoBehaviour:
@@ -6153,7 +6126,7 @@ Rigidbody:
     m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112

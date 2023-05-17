@@ -13,6 +13,7 @@ public class TimeScaler : MonoBehaviourPlus
 	void Start()
 	{
 		cnsTime = Console.AddLine();
+		imgTimeleft.gameObject.SetActive(false);
 		//startUIWidth = -ui.rect.width;
 	}
 

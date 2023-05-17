@@ -83,6 +83,7 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 	public bool demoMode;
 	public float demoDelay = 3, typeDelay;
 	TextMeshProUGUI[] textBoxes = new TextMeshProUGUI[3];
+	Transform subText;
 	Coroutine crtType;
 
 	private void Awake()
@@ -91,6 +92,7 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 		{
 			textBoxes[i] = transform.GetChild(i).GetComponent<TextMeshProUGUI>();
 		}
+		subText = transform.GetChild(3);
 	}
 
 	public void DisplayRandom(DeathType deathType = DeathType.General)
@@ -123,9 +125,10 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 		}
 	}
 
-	public void Display(string[] strings, Action onEnd = null)
+	public void Display(string[] strings, Action onEnd = null, bool showSubText = true)
 	{
 		gameObject.SetActive(true);
+		subText.gameObject.SetActive(showSubText);
 		ResetRoutine(Type(), ref crtType);
 		IEnumerator Type()
 		{
