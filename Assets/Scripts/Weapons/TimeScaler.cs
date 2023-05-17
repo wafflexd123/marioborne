@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TimeScaler : MonoBehaviourPlus
 {
 	public float timeScaleSpeed, minTimeScale, scaleDuration, recoveryDelay;
-	float currentScaleDuration, recoveryTimer;
+	public Image imgTimeleft;
+	float currentScaleDuration, recoveryTimer, startUIWidth;
 	Console.Line cnsTime;
 
 	void Start()
 	{
 		cnsTime = Console.AddLine();
+		//startUIWidth = -ui.rect.width;
 	}
 
 	//this is kinda messy but it works lol
@@ -25,10 +28,13 @@ public class TimeScaler : MonoBehaviourPlus
 			{
 				Time.timeScale -= timeScaleSpeed * Time.deltaTime;
 				if (Time.timeScale < minTimeScale) Time.timeScale = minTimeScale;
+				//imgTimescale.fillAmount = Mathf.InverseLerp(minTimeScale, 1, Time.timeScale);
 			}
 			currentScaleDuration += Time.unscaledDeltaTime;
 			if (currentScaleDuration > scaleDuration) currentScaleDuration = scaleDuration;
 			recoveryTimer = 0;
+			imgTimeleft.gameObject.SetActive(true);
+			imgTimeleft.fillAmount = 1 - currentScaleDuration / scaleDuration;
 		}
 		else if (!Input.GetButton("Ability") || currentScaleDuration >= scaleDuration)//2.scale time up, increment resetdelay timer
 		{
@@ -36,6 +42,8 @@ public class TimeScaler : MonoBehaviourPlus
 			{
 				Time.timeScale += timeScaleSpeed * Time.deltaTime;
 				if (Time.timeScale > 1) Time.timeScale = 1;
+				//imgTimescale.fillAmount = Mathf.InverseLerp(minTimeScale, 1, Time.timeScale);
+
 			}
 			if (!Input.GetButton("Ability"))//3.decrement scale duration
 			{
@@ -44,14 +52,22 @@ public class TimeScaler : MonoBehaviourPlus
 				{
 					recoveryTimer = recoveryDelay;
 					currentScaleDuration -= Time.unscaledDeltaTime;
-					if (currentScaleDuration < 0) currentScaleDuration = 0;
+					if (currentScaleDuration < 0)
+					{
+						currentScaleDuration = 0;
+						imgTimeleft.gameObject.SetActive(false);
+					}
+					else
+					{
+						imgTimeleft.gameObject.SetActive(true);
+						imgTimeleft.fillAmount = 1 - currentScaleDuration / scaleDuration;
+					}
 				}
 			}
 		}
 
-		if (Console.Enabled) cnsTime.text = $"Hold shift to slow time\n" +
+		if (Console.Enabled) cnsTime.text =
 					$"Timescale: {Time.timeScale}, Unity timescale (should always be 1): {UnityEngine.Time.timeScale}\n" +
 					$"Scale duration: {currentScaleDuration:#.00}, time to recover: {recoveryDelay - recoveryTimer:#.00}";
 	}
 }
-

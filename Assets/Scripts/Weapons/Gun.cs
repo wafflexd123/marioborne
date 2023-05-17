@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Gun : WeaponBase
 {
@@ -15,7 +16,7 @@ public class Gun : WeaponBase
 
 	Coroutine crtDelay;
 	GameObject ui;
-	RectTransform tfmReloadPercent;
+	Image imgReloadPercent;
 	TMP_Text txtAmmo;
 	Ammo ammo;
 
@@ -23,7 +24,7 @@ public class Gun : WeaponBase
 	{
 		base.Start();
 		ui = transform.Find("UI").gameObject;
-		tfmReloadPercent = (RectTransform)ui.transform.Find("Reload Mask").GetChild(0);
+		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
 		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
 		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
@@ -104,15 +105,15 @@ public class Gun : WeaponBase
 
 	IEnumerator Delay()
 	{
-		float timer = 0, startX = -tfmReloadPercent.rect.width;
-		tfmReloadPercent.parent.gameObject.SetActive(true);
+		float timer = 0;
+		imgReloadPercent.gameObject.SetActive(true);
 		while (timer < fireDelay)
 		{
 			timer += Time.fixedDeltaTime;
-			tfmReloadPercent.localPosition = new Vector3(Mathf.Lerp(startX, 0, timer / fireDelay), tfmReloadPercent.localPosition.y, tfmReloadPercent.localPosition.z);
+			imgReloadPercent.fillAmount = timer / fireDelay;
 			yield return new WaitForFixedUpdate();
 		}
-		tfmReloadPercent.parent.gameObject.SetActive(false);
+		imgReloadPercent.gameObject.SetActive(false);
 		//if (wielder) wielder.model.shooting = false;
 		crtDelay = null;
 	}
