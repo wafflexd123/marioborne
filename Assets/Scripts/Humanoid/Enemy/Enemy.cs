@@ -114,7 +114,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	void InitEngage()
 	{
-		switch (_typeOfWeapon)
+		switch (TypeOfWeapon)
 		{
 			case EnemyType.Ranged:
 				agent.isStopped = true;
@@ -132,7 +132,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 			State = EnemyState.Investigate;
 			return;
 		}
-		switch (_typeOfWeapon)
+		switch (TypeOfWeapon)
 		{
 			case EnemyType.Melee:
 				agent.SetDestination(Player.singlePlayer.transform.position);

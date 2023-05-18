@@ -152,5 +152,8 @@ public class MonoBehaviourPlus : MonoBehaviour
 			this.coords = useLocal ? transform.localPosition : transform.position;
 			this.eulers = useLocal ? transform.localEulerAngles : transform.eulerAngles;
 		}
+
+		public static implicit operator Vector3(Position p) => p.coords;
+		public static implicit operator Quaternion(Position p) => Quaternion.Euler(p.eulers);
 	}
 }
