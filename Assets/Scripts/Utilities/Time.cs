@@ -24,7 +24,6 @@ public class Time
 	public static float fixedUnscaledDeltaTime { get => UnityEngine.Time.fixedUnscaledDeltaTime; }
 
 	public static List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();
-	public static List<>
 }
 
 public interface ITimeScaleListener
