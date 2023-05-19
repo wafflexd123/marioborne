@@ -6,15 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class Player : Humanoid
 {
-	public static Player singlePlayer;
-	public bool invincibility;
-	public float maxInteractDistance;
-	public WickUI wickUI;
-	public GameObject escMenu;
-	[HideInInspector] public new Camera camera;
-	public RaycastHit raycast;
-	Console.Line cnsRaycast;
-	bool enableInput = true;
+    public static Player singlePlayer;
+    public bool invincibility;
+    public float maxInteractDistance;
+    public WickUI wickUI;
+    public GameObject escMenu;
+    [HideInInspector] public new Camera camera;
+    public RaycastHit raycast;
+    Console.Line cnsRaycast;
+    bool enableInput = true;
     public float deflectDelay, punchDelay;
     [HideInInspector] public float deflectTime, punchTime;
     [HideInInspector] public bool hasDied;

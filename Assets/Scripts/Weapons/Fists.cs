@@ -31,23 +31,26 @@ public class Fists : MonoBehaviourPlus
 
     protected void Update()
 	{
-		if (player.hand.childCount > 0)
-		{
-			Enable(false);
-		}
-		else if (FindComponent(player.raycast.transform, out WeaponBase weapon))
-		{
-			if (Vector3.Distance(player.transform.position, weapon.transform.position) >= player.maxInteractDistance)
-			{
-				if (Input.GetMouseButtonDown(0)) LeftMouse();
-				if (Input.GetMouseButtonDown(1)) RightMouse();
-			}
-		}
-		else
-		{
-			if (Input.GetMouseButtonDown(0)) LeftMouse();
-			if (Input.GetMouseButtonDown(1)) RightMouse();
-		}
+        if (!player.hasDied)
+        {
+            if (player.hand.childCount > 0)
+            {
+                Enable(false);
+            }
+            else if (FindComponent(player.raycast.transform, out WeaponBase weapon))
+            {
+                if (Vector3.Distance(player.transform.position, weapon.transform.position) >= player.maxInteractDistance)
+                {
+                    if (Input.GetMouseButtonDown(0)) LeftMouse();
+                    if (Input.GetMouseButtonDown(1)) RightMouse();
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0)) LeftMouse();
+                if (Input.GetMouseButtonDown(1)) RightMouse();
+            }
+        }
 	}
 
 	protected void LeftMouse()
