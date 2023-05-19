@@ -145,9 +145,13 @@ public class Enemy : Humanoid, ITimeScaleListener
 				break;
 
 			case EnemyType.Ranged:
-				transform.LookAt(new Vector3(Player.singlePlayer.camera.transform.position.x, transform.position.y, Player.singlePlayer.camera.transform.position.z));
-				if (!Player.singlePlayer.hasDied) lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
-				hand.GetChild(0).LookAt(lookingAt);
+				transform.LookAt(lookingAt = new Vector3(Player.singlePlayer.camera.transform.position.x, Player.singlePlayer.camera.transform.position.y, Player.singlePlayer.camera.transform.position.z));
+				if (!Player.singlePlayer.hasDied)
+                {
+                    if (Player.singlePlayer.GetComponent<Rigidbody>().velocity.magnitude > Player.singlePlayer.GetComponent<PlayerMovement>().walkForce.velocityAtMaxForce * 0.8f)
+                        lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
+                }
+                hand.GetChild(0).LookAt(lookingAt);
 				input.Press("Mouse", () => -1, () => false);//left click (shoot)
 				break;
 		}
