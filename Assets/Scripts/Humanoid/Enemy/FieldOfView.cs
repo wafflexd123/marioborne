@@ -7,24 +7,10 @@ public class FieldOfView : MonoBehaviour
 	[Range(0, 360)]
 	public float viewAngle;
     public Transform eyes;
-    public Vector3 playerLocation;
-    Transform playerEyes;
+    [HideInInspector] public Vector3 playerLocation;
+    [HideInInspector] Transform playerEyes;
 	public LayerMask targetMask, obstacleMask;
     public bool canSeePlayer;
-
-	//void Start()
-	//{
-	//	StartCoroutine(FindTargetsWithDelay(.2f));
-	//}
-
-	//IEnumerator FindTargetsWithDelay(float delay)
-	//{
-	//	while (true)
-	//	{
-	//		yield return new WaitForSeconds(delay);
-	//		FieldOfViewCheck();
-	//	}
-	//}
 
 	void Update()
 	{

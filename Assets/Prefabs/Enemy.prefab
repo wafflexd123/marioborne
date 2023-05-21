@@ -65,7 +65,7 @@ Transform:
   m_Children:
   - {fileID: 614581108126892843}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &941658141
 MonoBehaviour:
@@ -82,6 +82,7 @@ MonoBehaviour:
   hand: {fileID: 9208886631155602834}
   model: {fileID: 454927881951953529}
   deflectWindow: {fileID: 0}
+  points: {fileID: 0}
   sightRadius: 5
   meleeRadius: 2
   deathAnimationSpeed: 3
@@ -90,6 +91,8 @@ MonoBehaviour:
   investigateSpeed: 2
   investigateSpotTime: 3
   maxInvestigateTime: 10
+  rangedCloseDistance: 10
+  _state: 0
 --- !u!114 &-6666721045559162365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,8 +247,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6268412495155633877}
-  m_LocalRotation: {x: 0.5526933, y: 0.44105536, z: 0.44105518, w: 0.5526941}
-  m_LocalPosition: {x: 0.91900015, y: 1.393, z: -0.0048999786}
+  m_LocalRotation: {x: 0.55269325, y: 0.44105533, z: 0.441055, w: 0.55269414}
+  m_LocalPosition: {x: 0.919, y: 1.393, z: -0.00489999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -684,10 +687,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a45499e1875f3e4a91844562a15e3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0.1
-  runSpeed: 0
-  colliderCrouchTime: 0
-  crouchHeightMultiplier: 0
+  walkSpeed: 1
+  runSpeed: 4.5
+  colliderCrouchTime: 0.25
+  crouchHeightMultiplier: 0.55
 --- !u!4 &997610877331058443 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8ad3f6ad348b874dbc09c0496e4a89f, type: 3}

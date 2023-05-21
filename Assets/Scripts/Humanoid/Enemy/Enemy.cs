@@ -11,7 +11,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	//Inspector
 	[SerializeField] Transform points;
-	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime;
+	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistance;
 
 	//Script
 	Vector3 lookingAt, velocity = Vector3.zero;
@@ -144,17 +144,21 @@ public class Enemy : Humanoid, ITimeScaleListener
 				else agent.isStopped = false;
 				break;
 
-			case EnemyType.Ranged:
-				transform.LookAt(lookingAt = new Vector3(Player.singlePlayer.camera.transform.position.x, Player.singlePlayer.camera.transform.position.y, Player.singlePlayer.camera.transform.position.z));
-				if (!Player.singlePlayer.hasDied)
+            case EnemyType.Ranged:
+                transform.LookAt(lookingAt = new Vector3(Player.singlePlayer.camera.transform.position.x, Player.singlePlayer.camera.transform.position.y, Player.singlePlayer.camera.transform.position.z));
+                if (!Player.singlePlayer.hasDied)
                 {
                     if (Player.singlePlayer.GetComponent<Rigidbody>().velocity.magnitude > Player.singlePlayer.GetComponent<PlayerMovement>().walkForce.velocityAtMaxForce * 0.8f)
                         lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
+
+                    agent.SetDestination(Player.singlePlayer.transform.position);
+                    if (Vector3.Distance(transform.position, Player.singlePlayer.transform.position) <= rangedCloseDistance) agent.isStopped = true;
+                    else agent.isStopped = false;
                 }
                 hand.GetChild(0).LookAt(lookingAt);
-				input.Press("Mouse", () => -1, () => false);//left click (shoot)
-				break;
-		}
+                input.Press("Mouse", () => -1, () => false);//left click (shoot)
+                break;
+        }
 	}
 
 	void InitPatrol()
