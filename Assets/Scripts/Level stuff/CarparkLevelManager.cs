@@ -45,11 +45,10 @@ public class CarparkLevelManager : MonoBehaviour
 	{
 		yield return new WaitUntil(() => gunTutorial.weapon.BeingHeld());
 		gunTutorial.Destroy();
-		float originalDelay = wickUI.typeDelay;
-		wickUI.typeDelay = 0.03f;
-		wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, null, false);
-		yield return new WaitForSecondsRealtime(1f);
-		wickUI.typeDelay = originalDelay;
+		//float originalDelay = wickUI.typeDelay;
+		//wickUI.typeDelay = 0.03f;
+		wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, /*() => wickUI.typeDelay = originalDelay*/null, false);
+		yield return new WaitUntil(() => Time.timeScale < 0.26f);
 		wickUI.gameObject.SetActive(false);
 	}
 }

@@ -6,18 +6,27 @@ public class Bullet : MonoBehaviourPlus
 {
 	public bool canReflect;
 	public float speed, maxLifetime;
-	public Vector3 Direction { get => _direction; set { if (value != Vector3.negativeInfinity && value != Vector3.positiveInfinity && value != NAN_VECTOR) _direction = value;} }
+	public Color playerColor;
+	public Vector3 Direction { get => _direction; set => _direction = value; }
 	Vector3 _direction;
 	Humanoid shooter;
 	float timer;
 	bool reflected;
-	static readonly Vector3 NAN_VECTOR = new Vector3(float.NaN, float.NaN, float.NaN);
+	new ParticleSystem particleSystem;
+	new Renderer renderer;
+
+	private void Awake()
+	{
+		particleSystem = transform.Find("Bullet Trail").GetComponent<ParticleSystem>();
+		renderer = transform.Find("Model").GetComponent<Renderer>();
+	}
 
 	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter)
 	{
 		this.speed = speed;
 		this.Direction = direction;
 		this.shooter = shooter;
+		if (shooter is Player) SetColor(playerColor);
 		return this;
 	}
 
@@ -29,6 +38,13 @@ public class Bullet : MonoBehaviourPlus
 		if (timer >= maxLifetime) Destroy(gameObject);
 	}
 
+	void SetColor(Color color)
+	{
+		ParticleSystem.MainModule p = particleSystem.main;
+		p.startColor = color;
+		renderer.material.color = color;
+	}
+
 	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces on player
 	{
 		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs))
@@ -37,6 +53,7 @@ public class Bullet : MonoBehaviourPlus
 			{
 				Direction = humanoid.LookDirection;
 				reflected = true;
+				SetColor(playerColor);
 			}
 		}
 	}
@@ -46,12 +63,13 @@ public class Bullet : MonoBehaviourPlus
 		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
 		{
 			reflected = true;
+			SetColor(playerColor);
 			if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;
 			else Direction = Vector3.Reflect(Direction, collision.contacts[0].normal);
 		}
 		else if (FindComponent(collision.collider.transform, out Humanoid human))
 		{
-			if (human != shooter || reflected)//if humanoid hit isn't the shooter, or the bullet has been reflected
+			if (reflected || human.GetType() != shooter.GetType())//if reflected || if shooter and target are not both AI or both a player
 			{
 				human.Kill(DeathType.Bullet);
 				Destroy(gameObject);

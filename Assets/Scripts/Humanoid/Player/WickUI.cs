@@ -85,6 +85,7 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 	TextMeshProUGUI[] textBoxes = new TextMeshProUGUI[3];
 	Transform subText;
 	Coroutine crtType;
+	Action onEnd;
 
 	private void Awake()
 	{
@@ -129,6 +130,8 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 	{
 		gameObject.SetActive(true);
 		subText.gameObject.SetActive(showSubText);
+		this.onEnd?.Invoke();//call onEnd from last Display() call if it was ended early
+		this.onEnd = onEnd;
 		ResetRoutine(Type(), ref crtType);
 		IEnumerator Type()
 		{
@@ -144,6 +147,7 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 				}
 			}
 			onEnd?.Invoke();
+			this.onEnd = null;
 		}
 	}
 

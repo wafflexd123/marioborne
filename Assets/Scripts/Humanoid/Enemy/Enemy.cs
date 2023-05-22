@@ -283,4 +283,9 @@ public class Enemy : Humanoid, ITimeScaleListener
 	{
 		agent.speed = AgentSpeed * Time.timeScale;
 	}
+
+	private void OnDestroy()
+	{
+		Time.timeScaleListeners.Remove(this);
+	}
 }
