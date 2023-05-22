@@ -45,7 +45,7 @@ public class Bullet : MonoBehaviourPlus
 		renderer.material.color = color;
 	}
 
-	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces on player
+	private void OnTriggerEnter(Collider other)
 	{
 		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs) && brs.enableReflect)//if hit a reflect surface
 		{
