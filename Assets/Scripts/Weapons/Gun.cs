@@ -12,21 +12,22 @@ public class Gun : WeaponBase
 	public GunType type;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
-	new AudioSource audio;
 
+	new AudioSource audio;
 	Coroutine crtDelay;
 	GameObject ui, qToDrop;
 	Image imgReloadPercent;
-	Image deflectPercent;
 	TMP_Text txtAmmo;
 	Ammo ammo;
+
+	public override bool IsFiring => false;
 
 	protected override void Start()
 	{
 		base.Start();
 		ui = transform.Find("UI").gameObject;
 		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
-		deflectPercent = ui.transform.Find("Deflect").GetComponent<Image>();
+		//deflectPercent = ui.transform.Find("Deflect").GetComponent<Image>();
 		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
 		qToDrop = ui.transform.Find("Q To Drop").gameObject;
 		playerAmmo.amount = playerAmmo.startAmount;
@@ -59,50 +60,8 @@ public class Gun : WeaponBase
 
 	protected override void LeftMouse()
 	{
-		if (wielder.crtDeflectTime == null) Shoot();
-	}
-
-	protected override void RightMouse() //handles deflection while holding weapon
-	{
-		if (wielder is Player)
-		{
-			if (crtDelay == null)
-			{
-				if (wielder.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
-				{
-					if (wielder.crtDeflectTime == null)
-					{
-						wielder.model.deflect = true;
-						wielder.crtDeflectTime = StartCoroutine(Anim());
-
-						IEnumerator Anim()
-						{
-							wielder.deflectWindow.SetActive(true);
-							yield return new WaitForSeconds(wielder.GetComponent<Player>().deflectTime);
-							wielder.deflectWindow.SetActive(false);
-							wielder.model.deflect = false;
-							wielder.crtDeflectDelay = StartCoroutine(Delay());
-							wielder.crtDeflectTime = null;
-						}
-					}
-				}
-
-				IEnumerator Delay()
-				{
-					//yield return new WaitForSeconds(wielder.deflectDelay);
-					float timer = 0;
-					deflectPercent.gameObject.SetActive(true);
-					while (timer < wielder.GetComponent<Player>().deflectDelay)
-					{
-						timer += Time.fixedDeltaTime;
-						deflectPercent.fillAmount = timer / wielder.GetComponent<Player>().deflectDelay;
-						yield return new WaitForFixedUpdate();
-					}
-					deflectPercent.gameObject.SetActive(false);
-					wielder.crtDeflectDelay = null;
-				}
-			}
-		}
+		if (wielder is not Player || !((Player)wielder).fists.IsFiring) Shoot();
+		//if (wielder.crtDeflectTime == null) Shoot();
 	}
 
 	protected void Shoot()
@@ -113,10 +72,14 @@ public class Gun : WeaponBase
 			{
 				txtAmmo.text = $"{playerAmmo.amount}";
 				if (playerAmmo.amount <= 0) qToDrop.SetActive(true);
+				crtDelay = StartCoroutine(DelayWithUI());
+			}
+			else
+			{
+				crtDelay = StartCoroutine(Delay());
 			}
 			audio.Play();
 			//wielder.model.shooting = true;
-			crtDelay = StartCoroutine(Delay());
 			switch (type)
 			{
 				case GunType.Pistol:
@@ -132,7 +95,7 @@ public class Gun : WeaponBase
 		}
 	}
 
-	IEnumerator Delay()
+	IEnumerator DelayWithUI()
 	{
 		float timer = 0;
 		imgReloadPercent.gameObject.SetActive(true);
@@ -144,6 +107,12 @@ public class Gun : WeaponBase
 		}
 		imgReloadPercent.gameObject.SetActive(false);
 		//if (wielder) wielder.model.shooting = false;
+		crtDelay = null;
+	}
+
+	IEnumerator Delay()
+	{
+		yield return new WaitForSeconds(fireDelay);
 		crtDelay = null;
 	}
 
@@ -166,3 +135,46 @@ public class Gun : WeaponBase
 		}
 	}
 }
+
+//protected override void RightMouse() //handles deflection while holding weapon
+//{
+//	if (wielder is Player)
+//	{
+//		if (crtDelay == null)
+//		{
+//			if (wielder.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
+//			{
+//				if (wielder.crtDeflectTime == null)
+//				{
+//					wielder.model.deflect = true;
+//					wielder.crtDeflectTime = StartCoroutine(Anim());
+
+//					IEnumerator Anim()
+//					{
+//						wielder.deflectWindow.SetActive(true);
+//						yield return new WaitForSeconds(wielder.GetComponent<Player>().deflectTime);
+//						wielder.deflectWindow.SetActive(false);
+//						wielder.model.deflect = false;
+//						wielder.crtDeflectDelay = StartCoroutine(Delay());
+//						wielder.crtDeflectTime = null;
+//					}
+//				}
+//			}
+
+//			IEnumerator Delay()
+//			{
+//				//yield return new WaitForSeconds(wielder.deflectDelay);
+//				float timer = 0;
+//				deflectPercent.gameObject.SetActive(true);
+//				while (timer < wielder.GetComponent<Player>().deflectDelay)
+//				{
+//					timer += Time.fixedDeltaTime;
+//					deflectPercent.fillAmount = timer / wielder.GetComponent<Player>().deflectDelay;
+//					yield return new WaitForFixedUpdate();
+//				}
+//				deflectPercent.gameObject.SetActive(false);
+//				wielder.crtDeflectDelay = null;
+//			}
+//		}
+//	}
+//}

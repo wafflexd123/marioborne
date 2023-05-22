@@ -117,9 +117,10 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 		}
 	}
 
-	public void DisplayImmediate(string[] strings)
+	public void DisplayImmediate(string[] strings, bool showSubText = true)
 	{
 		gameObject.SetActive(true);
+		subText.gameObject.SetActive(showSubText);
 		for (int f = 0; f < 3; f++)
 		{
 			textBoxes[f].text = f < strings.Length ? strings[f] : "";

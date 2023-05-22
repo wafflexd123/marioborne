@@ -6,19 +6,24 @@ using UnityEngine.SceneManagement;
 
 public class Player : Humanoid
 {
-    public static Player singlePlayer;
-    public bool invincibility;
-    public float maxInteractDistance;
-    public WickUI wickUI;
-    public GameObject escMenu;
-    [HideInInspector] public new Camera camera;
-    public RaycastHit raycast;
-    Console.Line cnsRaycast;
-    bool enableInput = true;
-    public float deflectDelay, punchDelay;
-    [HideInInspector] public float deflectTime, punchTime;
-    [HideInInspector] public bool hasDied;
+	//Inspector
+	public static Player singlePlayer;
+	public bool invincibility;
+	public float maxInteractDistance;
+
+	//Public
+	public RaycastHit raycast;
+	[HideInInspector] public bool hasDied;
 	[HideInInspector] public PlayerMovement movement;
+	[HideInInspector] public WeaponBase weapon;
+	[HideInInspector] public Fists fists;
+	[HideInInspector] public new Camera camera;
+
+	//Script
+	Console.Line cnsRaycast;
+	WickUI wickUI;
+	GameObject escMenu;
+	bool enableInput = true;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
@@ -27,9 +32,14 @@ public class Player : Humanoid
 	{
 		base.Awake();
 		camera = transform.Find("Head").Find("Eyes").Find("Camera").GetComponent<Camera>();
+		fists = transform.Find("Body").Find("Hand").GetComponent<Fists>();
 		singlePlayer = this;
 		cnsRaycast = Console.AddLine();
 		movement = GetComponent<PlayerMovement>();
+		Transform ui = transform.Find("UI");
+		escMenu = ui.Find("Escape Menu").gameObject;
+		wickUI = ui.Find("Wick Text").GetComponent<WickUI>(); 
+
 	}
 
 	private void Start()
@@ -83,7 +93,10 @@ public class Player : Humanoid
 		{
 			if (FindComponent(raycast.transform, out WeaponBase weapon))
 			{
-				if (Vector3.Distance(transform.position, weapon.transform.position) <= maxInteractDistance) weapon.Pickup(this);
+				if (Vector3.Distance(transform.position, weapon.transform.position) <= maxInteractDistance)
+				{
+					if (weapon.Pickup(this, () => this.weapon = null)) this.weapon = weapon;
+				}
 			}
 		}
 	}

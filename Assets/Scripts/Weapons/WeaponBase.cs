@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [SelectionBase]
-public class WeaponBase : MonoBehaviourPlus
+public abstract class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
-    public float pickupSpeed, dropForce, throwForce;
+	public float pickupSpeed, dropForce, throwForce;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	bool isMoving;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
+	Action onDrop;
 
+	public abstract bool IsFiring { get; }
 
 	protected virtual void Start()
 	{
@@ -32,12 +35,13 @@ public class WeaponBase : MonoBehaviourPlus
 		else isMoving = false;
 	}
 
-	public virtual bool Pickup(Humanoid humanoid)
+	public virtual bool Pickup(Humanoid humanoid, Action onDrop = null)
 	{
 		if (!BeingHeld())
 		{
 			wielder = humanoid;
 			transform.parent = humanoid.hand;
+			this.onDrop = onDrop;
 			EnableRigidbody(false);
 			StartCoroutine(LerpToPos(transform, handPosition, pickupSpeed, () => OnPickup()));
 			return true;
@@ -48,6 +52,8 @@ public class WeaponBase : MonoBehaviourPlus
 	public virtual void Drop()
 	{
 		OnDrop();
+		onDrop?.Invoke();
+		onDrop = null;
 		wielder = null;
 		transform.parent = null;
 		EnableRigidbody(true);
@@ -58,9 +64,9 @@ public class WeaponBase : MonoBehaviourPlus
 	{
 		Vector3 tempDir = wielder.LookDirection;
 		Vector3 tempPos = wielder.GetComponent<Player>().camera.transform.position + wielder.GetComponent<Player>().camera.transform.forward;
-        Drop();
-        transform.position = tempPos; //it goes back to the wielder's hand before adding force below. not sure why when the wielder is null
-        rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
+		Drop();
+		transform.position = tempPos; //it goes back to the wielder's hand before adding force below. not sure why when the wielder is null
+		rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
 
 	}
 
@@ -95,7 +101,7 @@ public class WeaponBase : MonoBehaviourPlus
 	protected virtual void RightMouse()
 	{
 
-    }
+	}
 
 	public virtual bool BeingHeld()
 	{

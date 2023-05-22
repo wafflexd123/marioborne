@@ -11,8 +11,8 @@ public abstract class Humanoid : MonoBehaviourPlus
 	[HideInInspector] public Transform hand;
 	[HideInInspector] public HumanoidAnimatorManager model;
 	public UniInput input;
-	public Coroutine crtDeflectDelay, crtDeflectTime;
-	public GameObject deflectWindow;
+	//public Coroutine crtDeflectDelay, crtDeflectTime;
+	//public GameObject deflectWindow;
 
 	public abstract Vector3 LookDirection { get; }
 	public abstract Vector3 LookingAt { get; }

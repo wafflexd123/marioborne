@@ -31,6 +31,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	public override Vector3 LookingAt => lookingAt;
 	public float AgentSpeed { get => _agentSpeed; set { _agentSpeed = value; agent.speed = value * Time.timeScale; } }
 	public Transform Points { get => points; set { points = value; FindClosestPoint(); } }
+	public bool IsStopped { get => agent.isStopped; set { if (agent.isOnNavMesh) agent.isStopped = value; } }
 	public EnemyState State
 	{
 		get => _state; set
@@ -123,7 +124,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 		switch (TypeOfWeapon)
 		{
 			case EnemyType.Ranged:
-				agent.isStopped = true;
+				IsStopped = true;
 				rangedCloseDistance = UnityEngine.Random.Range(rangedCloseDistanceMin, rangedCloseDistanceMax);
 				break;
 			case EnemyType.Melee:
@@ -145,10 +146,10 @@ public class Enemy : Humanoid, ITimeScaleListener
 				agent.SetDestination(player.transform.position);
 				if (Vector3.Distance(transform.position, player.transform.position) <= meleeRadius)
 				{
-					agent.isStopped = true;
+					IsStopped = true;
 					input.Press("Mouse", () => -1, () => false);//left click (hit)
 				}
-				else agent.isStopped = false;
+				else IsStopped = false;
 				break;
 
 			case EnemyType.Ranged:
@@ -162,18 +163,18 @@ public class Enemy : Humanoid, ITimeScaleListener
 					{
 						lookingAt = player.camera.transform.position;
 					}
-	
+
 					hand.GetChild(0).LookAt(lookingAt);
 					transform.LookAt(player.transform);
 
 					if (Vector3.Distance(transform.position, player.transform.position) <= rangedCloseDistance)
 					{
-						agent.isStopped = true;
+						IsStopped = true;
 					}
 					else
 					{
 						agent.SetDestination(player.transform.position);
-						agent.isStopped = false;
+						IsStopped = false;
 					}
 				}
 				input.Press("Mouse", () => -1, () => false);//left click (shoot)
@@ -185,7 +186,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	{
 		lookingAt = Vector3.negativeInfinity;
 		AgentSpeed = patrolSpeed;
-		agent.isStopped = false;
+		IsStopped = false;
 		FindClosestPoint();
 	}
 
@@ -218,7 +219,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	{
 		lookingAt = Vector3.negativeInfinity;
 		AgentSpeed = investigateSpeed;
-		agent.isStopped = false;
+		IsStopped = false;
 		agent.SetDestination(fov.playerLocation);
 	}
 
