@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	bool queueJump, queueDash, canDoubleJump, canWallJump, hitWall, _isGrounded, _isWallrunning, _isSliding, _onLedge, allowMovement = true, queueRoll;
 	Vector3 moveDirection, velocity;
 	RaycastHit groundHit;
-	new Rigidbody rigidbody;
+	[HideInInspector] public new Rigidbody rigidbody;
 	new Camera camera;
 	new CapsuleCollider collider;
 	PlayerCamera playerCamera;

@@ -47,27 +47,14 @@ public class Bullet : MonoBehaviourPlus
 
 	private void OnTriggerEnter(Collider other)//only for bullet reflect surfaces on player
 	{
-		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs))
+		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs) && brs.enableReflect)//if hit a reflect surface
 		{
-			if (brs.enableReflect && FindComponent(brs.transform, out Humanoid humanoid))
-			{
-				Direction = humanoid.LookDirection;
-				reflected = true;
-				SetColor(playerColor);
-			}
-		}
-	}
-
-	private void OnCollisionEnter(Collision collision)
-	{
-		if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
-		{
+			if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;
+			else Direction = -Direction;
 			reflected = true;
 			SetColor(playerColor);
-			if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;
-			else Direction = Vector3.Reflect(Direction, collision.contacts[0].normal);
 		}
-		else if (FindComponent(collision.collider.transform, out Humanoid human))
+		else if (FindComponent(other.transform, out Humanoid human))//if hit a humanoid
 		{
 			if (reflected || human.GetType() != shooter.GetType())//if reflected || if shooter and target are not both AI or both a player
 			{
@@ -75,6 +62,26 @@ public class Bullet : MonoBehaviourPlus
 				Destroy(gameObject);
 			}
 		}
-		else Destroy(gameObject);
+		else Destroy(gameObject);//if hit a normal object
 	}
+
+	//private void OnCollisionEnter(Collision collision)
+	//{
+	//	if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
+	//	{
+	//		reflected = true;
+	//		SetColor(playerColor);
+	//		if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;
+	//		else Direction = Vector3.Reflect(Direction, collision.contacts[0].normal);
+	//	}
+	//	else if (FindComponent(collision.collider.transform, out Humanoid human))
+	//	{
+	//		if (reflected || human.GetType() != shooter.GetType())//if reflected || if shooter and target are not both AI or both a player
+	//		{
+	//			human.Kill(DeathType.Bullet);
+	//			Destroy(gameObject);
+	//		}
+	//	}
+	//	else Destroy(gameObject);
+	//}
 }

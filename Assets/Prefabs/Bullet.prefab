@@ -99,7 +99,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canReflect: 1
   speed: 0.5
-  maxLifetime: 30
+  maxLifetime: 15
   playerColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!54 &1470589054315451326
 Rigidbody:
@@ -174,10 +174,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 3839
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8448
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

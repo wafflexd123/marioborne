@@ -257,7 +257,7 @@ Transform:
   m_Children:
   - {fileID: 614581108126892843}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &941658141
 MonoBehaviour:
@@ -283,7 +283,9 @@ MonoBehaviour:
   investigateSpeed: 2
   investigateSpotTime: 3
   maxInvestigateTime: 10
-  rangedCloseDistance: 10
+  rangedCloseDistanceMin: 8
+  rangedCloseDistanceMax: 15
+  aimAdjustVelocityMagnitude: 0.8
   _state: 0
 --- !u!114 &-6666721045559162365
 MonoBehaviour:
@@ -2277,8 +2279,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6268412495155633877}
-  m_LocalRotation: {x: 0.5526936, y: 0.441055, z: 0.44105482, w: 0.5526943}
-  m_LocalPosition: {x: 0.919, y: 1.393, z: -0.0048999935}
+  m_LocalRotation: {x: 0.5526737, y: 0.44107947, z: 0.44107908, w: 0.5526753}
+  m_LocalPosition: {x: 0.91900384, y: 1.3930786, z: -0.0049009323}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2311,7 +2313,7 @@ ParentConstraint:
   m_Active: 1
   m_IsLocked: 1
   m_Sources:
-  - sourceTransform: {fileID: 0}
+  - sourceTransform: {fileID: 5995921209448158796}
     weight: 1
 --- !u!1 &6430100320024606607
 GameObject:

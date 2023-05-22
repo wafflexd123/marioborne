@@ -11,16 +11,17 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	//Inspector
 	[SerializeField] Transform points;
-	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistance;
+	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
 
 	//Script
 	Vector3 lookingAt, velocity = Vector3.zero;
 	int destPoint = 0;
-	float _agentSpeed, maxInvestigateTimer = 0, investigateTimer = 0;
+	float _agentSpeed, maxInvestigateTimer = 0, investigateTimer = 0, rangedCloseDistance;
 	NavMeshAgent agent;
 	FieldOfView fov;
 	Transform head;
 	EnemyType _typeOfWeapon;
+	Player player;
 
 	[Header("Debug (Don't change values)")]
 	[SerializeField] EnemyState _state;
@@ -82,9 +83,14 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 		if (hand.childCount > 0)
 		{
-			if (hand.GetChild(0).GetComponent<WeaponBase>() is Gun) TypeOfWeapon = EnemyType.Ranged;
+			if (hand.GetChild(0).GetComponent<Gun>()) TypeOfWeapon = EnemyType.Ranged;
 			else TypeOfWeapon = EnemyType.Melee;
 		}
+	}
+
+	void Start()
+	{
+		player = Player.singlePlayer;
 	}
 
 	void Update()
@@ -118,6 +124,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 		{
 			case EnemyType.Ranged:
 				agent.isStopped = true;
+				rangedCloseDistance = UnityEngine.Random.Range(rangedCloseDistanceMin, rangedCloseDistanceMax);
 				break;
 			case EnemyType.Melee:
 				AgentSpeed = meleeSpeed;
@@ -135,8 +142,8 @@ public class Enemy : Humanoid, ITimeScaleListener
 		switch (TypeOfWeapon)
 		{
 			case EnemyType.Melee:
-				agent.SetDestination(Player.singlePlayer.transform.position);
-				if (Vector3.Distance(transform.position, Player.singlePlayer.transform.position) <= meleeRadius)
+				agent.SetDestination(player.transform.position);
+				if (Vector3.Distance(transform.position, player.transform.position) <= meleeRadius)
 				{
 					agent.isStopped = true;
 					input.Press("Mouse", () => -1, () => false);//left click (hit)
@@ -144,21 +151,34 @@ public class Enemy : Humanoid, ITimeScaleListener
 				else agent.isStopped = false;
 				break;
 
-            case EnemyType.Ranged:
-                transform.LookAt(lookingAt = new Vector3(Player.singlePlayer.camera.transform.position.x, Player.singlePlayer.camera.transform.position.y, Player.singlePlayer.camera.transform.position.z));
-                if (!Player.singlePlayer.hasDied)
-                {
-                    if (Player.singlePlayer.GetComponent<Rigidbody>().velocity.magnitude > Player.singlePlayer.GetComponent<PlayerMovement>().walkForce.velocityAtMaxForce * 0.8f)
-                        lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, Player.singlePlayer.camera.transform.position, Player.singlePlayer.GetComponent<Rigidbody>().velocity);
+			case EnemyType.Ranged:
+				if (!player.hasDied)
+				{
+					if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
+					{
+						lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
+					}
+					else
+					{
+						lookingAt = player.camera.transform.position;
+					}
+	
+					hand.GetChild(0).LookAt(lookingAt);
+					transform.LookAt(player.transform);
 
-                    agent.SetDestination(Player.singlePlayer.transform.position);
-                    if (Vector3.Distance(transform.position, Player.singlePlayer.transform.position) <= rangedCloseDistance) agent.isStopped = true;
-                    else agent.isStopped = false;
-                }
-                hand.GetChild(0).LookAt(lookingAt);
-                input.Press("Mouse", () => -1, () => false);//left click (shoot)
-                break;
-        }
+					if (Vector3.Distance(transform.position, player.transform.position) <= rangedCloseDistance)
+					{
+						agent.isStopped = true;
+					}
+					else
+					{
+						agent.SetDestination(player.transform.position);
+						agent.isStopped = false;
+					}
+				}
+				input.Press("Mouse", () => -1, () => false);//left click (shoot)
+				break;
+		}
 	}
 
 	void InitPatrol()

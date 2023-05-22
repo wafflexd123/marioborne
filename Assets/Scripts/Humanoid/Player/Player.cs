@@ -18,6 +18,7 @@ public class Player : Humanoid
     public float deflectDelay, punchDelay;
     [HideInInspector] public float deflectTime, punchTime;
     [HideInInspector] public bool hasDied;
+	[HideInInspector] public PlayerMovement movement;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
@@ -28,6 +29,7 @@ public class Player : Humanoid
 		camera = transform.Find("Head").Find("Eyes").Find("Camera").GetComponent<Camera>();
 		singlePlayer = this;
 		cnsRaycast = Console.AddLine();
+		movement = GetComponent<PlayerMovement>();
 	}
 
 	private void Start()
