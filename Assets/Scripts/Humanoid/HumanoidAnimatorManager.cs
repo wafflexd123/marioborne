@@ -2,39 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
-	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier;
+    // Add your footstep sounds here
+    public AudioClip[] footstepSounds;
+    public AudioClip[] jumpingSounds;
+    public AudioClip[] landingSounds;
 
-	float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
-	bool _wallRunning, _grounded;
-	Vector3 colliderCentre;
-	Animator animator;
-	Coroutine crtGroundState, crtCrouch;
-	new CapsuleCollider collider;
+    public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier;
 
-	private void Awake()
-	{
-		animator = GetComponent<Animator>();
-		collider = transform.parent.GetComponent<CapsuleCollider>();
-		colliderHeight = collider.height;
-		colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
-		colliderCentre = collider.center;
-		colliderCentreCrouch = colliderCentre.y * crouchHeightMultiplier;
+    private AudioSource audioSource;
+    private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
+    private bool _wallRunning, _grounded;
+    private Vector3 colliderCentre;
+    private Animator animator;
+    private Coroutine crtGroundState, crtCrouch;
+    new private CapsuleCollider collider;
+	private Vector3 _velocity;
 
-		if (transform.localPosition != Vector3.zero)
-		{
-			transform.localPosition = Vector3.zero;
-			Debug.LogWarning("The model position of " + name + " is not zero. Resetting.");
-		}
-		if (transform.localEulerAngles != Vector3.zero)
-		{
-			transform.localEulerAngles = Vector3.zero;
-			Debug.LogWarning("The model rotation of " + name + " is not zero. Resetting.");
-		}
-	}
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
+        collider = transform.parent.GetComponent<CapsuleCollider>();
+        colliderHeight = collider.height;
+        colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
+        colliderCentre = collider.center;
+        colliderCentreCrouch = colliderCentre.y * crouchHeightMultiplier;
 
-	void CheckGroundState()
+        if (transform.localPosition != Vector3.zero)
+        {
+            transform.localPosition = Vector3.zero;
+            Debug.LogWarning("The model position of " + name + " is not zero. Resetting.");
+        }
+        if (transform.localEulerAngles != Vector3.zero)
+        {
+            transform.localEulerAngles = Vector3.zero;
+            Debug.LogWarning("The model rotation of " + name + " is not zero. Resetting.");
+        }
+    }
+
+    void CheckGroundState()
 	{
 		if (crtGroundState == null) crtGroundState = StartCoroutine(Routine());
 		IEnumerator Routine()
@@ -88,6 +97,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	{
 		set
 		{
+			_velocity = value;
 			float magnitude = Mathf.Sqrt((value.x * value.x) + (value.z * value.z));
 			magnitude = ((int)(magnitude * 100)) / 100f;//round to 2 decimals
 			animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
@@ -96,4 +106,33 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 			animator.SetFloat("timeScale", Time.timeScale);
 		}
 	}
+
+    public void PlayFootstepSound()
+    {
+        if (footstepSounds.Length == 0) return; 
+		// Pick random sound from array
+        AudioClip footstepSound = footstepSounds[Random.Range(0, footstepSounds.Length)];
+
+        // Change the volume based on the player's velocity
+        float volume = Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z)) / 10.0f; // Adjust if you want (Probably necessary but I dunno)
+        volume = Mathf.Clamp(volume, 0.1f, 1.0f);
+
+        audioSource.PlayOneShot(footstepSound, volume);
+    }
+
+	public void PlayJumpSound()
+	{
+        if (jumpingSounds.Length == 0) return;
+        AudioClip jumpSound = jumpingSounds[Random.Range(0, jumpingSounds.Length)];
+
+        audioSource.PlayOneShot(jumpSound);
+    }
+
+	public void PlayLandingSound()
+	{
+        if (landingSounds.Length == 0) return;
+		AudioClip landingSound = landingSounds[Random.Range(0, landingSounds.Length)];
+
+        audioSource.PlayOneShot(landingSound);
+    }
 }
