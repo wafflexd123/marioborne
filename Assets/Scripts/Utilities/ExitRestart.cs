@@ -41,4 +41,25 @@ public class ExitRestart : MonoBehaviour
 			}
 		}
 	}
+
+	public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		Debug.Log("Teleporting Player");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (CheckpointManager.instance != null && player != null)
+        {
+            player.transform.position = CheckpointManager.instance.lastCheckpointPos;
+        }
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }

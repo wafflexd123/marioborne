@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour //might use this later lol 
+public class GameManager : MonoBehaviour //might use this later lol - I'm commandeering this code - Pluuskie
 {
 	//static GameManager singleton;
 
@@ -20,4 +20,6 @@ public class GameManager : MonoBehaviour //might use this later lol
 	//		DestroyImmediate(gameObject);//don't let more than one of these exist
 	//	}
 	//}
+
 }
+
