@@ -14,6 +14,7 @@ public class CarparkLevelManager : MonoBehaviour
 	public TriggerCollider firstEnemyTrigger, secondEnemyTrigger;
 	public float sceneLoadDelay;
 	public Rotater[] boomSticks;
+	public GameObject boomCollider;
 	EnemyPathManager enemyPathManager;
 
 	IEnumerator Start()
@@ -29,6 +30,7 @@ public class CarparkLevelManager : MonoBehaviour
 		enemyPathManager.SetNextEnemyPath();
 		yield return new WaitUntil(() => enemyPathManager.ActiveEnemiesAreDead());
 		for (int i = 0; i < boomSticks.Length; i++) boomSticks[i].StartRotation();
+		Destroy(boomCollider);
 
 		yield return new WaitUntil(() => holdShiftTrigger.isTriggered);
 		for (int i = 0; i < 6; i++) enemyPathManager.SetNextEnemyPath();

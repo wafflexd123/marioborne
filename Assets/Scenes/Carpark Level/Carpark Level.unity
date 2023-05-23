@@ -2451,7 +2451,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-16652
+  m_Name: pb_Mesh158724
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6912,7 +6912,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2338562940323108284, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -9.999817
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 3347588759300335361, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: deflectTime
@@ -14089,6 +14089,7 @@ MonoBehaviour:
   - {fileID: 534082847}
   - {fileID: 862605529}
   - {fileID: 1501464915}
+  boomCollider: {fileID: 814553313}
 --- !u!1001 &638841098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22736,6 +22737,59 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &814553313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 814553314}
+  - component: {fileID: 814553315}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &814553314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814553313}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1815249039}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &814553315
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814553313}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.9596796, y: 4.573725, z: 0.35812378}
+  m_Center: {x: -1.9798398, y: 1.7868626, z: -0.022165298}
 --- !u!1001 &826561727
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49319,6 +49373,7 @@ Transform:
   - {fileID: 534082846}
   - {fileID: 862605528}
   - {fileID: 1501464914}
+  - {fileID: 814553314}
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
