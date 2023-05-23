@@ -239,14 +239,19 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 		PrintForce();
 		forces.Clear();
+
+		velocity *= 1 - Time.fixedDeltaTime * currentDrag;//drag
+
+		if (IsGrounded)//uneven surfaces & timescale adjustment
+		{
+			rigidbody.velocity = (Vector3.ProjectOnPlane(new Vector3(velocity.x, 0, velocity.z), groundHit.normal) + new Vector3(0, velocity.y)) * Time.timeScale;
+		}
+		else
+		{
+			if (useGravity) velocity += gravity * Time.fixedDeltaTime;//gravity
+			rigidbody.velocity = velocity * Time.timeScale;
+		}
 		animator.velocity = velocity;
-
-		if (!IsGrounded && useGravity) velocity += gravity * Time.fixedDeltaTime;
-
-		velocity *= 1 - Time.fixedDeltaTime * currentDrag;
-		//Debug.Log($"{currentDrag}   {1 - Time.fixedDeltaTime * currentDrag}   {(1 * Time.timeScale) - Time.fixedUnscaledDeltaTime * currentDrag}");
-
-		rigidbody.velocity = velocity * Time.timeScale;
 	}
 
 	void PrintForce()
@@ -254,7 +259,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (Console.Enabled)
 		{
 			ForceCurve curve = IsGrounded ? walkForce : IsWallrunning ? wallForce : airForce;
-			float velocity = IsWallrunning ? LateralVelocity() : this.velocity.magnitude;
+			float velocity = IsWallrunning || IsGrounded ? LateralVelocity() : this.velocity.magnitude;
 			cnsDebug.text = $"Force: {velocity:#.00} {this.velocity} ({Mathf.InverseLerp(curve.minForce, curve.maxForce, curve.Evaluate(velocity)) * 100:#0}% of current curve), actual velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}\n" +
 				$"Drag: {currentDrag}\n" +
 				$"Grounded: {IsGrounded}, last object walked on: {(groundHit.transform != null ? groundHit.transform.name : "not found")}\n" +
@@ -299,6 +304,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		if (Physics.CheckSphere(collider.transform.position + groundCheckOffset + new Vector3(0, collider.radius), collider.radius, layerGround, QueryTriggerInteraction.Ignore))
 		{
+			Physics.Raycast(collider.transform.position + Vector3.up, Vector3.down, out groundHit, 2f, layerGround + layerWall);
 			if (!IsGrounded)
 			{
 				IsGrounded = true;
@@ -333,8 +339,9 @@ public class PlayerMovement : MonoBehaviourPlus
 				{
 					if (IsSliding) currentDrag = slideDrag.Evaluate(LateralVelocity());
 					else currentDrag = walkDrag;
-					Physics.Raycast(collider.transform.position + Vector3.up, Vector3.down, out groundHit, 2f, layerGround + layerWall);
-					AddForce(walkForce.Evaluate(velocity.magnitude, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized), ForceMode.Acceleration);
+					//Physics.Raycast(collider.transform.position + Vector3.up, Vector3.down, out groundHit, 2f, layerGround + layerWall);
+					//AddForce(walkForce.Evaluate(velocity.magnitude, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized), ForceMode.Acceleration);
+					AddForce(walkForce.Evaluate(LateralVelocity(), moveDirection), ForceMode.Acceleration);
 				}
 			}
 			else if (wallSide.IsTouchingWall && (!Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hitGround, 2f, layerGround) || Vector3.Distance(transform.position, hitGround.point) >= wallCatchHeight))//if touching a wall and the player has jumped high enough
