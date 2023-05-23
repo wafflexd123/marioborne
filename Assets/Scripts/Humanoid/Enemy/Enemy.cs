@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Enemy : Humanoid, ITimeScaleListener
 {
 	public enum EnemyType { Ranged, Melee }
-	public enum EnemyState { Patrol, Engage, Investigate }
+	public enum EnemyState { Patrol, Engage, Investigate, Idle }
 
 	//Inspector
 	[SerializeField] Transform points;
@@ -22,6 +22,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	Transform head;
 	EnemyType _typeOfWeapon;
 	Player player;
+	Coroutine crtRotate;
 
 	[Header("Debug (Don't change values)")]
 	[SerializeField] EnemyState _state;
@@ -192,7 +193,8 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	private void Patrol()
 	{
-		if (destPoint != -1 && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+		if (destPoint == -1) State = EnemyState.Idle;//if there are no points to patrol
+		else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
 		{
 			agent.SetDestination(Points.GetChild(destPoint).position);
 			destPoint = (destPoint + 1) % Points.childCount;
@@ -201,18 +203,33 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	void FindClosestPoint()
 	{
-		if (Points != null && Points.childCount > 0)
+		if (Points != null)
 		{
-			int closestPoint = 0;
-			float dist = Vector3.Distance(transform.position, Points.GetChild(0).position);
-			for (int i = 0; i < Points.childCount; i++)
+			if (points.childCount > 0)
 			{
-				float tempDist = Vector3.Distance(transform.position, Points.GetChild(i).position);
-				if (tempDist < dist) closestPoint = i;
+				int closestPoint = 0;
+				float dist = Mathf.Infinity;
+				for (int i = 0; i < Points.childCount; i++)
+				{
+					float tempDist = Vector3.Distance(transform.position, Points.GetChild(i).position);
+					if (tempDist < dist) closestPoint = i;
+				}
+				destPoint = closestPoint;
+				return;
 			}
-			destPoint = closestPoint;
+			else
+			{
+				agent.SetDestination(Points.position);//if there is only 1 point, go to it and then idle
+				ResetRoutine(RotateTowardsPoint(), ref crtRotate);
+			}
 		}
-		else destPoint = -1;
+		destPoint = -1;
+	}
+
+	IEnumerator RotateTowardsPoint()//temporary, idk how to get them to rotate on their own, and they rotate back anyway so rip
+	{
+		yield return new WaitUntil(() => agent.remainingDistance <= agent.stoppingDistance);
+		transform.rotation = Points.rotation;
 	}
 
 	void InitInvestigate()
@@ -296,7 +313,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 		model.shooting = false;
 		model.dying = true;
 		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
-		model.transform.SetParent(null);
+		model.transform.SetParent(transform.parent.parent.parent);
 		Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
 	}
 

@@ -38,7 +38,7 @@ public class Player : Humanoid
 		movement = GetComponent<PlayerMovement>();
 		Transform ui = transform.Find("UI");
 		escMenu = ui.Find("Escape Menu").gameObject;
-		wickUI = ui.Find("Wick Text").GetComponent<WickUI>(); 
+		wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
 
 	}
 
@@ -52,7 +52,7 @@ public class Player : Humanoid
 		if (enableInput)
 		{
 			HandleInput();
-			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, ~0, QueryTriggerInteraction.Ignore);
+			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
 			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
 		}

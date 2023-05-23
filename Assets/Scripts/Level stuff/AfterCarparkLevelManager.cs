@@ -9,7 +9,7 @@ public class AfterCarparkLevelManager : MonoBehaviour
 	public EnemyPath[] enemySpawns;
 	public ElevatorDoor elevator;
 	public TriggerCollider elevatorTrigger;
-	public ElevatorButton elevatorButton;
+	public UniversalButton elevatorButton;
 	public float sceneLoadDelay;
 
 	IEnumerator Start()

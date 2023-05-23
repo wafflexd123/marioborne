@@ -82,14 +82,13 @@ public class Gun : WeaponBase
 			//wielder.model.shooting = true;
 			switch (type)
 			{
+				case GunType.Shotgun:
+					for (int i = 1; i < shotgunPellets; i++)
+						Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).
+							Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized + new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread)), wielder);
+					goto case GunType.Pistol;//also fire 1 bullet directly ahead
 				case GunType.Pistol:
 					Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder);
-					break;
-
-				case GunType.Shotgun:
-					for (int i = 0; i <= shotgunPellets; i++)
-						Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise
-							(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized + new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread)), wielder);
 					break;
 			}
 		}

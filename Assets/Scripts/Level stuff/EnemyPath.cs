@@ -55,10 +55,10 @@ public class EnemyPathManager
 		return true;
 	}
 
-	public void SetNextEnemyPath()
+	public void SetNextEnemyPath(bool requireKilling = true)
 	{
 		enemyPaths[currentPos].SetPaths();
-		activeEnemies.Add(enemyPaths[currentPos]);
+		if (requireKilling) activeEnemies.Add(enemyPaths[currentPos]);
 		currentPos++;
 	}
 }

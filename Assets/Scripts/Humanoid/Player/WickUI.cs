@@ -127,7 +127,7 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 		}
 	}
 
-	public void Display(string[] strings, Action onEnd = null, bool showSubText = true)
+	public void Display(string[] strings, Action onEnd = null, bool showSubText = true, int animateMask = 1 << 1)
 	{
 		gameObject.SetActive(true);
 		subText.gameObject.SetActive(showSubText);
@@ -137,18 +137,39 @@ new string[] { "While you may think he could, John Matrix can't fly. But he shou
 		IEnumerator Type()
 		{
 			for (int i = 0; i < 3; i++) textBoxes[i].text = "";
-			if (strings.Length > 0) textBoxes[0].text = strings[0];
-			if (strings.Length > 1)
+
+			for (int i = 0; i < strings.Length; i++)
 			{
-				if (strings.Length > 2) textBoxes[2].text = strings[2];
-				for (int i = 0; i < strings[1].Length; i++)
-				{
-					textBoxes[1].text += strings[1][i];
-					yield return new WaitForSecondsRealtime(typeDelay);
-				}
+				if ((animateMask & (1 << i)) == 0) textBoxes[i].text = strings[i];//lol decipher this
+				else for (int ii = 0; ii < strings[i].Length; ii++)
+					{
+						textBoxes[i].text += strings[i][ii];
+						yield return new WaitForSecondsRealtime(typeDelay);
+					}
 			}
+
 			onEnd?.Invoke();
 			this.onEnd = null;
+		}
+	}
+
+	public void UnDisplay(int animateMask = 1 << 1)
+	{
+		subText.gameObject.SetActive(false);
+		onEnd?.Invoke();//call onEnd from last Display() call if it was ended early
+		onEnd = null;
+		ResetRoutine(Type(), ref crtType);
+		IEnumerator Type()
+		{
+			for (int i = 0; i < textBoxes.Length; i++)
+			{
+				if ((animateMask & (1 << i)) == 0) textBoxes[i].text = "";
+				else while (textBoxes[i].text.Length > 0)
+					{
+						textBoxes[i].text = textBoxes[i].text[..^1];//deciper this as well
+						yield return new WaitForSecondsRealtime(typeDelay);
+					}
+			}
 		}
 	}
 
