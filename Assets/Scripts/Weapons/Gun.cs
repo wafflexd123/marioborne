@@ -39,7 +39,7 @@ public class Gun : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-		wielder.model.holdingGun = true;
+		wielder.model.holdingPistol = true;
 		if (wielder is Player)
 		{
 			ammo = playerAmmo;
@@ -54,7 +54,7 @@ public class Gun : WeaponBase
 	protected override void OnDrop()
 	{
 		base.OnDrop();
-		wielder.model.holdingGun = false;
+		wielder.model.holdingPistol = false;
 		ui.SetActive(false);
 	}
 
@@ -79,7 +79,7 @@ public class Gun : WeaponBase
 				crtDelay = StartCoroutine(Delay());
 			}
 			audio.Play();
-			//wielder.model.shooting = true;
+			wielder.model.shoot = true;
 			switch (type)
 			{
 				case GunType.Shotgun:
@@ -134,46 +134,3 @@ public class Gun : WeaponBase
 		}
 	}
 }
-
-//protected override void RightMouse() //handles deflection while holding weapon
-//{
-//	if (wielder is Player)
-//	{
-//		if (crtDelay == null)
-//		{
-//			if (wielder.crtDeflectDelay == null && wielder.LookingAt != Vector3.negativeInfinity)
-//			{
-//				if (wielder.crtDeflectTime == null)
-//				{
-//					wielder.model.deflect = true;
-//					wielder.crtDeflectTime = StartCoroutine(Anim());
-
-//					IEnumerator Anim()
-//					{
-//						wielder.deflectWindow.SetActive(true);
-//						yield return new WaitForSeconds(wielder.GetComponent<Player>().deflectTime);
-//						wielder.deflectWindow.SetActive(false);
-//						wielder.model.deflect = false;
-//						wielder.crtDeflectDelay = StartCoroutine(Delay());
-//						wielder.crtDeflectTime = null;
-//					}
-//				}
-//			}
-
-//			IEnumerator Delay()
-//			{
-//				//yield return new WaitForSeconds(wielder.deflectDelay);
-//				float timer = 0;
-//				deflectPercent.gameObject.SetActive(true);
-//				while (timer < wielder.GetComponent<Player>().deflectDelay)
-//				{
-//					timer += Time.fixedDeltaTime;
-//					deflectPercent.fillAmount = timer / wielder.GetComponent<Player>().deflectDelay;
-//					yield return new WaitForFixedUpdate();
-//				}
-//				deflectPercent.gameObject.SetActive(false);
-//				wielder.crtDeflectDelay = null;
-//			}
-//		}
-//	}
-//}

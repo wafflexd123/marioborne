@@ -37,10 +37,10 @@ public class Fists : MonoBehaviourPlus
 
 		IEnumerator Punch()
 		{
-			player.model.punching = true;
+			player.model.punch = true;
 			collider.enabled = true;
 			_isFiring = true;
-			yield return new WaitUntil(() => !player.model.punching);
+			yield return new WaitUntil(() => !player.model.punch);
 			_isFiring = false;
 			collider.enabled = false;
 			yield return new WaitForSeconds(punchDelay);

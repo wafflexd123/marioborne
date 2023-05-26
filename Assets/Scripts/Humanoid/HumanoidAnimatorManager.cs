@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,21 +6,61 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
-	// Add your footstep sounds here
-	public AudioClip[] footstepSounds;
-	public AudioClip[] jumpingSounds;
-	public AudioClip[] landingSounds;
-
+	//Inspector
+	public AudioClip[] footstepSounds, jumpingSounds, landingSounds;
 	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, minStepVolume, maxStepVolume, velocityAtMaxStepVolume;
 
+	//Script
 	private AudioSource audioSource;
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
 	private bool _wallRunning, _grounded, _punching, _deflect;
 	private Vector3 colliderCentre;
 	private Animator animator;
-	private Coroutine crtGroundState, crtCrouch;
+	private Coroutine crtGroundState, crtCrouch, crtPunch, crtDeflect;
 	new private CapsuleCollider collider;
 	private Vector3 _velocity;
+
+	//PROPERTIES
+
+	//Movement
+	public bool roll { set { if (value) animator.SetTrigger("roll"); } }
+	public bool land { set { if (value) animator.SetTrigger("land"); } }
+	public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
+	public bool hanging { set => animator.SetBool("hanging", value); }
+
+	//Attacks
+	public bool holdingMelee { set; get; }
+	public bool holdingPistol { set => animator.SetFloat("holdingPistol", value ? 1 : 0); }
+	public bool slash { set { if (value) animator.SetTrigger("slash"); } }
+	public bool shoot { set { if (value) animator.SetTrigger("shoot"); } }
+	public bool punch
+	{
+		set { if (value) { _punching = true; SetTrigger("punch", ref crtPunch, () => _punching = false); } }
+		get => _punching;
+	}
+	public bool deflect
+	{
+		set { if (value) { _deflect = true; SetTrigger("deflect", ref crtDeflect, () => _deflect = false); } }
+		get => _deflect;
+	}
+
+	//Other
+	public bool dying { set => animator.SetTrigger("die"); }
+	public bool grounded { set { _grounded = value; CheckGroundState(); } }
+	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
+	public Vector3 velocity
+	{
+		set
+		{
+			_velocity = value;
+			float magnitude = Mathf.Sqrt((value.x * value.x) + (value.z * value.z));
+			magnitude = ((int)(magnitude * 100)) / 100f;//round to 2 decimals
+			animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
+			animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
+			//animator.SetBool("falling", Mathf.Abs(value.y) >= airSpeed);
+			animator.SetFloat("timeScale", Time.timeScale);
+		}
+	}
 
 	private void Awake()
 	{
@@ -80,60 +121,32 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		} while (percent != 1);
 	}
 
-	public bool roll { set => animator.SetTrigger("roll"); }
-	public bool land { set => animator.SetTrigger("land"); }
-	public bool holdingMelee { set => animator.SetLayerWeight(1, value ? 1 : 0); }
-	public bool holdingGun { set => animator.SetLayerWeight(2, value ? 1 : 0); }
-	public bool punching { set { if (value) { animator.SetTrigger("punching"); _punching = true; } } get => _punching; }
-	public bool melee { set => animator.SetBool("melee", value); }
-	public bool shooting { set => animator.SetBool("shooting", value); }
-	public bool deflect { set { if (value) { animator.SetTrigger("deflect"); _deflect = true; } } get => _deflect; }
-	public bool dying { set => animator.SetBool("dying", value); }
-	public bool grounded { set { _grounded = value; CheckGroundState(); } }
-	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
-	public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
-	public bool hanging { set => animator.SetBool("hanging", value); }
-	public Vector3 velocity
+	void SetTrigger(string name, ref Coroutine crt, Action onEnd)
 	{
-		set
+		ResetRoutine(WaitForEnd(), ref crt);
+		IEnumerator WaitForEnd()
 		{
-			_velocity = value;
-			float magnitude = Mathf.Sqrt((value.x * value.x) + (value.z * value.z));
-			magnitude = ((int)(magnitude * 100)) / 100f;//round to 2 decimals
-			animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
-			animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
-			//animator.SetBool("falling", Mathf.Abs(value.y) >= airSpeed);
-			animator.SetFloat("timeScale", Time.timeScale);
+			animator.SetTrigger(name);
+			yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).IsName(name) || animator.GetNextAnimatorStateInfo(0).IsName(name));
+			onEnd();
 		}
-	}
-
-	public void EndPunch()
-	{
-		_punching = false;
-	}
-
-	public void EndDeflect()
-	{
-		_deflect = false;
 	}
 
 	public void PlayFootstepSound()
 	{
 		if (footstepSounds.Length == 0) return;
 		// Pick random sound from array
-		AudioClip footstepSound = footstepSounds[Random.Range(0, footstepSounds.Length)];
+		AudioClip footstepSound = footstepSounds[UnityEngine.Random.Range(0, footstepSounds.Length)];
 
 		// Change the volume based on the player's velocity
 		float volume = Mathf.Lerp(minStepVolume, maxStepVolume, Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z)) / velocityAtMaxStepVolume);
-		volume = Mathf.Clamp(volume, 0.1f, 1.0f);
-
 		audioSource.PlayOneShot(footstepSound, volume);
 	}
 
 	public void PlayJumpSound()
 	{
 		if (jumpingSounds.Length == 0) return;
-		AudioClip jumpSound = jumpingSounds[Random.Range(0, jumpingSounds.Length)];
+		AudioClip jumpSound = jumpingSounds[UnityEngine.Random.Range(0, jumpingSounds.Length)];
 
 		audioSource.PlayOneShot(jumpSound);
 	}
@@ -141,7 +154,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public void PlayLandingSound()
 	{
 		if (landingSounds.Length == 0) return;
-		AudioClip landingSound = landingSounds[Random.Range(0, landingSounds.Length)];
+		AudioClip landingSound = landingSounds[UnityEngine.Random.Range(0, landingSounds.Length)];
 
 		audioSource.PlayOneShot(landingSound);
 	}

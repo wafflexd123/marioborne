@@ -20,7 +20,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	NavMeshAgent agent;
 	FieldOfView fov;
 	Transform head;
-	EnemyType _typeOfWeapon;
+	EnemyType typeOfWeapon;
 	Player player;
 	Coroutine crtRotate;
 
@@ -35,7 +35,8 @@ public class Enemy : Humanoid, ITimeScaleListener
 	public bool IsStopped { get => agent.isStopped; set { if (agent.isOnNavMesh) agent.isStopped = value; } }
 	public EnemyState State
 	{
-		get => _state; set
+		get => _state;
+		set
 		{
 			_state = value;
 			switch (value)
@@ -48,23 +49,6 @@ public class Enemy : Humanoid, ITimeScaleListener
 					break;
 				case EnemyState.Investigate:
 					InitInvestigate();
-					break;
-			}
-		}
-	}
-	public EnemyType TypeOfWeapon
-	{
-		get => _typeOfWeapon;
-		set
-		{
-			_typeOfWeapon = value;
-			switch (value)
-			{
-				case EnemyType.Ranged:
-					model.holdingGun = true;
-					break;
-				case EnemyType.Melee:
-					model.holdingMelee = true;
 					break;
 			}
 		}
@@ -85,8 +69,8 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 		if (hand.childCount > 0)
 		{
-			if (hand.GetChild(0).GetComponent<Gun>()) TypeOfWeapon = EnemyType.Ranged;
-			else TypeOfWeapon = EnemyType.Melee;
+			if (hand.GetChild(0).GetComponent<Gun>()) typeOfWeapon = EnemyType.Ranged;
+			else typeOfWeapon = EnemyType.Melee;
 		}
 	}
 
@@ -122,7 +106,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	void InitEngage()
 	{
-		switch (TypeOfWeapon)
+		switch (typeOfWeapon)
 		{
 			case EnemyType.Ranged:
 				IsStopped = true;
@@ -141,7 +125,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 			State = EnemyState.Investigate;
 			return;
 		}
-		switch (TypeOfWeapon)
+		switch (typeOfWeapon)
 		{
 			case EnemyType.Melee:
 				agent.SetDestination(player.transform.position);
@@ -309,8 +293,6 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		model.melee = false;
-		model.shooting = false;
 		model.dying = true;
 		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
 		model.transform.SetParent(transform.parent.parent.parent);

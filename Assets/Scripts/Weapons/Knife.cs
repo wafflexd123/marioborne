@@ -15,11 +15,11 @@ public class Knife : WeaponBase
 
         IEnumerator Delay()
         {
-            wielder.model.melee = true;
+            wielder.model.slash = true;
             _isFiring = true;
             yield return new WaitForSeconds(hitTime);
             _isFiring = false;
-            if (wielder) wielder.model.melee = false;
+            if (wielder) wielder.model.slash = false;
             yield return new WaitForSeconds(hitDelay);
             crtDelay = null;
         }
