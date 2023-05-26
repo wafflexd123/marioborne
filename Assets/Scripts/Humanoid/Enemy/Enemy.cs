@@ -136,7 +136,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	private void Engage()
 	{
-		if (!fov.canSeePlayer)
+		if (!fov.canSeePlayer && Vector3.Distance(transform.position, player.transform.position) > rangedCloseDistanceMin)
 		{
 			State = EnemyState.Investigate;
 			return;

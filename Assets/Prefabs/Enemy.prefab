@@ -349,7 +349,7 @@ NavMeshAgent:
   m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 360
   m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
@@ -3114,6 +3114,9 @@ MonoBehaviour:
   runSpeed: 4.5
   colliderCrouchTime: 0.25
   crouchHeightMultiplier: 0.55
+  minStepVolume: 0
+  maxStepVolume: 0
+  velocityAtMaxStepVolume: 0
 --- !u!82 &6998661741444800718
 AudioSource:
   m_ObjectHideFlags: 0
