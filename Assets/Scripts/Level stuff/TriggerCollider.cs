@@ -5,11 +5,13 @@ public class TriggerCollider : MonoBehaviour
 {
 	public UnityEvent onEnter, onStay, onExit;
 	[HideInInspector] public bool isTriggered;
+	[HideInInspector] public Collider other;
 
 	private void OnTriggerEnter(Collider other)
 	{
-		onEnter.Invoke();
 		isTriggered = true;
+		this.other = other;
+		onEnter.Invoke();
 	}
 
 	private void OnTriggerStay(Collider other)
@@ -21,5 +23,6 @@ public class TriggerCollider : MonoBehaviour
 	{
 		onExit.Invoke();
 		isTriggered = false;
+		if (this.other == other) this.other = null;
 	}
 }

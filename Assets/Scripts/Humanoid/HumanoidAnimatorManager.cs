@@ -13,10 +13,10 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	//Script
 	private AudioSource audioSource;
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
-	private bool _wallRunning, _grounded, _punching, _deflect;
+	private bool _wallRunning, _grounded, _punching, _deflect, _slashing;
 	private Vector3 colliderCentre;
 	private Animator animator;
-	private Coroutine crtGroundState, crtCrouch, crtPunch, crtDeflect;
+	private Coroutine crtGroundState, crtCrouch, crtPunch, crtDeflect, crtSlash;
 	new private CapsuleCollider collider;
 	private Vector3 _velocity;
 
@@ -31,8 +31,12 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	//Attacks
 	public bool holdingMelee { set; get; }
 	public bool holdingPistol { set => animator.SetFloat("holdingPistol", value ? 1 : 0); }
-	public bool slash { set { if (value) animator.SetTrigger("slash"); } }
 	public bool shoot { set { if (value) animator.SetTrigger("shoot"); } }
+	public bool slash
+	{
+		set { if (value) { _slashing = true; SetTrigger("slash", ref crtSlash, () => _slashing = false); } }
+		get => _slashing;
+	}
 	public bool punch
 	{
 		set { if (value) { _punching = true; SetTrigger("punch", ref crtPunch, () => _punching = false); } }
@@ -127,6 +131,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		IEnumerator WaitForEnd()
 		{
 			animator.SetTrigger(name);
+			yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName(name) || animator.GetNextAnimatorStateInfo(0).IsName(name));
 			yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).IsName(name) || animator.GetNextAnimatorStateInfo(0).IsName(name));
 			onEnd();
 		}
