@@ -38,10 +38,10 @@ public class CarparkLevelManager : MonoBehaviour
 				goto case 1;
 			case 1:
 				//Load area init
-				Destroy(enemies[0].gameObject);
+				//Destroy(enemies[0].gameObject);
 
 				//Through first hallway
-				yield return new WaitUntil(() => holdShiftTrigger.isTriggered || Player.singlePlayer.hand.childCount > 0);
+				yield return new WaitUntil(() => holdShiftTrigger.isTriggered/* || Player.singlePlayer.hand.childCount > 0*/);
 				for (int i = 0; i < 6; i++)
 				{
 					enemyPaths[1].SetNextEnemyPath();
@@ -59,6 +59,7 @@ public class CarparkLevelManager : MonoBehaviour
 				Destroy(boomCollider);
 				skyscraper.SetActive(true);
 				yield return new WaitUntil(() => deleteInteriorTrigger.isTriggered);
+				if (Player.singlePlayer.hand.childCount > 0) Player.singlePlayer.input.Press("Drop");//drop weapon if holding one (because the animations don't look as good)
 
 				goto case 2;
 			case 2:
