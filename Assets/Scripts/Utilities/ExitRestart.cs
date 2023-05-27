@@ -6,60 +6,68 @@ using UnityEngine.SceneManagement;
 
 public class ExitRestart : MonoBehaviour
 {
+	/// <summary>
+	/// Respawn input is handled by the Player script, checkpoints handled by CheckpointManager
+	/// Changing scenes/closing the game should be handled by the pre-existing esc UI
+	/// (We don't want an exit button in the WebGL build)
+	/// </summary>
+
+
+
 	[SerializeField] private int currentSceneIndex;
 
 	public KeyCode restartKey = KeyCode.R;
 	public KeyCode exitKey = KeyCode.Escape;
 
-	private void Start()
-	{
-		DontDestroyOnLoad(this);
-		Debug.Log("Loaded (should only see this once)");
-		SceneManager.activeSceneChanged += (Scene a, Scene b) => Cursor.lockState = CursorLockMode.None;
-	}
+	//private void Start()
+	//{
+	//	DontDestroyOnLoad(this);
+	//	Debug.Log("Loaded (should only see this once)");
+	//	SceneManager.activeSceneChanged += (Scene a, Scene b) => Cursor.lockState = CursorLockMode.None;
+	//}
 
-	private void Update()
-	{
-		currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+	//private void Update()
+	//{
+	//	currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-		if (Input.GetKeyDown(restartKey))
-		{
-			SceneManager.LoadScene(currentSceneIndex);
-		}
+	//	if (Input.GetKeyDown(restartKey))
+	//	{
+	//		SceneManager.LoadScene(currentSceneIndex);
+	//	}
 
-		if (Input.GetKeyDown(exitKey))
-		{
-			if (currentSceneIndex != 0)
-			{
-				SceneManager.LoadScene(0);
-				Cursor.lockState = CursorLockMode.None;
-			}
-			else
-			{
-				Debug.Log("Game Quit.");
-				Application.Quit();
-			}
-		}
-	}
+	//	if (Input.GetKeyDown(exitKey))
+	//	{
+	//		if (currentSceneIndex != 0)
+	//		{
+	//			SceneManager.LoadScene(0);
+	//			Cursor.lockState = CursorLockMode.None;
+	//		}
+	//		else
+	//		{
+	//			Debug.Log("Game Quit.");
+	//			Application.Quit();
+	//		}
+	//	}
+	//}
 
-	public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-	{
-		Debug.Log("Teleporting Player");
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+	//public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	//{
+	//	Debug.Log("Teleporting Player");
+ //       GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        if (CheckpointManager.instance != null && player != null)
-        {
-            player.transform.position = CheckpointManager.instance.lastCheckpointPos;
-        }
-    }
+ //       if (CheckpointManager.instance != null && player != null)
+ //       {
+ //          // player.transform.position = CheckpointManager.instance.lastCheckpointPos;
+ //       }
+ //   }
 
-    void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+ //   void OnEnable()
+ //   {
+ //       SceneManager.sceneLoaded += OnSceneLoaded;
+ //   }
 
-    void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+ //   void OnDisable()
+ //   {
+ //       SceneManager.sceneLoaded -= OnSceneLoaded;
+ //   }
 }

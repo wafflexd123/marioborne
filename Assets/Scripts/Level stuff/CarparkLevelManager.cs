@@ -30,7 +30,7 @@ public class CarparkLevelManager : MonoBehaviour
 		enemyPathManager.SetNextEnemyPath(false);
 
 		//Through first hallway
-		yield return new WaitUntil(() => holdShiftTrigger.isTriggered);
+		yield return new WaitUntil(() => holdShiftTrigger.isTriggered || Player.singlePlayer.hand.childCount > 0);
 		for (int i = 0; i < 6; i++)
 		{
 			enemyPathManager.SetNextEnemyPath();
@@ -38,9 +38,10 @@ public class CarparkLevelManager : MonoBehaviour
 		}
 		float temp = wickUI.typeDelay;
 		wickUI.typeDelay = .1f;
-		wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, () => wickUI.typeDelay = temp, false, 7);
+		wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, null, false, 7);
 		yield return new WaitUntil(() => Time.timeScale < 0.26f || enemyPathManager.ActiveEnemiesAreDead());
 		wickUI.UnDisplay(7);
+		wickUI.typeDelay = temp;
 
 		//After big battle
 		for (int i = 0; i < boomSticks.Length; i++) boomSticks[i].StartRotation();
