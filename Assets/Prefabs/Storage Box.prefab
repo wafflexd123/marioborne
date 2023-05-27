@@ -10,19 +10,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       propertyPath: m_RootOrder
-      value: 81
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.5049887
+      value: -13.619125
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -39.1
+      value: -2.6959991
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -251.26099
+      value: -22.999008
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       propertyPath: m_Name
-      value: Storage Box
+      value: Storage Box (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62,15 +62,15 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3361884475301782491}
+      addedObject: {fileID: 1882004500892515036}
   m_SourcePrefab: {fileID: 100100000, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
 --- !u!1 &7824084869327992112 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 393b619dcca6161479512e21c4afb1dd, type: 3}
   m_PrefabInstance: {fileID: 6941685769555708001}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &3361884475301782491
-BoxCollider:
+--- !u!64 &1882004500892515036
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -87,6 +87,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.45, y: 1.45, z: 1.2}
-  m_Center: {x: 0, y: 0.7, z: 0}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
