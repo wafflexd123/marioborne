@@ -11,8 +11,8 @@ public class CarparkLevelManager : MonoBehaviour
 	public UniversalButton elevatorButton;
 	public WickUI wickUI;
 	public float sceneLoadDelay;
-	public Rotater[] boomSticks;
-	public GameObject boomCollider, skyscraper, carparkInterior;
+	public Rotater[] boomSticks, afterWatchBoomSticks;
+	public GameObject boomCollider, skyscraper, carparkInterior, afterWatchBoomCollider;
 	public TimeScaler timeScaler;
 	[HideInInspector] public bool timeScalerEnable;
 	EnemyPathManager[] enemyPaths;
@@ -49,13 +49,15 @@ public class CarparkLevelManager : MonoBehaviour
 				float temp = wickUI.typeDelay;
 				wickUI.typeDelay = .1f;
 				wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, () => wickUI.typeDelay = temp, false, 7); ;
+				for (int i = 0; i < boomSticks.Length; i++) afterWatchBoomSticks[i].StartRotation();
+				Destroy(afterWatchBoomCollider);
 
 				//End of hallway
 				yield return new WaitUntil(() => pillarEnemiesTrigger.isTriggered);
 				for (int i = 0; i < 6; i++)
 				{
 					enemyPaths[1].SetNextEnemyPath();
-					yield return new WaitForSeconds(.5f);
+					yield return new WaitForSeconds(.25f);
 				}
 
 				//Killed enemies

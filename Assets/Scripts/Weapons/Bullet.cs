@@ -47,7 +47,6 @@ public class Bullet : MonoBehaviourPlus
 
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log(FindComponent(other.transform, out BulletReflectSurface _));
 		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs) && brs.enableReflect)//if hit a reflect surface
 		{
 			if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;

@@ -52,7 +52,6 @@ public class Player : Humanoid
 		{
 			HandleInput();
 			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
-			Debug.Log(raycast.transform + "  " + FindComponent(raycast.transform, out Raycastable _));
 			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
 		}

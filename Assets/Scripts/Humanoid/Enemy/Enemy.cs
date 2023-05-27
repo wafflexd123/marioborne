@@ -125,21 +125,21 @@ public class Enemy : Humanoid, ITimeScaleListener
 			State = EnemyState.Investigate;
 			return;
 		}
-		switch (typeOfWeapon)
+		if (!player.hasDied)
 		{
-			case EnemyType.Melee:
-				agent.SetDestination(player.transform.position);
-				if (Vector3.Distance(transform.position, player.transform.position) <= meleeRadius)
-				{
-					IsStopped = true;
-					input.Press("Mouse", () => -1, () => false);//left click (hit)
-				}
-				else IsStopped = false;
-				break;
+			switch (typeOfWeapon)
+			{
+				case EnemyType.Melee:
+					agent.SetDestination(player.transform.position);
+					if (Vector3.Distance(transform.position, player.transform.position) <= meleeRadius)
+					{
+						IsStopped = true;
+						input.Press("Mouse", () => -1, () => false);//left click (hit)
+					}
+					else IsStopped = false;
+					break;
 
-			case EnemyType.Ranged:
-				if (!player.hasDied)
-				{
+				case EnemyType.Ranged:
 					if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
 					{
 						lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
@@ -161,9 +161,9 @@ public class Enemy : Humanoid, ITimeScaleListener
 						agent.SetDestination(player.transform.position);
 						IsStopped = false;
 					}
-				}
-				input.Press("Mouse", () => -1, () => false);//left click (shoot)
-				break;
+					input.Press("Mouse", () => -1, () => false);//left click (shoot)
+					break;
+			}
 		}
 	}
 
