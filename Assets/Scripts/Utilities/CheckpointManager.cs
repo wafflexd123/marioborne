@@ -7,6 +7,7 @@ public class CheckpointManager : MonoBehaviour
 {
 	public static CheckpointManager instance;
 	public Vector3 lastCheckpointPos;
+	public int lastCheckpoint;
 	int lastScene;
 
 	void Awake()

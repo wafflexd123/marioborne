@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
 	bool OnLedge { get => _onLedge; set { _onLedge = value; animator.hanging = value; rigidbody.useGravity = !value; } }
 
-	IEnumerator Start()
+	void Start()
 	{
 		health = maxHealth;
 		player = GetComponent<Player>();
@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		txtWhereAmI.text = "";
 		healthVignette = ui.Find("Health Vignette").GetComponent<VignetteControl>();
 		rigidbody = GetComponent<Rigidbody>();
+		rigidbody.isKinematic = false;//potentially fixed first frame bug-out if isKinematic is true during Awake()
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;
 		rigidbody.drag = 0;
@@ -90,12 +91,12 @@ public class PlayerMovement : MonoBehaviourPlus
 		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		cnsDebug = Console.AddLine();
-		if (useGravity)
-		{
-			useGravity = false;
-			yield return new WaitForFixedUpdate();//bugs out for some reason if gravity is enabled on first frame
-			useGravity = true;
-		}
+		//if (useGravity)
+		//{
+		//	useGravity = false;
+		//	yield return new WaitForFixedUpdate();//bugs out for some reason if gravity is enabled on first frame
+		//	useGravity = true;
+		//}
 	}
 
 	void Update()

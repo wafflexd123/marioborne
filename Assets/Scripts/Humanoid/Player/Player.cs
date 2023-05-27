@@ -39,7 +39,6 @@ public class Player : Humanoid
 		Transform ui = transform.Find("UI");
 		escMenu = ui.Find("Escape Menu").gameObject;
 		wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
-
 	}
 
 	private void Start()
