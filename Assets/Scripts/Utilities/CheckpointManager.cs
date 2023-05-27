@@ -25,6 +25,7 @@ public class CheckpointManager : MonoBehaviour
 				}
 				else
 				{
+					lastCheckpoint = 0;
 					lastScene = b.buildIndex;//if reloading to a different scene, store new scene
 				}
 			};

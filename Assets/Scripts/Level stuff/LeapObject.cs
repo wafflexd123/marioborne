@@ -6,7 +6,7 @@ public class LeapObject : MonoBehaviourPlus
 {
 	public Transform leapDirection;
 	public float leapForce, maxLookAngleDifference;
-	public Collider collisionCollider;
+	public Collider[] collisionColliders;
 	bool playerInTrigger;
 
 	public bool CanLeap(Transform lookDirection)
@@ -16,8 +16,8 @@ public class LeapObject : MonoBehaviourPlus
 
 	public Vector3 GetLeapForce(float mass)
 	{
-		collisionCollider.isTrigger = true;//stop player from colliding with box while leaping
-		//return Mathf.Lerp(minLeapForce, maxLeapForce, currentWalkForceMagnitude) * mass * leapDirection.forward;
+		for (int i = 0; i < collisionColliders.Length; i++) collisionColliders[i].isTrigger = true;//stop player from colliding with box while leaping
+		Debug.Log(leapForce * mass * leapDirection.forward);
 		return leapForce * mass * leapDirection.forward;
 	}
 
@@ -36,7 +36,7 @@ public class LeapObject : MonoBehaviourPlus
 		{
 			if (player.closestLeapObject == this) player.closestLeapObject = null;
 			playerInTrigger = false;
-			collisionCollider.isTrigger = false;
+			for (int i = 0; i < collisionColliders.Length; i++) collisionColliders[i].isTrigger = false;
 		}
 	}
 }

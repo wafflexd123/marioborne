@@ -384,7 +384,7 @@ Transform:
   - {fileID: 3785649916426086921}
   - {fileID: 3785649916936408249}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3785649916641934144
 MonoBehaviour:
@@ -401,7 +401,8 @@ MonoBehaviour:
   leapDirection: {fileID: 3785649916936408249}
   leapForce: 15
   maxLookAngleDifference: 25
-  collisionCollider: {fileID: 3785649916426086922}
+  collisionColliders:
+  - {fileID: 3785649916426086922}
 --- !u!65 &3785649916641934145
 BoxCollider:
   m_ObjectHideFlags: 0
