@@ -10,12 +10,15 @@ public class TimescalerTutorial : Raycastable
 
 	public override void OnRaycast(Player player)
 	{
+		Debug.Log(1);
 		if (ui != null && crtRaycast == null) crtRaycast = StartCoroutine(WaitForEndRaycast());
 		IEnumerator WaitForEndRaycast()
 		{
 			ui.SetActive(true);
+			Debug.Log(2);
 			while (FindComponent(player.raycast.transform, out TimescalerTutorial scaler))//while looking at this
 			{
+				Debug.Log(3);
 				ui.transform.LookAt(player.camera.transform);
 				if (Input.GetMouseButtonDown(0))//if clicked on watch
 				{
