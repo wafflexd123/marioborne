@@ -297,12 +297,11 @@ public class Enemy : Humanoid, ITimeScaleListener
 		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
 		if (transform.parent != null && transform.parent.parent != null && transform.parent.parent.parent != null)
 		{
-			model.transform.SetParent(transform.parent.parent.parent);
+			model.transform.SetParent(transform.parent.parent.parent);//if enemy is part of an auto-unloading section of the level
 		}
 		else
 		{
-			model.transform.SetParent(null);
-			Debug.LogWarning("Enemy transform hierarchy is not in correct format to unload with specific level sections", this);
+			model.transform.SetParent(null);//if enemy is always enabled
 		}
 		Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
 	}

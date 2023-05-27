@@ -6,8 +6,7 @@ public class TimescalerTutorial : Raycastable
 {
 	public GameObject ui;
 	Coroutine crtRaycast;
-	public Enemy[] enemies;
-	public Transform path;
+	public CarparkLevelManager carparkLevelManager;
 
 	public override void OnRaycast(Player player)
 	{
@@ -15,20 +14,14 @@ public class TimescalerTutorial : Raycastable
 		IEnumerator WaitForEndRaycast()
 		{
 			ui.SetActive(true);
-			while (FindComponent(player.raycast.transform, out TimeScaler scaler))//while looking at this
+			while (FindComponent(player.raycast.transform, out TimescalerTutorial scaler))//while looking at this
 			{
 				ui.transform.LookAt(player.camera.transform);
 				if (Input.GetMouseButtonDown(0))//if clicked on watch
 				{
-					scaler.transform.SetParent(player.transform);
-					player.StartCoroutine(LerpToPos(scaler.transform, new Position(player.hand), 5f));
-
-					for (int i = 0; i < enemies.Length; i++)
-					{
-						enemies[i].Points = path;
-					}
-
-					Destroy(gameObject);
+					carparkLevelManager.timeScalerEnable = true;
+					Destroy(ui);
+					player.StartCoroutine(LerpToPos(scaler.transform, new Position(player.hand), 5f, ()=> Destroy(transform.parent.gameObject)));
 					yield break;
 				}
 				yield return null;

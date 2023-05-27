@@ -7,10 +7,10 @@ public class TimeScaler : MonoBehaviourPlus
 {
 	public float timeScaleSpeed, minTimeScale, scaleDuration, recoveryDelay;
 	public Image imgTimeleft;
-	float currentScaleDuration, recoveryTimer, startUIWidth;
+	float currentScaleDuration, recoveryTimer;
 	Console.Line cnsTime;
 
-	void Start()
+	void Awake()
 	{
 		cnsTime = Console.AddLine();
 		imgTimeleft.gameObject.SetActive(false);

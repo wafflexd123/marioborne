@@ -5,15 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class CarparkLevelManager : MonoBehaviour
 {
-	public GunTutorial gunTutorial;
 	public Transform[] enemies;
 	public ElevatorDoor exitElevator, enemyElevator;
-	public TriggerCollider firstEnemyTrigger, elevatorTrigger, holdShiftTrigger, deleteInteriorTrigger;
+	public TriggerCollider firstEnemyTrigger, elevatorTrigger, deleteInteriorTrigger, pillarTriggerCollider, pillarEnemiesTrigger;
 	public UniversalButton elevatorButton;
 	public WickUI wickUI;
 	public float sceneLoadDelay;
 	public Rotater[] boomSticks;
 	public GameObject boomCollider, skyscraper, carparkInterior;
+	public TimeScaler timeScaler;
+	[HideInInspector] public bool timeScalerEnable;
 	EnemyPathManager[] enemyPaths;
 
 	IEnumerator Start()
@@ -27,6 +28,7 @@ public class CarparkLevelManager : MonoBehaviour
 			case 0:
 				//Load area init
 				skyscraper.SetActive(false);
+				timeScaler.enabled = false;
 
 				//Before elevator
 				yield return new WaitUntil(() => firstEnemyTrigger.isTriggered);
@@ -39,20 +41,26 @@ public class CarparkLevelManager : MonoBehaviour
 			case 1:
 				//Load area init
 				//Destroy(enemies[0].gameObject);
+				timeScaler.enabled = false;
 
-				//Through first hallway
-				yield return new WaitUntil(() => holdShiftTrigger.isTriggered/* || Player.singlePlayer.hand.childCount > 0*/);
+				//Pick up watch
+				yield return new WaitUntil(() => timeScalerEnable);
+				timeScaler.enabled = true;
+				float temp = wickUI.typeDelay;
+				wickUI.typeDelay = .1f;
+				wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, () => wickUI.typeDelay = temp, false, 7); ;
+
+				//End of hallway
+				yield return new WaitUntil(() => pillarEnemiesTrigger.isTriggered);
 				for (int i = 0; i < 6; i++)
 				{
 					enemyPaths[1].SetNextEnemyPath();
-					yield return new WaitForSeconds(.25f);
+					yield return new WaitForSeconds(.5f);
 				}
-				float temp = wickUI.typeDelay;
-				wickUI.typeDelay = .1f;
-				wickUI.Display(new string[] { "You are", "John Matrix", "hold shift to slow time" }, null, false, 7);
 
 				//Killed enemies
 				yield return new WaitUntil(() => enemyPaths[1].ActiveEnemiesAreDead());
+				wickUI.typeDelay = .1f;
 				wickUI.UnDisplay(7);
 				wickUI.typeDelay = temp;
 				for (int i = 0; i < boomSticks.Length; i++) boomSticks[i].StartRotation();
@@ -66,21 +74,22 @@ public class CarparkLevelManager : MonoBehaviour
 				//Load area init
 				Destroy(carparkInterior);
 
+				yield return new WaitUntil(() => pillarTriggerCollider.isTriggered);
+				enemyPaths[2].SetNextEnemyPath(false);
+
 				goto case 3;
 			case 3:
 				//Load area init
 				if (carparkInterior != null) Destroy(carparkInterior);//if spawned at this checkpoint
 
+				//Elevator section
+				yield return new WaitUntil(() => exitElevator.IsFullyClosed && elevatorTrigger.isTriggered);//elevator is closed and player is inside elevator
+				elevatorButton.interactable = false;
+				yield return new WaitForSeconds(sceneLoadDelay);
+				SceneManager.LoadSceneAsync("Mik Level", LoadSceneMode.Single);
+
 				break;
 		}
-		//Elevator section
-		//exitElevator.Open();
-		//enemyPathManager.SetNextEnemyPath();
-		//yield return new WaitUntil(() => enemyPathManager.ActiveEnemiesAreDead());
-		//yield return new WaitUntil(() => exitElevator.IsFullyClosed && elevatorTrigger.isTriggered);//elevator is closed and player is inside elevator
-		//elevatorButton.interactable = false;
-		//yield return new WaitForSeconds(sceneLoadDelay);
-		//SceneManager.LoadSceneAsync("After Carpark Level", LoadSceneMode.Single);
 	}
 
 	//IEnumerator Text()
