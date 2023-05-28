@@ -348,7 +348,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763080
+  m_Name: pb_Mesh2330916
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1370,7 +1370,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763494
+  m_Name: pb_Mesh2331388
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1535,7 +1535,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763528
+  m_Name: pb_Mesh2331422
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2057,7 +2057,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763698
+  m_Name: pb_Mesh2331612
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2738,7 +2738,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763618
+  m_Name: pb_Mesh2331530
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2903,7 +2903,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762790
+  m_Name: pb_Mesh2330610
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3078,7 +3078,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762410
+  m_Name: pb_Mesh2330212
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3347,7 +3347,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1162340
+  m_Name: pb_Mesh-1382468
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3647,7 +3647,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762930
+  m_Name: pb_Mesh2330760
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3984,7 +3984,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762962
+  m_Name: pb_Mesh2330798
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -4393,7 +4393,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763252
+  m_Name: pb_Mesh2609396
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -4873,7 +4873,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763632
+  m_Name: pb_Mesh2331544
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -5032,6 +5032,77 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &382234243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 382234246}
+  - component: {fileID: 382234245}
+  - component: {fileID: 382234244}
+  m_Layer: 0
+  m_Name: Run Music Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &382234244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382234243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef57924c957e9c345a9f4263d82b5947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 867966842}
+  audioClips:
+  - {fileID: 8300000, guid: 02199b3e54bba7448b266b8488f4dc70, type: 3}
+  - {fileID: 8300000, guid: ef4c39aa215bed545bcde5a7e6c914be, type: 3}
+  - {fileID: 8300000, guid: 7f6744fa67cfdeb46a3e681cd06712da, type: 3}
+--- !u!65 &382234245
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382234243}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &382234246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382234243}
+  m_LocalRotation: {x: -0, y: 0.41024554, z: -0, w: 0.91197515}
+  m_LocalPosition: {x: 13.28, y: 1.6, z: -9.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 48.44, z: 0}
 --- !u!1 &387825432
 GameObject:
   m_ObjectHideFlags: 0
@@ -5453,7 +5524,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762660
+  m_Name: pb_Mesh2330468
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -5618,7 +5689,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762836
+  m_Name: pb_Mesh2330662
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6216,7 +6287,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763302
+  m_Name: pb_Mesh2331180
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -6437,7 +6508,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763394
+  m_Name: pb_Mesh2331288
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7226,7 +7297,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763450
+  m_Name: pb_Mesh2609612
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -7397,6 +7468,7 @@ GameObject:
   - component: {fileID: 548191742}
   - component: {fileID: 548191741}
   - component: {fileID: 548191743}
+  - component: {fileID: 548191744}
   m_Layer: 0
   m_Name: Checkpoint (2)
   m_TagString: Untagged
@@ -7467,6 +7539,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 553387461}
+--- !u!114 &548191744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548191739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef57924c957e9c345a9f4263d82b5947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 867966842}
+  audioClips:
+  - {fileID: 8300000, guid: d3d503dc7d787b0488e868d86fe525c2, type: 3}
+  - {fileID: 8300000, guid: fab7c94180ebf3f4b97e0480d7e670b9, type: 3}
+  - {fileID: 8300000, guid: d30ef3ad24c15c0499c7fe035d698a56, type: 3}
+  - {fileID: 8300000, guid: 722906a27b398864a9556d7aceee8355, type: 3}
 --- !u!1 &553387461 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8405350625490031523, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
@@ -8652,7 +8742,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763178
+  m_Name: pb_Mesh2331024
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9014,6 +9104,7 @@ GameObject:
   - component: {fileID: 598764935}
   - component: {fileID: 598764937}
   - component: {fileID: 598764936}
+  - component: {fileID: 598764938}
   m_Layer: 0
   m_Name: Checkpoint
   m_TagString: Untagged
@@ -9071,6 +9162,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 5, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &598764938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598764934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d8abf50b817474f8d803d21a32a63d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 867966842}
 --- !u!1 &605428194
 GameObject:
   m_ObjectHideFlags: 0
@@ -11789,7 +11893,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763514
+  m_Name: pb_Mesh2331408
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12249,7 +12353,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763604
+  m_Name: pb_Mesh2331516
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -12629,7 +12733,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 797956730}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 630.6678, y: -79.894646, z: -58.44629}
+  m_LocalPosition: {x: 630.6678, y: -79.894646, z: -58.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13043,38 +13147,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &802837527
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 802837528}
-  m_Layer: 0
-  m_Name: Music Triggers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &802837528
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 802837527}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1909389654}
-  m_Father: {fileID: 0}
-  m_RootOrder: 18
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &808860933
 GameObject:
   m_ObjectHideFlags: 0
@@ -13113,7 +13185,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1161812
+  m_Name: pb_Mesh-1383052
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -13525,7 +13597,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763228
+  m_Name: pb_Mesh2331104
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -19142,7 +19214,7 @@ GameObject:
   - component: {fileID: 867966842}
   m_Layer: 0
   m_Name: MusicPlayer
-  m_TagString: Untagged
+  m_TagString: BGMSource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19256,7 +19328,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &868599778
 LightingSettings:
@@ -25251,7 +25323,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1153640
+  m_Name: pb_Mesh-1390734
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -27431,7 +27503,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763326
+  m_Name: pb_Mesh2331210
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -28280,7 +28352,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762736
+  m_Name: pb_Mesh2608812
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -28529,7 +28601,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1154246
+  m_Name: pb_Mesh-1389644
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -29278,7 +29350,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1155820
+  m_Name: pb_Mesh-1388634
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -29617,6 +29689,7 @@ GameObject:
   - component: {fileID: 1243296610}
   - component: {fileID: 1243296609}
   - component: {fileID: 1243296611}
+  - component: {fileID: 1243296612}
   m_Layer: 0
   m_Name: Checkpoint (4)
   m_TagString: Untagged
@@ -29687,6 +29760,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 553387461}
+--- !u!114 &1243296612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243296607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef57924c957e9c345a9f4263d82b5947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 867966842}
+  audioClips:
+  - {fileID: 8300000, guid: 02199b3e54bba7448b266b8488f4dc70, type: 3}
+  - {fileID: 8300000, guid: ef4c39aa215bed545bcde5a7e6c914be, type: 3}
+  - {fileID: 8300000, guid: 7f6744fa67cfdeb46a3e681cd06712da, type: 3}
 --- !u!1 &1247002097
 GameObject:
   m_ObjectHideFlags: 0
@@ -30538,7 +30628,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762776
+  m_Name: pb_Mesh2330596
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -33160,7 +33250,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464680140}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 726.3078, y: -88.37465, z: -88.80629}
+  m_LocalPosition: {x: 726.3078, y: -88.37465, z: -89.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33429,7 +33519,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762884
+  m_Name: pb_Mesh2330710
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -35903,7 +35993,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762618
+  m_Name: pb_Mesh2330426
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -36318,7 +36408,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762396
+  m_Name: pb_Mesh2330198
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -36597,7 +36687,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763214
+  m_Name: pb_Mesh2331080
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -36867,6 +36957,7 @@ GameObject:
   - component: {fileID: 1751449262}
   - component: {fileID: 1751449261}
   - component: {fileID: 1751449263}
+  - component: {fileID: 1751449264}
   m_Layer: 0
   m_Name: Checkpoint (5)
   m_TagString: Untagged
@@ -36937,6 +37028,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 553387461}
+--- !u!114 &1751449264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751449259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef57924c957e9c345a9f4263d82b5947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 867966842}
+  audioClips:
+  - {fileID: 8300000, guid: 02199b3e54bba7448b266b8488f4dc70, type: 3}
+  - {fileID: 8300000, guid: ef4c39aa215bed545bcde5a7e6c914be, type: 3}
+  - {fileID: 8300000, guid: 7f6744fa67cfdeb46a3e681cd06712da, type: 3}
 --- !u!1 &1772494815
 GameObject:
   m_ObjectHideFlags: 0
@@ -36985,7 +37093,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762762
+  m_Name: pb_Mesh2330582
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -37150,7 +37258,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762584
+  m_Name: pb_Mesh2330392
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -39999,7 +40107,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763010
+  m_Name: pb_Mesh2330846
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -41498,7 +41606,7 @@ GameObject:
   - component: {fileID: 1909389655}
   - component: {fileID: 1909389656}
   m_Layer: 0
-  m_Name: Fight Trigger
+  m_Name: Fight Music Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41511,13 +41619,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909389653}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 18.19, y: -8.21, z: 5.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 802837528}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1909389655
 BoxCollider:
@@ -41552,9 +41660,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef57924c957e9c345a9f4263d82b5947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  audioClips: []
-  sceneName: Descent V2
+  audioSource: {fileID: 867966842}
+  audioClips:
+  - {fileID: 8300000, guid: fab7c94180ebf3f4b97e0480d7e670b9, type: 3}
+  - {fileID: 8300000, guid: d3d503dc7d787b0488e868d86fe525c2, type: 3}
+  - {fileID: 8300000, guid: d30ef3ad24c15c0499c7fe035d698a56, type: 3}
+  - {fileID: 8300000, guid: 722906a27b398864a9556d7aceee8355, type: 3}
 --- !u!1 &1909898044
 GameObject:
   m_ObjectHideFlags: 0
@@ -41985,7 +42096,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1154864
+  m_Name: pb_Mesh-1380008
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -42274,7 +42385,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763042
+  m_Name: pb_Mesh2330878
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -44924,7 +45035,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1762690
+  m_Name: pb_Mesh2330500
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -45189,6 +45300,7 @@ GameObject:
   - component: {fileID: 2088876542}
   - component: {fileID: 2088876541}
   - component: {fileID: 2088876543}
+  - component: {fileID: 2088876544}
   m_Layer: 0
   m_Name: Checkpoint (3)
   m_TagString: Untagged
@@ -45259,6 +45371,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 553387461}
+--- !u!114 &2088876544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088876539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef57924c957e9c345a9f4263d82b5947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 867966842}
+  audioClips:
+  - {fileID: 8300000, guid: d3d503dc7d787b0488e868d86fe525c2, type: 3}
+  - {fileID: 8300000, guid: fab7c94180ebf3f4b97e0480d7e670b9, type: 3}
+  - {fileID: 8300000, guid: d30ef3ad24c15c0499c7fe035d698a56, type: 3}
+  - {fileID: 8300000, guid: 722906a27b398864a9556d7aceee8355, type: 3}
 --- !u!1 &2089643227
 GameObject:
   m_ObjectHideFlags: 0
@@ -45901,7 +46031,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh1763028
+  m_Name: pb_Mesh2330864
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

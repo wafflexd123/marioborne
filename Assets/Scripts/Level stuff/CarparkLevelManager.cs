@@ -23,6 +23,8 @@ public class CarparkLevelManager : MonoBehaviour
 		enemyPaths = new EnemyPathManager[enemies.Length];
 		for (int i = 0; i < enemyPaths.Length; i++) enemyPaths[i] = new EnemyPathManager(enemies[i]);
 
+		yield return null;//to work with debug checkpoints, not enough time to fix rn
+
 		switch (CheckpointManager.instance.lastCheckpoint)
 		{
 			case 0:
@@ -75,7 +77,6 @@ public class CarparkLevelManager : MonoBehaviour
 			case 2:
 				//Load area init
 				Destroy(carparkInterior);
-
 				yield return new WaitUntil(() => pillarTriggerCollider.isTriggered);
 				enemyPaths[2].SetNextEnemyPath(false);
 

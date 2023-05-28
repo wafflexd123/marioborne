@@ -17,9 +17,9 @@ public class Checkpoint : MonoBehaviourPlus
 		if (boxCollider.includeLayers == 0) boxCollider.includeLayers = ~(1 << 13);//ignore bullets layer
 		if (debugSpawnHereOnAwake)
 		{
-			StartCoroutine(WaitToMovePlayer());
 			CheckpointManager.instance.lastCheckpointPos = transform.position;
 			CheckpointManager.instance.lastCheckpoint = checkpointNumber;
+			StartCoroutine(WaitToMovePlayer());
 		}
 	}
 
