@@ -6400,6 +6400,34 @@ MonoBehaviour:
     minForce: 8
     maxForce: 12
     velocityAtMaxForce: 10
+  slideForce:
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.008331299
+        value: 0.30896378
+        inSlope: 0.14630532
+        outSlope: 0.14630532
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9916687
+        value: 0.45283127
+        inSlope: 0.14630532
+        outSlope: 0.14630532
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    minForce: 10
+    maxForce: 100
+    velocityAtMaxForce: 10
   minDamageVelocity: 15
   maxDamageVelocity: 25
   maxHealth: 100

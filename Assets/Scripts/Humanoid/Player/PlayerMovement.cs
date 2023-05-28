@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public float rollQueueTime;
 	public float rollRequeueTime, fallRollEngageSpeed, fallCrouchEngageSpeed;
 	public ForceCurve slideDrag;
+	public ForceCurve slideForce;
 
 	[Header("Fall Damage")]
 	public float minDamageVelocity;
@@ -335,29 +336,42 @@ public class PlayerMovement : MonoBehaviourPlus
 			if (IsGrounded)//on ground
 			{
 				if (IsWallrunning) WallRun(false);
-				
-                if (moveDirection == Vector3.zero) currentDrag = noInputGroundDrag.Evaluate(LateralVelocity());
-                
-                else
-                {
-					if (IsSliding) currentDrag = slideDrag.Evaluate(LateralVelocity());
-					else currentDrag = walkDrag;
-                    Physics.Raycast(collider.transform.position + Vector3.up, Vector3.down, out groundHit, 2f, layerGround + layerWall);
-                    float slopeAngle = Vector3.Angle(Vector3.up, groundHit.normal);
-                    if (slopeAngle > 35)
-                    {
-                        currentDrag = 5;
-                        Vector3 slopeDirection = Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized;
-                        float slopeForceMultiplier = Mathf.Tan(Mathf.Deg2Rad * slopeAngle);
-                        AddForce(slopeForceMultiplier * walkForce.Evaluate(velocity.magnitude, slopeDirection), ForceMode.Acceleration);
-                    }
-                    else
-                    {
-                        currentDrag = walkDrag;
-                        AddForce(walkForce.Evaluate(LateralVelocity(), moveDirection), ForceMode.Acceleration);
-                    }
-                }
+
+				if (moveDirection == Vector3.zero) currentDrag = noInputGroundDrag.Evaluate(LateralVelocity());
+
+				else
+				{
+					Physics.Raycast(collider.transform.position + Vector3.up, Vector3.down, out groundHit, 2f, layerGround + layerWall);
+					float slopeAngle = Vector3.Angle(Vector3.up, groundHit.normal);
+					if (slopeAngle > 35)
+					{
+						currentDrag = 5;
+						Vector3 slopeDirection = Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized;
+						float slopeForceMultiplier = Mathf.Tan(Mathf.Deg2Rad * slopeAngle);
+						if (IsSliding)
+						{
+							AddForce(slopeForceMultiplier * slideForce.Evaluate(velocity.magnitude, slopeDirection), ForceMode.Acceleration);
+						}
+						else
+						{
+							AddForce(slopeForceMultiplier * walkForce.Evaluate(velocity.magnitude, slopeDirection), ForceMode.Acceleration);
+						}
+					}
+					else
+					{
+						currentDrag = walkDrag;
+						if (IsSliding)
+						{
+							AddForce(slideForce.Evaluate(LateralVelocity(), moveDirection), ForceMode.Acceleration);
+						}
+						else
+						{
+							AddForce(walkForce.Evaluate(LateralVelocity(), moveDirection), ForceMode.Acceleration);
+						}
+					}
+				}
 			}
+
 			else if (wallSide.IsTouchingWall && (!Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hitGround, 2f, layerGround) || Vector3.Distance(transform.position, hitGround.point) >= wallCatchHeight))//if touching a wall and the player has jumped high enough
 			{
 				if (!IsWallrunning) WallRun(true);
