@@ -56,6 +56,11 @@ public class Gun : WeaponBase
 		base.OnDrop();
 		wielder.model.holdingPistol = false;
 		ui.SetActive(false);
+		if (crtDelay != null)
+		{
+			StopCoroutine(crtDelay); //if dropped while attacking
+			crtDelay = null;
+		}
 	}
 
 	protected override void LeftMouse()

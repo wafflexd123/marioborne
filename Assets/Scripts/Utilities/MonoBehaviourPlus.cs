@@ -52,13 +52,13 @@ public class MonoBehaviourPlus : MonoBehaviour
 		return (a - b).sqrMagnitude < sqrErrorMargin;
 	}
 
-	public IEnumerator LerpToPos(Transform transformToLerp, Position pos, float speed, Action onEnd = null)
+	public IEnumerator LerpToPos(Transform transformToLerp, Position pos, float speed, Action onEnd = null, float error = 0.005f)
 	{
 		transformToLerp.localEulerAngles = pos.eulers;//temp
-		while (!ApproxEquals(transformToLerp.localPosition, pos.coords, 0.0001f))
+		while (!ApproxEquals(transformToLerp.localPosition, pos.coords, error))
 		{
-			transformToLerp.localPosition = Vector3.MoveTowards(transformToLerp.localPosition, pos.coords, Time.deltaTime * speed);
-			yield return null;
+			transformToLerp.localPosition = Vector3.MoveTowards(transformToLerp.localPosition, pos.coords, Time.fixedDeltaTime * speed);
+			yield return new WaitForFixedUpdate();
 		}
 		transformToLerp.localPosition = pos.coords;
 		onEnd?.Invoke();

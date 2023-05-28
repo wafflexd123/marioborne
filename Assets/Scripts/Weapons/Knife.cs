@@ -25,7 +25,11 @@ public class Knife : WeaponBase
 	protected override void OnDrop()
 	{
 		base.OnDrop();
-		if (crtDelay != null) StopCoroutine(crtDelay); //if dropped while attacking
+		if (crtDelay != null)
+		{
+			StopCoroutine(crtDelay); //if dropped while attacking
+			crtDelay = null;
+		}
 		wielder.model.holdingMelee = false;
 		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = true;
 		for (int i = 0; i < bladeColliders.Length; i++)

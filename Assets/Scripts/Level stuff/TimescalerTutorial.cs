@@ -21,7 +21,8 @@ public class TimescalerTutorial : Raycastable
 				{
 					carparkLevelManager.timeScalerEnable = true;
 					Destroy(ui);
-					player.StartCoroutine(LerpToPos(transform.parent, new Position(player.hand), 1f, ()=> Destroy(transform.parent.gameObject)));
+					transform.parent = player.transform;
+					StartCoroutine(LerpToPos(transform, new Position(player.hand), 1f, ()=> Destroy(gameObject), .1f));
 					yield break;
 				}
 				yield return null;
