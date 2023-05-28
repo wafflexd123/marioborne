@@ -20,13 +20,16 @@ public class CheckpointManager : MonoBehaviour
 			{
 				if (lastScene == b.buildIndex)
 				{
-					Player.singlePlayer.transform.position = lastCheckpointPos;//if reloading the same scene, spawn at checkpoint
-					StartCoroutine(IHateSocietyAndUnityAndEverythingSucks(lastCheckpointPos));
+					if (Player.singlePlayer != null)
+					{
+						Player.singlePlayer.transform.position = lastCheckpointPos;//if reloading the same scene, spawn at checkpoint
+						StartCoroutine(IHateSocietyAndUnityAndEverythingSucks(lastCheckpointPos));
+					}
 				}
 				else
 				{
 					lastCheckpoint = 0;
-					lastCheckpointPos = Player.singlePlayer.transform.position;//player will respawn where it starts in the level, until hitting a checkpoint
+					lastCheckpointPos = Player.singlePlayer != null ? Player.singlePlayer.transform.position : Vector3.zero;//player will respawn where it starts in the level, until hitting a checkpoint
 					lastScene = b.buildIndex;//if reloading to a different scene, store new scene
 				}
 			};

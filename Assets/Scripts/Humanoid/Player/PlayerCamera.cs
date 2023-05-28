@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -12,9 +12,9 @@ public class PlayerCamera : MonoBehaviour
 	Vector3 rotation;
 
 	//for the UI slider
-	public float Sensitivity { set => sensitivity = value; }
+	public float Sensitivity { set { sensitivity = value; GameManager.singleton.savedSensitivity = value; } get => sensitivity; }
 
-    IEnumerator Start()
+	IEnumerator Start()
 	{
 		Cursor.lockState = CursorLockMode.Locked;
 		rotation = transform.localEulerAngles + body.parent.localEulerAngles;
@@ -39,5 +39,5 @@ public class PlayerCamera : MonoBehaviour
 		body.localEulerAngles = new Vector3(0, rotation.y);
 
 		if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
-    }
+	}
 }
