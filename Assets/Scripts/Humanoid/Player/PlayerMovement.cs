@@ -386,7 +386,6 @@ public class PlayerMovement : MonoBehaviourPlus
 				if (moveDirection != Vector3.zero) AddForce(airForce.Evaluate(velocity.magnitude, moveDirection), ForceMode.Acceleration);
 			}
 		}
-        Debug.Log("Current Drag: " + currentDrag);
     }
 
 	float LateralVelocity()
