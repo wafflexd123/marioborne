@@ -44,9 +44,9 @@ PlayerSettings:
     duration: 4
   - logo: {fileID: 21300000, guid: 70f0729e0b77582428f69fcd36cd5c11, type: 3}
     duration: 4
-  - logo: {fileID: 21300000, guid: e4c266e61fd07c448af4e6f29e1fdafb, type: 3}
+  - logo: {fileID: 21300000, guid: c831eb85b60544143aa21587fc3c06a2, type: 3}
     duration: 4
-  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: 3aced5dd6124b1a438a4022a7a7fde14, type: 3}
+  m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1920
   defaultScreenHeight: 1080
@@ -159,7 +159,8 @@ PlayerSettings:
   resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Standalone: com.marioborne.john-matrix
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -278,7 +279,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 3aced5dd6124b1a438a4022a7a7fde14, type: 3}
+      m_Icon: {fileID: 0}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -586,12 +587,13 @@ PlayerSettings:
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel:
+    Standalone: 3
     WebGL: 3
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
   allowUnsafeCode: 0
   useDeterministicCompilation: 1
-  selectedPlatform: 0
+  selectedPlatform: 2
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   gcIncremental: 1

@@ -48,6 +48,11 @@ public class LevelSelect : MonoBehaviour
         }
     }
 
+    public void Exit()
+	{
+        Application.Quit();
+    }
+
     private void UpdatePanels()
     {
         for (int i = 0; i < levelPanels.Length; i++)
