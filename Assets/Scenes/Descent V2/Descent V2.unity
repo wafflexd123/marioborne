@@ -39674,7 +39674,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 02d4b2dff380d194fab91c0864b0c386, type: 3}
     - target: {fileID: 3347588759300335361, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: invincibility
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3546553014190524203, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: m_AnchorMax.x
@@ -39773,6 +39773,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[0].time
+      value: 0.0083351135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[1].time
+      value: 0.9833069
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[0].value
       value: 0
       objectReference: {fileID: 0}
@@ -39801,6 +39809,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[0].value
+      value: 0.5046997
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[1].value
+      value: 0.15567017
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[0].inSlope
       value: 0.58223724
       objectReference: {fileID: 0}
@@ -39827,6 +39843,14 @@ PrefabInstance:
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[6].inSlope
       value: 0.6858097
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[1].inSlope
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[0].outSlope
@@ -39877,6 +39901,18 @@ PrefabInstance:
       value: 0.6858097
       objectReference: {fileID: 0}
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[0].outWeight
       value: 0.33333334
       objectReference: {fileID: 0}
@@ -39902,6 +39938,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[6].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[0].outWeight
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
@@ -39931,6 +39971,14 @@ PrefabInstance:
     - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: walkForce.curve.m_Curve.Array.data[6].tangentMode
       value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092373990879751735, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: slideForce.curve.m_Curve.Array.data[1].tangentMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8230165543452067333, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: m_Sprite
