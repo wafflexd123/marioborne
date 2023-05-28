@@ -5,13 +5,13 @@ using UnityEngine;
 public class LeapObject : MonoBehaviourPlus
 {
 	public Transform leapDirection;
-	public float leapForce, maxLookAngleDifference;
+	public float leapForce;
 	public Collider[] collisionColliders;
 	bool playerInTrigger;
 
 	public bool CanLeap(Transform lookDirection)
 	{
-		return playerInTrigger && Mathf.Abs(leapDirection.eulerAngles.y - lookDirection.eulerAngles.y) <= maxLookAngleDifference;//player is in trigger and looking in the right direction
+		return playerInTrigger; /*&& Mathf.Abs(leapDirection.eulerAngles.y - lookDirection.eulerAngles.y) <= maxLookAngleDifference;*///player is in trigger and looking in the right direction
 	}
 
 	public Vector3 GetLeapForce(float mass)

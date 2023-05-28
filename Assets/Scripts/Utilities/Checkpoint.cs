@@ -12,6 +12,9 @@ public class Checkpoint : MonoBehaviour
 	{
 		boxCollider = GetComponent<BoxCollider>();
 		boxCollider.isTrigger = true;
+		if (boxCollider.gameObject.layer == 0) boxCollider.gameObject.layer = 13;//ignore bullets layer
+		if (boxCollider.excludeLayers == 0) boxCollider.excludeLayers = 1 << 13;//ignore bullets layer
+		if (boxCollider.includeLayers == 0) boxCollider.includeLayers = ~(1 << 13);//ignore bullets layer
 		if (debugSpawnHereOnAwake)
 		{
 			StartCoroutine(WaitToMovePlayer());

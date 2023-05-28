@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TimescalerTutorial : Raycastable
 {
-	public GameObject ui;
+	public GameObject ui, delete;
 	Coroutine crtRaycast;
 	public CarparkLevelManager carparkLevelManager;
 
@@ -20,9 +20,9 @@ public class TimescalerTutorial : Raycastable
 				if (Input.GetMouseButtonDown(0))//if clicked on watch
 				{
 					carparkLevelManager.timeScalerEnable = true;
-					Destroy(ui);
+					Destroy(delete);
 					transform.parent = player.transform;
-					StartCoroutine(LerpToPos(transform, new Position(player.hand), 1f, ()=> Destroy(gameObject), .1f));
+					StartCoroutine(LerpToPos(transform, new Position(player.hand, true), 5f, ()=> Destroy(gameObject), .1f));
 					yield break;
 				}
 				yield return null;
