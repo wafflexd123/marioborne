@@ -10,7 +10,7 @@ public class BulletSoundEF : MonoBehaviour
 
      
 
-            Instantiate(audioReflecionSound, transform.position, transform.rotation);
-
+            //Instantiate(audioReflecionSound, transform.position, transform.rotation);
+            //this is bad. test it.
     }
 }
