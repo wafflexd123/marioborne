@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Checkpoint : MonoBehaviour
+public class Checkpoint : MonoBehaviourPlus
 {
 	public int checkpointNumber;
 	public bool debugSpawnHereOnAwake;
@@ -31,7 +31,7 @@ public class Checkpoint : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Player"))
+		if (FindComponent(other.transform, out Player _))
 		{
 			CheckpointManager.instance.lastCheckpointPos = transform.position;
 			CheckpointManager.instance.lastCheckpoint = checkpointNumber;
