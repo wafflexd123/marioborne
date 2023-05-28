@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
-	public float pickupSpeed, dropForce, throwForce;
+	public float pickupSpeed, dropForce;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
@@ -60,16 +60,6 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
 	}
 
-	public virtual void Throw()
-	{
-		Vector3 tempDir = wielder.LookDirection;
-		Vector3 tempPos = wielder.GetComponent<Player>().camera.transform.position + wielder.GetComponent<Player>().camera.transform.forward;
-		Drop();
-		transform.position = tempPos; //it goes back to the wielder's hand before adding force below. not sure why when the wielder is null
-		rigidbody.AddForce(tempDir * throwForce, ForceMode.Impulse);
-
-	}
-
 	/// <summary>
 	/// Called when item is picked up by a humanoid. Set input listeners here.
 	/// </summary>
@@ -81,7 +71,6 @@ public abstract class WeaponBase : MonoBehaviourPlus
 			else RightMouse();
 		}));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop()));
-		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw()));
 	}
 
 	/// <summary>
