@@ -7,14 +7,16 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
-	public float pickupSpeed, dropForce;
+	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
-	bool isMoving;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 	Action onDrop;
+	Coroutine crtDropTimer;
+
+	bool IsMoving { get => rigidbody != null && rigidbody.velocity != Vector3.zero; }
 
 	public abstract bool IsFiring { get; }
 
@@ -29,19 +31,11 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-	protected virtual void Update()
+	public virtual bool Pickup(Humanoid humanoid)
 	{
-		if (rigidbody != null && rigidbody.velocity != Vector3.zero) isMoving = true;
-		else isMoving = false;
-	}
-
-	public virtual bool Pickup(Humanoid humanoid, Action onDrop = null)
-	{
-		if (!BeingHeld())
+		if (crtDropTimer == null && !BeingHeld() && humanoid.PickupObject(this, out onDrop))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			wielder = humanoid;
-			transform.parent = humanoid.hand;
-			this.onDrop = onDrop;
 			EnableRigidbody(false);
 			StartCoroutine(LerpToPos(transform, handPosition, pickupSpeed, () => OnPickup()));
 			return true;
@@ -51,6 +45,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 
 	public virtual void Drop()
 	{
+		ResetRoutine(DropTimer(), ref crtDropTimer);
 		OnDrop();
 		onDrop?.Invoke();
 		onDrop = null;
@@ -58,6 +53,12 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		transform.parent = null;
 		EnableRigidbody(true);
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
+
+		IEnumerator DropTimer()
+		{
+			for (float i = 0; i < disablePickupAfterDropSeconds; i += Time.fixedDeltaTime) yield return null;
+			crtDropTimer = null;
+		}
 	}
 
 	/// <summary>
@@ -116,15 +117,20 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	private void OnCollisionEnter(Collision other)
 	{
-		if (rigidbody != null && isMoving)
-		{
-			if (FindComponent(collision.collider.transform, out Enemy enemy))
-			{
-				enemy.Kill();
-				Destroy(gameObject);
-			}
-		}
+		if (FindComponent(other.transform, out Player player)) Pickup(player);
 	}
+
+	//private void OnCollisionEnter(Collision collision)
+	//{
+	//	if (rigidbody != null && IsMoving)//needs to kill at fast enough speeds, otherwise it kills even if it's barely moving. Also need animations for knockback..
+	//	{
+	//		if (FindComponent(collision.collider.transform, out Enemy enemy))
+	//		{
+	//			enemy.Kill();
+	//			Destroy(gameObject);
+	//		}
+	//	}
+	//}
 }

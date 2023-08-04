@@ -23,6 +23,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	EnemyType typeOfWeapon;
 	Player player;
 	Coroutine crtRotate;
+	WeaponBase weapon;
 
 	[Header("Debug (Don't change values)")]
 	[SerializeField] EnemyState _state;
@@ -66,12 +67,6 @@ public class Enemy : Humanoid, ITimeScaleListener
 		fov = GetComponent<FieldOfView>();
 		head = transform.Find("Body").Find("Head");
 		Time.timeScaleListeners.Add(this);
-
-		if (hand.childCount > 0)
-		{
-			if (hand.GetChild(0).GetComponent<Gun>()) typeOfWeapon = EnemyType.Ranged;
-			else typeOfWeapon = EnemyType.Melee;
-		}
 	}
 
 	void Start()
@@ -142,14 +137,14 @@ public class Enemy : Humanoid, ITimeScaleListener
 				case EnemyType.Ranged:
 					if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
 					{
-						lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, hand.GetChild(0).GetComponent<Gun>().bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
+						lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, ((Gun)weapon).bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
 					}
 					else
 					{
 						lookingAt = player.camera.transform.position;
 					}
 
-					hand.GetChild(0).LookAt(lookingAt);
+					weapon.transform.LookAt(lookingAt);
 					transform.LookAt(player.transform);
 
 					if (Vector3.Distance(transform.position, player.transform.position) <= rangedCloseDistance)
@@ -294,7 +289,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		model.dying = true;
-		if (hand.childCount > 0) input.Press("Drop");//drop weapon if holding one
+		if (weapon) input.Press("Drop");//drop weapon if holding one
 		if (transform.parent != null && transform.parent.parent != null && transform.parent.parent.parent != null)
 		{
 			model.transform.SetParent(transform.parent.parent.parent);//if enemy is part of an auto-unloading section of the level
@@ -314,5 +309,18 @@ public class Enemy : Humanoid, ITimeScaleListener
 	private void OnDestroy()
 	{
 		Time.timeScaleListeners.Remove(this);
+	}
+
+	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
+	{
+		if (!this.weapon)
+		{
+			this.weapon = weapon;
+			typeOfWeapon = weapon is Gun ? EnemyType.Ranged : EnemyType.Melee;
+			onDrop = () => this.weapon = null;
+			return true;
+		}
+		onDrop = null;
+		return false;
 	}
 }

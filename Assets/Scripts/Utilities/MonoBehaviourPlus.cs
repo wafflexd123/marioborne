@@ -47,12 +47,12 @@ public class MonoBehaviourPlus : MonoBehaviour
 		return new float[] { vector.x, vector.y, vector.z };
 	}
 
-	public static bool ApproxEquals(Vector3 a, Vector3 b, float sqrErrorMargin = 0.0000001f)
+	public static bool ApproxEquals(Vector3 a, Vector3 b, float errorMargin = 0.001f)
 	{
-		return (a - b).sqrMagnitude < sqrErrorMargin;
+		return (a - b).sqrMagnitude < errorMargin * errorMargin;
 	}
 
-	public IEnumerator LerpToPos(Transform transformToLerp, Position pos, float speed, Action onEnd = null, float error = 0.005f)
+	public IEnumerator LerpToPos(Transform transformToLerp, Position pos, float speed, Action onEnd = null, float error = 0.001f)
 	{
 		transformToLerp.localEulerAngles = pos.eulers;//temp
 		while (!ApproxEquals(transformToLerp.localPosition, pos.coords, error))

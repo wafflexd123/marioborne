@@ -5,11 +5,8 @@ using UnityEngine.UI;
 
 public class Gun : WeaponBase
 {
-	public enum GunType { Pistol, Shotgun }
-	public float fireDelay, bulletSpeed, maxSpread;
+	public float fireDelay, bulletSpeed;
 	public Ammo playerAmmo, aiAmmo;
-	public int shotgunPellets;
-	public GunType type;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
 
@@ -27,7 +24,6 @@ public class Gun : WeaponBase
 		base.Start();
 		ui = transform.Find("UI").gameObject;
 		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
-		//deflectPercent = ui.transform.Find("Deflect").GetComponent<Image>();
 		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
 		qToDrop = ui.transform.Find("Q To Drop").gameObject;
 		playerAmmo.amount = playerAmmo.startAmount;
@@ -65,13 +61,7 @@ public class Gun : WeaponBase
 
 	protected override void LeftMouse()
 	{
-		if (wielder is not Player || !((Player)wielder).fists.IsFiring) Shoot();
-		//if (wielder.crtDeflectTime == null) Shoot();
-	}
-
-	protected void Shoot()
-	{
-		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//if not waiting for fireDelay && wielder is looking at something && can shoot
+		if ((wielder is not Player || !((Player)wielder).fists.IsFiring) && crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//(if wielder is ai || isnt punching) && not waiting for fireDelay && wielder is looking at something && can shoot
 		{
 			if (wielder is Player)
 			{
@@ -85,18 +75,13 @@ public class Gun : WeaponBase
 			}
 			audio.Play();
 			wielder.model.shoot = true;
-			switch (type)
-			{
-				case GunType.Shotgun:
-					for (int i = 1; i < shotgunPellets; i++)
-						Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).
-							Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized + new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread)), wielder);
-					goto case GunType.Pistol;//also fire 1 bullet directly ahead
-				case GunType.Pistol:
-					Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder);
-					break;
-			}
+			Shoot();
 		}
+	}
+
+	protected virtual void Shoot()
+	{
+		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder);
 	}
 
 	IEnumerator DelayWithUI()

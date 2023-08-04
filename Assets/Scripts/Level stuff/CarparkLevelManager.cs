@@ -71,7 +71,7 @@ public class CarparkLevelManager : MonoBehaviour
 				Destroy(boomCollider);
 				skyscraper.SetActive(true);
 				yield return new WaitUntil(() => deleteInteriorTrigger.isTriggered);
-				if (Player.singlePlayer.hand.childCount > 0) Player.singlePlayer.input.Press("Drop");//drop weapon if holding one (because the animations don't look as good)
+				if (Player.singlePlayer.weapon) Player.singlePlayer.input.Press("Drop");//drop weapon if holding one (because the animations don't look as good)
 
 				goto case 2;
 			case 2:

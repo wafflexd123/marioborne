@@ -41,10 +41,10 @@ public class Player : Humanoid
 		wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
 	}
 
-	private void Start()
-	{
-		input.AddListener("Mouse", InputType.OnPress, (float direction) => PickupObject(direction));
-	}
+	//private void Start()
+	//{
+	//	input.AddListener("Mouse", InputType.OnPress, (float direction) => PickupObject(direction));
+	//}
 
 	void Update()
 	{
@@ -83,21 +83,18 @@ public class Player : Humanoid
 		}
 	}
 
-	/// <summary>
-	/// Called when mouse is pressed
-	/// </summary>
-	void PickupObject(float direction)
+	/// <returns>True if object is picked up</returns>
+	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
 	{
-		if (direction < 0 && hand.childCount == 0)//if clicked mouse button && left clicked && nothing in hand
+		if (fists.transform.childCount == 0)//if nothing in hand
 		{
-			if (FindComponent(raycast.transform, out WeaponBase weapon))
-			{
-				if (Vector3.Distance(transform.position, weapon.transform.position) <= maxInteractDistance)
-				{
-					if (weapon.Pickup(this, () => this.weapon = null)) this.weapon = weapon;
-				}
-			}
+			this.weapon = weapon;
+			weapon.transform.SetParent(camera.transform.parent);
+			onDrop = () => this.weapon = null;
+			return true;
 		}
+		onDrop = null;
+		return false;
 	}
 
 	public override void Kill(DeathType deathType = DeathType.General)
