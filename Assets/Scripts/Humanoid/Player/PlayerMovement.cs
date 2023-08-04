@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Header("Roll & Slide/Crouch")]
 	[Tooltip("This curve is used to interpolate between high velocity sliding and slow velocity crouch walking, where x=magnitude of velocity and y=magnitude of drag")]
 	public ForceCurve slideDrag;
+	[Tooltip("Multiplier for the amount a slope's steepness affects sliding acceleration")]
+	public float slopeDragMultiplier;
 	[Tooltip("How many seconds before you hit the ground that a roll can be registered")]
 	public float rollQueueTime;
 	[Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")]
@@ -170,12 +172,21 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			if (IsWallrunning) WallRun(false);
 
-			if (moveDirection == Vector3.zero) currentDrag = noInputGroundDrag.Evaluate(xzVelocity.magnitude);
+			if (moveDirection == Vector3.zero) currentDrag = noInputGroundDrag.Evaluate(xzVelocity.magnitude);//not pressing any input
 			else
 			{
-				if (IsSliding) currentDrag = slideDrag.Evaluate(xzVelocity.magnitude);
-				else currentDrag = walkDrag;
-				xzVelocity.AddForce(walkForce, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized, ForceMode.Acceleration);
+				if (IsSliding)//crouching/sliding
+				{
+					currentDrag = slideDrag.Evaluate(xzVelocity.magnitude);
+					Vector3 force = Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized;
+					if (force.y < 0.001f) currentDrag *= groundHit.normal.y * slopeDragMultiplier;//if crouching down a slope, slide
+					xzVelocity.AddForce(walkForce, force, ForceMode.Acceleration);
+				}
+				else//walking/running normally
+				{
+					currentDrag = walkDrag;
+					xzVelocity.AddForce(walkForce, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized, ForceMode.Acceleration);
+				}
 			}
 		}
 		else if (IsOnWall && (!Physics.Raycast(collider.transform.position + (collider.transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
