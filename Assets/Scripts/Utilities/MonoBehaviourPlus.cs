@@ -32,9 +32,9 @@ public class MonoBehaviourPlus : MonoBehaviour
 		return value;
 	}
 
-	public static Vector3 MultiplyVector(Vector3 a, Vector3 b)
+	public static bool IsInLayer(int layerNumber, int layerMask)
 	{
-		return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+		return ((1 << layerNumber) & layerMask) != 0;
 	}
 
 	public static Vector3 VectorArray(float[] array)
