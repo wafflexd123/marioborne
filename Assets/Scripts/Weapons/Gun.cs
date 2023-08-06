@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GunAnimator))]
 public class Gun : WeaponBase
 {
 	public float fireDelay, bulletSpeed;
@@ -16,12 +17,14 @@ public class Gun : WeaponBase
 	Image imgReloadPercent;
 	TMP_Text txtAmmo;
 	Ammo ammo;
+	GunAnimator animator;
 
 	public override bool IsFiring => false;
 
 	protected override void Start()
 	{
 		base.Start();
+		animator = GetComponent<GunAnimator>();
 		ui = transform.Find("UI").gameObject;
 		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
 		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
@@ -35,7 +38,8 @@ public class Gun : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-		wielder.model.holdingPistol = true;
+		//wielder.model.holdingPistol = true;
+		animator.StartAnimations();
 		if (wielder is Player)
 		{
 			ammo = playerAmmo;
@@ -50,7 +54,8 @@ public class Gun : WeaponBase
 	protected override void OnDrop()
 	{
 		base.OnDrop();
-		wielder.model.holdingPistol = false;
+		//wielder.model.holdingPistol = false;
+		animator.StopAnimations();
 		ui.SetActive(false);
 		if (crtDelay != null)
 		{
@@ -74,7 +79,8 @@ public class Gun : WeaponBase
 				crtDelay = StartCoroutine(Delay());
 			}
 			audio.Play();
-			wielder.model.shoot = true;
+			//wielder.model.shoot = true;
+			animator.Shoot();
 			Shoot();
 		}
 	}

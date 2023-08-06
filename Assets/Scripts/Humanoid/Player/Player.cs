@@ -86,7 +86,7 @@ public class Player : Humanoid
 	/// <returns>True if object is picked up</returns>
 	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
 	{
-		if (fists.transform.childCount == 0)//if nothing in hand
+		if (!this.weapon)//if nothing in hand
 		{
 			this.weapon = weapon;
 			weapon.transform.SetParent(camera.transform.parent);

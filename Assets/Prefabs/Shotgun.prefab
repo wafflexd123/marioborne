@@ -103,6 +103,22 @@ PrefabInstance:
       propertyPath: 'colliders.Array.data[1]'
       value: 
       objectReference: {fileID: 6603402652954775495}
+    - target: {fileID: 3902441386623006281, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: recoilTime
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3902441386623006281, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: recoilEulers.x
+      value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3902441386623006281, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: recoilEulers.y
+      value: -4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3902441386623006281, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: recoilEulers.z
+      value: -7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -212,7 +228,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
   firePosition: {fileID: 5672108846803261268}
   shotgunPellets: 10
-  maxSpread: 1
+  maxSpread: 0.25
 --- !u!1001 &7731621372174152087
 PrefabInstance:
   m_ObjectHideFlags: 0

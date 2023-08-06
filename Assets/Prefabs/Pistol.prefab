@@ -518,6 +518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6459212967476039814}
   - component: {fileID: 1044067982175564610}
+  - component: {fileID: 3902441386623006281}
   - component: {fileID: 852913784273586255}
   - component: {fileID: 5657302735459858405}
   - component: {fileID: 5784834282265857878}
@@ -579,6 +580,32 @@ MonoBehaviour:
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
   firePosition: {fileID: 1628130774508101737}
+--- !u!114 &3902441386623006281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459212967476039815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd3041fc7c0879d41904b26c84276b55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoilAnim:
+    position:
+      coords: {x: 0, y: 0, z: -0.025}
+      eulers: {x: -10, y: -3, z: -5}
+    animateTime: 0.25
+    maxPositionVarianceMultipler: 0.1
+    maxRotationVarianceMultipler: 0.1
+  idleAnim:
+    position:
+      coords: {x: 0.005, y: 0.005, z: 0.005}
+      eulers: {x: 0.5, y: 0.5, z: 0.5}
+    animateTime: 5
+    maxPositionVarianceMultipler: 0
+    maxRotationVarianceMultipler: 0.2
 --- !u!54 &852913784273586255
 Rigidbody:
   m_ObjectHideFlags: 0

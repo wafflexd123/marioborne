@@ -153,7 +153,23 @@ public class MonoBehaviourPlus : MonoBehaviour
 			this.eulers = useLocal ? transform.localEulerAngles : transform.eulerAngles;
 		}
 
+		public void ApplyToTransform(Transform t, bool useLocal = false)
+		{
+			if (useLocal)
+			{
+				t.localEulerAngles = coords;
+				t.localEulerAngles = eulers;
+			}
+			else
+			{
+				t.position = coords;
+				t.eulerAngles = eulers;
+			}
+		}
+
 		public static implicit operator Vector3(Position p) => p.coords;
 		public static implicit operator Quaternion(Position p) => Quaternion.Euler(p.eulers);
+		public static Position operator +(Position a, Position b) => new Position(a.coords + b.coords, a.eulers + b.eulers);
+		public static Position operator -(Position a, Position b) => new Position(a.coords - b.coords, a.eulers - b.eulers);
 	}
 }

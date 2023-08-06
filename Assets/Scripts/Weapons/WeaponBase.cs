@@ -23,17 +23,15 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	protected virtual void Start()
 	{
 		rigidbody = GetComponent<Rigidbody>();
-		FindComponent(transform, out wielder);//set wielder and subsequent BeingHeld() value
-		if (BeingHeld())
+		if (FindComponent(transform, out Humanoid wielder))
 		{
-			EnableRigidbody(false);
-			OnPickup();//simulate being picked up if already held
+			Pickup(wielder);//set wielder if placed in hand on startup
 		}
 	}
 
 	public virtual bool Pickup(Humanoid humanoid)
 	{
-		if (crtDropTimer == null && !BeingHeld() && humanoid.PickupObject(this, out onDrop))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+		if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onDrop))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			wielder = humanoid;
 			EnableRigidbody(false);
@@ -91,11 +89,6 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	protected virtual void RightMouse()
 	{
 
-	}
-
-	public virtual bool BeingHeld()
-	{
-		return wielder != null;
 	}
 
 	/// <summary>
