@@ -32,10 +32,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	public float rollQueueTime;
 	[Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")]
 	public float rollRequeueTime;
-	[Tooltip("Minimum downward speed at which rolls can occur")]
-	public float fallRollEngageSpeed;
-	[Tooltip("Minimum downward speed at which the fall-crouch animation can occur")]
-	public float fallCrouchEngageSpeed;
+	[Tooltip("Minimum distance fallen at which rolls can occur")]
+	public float fallRollEngageDistance;
+	[Tooltip("Minimum distance fallen at which the fall-crouch animation can occur")]
+	public float fallCrouchEngageDistance;
 
 	[Header("Wall Running")]
 	[Tooltip("Input force to apply to rigidbody when wall running, where x=magnitude of velocity and y=magnitude of force")]
@@ -54,8 +54,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Header("Fall Damage")]
 	public float maxHealth;
 	public float healthRecoverDelay, healthPerSecond;
-	[Tooltip("Min/max downwards velocity at which fall damage can occur. Damage is lerped between 0 and maxHealth where minVelocity = (0) damage & maxVelocity = (maxHealth) damage.")]
-	public float minDamageVelocity, maxDamageVelocity;
+	[Tooltip("Min/max distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")]
+	public float minDamageDistance, maxDamageDistance;
 
 	[Header("Collisions")]
 	[Tooltip("How far above/below y0 the ground-check spherecast starts")]
@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	int wallDirection;
 	float mass, _tilt, currentDrag, health;
 	bool queueJump, /*queueDash,*/ canDoubleJump, _isGrounded, _isWallrunning, _isSliding, queueRoll;
-	Vector3 moveDirection;
+	Vector3 moveDirection, currentGroundPosition;
 	RaycastHit groundHit, wallHit;
 	Vector xzVelocity, yVelocity;
 	PlayerCamera playerCamera;
@@ -82,9 +82,6 @@ public class PlayerMovement : MonoBehaviourPlus
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
 	[HideInInspector] public CatchLedge closestCatchLedge;//not used rn
-
-	//Debug
-	float /*dashForce, dashCooldown,*/ lastFallVelocity;
 	#endregion
 	#region Properties
 	public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
@@ -236,24 +233,22 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void Collide()
 	{
-		if (rigidbody.velocity.y > yVelocity.y)//rigidbody y velocity will differ from intended velocity if a ground collision occurred, but will not always equal 0 due to interpolation (i think)
+		if (!IsGrounded)
 		{
+			Vector3 lastGroundPos = currentGroundPosition;
 			CheckGround();//this will call twice a frame but cant be bothered
 			if (IsGrounded)
 			{
-				if (queueRoll && yVelocity.y <= -fallRollEngageSpeed)//if queueing a roll & hit the ground at roll speed
+				float distance = lastGroundPos.y - collider.transform.position.y;
+				if (queueRoll && distance >= fallRollEngageDistance)//if queueing a roll & hit the ground at roll distance
 				{
 					animator.roll = true;
 					queueRoll = false;
 					StopCoroutine(crtQueueRoll);
 					crtQueueRoll = null;
-
-					lastFallVelocity = -yVelocity.y;//store y value as positive
-					yVelocity.vector.y = 0;//set y velocity to 0
-					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (lastFallVelocity * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
-					return;
+					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
 				}
-				else if (yVelocity.y <= -fallCrouchEngageSpeed)//if hit the ground at crouch speed
+				else if (distance >= fallCrouchEngageDistance)//if hit the ground at crouch distance
 				{
 					animator.land = true;
 					if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
@@ -262,18 +257,17 @@ public class PlayerMovement : MonoBehaviourPlus
 						StopCoroutine(crtQueueRoll);
 						crtQueueRoll = null;
 					}
-
-					lastFallVelocity = -yVelocity.y;
-					yVelocity.vector.y = 0;//set y velocity to 0
-					float velocityPercent = Mathf.InverseLerp(minDamageVelocity, maxDamageVelocity, lastFallVelocity);
-					xzVelocity.vector *= 1 - velocityPercent;//reduce lateral velocity according to percent of health decreased
-					Health(Mathf.Lerp(0, maxHealth, velocityPercent), DeathType.Fall);
-					return;
+					float damageMagnitude = Mathf.InverseLerp(minDamageDistance, maxDamageDistance, distance);
+					if (damageMagnitude > 0)
+					{
+						xzVelocity.vector *= 1 - damageMagnitude;//reduce lateral velocity according to percent of health decreased
+						Health(Mathf.Lerp(0, maxHealth, damageMagnitude), DeathType.Fall);
+					}
 				}
+				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
 			}
 		}
-		//if collision wasn't a ground collision
-		xzVelocity.vector = rigidbody.velocity;//account for collisions
+		xzVelocity.vector = rigidbody.velocity;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
 	}
 
 	void Slide()
@@ -294,6 +288,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (Physics.SphereCast(collider.transform.position + (collider.transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -collider.transform.up, out groundHit, groundCheckDistance, ~(1 << 3)))
 		{
 			if (!IsGrounded) IsGrounded = true;
+			currentGroundPosition = collider.transform.position;
 			return;
 		}
 		IsGrounded = false;
@@ -311,6 +306,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				if (Mathf.Abs(wallHit.normal.y) <= maxWallYNormal)
 				{
 					wallDirection = direction;
+					currentGroundPosition = collider.transform.position;//called after CheckGround(), using wall position as ground position for fall-damage checks
 					return true;
 				}
 			}
@@ -409,7 +405,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				$"Grounded: {IsGrounded}, last object walked on: {(groundHit.transform != null ? groundHit.transform.name : "not found")}\n" +
 				$"Wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: {(IsOnWall ? $"True, direction: {wallDirection})" : "False")}\n" +
 				$"Can doublejump: {canDoubleJump}\n" +
-				$"Health: {health:#0.00}, last fall velocity: {lastFallVelocity:#0.00}";
+				$"Health: {health:#0.00}, last ground/wall positon: {currentGroundPosition}";
 		}
 	}
 
@@ -530,3 +526,44 @@ public class PlayerMovement : MonoBehaviourPlus
 	}
 	#endregion
 }
+
+/*
+ * if (rigidbody.velocity.y > yVelocity.y)//rigidbody y velocity will differ from intended velocity if a ground collision occurred, but will not always equal 0 due to interpolation (i think)
+		{
+			CheckGround();//this will call twice a frame but cant be bothered
+			if (IsGrounded)
+			{
+				if (queueRoll && yVelocity.y <= -fallRollEngageSpeed)//if queueing a roll & hit the ground at roll speed
+				{
+					animator.roll = true;
+					queueRoll = false;
+					StopCoroutine(crtQueueRoll);
+					crtQueueRoll = null;
+
+					lastFallVelocity = -yVelocity.y;//store y value as positive
+					yVelocity.vector.y = 0;//set y velocity to 0
+					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (lastFallVelocity * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
+					return;
+				}
+				else if (yVelocity.y <= -fallCrouchEngageSpeed)//if hit the ground at crouch speed
+				{
+					animator.land = true;
+					if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
+					{
+						queueRoll = false;
+						StopCoroutine(crtQueueRoll);
+						crtQueueRoll = null;
+					}
+
+					lastFallVelocity = -yVelocity.y;
+					yVelocity.vector.y = 0;//set y velocity to 0
+					float velocityPercent = Mathf.InverseLerp(minDamageVelocity, maxDamageVelocity, lastFallVelocity);
+					xzVelocity.vector *= 1 - velocityPercent;//reduce lateral velocity according to percent of health decreased
+					Health(Mathf.Lerp(0, maxHealth, velocityPercent), DeathType.Fall);
+					return;
+				}
+			}
+		}
+		//if collision wasn't a ground collision
+		xzVelocity.vector = rigidbody.velocity;//account for collisions
+ */
