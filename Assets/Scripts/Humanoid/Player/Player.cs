@@ -87,7 +87,8 @@ public class Player : Humanoid
 		}
 	}
 
-	/// <returns>True if object is picked up</returns>
+	/// <summary>Method called by a weapon when it detects the player walking over it (do not call otherwise)</summary>
+	/// <returns>True if object is picked up, sets parent of weapon</returns>
 	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
 	{
 		if (!this.weapon)//if nothing in hand
@@ -130,13 +131,15 @@ public class Player : Humanoid
 			movement.ResetVelocity();
 			movement.EnableCollider(false);
 			enemy.enabled = false;
+			if (weapon) weapon.Drop();
 			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
 			{
-				Destroy(enemy.gameObject);
+				if (enemy.weapon) enemy.weapon.Pickup(this, true);
 				cameraController.enabled = true;
 				movement.EnableCollider(true);
 				movement.enabled = true;
 				crtMoveToEnemy = null;
+				Destroy(enemy.gameObject);
 			}, EasingFunction.EaseInSine));
 		}
 	}

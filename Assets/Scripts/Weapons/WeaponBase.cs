@@ -13,11 +13,10 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
-	Action onDrop;
+	Action onWielderChange;//registered by wielder when picked up, to be called just before the weapon is dropped
 	Coroutine crtDropTimer;
 
 	bool IsMoving { get => rigidbody != null && rigidbody.velocity != Vector3.zero; }
-
 	public abstract bool IsFiring { get; }
 
 	protected virtual void Start()
@@ -29,13 +28,27 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-	public virtual bool Pickup(Humanoid humanoid)
+	public virtual bool Pickup(Humanoid humanoid, bool forcePickup = false)
 	{
-		if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onDrop))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+		if (forcePickup && wielder)//forced pickups only need to occur if the weapon is being wielded already
+		{
+			if (humanoid.PickupObject(this, out Action onWielderChange))
+			{
+				StopCoroutine(ref crtDropTimer);//just in case
+				OnWielderChange();
+				this.onWielderChange = onWielderChange;
+				wielder = humanoid;
+				transform.localPosition = handPosition;
+				transform.localEulerAngles = handPosition.eulers;
+				OnPickup();
+				return true;
+			}
+		}
+		else if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			wielder = humanoid;
 			EnableRigidbody(false);
-			StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));
+			StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
 			return true;
 		}
 		return false;
@@ -43,12 +56,11 @@ public abstract class WeaponBase : MonoBehaviourPlus
 
 	public virtual void Drop()
 	{
-		ResetRoutine(DropTimer(), ref crtDropTimer);
+		OnWielderChange();
 		OnDrop();
-		onDrop?.Invoke();
-		onDrop = null;
 		wielder = null;
 		transform.parent = null;
+		ResetRoutine(DropTimer(), ref crtDropTimer);
 		EnableRigidbody(true);
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
 
@@ -57,6 +69,22 @@ public abstract class WeaponBase : MonoBehaviourPlus
 			for (float i = 0; i < disablePickupAfterDropSeconds; i += Time.fixedDeltaTime) yield return null;
 			crtDropTimer = null;
 		}
+	}
+
+	/// <summary>
+	/// Called just after OnWielderChange() when dropped
+	/// </summary>
+	protected virtual void OnDrop() { }
+
+	/// <summary>
+	/// Called to prepare a weapon for being dropped OR swapping wielders without being dropped; always just before wielder is changed.
+	/// </summary>
+	protected virtual void OnWielderChange()
+	{
+		onWielderChange?.Invoke();
+		onWielderChange = null;
+		foreach (UniInput.InputAction action in inputActions) action.RemoveListener();
+		inputActions.Clear();
 	}
 
 	/// <summary>
@@ -72,24 +100,9 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop()));
 	}
 
-	/// <summary>
-	/// Called when item is dropped by a humanoid. Remove input listeners here.
-	/// </summary>
-	protected virtual void OnDrop()
-	{
-		foreach (UniInput.InputAction action in inputActions) action.RemoveListener();
-		inputActions.Clear();
-	}
+	protected virtual void LeftMouse() { }
 
-	protected virtual void LeftMouse()
-	{
-
-	}
-
-	protected virtual void RightMouse()
-	{
-
-	}
+	protected virtual void RightMouse() { }
 
 	/// <summary>
 	/// When an object with a rigidbody is set as a child of another object with a rigidbody, it gets buggy. This destroys the rigidbody and saves its data for later use.

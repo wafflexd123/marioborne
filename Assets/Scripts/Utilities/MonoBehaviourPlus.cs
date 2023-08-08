@@ -125,7 +125,7 @@ public class MonoBehaviourPlus : MonoBehaviour
 		variable = StartCoroutine(routine);
 	}
 
-	public void StopRoutine(ref Coroutine variable)
+	public void StopCoroutine(ref Coroutine variable)
 	{
 		if (variable != null)
 		{

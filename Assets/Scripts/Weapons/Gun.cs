@@ -53,9 +53,9 @@ public class Gun : WeaponBase
 		}
 	}
 
-	protected override void OnDrop()
+	protected override void OnWielderChange()
 	{
-		base.OnDrop();
+		base.OnWielderChange();
 		//wielder.model.holdingPistol = false;
 		animator.StopAnimations();
 		ui.SetActive(false);

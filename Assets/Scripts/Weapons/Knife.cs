@@ -24,19 +24,23 @@ public class Knife : WeaponBase
 
 	protected override void OnDrop()
 	{
-		base.OnDrop();
-		if (crtDelay != null)
-		{
-			StopCoroutine(crtDelay); //if dropped while attacking
-			crtDelay = null;
-		}
-		wielder.model.holdingMelee = false;
 		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = true;
 		for (int i = 0; i < bladeColliders.Length; i++)
 		{
 			bladeColliders[i].enabled = true;
 			bladeColliders[i].isTrigger = false;
 		}
+	}
+
+	protected override void OnWielderChange()
+	{
+		base.OnWielderChange();
+		if (crtDelay != null)
+		{
+			StopCoroutine(crtDelay); //if dropped while attacking
+			crtDelay = null;
+		}
+		wielder.model.holdingMelee = false;
 	}
 
 	protected override void LeftMouse()
