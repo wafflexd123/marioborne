@@ -14,4 +14,9 @@ public class AnimatorTimeScaler : MonoBehaviour, ITimeScaleListener
 	{
 		animator.SetFloat("timeScale", Time.timeScale);
 	}
+
+	private void OnDestroy()
+	{
+		Time.timeScaleListeners.Remove(this);
+	}
 }

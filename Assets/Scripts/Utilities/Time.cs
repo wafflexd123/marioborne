@@ -23,7 +23,7 @@ public class Time
 	public static float fixedDeltaTime { get => timeScale * UnityEngine.Time.fixedUnscaledDeltaTime; }
 	public static float fixedUnscaledDeltaTime { get => UnityEngine.Time.fixedUnscaledDeltaTime; }
 
-	public static List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();
+	public static readonly List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();
 
 	public static void OnSceneChange()
 	{
