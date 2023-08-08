@@ -35,7 +35,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		{
 			wielder = humanoid;
 			EnableRigidbody(false);
-			StartCoroutine(LerpToPos(transform, handPosition, pickupSpeed, () => OnPickup()));
+			StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));
 			return true;
 		}
 		return false;

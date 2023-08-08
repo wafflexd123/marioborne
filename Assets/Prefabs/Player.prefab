@@ -4796,8 +4796,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5912798137842022607}
   - component: {fileID: 355316256705340085}
-  - component: {fileID: 3020987589814594017}
-  - component: {fileID: 8959318726241102865}
+  - component: {fileID: 2081393279321937494}
+  - component: {fileID: 3877466887347810973}
+  - component: {fileID: 1727486885413383923}
+  - component: {fileID: 2377155711002094138}
   m_Layer: 3
   m_Name: Model
   m_TagString: Untagged
@@ -4845,7 +4847,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3020987589814594017
+--- !u!114 &2081393279321937494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4889,7 +4891,8 @@ MonoBehaviour:
   minStepVolume: 0.5
   maxStepVolume: 1
   velocityAtMaxStepVolume: 10
---- !u!82 &8959318726241102865
+  deathPosePrefab: {fileID: 6723186651781824147, guid: c3fcd6d9d58c92e41829b9b1ad2b7368, type: 3}
+--- !u!82 &3877466887347810973
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4985,6 +4988,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1727486885413383923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432734802949595765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7441b6f700f1c084891134ed06d07d8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2377155711002094138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432734802949595765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b12c97551941647aceb68a375a6aa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minTimescale: 0.25
+  minPitch: 0.7
 --- !u!1 &6462925653816994565
 GameObject:
   m_ObjectHideFlags: 0
@@ -6004,7 +6033,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eff7614580ff394ab5b751e01636eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: {fileID: 0}
   model: {fileID: 0}
   invincibility: 0
   maxInteractDistance: 5
@@ -6013,6 +6041,7 @@ MonoBehaviour:
   weapon: {fileID: 0}
   fists: {fileID: 0}
   camera: {fileID: 0}
+  teleportSpeed: 0
 --- !u!114 &8092373990879751735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6280,10 +6309,11 @@ MonoBehaviour:
     minForce: 8
     maxForce: 12
     velocityAtMaxForce: 10
+  slopeDragMultiplier: 0
   rollQueueTime: 0.3
   rollRequeueTime: 1
-  fallRollEngageSpeed: 10
-  fallCrouchEngageSpeed: 8
+  fallRollEngageDistance: 0
+  fallCrouchEngageDistance: 0
   wallForce:
     curve:
       serializedVersion: 2
@@ -6393,28 +6423,23 @@ MonoBehaviour:
     minForce: 15
     maxForce: 100
     velocityAtMaxForce: 10
+  wallDrag: 8.75
   wallRunGravity: 10
   wallJumpForce: 13
   wallTilt: 10
   tiltPerSecond: 60
   maxWallUpwardsVelocity: 15
   wallCatchDistance: 0.6
-  wallDrag: 8.75
   wallCatchHeight: 1
   maxWallYNormal: 0
   wallJumpAngle: {x: 0, y: 0, z: 0}
-  minDamageVelocity: 15
-  maxDamageVelocity: 25
   maxHealth: 100
   healthRecoverDelay: 2
   healthPerSecond: 20
-  groundCheckOffset: {x: 0, y: -0.01, z: 0}
-  layerNotGround:
-    serializedVersion: 2
-    m_Bits: 4096
-  layerNotWall:
-    serializedVersion: 2
-    m_Bits: 4096
+  minDamageDistance: 0
+  maxDamageDistance: 0
+  groundCheckYOffset: 0
+  groundCheckDistance: 0
   rigidbody: {fileID: 0}
   closestLeapObject: {fileID: 0}
   closestCatchLedge: {fileID: 0}

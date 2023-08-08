@@ -288,17 +288,20 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		model.dying = true;
-		if (weapon) input.Press("Drop");//drop weapon if holding one
-		if (transform.parent != null && transform.parent.parent != null && transform.parent.parent.parent != null)
+		if (enabled)//Don't die if disabled; allows player to teleport here without issues
 		{
-			model.transform.SetParent(transform.parent.parent.parent);//if enemy is part of an auto-unloading section of the level
+			model.dying = true;
+			if (weapon) input.Press("Drop");//drop weapon if holding one
+			if (transform.parent != null && transform.parent.parent != null && transform.parent.parent.parent != null)
+			{
+				model.transform.SetParent(transform.parent.parent.parent);//if enemy is part of an auto-unloading section of the level
+			}
+			else
+			{
+				model.transform.SetParent(null);//if enemy is always enabled
+			}
+			Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
 		}
-		else
-		{
-			model.transform.SetParent(null);//if enemy is always enabled
-		}
-		Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
 	}
 
 	public void OnTimeSlow()

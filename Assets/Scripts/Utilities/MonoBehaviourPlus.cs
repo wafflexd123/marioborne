@@ -52,15 +52,67 @@ public class MonoBehaviourPlus : MonoBehaviour
 		return (a - b).sqrMagnitude < errorMargin * errorMargin;
 	}
 
-	public IEnumerator LerpToPos(Transform transformToLerp, Position pos, float speed, Action onEnd = null, float error = 0.001f)
+	public IEnumerator MoveToPos(Position worldPosition, float speed, Transform transform = null, Action onEnd = null, float error = 0.001f)
 	{
-		transformToLerp.localEulerAngles = pos.eulers;//temp
-		while (!ApproxEquals(transformToLerp.localPosition, pos.coords, error))
+		if (transform == null) transform = this.transform;
+		transform.eulerAngles = worldPosition.eulers;//temp
+		while (!ApproxEquals(transform.position, worldPosition.coords, error))
 		{
-			transformToLerp.localPosition = Vector3.MoveTowards(transformToLerp.localPosition, pos.coords, Time.fixedDeltaTime * speed);
+			transform.position = Vector3.MoveTowards(transform.position, worldPosition.coords, Time.fixedDeltaTime * speed);
 			yield return new WaitForFixedUpdate();
 		}
-		transformToLerp.localPosition = pos.coords;
+		transform.position = worldPosition.coords;
+		onEnd?.Invoke();
+	}
+
+	public IEnumerator MoveToPosLocal(Position localPosition, float speed, Transform transform = null, Action onEnd = null, float error = 0.001f)
+	{
+		if (transform == null) transform = this.transform;
+		transform.localEulerAngles = localPosition.eulers;//temp
+		while (!ApproxEquals(transform.localPosition, localPosition.coords, error))
+		{
+			transform.localPosition = Vector3.MoveTowards(transform.localPosition, localPosition.coords, Time.fixedDeltaTime * speed);
+			yield return new WaitForFixedUpdate();
+		}
+		transform.localPosition = localPosition.coords;
+		onEnd?.Invoke();
+	}
+
+	public IEnumerator LerpToPos(Position worldPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
+	{
+		if (transform == null) transform = this.transform;
+		if (easingFunction == null) easingFunction = EasingFunction.Linear;
+		Position startPosition = new Position(transform);
+		float timer = 0, percent, ease;
+		do
+		{
+			timer += Time.fixedDeltaTime;
+			percent = timer / time;
+			if (percent > 1) percent = 1;
+			ease = easingFunction(percent);
+			transform.eulerAngles = Vector3.LerpUnclamped(startPosition.eulers, worldPosition.eulers, ease);
+			transform.position = Vector3.LerpUnclamped(startPosition.coords, worldPosition.coords, ease);
+			yield return new WaitForFixedUpdate();
+		} while (percent < 1);
+		onEnd?.Invoke();
+	}
+
+	public IEnumerator LerpToPosLocal(Position localPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
+	{
+		if (transform == null) transform = this.transform;
+		if (easingFunction == null) easingFunction = EasingFunction.Linear;
+		Position startPosition = new Position(transform, true);
+		float timer = 0, percent, ease;
+		do
+		{
+			timer += Time.fixedDeltaTime;
+			percent = timer / time;
+			if (percent > 1) percent = 1;
+			ease = easingFunction(percent);
+			transform.localEulerAngles = Vector3.LerpUnclamped(startPosition.eulers, localPosition.eulers, ease);
+			transform.localPosition = Vector3.LerpUnclamped(startPosition.coords, localPosition.coords, ease);
+			yield return new WaitForFixedUpdate();
+		} while (percent < 1);
 		onEnd?.Invoke();
 	}
 

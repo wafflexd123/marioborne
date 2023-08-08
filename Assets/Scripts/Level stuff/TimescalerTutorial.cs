@@ -22,7 +22,7 @@ public class TimescalerTutorial : Raycastable
 					carparkLevelManager.timeScalerEnable = true;
 					Destroy(delete);
 					transform.parent = player.transform;
-					StartCoroutine(LerpToPos(transform, new Position(player.transform, true), 5f, ()=> Destroy(gameObject), .1f));
+					StartCoroutine(MoveToPosLocal(new Position(player.transform, true), 5f, transform, ()=> Destroy(gameObject), .1f));
 					yield break;
 				}
 				yield return null;

@@ -10,6 +10,7 @@ public class Gun : WeaponBase
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
+	public AudioClip audioPickup, audioFire;
 
 	new AudioSource audio;
 	Coroutine crtDelay;
@@ -44,6 +45,7 @@ public class Gun : WeaponBase
 		{
 			ammo = playerAmmo;
 			ui.SetActive(true);
+			audio.PlayOneShot(audioPickup);
 		}
 		else
 		{
@@ -78,7 +80,7 @@ public class Gun : WeaponBase
 			{
 				crtDelay = StartCoroutine(Delay());
 			}
-			audio.Play();
+			audio.PlayOneShot(audioFire);
 			//wielder.model.shoot = true;
 			animator.Shoot();
 			Shoot();

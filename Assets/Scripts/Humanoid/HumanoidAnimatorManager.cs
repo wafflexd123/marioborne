@@ -9,6 +9,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	//Inspector
 	public AudioClip[] footstepSounds, jumpingSounds, landingSounds;
 	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, minStepVolume, maxStepVolume, velocityAtMaxStepVolume;
+	public GameObject deathPosePrefab;
 
 	//Script
 	private AudioSource audioSource;
@@ -62,7 +63,6 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 			animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
 			animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
 			//animator.SetBool("falling", Mathf.Abs(value.y) >= airSpeed);
-			animator.SetFloat("timeScale", Time.timeScale);
 		}
 	}
 

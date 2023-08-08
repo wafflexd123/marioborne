@@ -152,7 +152,41 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		Collide();
+		if (!IsGrounded)
+		{
+			Vector3 lastGroundPos = currentGroundPosition;
+			CheckGround();//this will call twice a frame but cant be bothered
+			if (IsGrounded)
+			{
+				float distance = lastGroundPos.y - collider.transform.position.y;
+				if (queueRoll && distance >= fallRollEngageDistance)//if queueing a roll & hit the ground at roll distance
+				{
+					animator.roll = true;
+					queueRoll = false;
+					StopCoroutine(crtQueueRoll);
+					crtQueueRoll = null;
+					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
+				}
+				else if (distance >= fallCrouchEngageDistance)//if hit the ground at crouch distance
+				{
+					animator.land = true;
+					if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
+					{
+						queueRoll = false;
+						StopCoroutine(crtQueueRoll);
+						crtQueueRoll = null;
+					}
+					float damageMagnitude = Mathf.InverseLerp(minDamageDistance, maxDamageDistance, distance);
+					if (damageMagnitude > 0)
+					{
+						xzVelocity.vector *= 1 - damageMagnitude;//reduce lateral velocity according to percent of health decreased
+						Health(Mathf.Lerp(0, maxHealth, damageMagnitude), DeathType.Fall);
+					}
+				}
+				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
+			}
+		}
+		xzVelocity.vector = rigidbody.velocity;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
 	}
 
 	void OnDrawGizmosSelected()
@@ -207,7 +241,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	void ControlRigidbody()
 	{
 		if (useGravity && !IsGrounded) yVelocity.AddForce(gravity, ForceMode.Acceleration);//gravity
-		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);
+		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
 		velocity *= Time.timeScale;
 		rigidbody.velocity = velocity;
 		animator.velocity = velocity;
@@ -229,45 +263,6 @@ public class PlayerMovement : MonoBehaviourPlus
 			yield return new WaitForSeconds(rollRequeueTime);
 			crtQueueRoll = null;
 		}
-	}
-
-	void Collide()
-	{
-		if (!IsGrounded)
-		{
-			Vector3 lastGroundPos = currentGroundPosition;
-			CheckGround();//this will call twice a frame but cant be bothered
-			if (IsGrounded)
-			{
-				float distance = lastGroundPos.y - collider.transform.position.y;
-				if (queueRoll && distance >= fallRollEngageDistance)//if queueing a roll & hit the ground at roll distance
-				{
-					animator.roll = true;
-					queueRoll = false;
-					StopCoroutine(crtQueueRoll);
-					crtQueueRoll = null;
-					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
-				}
-				else if (distance >= fallCrouchEngageDistance)//if hit the ground at crouch distance
-				{
-					animator.land = true;
-					if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
-					{
-						queueRoll = false;
-						StopCoroutine(crtQueueRoll);
-						crtQueueRoll = null;
-					}
-					float damageMagnitude = Mathf.InverseLerp(minDamageDistance, maxDamageDistance, distance);
-					if (damageMagnitude > 0)
-					{
-						xzVelocity.vector *= 1 - damageMagnitude;//reduce lateral velocity according to percent of health decreased
-						Health(Mathf.Lerp(0, maxHealth, damageMagnitude), DeathType.Fall);
-					}
-				}
-				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
-			}
-		}
-		xzVelocity.vector = rigidbody.velocity;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
 	}
 
 	void Slide()
@@ -394,6 +389,18 @@ public class PlayerMovement : MonoBehaviourPlus
 	//}
 	#endregion
 	#region Misc
+	public void ResetVelocity()
+	{
+		xzVelocity.vector = Vector3.zero;
+		yVelocity.vector = Vector3.zero;
+		rigidbody.velocity = Vector3.zero;
+	}
+
+	public void EnableCollider(bool enable)
+	{
+		collider.enabled = enable;
+	}
+
 	void PrintForce(Vector3 intendedVelocity)
 	{
 		if (Console.Enabled)
@@ -472,7 +479,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		public Vector3 vector;
 		ForceCurve currentCurveDebug;
-		PlayerMovement player;
+		readonly PlayerMovement player;
 
 		public Vector(PlayerMovement player)
 		{

@@ -9,12 +9,13 @@ public class Player : Humanoid
 	//Inspector
 	public static Player singlePlayer;
 	public bool invincibility;
-	public float maxInteractDistance;
+	public float maxInteractDistance, teleportSpeed;
 
 	//Public
 	public RaycastHit raycast;
 	[HideInInspector] public bool hasDied;
 	[HideInInspector] public PlayerMovement movement;
+	[HideInInspector] public PlayerCamera cameraController;
 	[HideInInspector] public WeaponBase weapon;
 	[HideInInspector] public Fists fists;
 	[HideInInspector] public new Camera camera;
@@ -24,6 +25,7 @@ public class Player : Humanoid
 	WickUI wickUI;
 	GameObject escMenu;
 	bool enableInput = true;
+	Coroutine crtMoveToEnemy;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
@@ -31,7 +33,8 @@ public class Player : Humanoid
 	protected override void Awake()
 	{
 		base.Awake();
-		camera = transform.Find("Head").Find("Eyes").Find("Camera").GetComponent<Camera>();
+		cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
+		camera = cameraController.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		fists = transform.Find("Body").Find("Hand").GetComponent<Fists>();
 		singlePlayer = this;
 		cnsRaycast = Console.AddLine();
@@ -54,6 +57,7 @@ public class Player : Humanoid
 			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
 			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
+			if (Input.GetKeyDown(KeyCode.E) && FindComponent(raycast.transform, out Enemy e)) TeleportToEnemy(e);
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
@@ -113,6 +117,27 @@ public class Player : Humanoid
 			enableInput = false;
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
+		}
+	}
+
+	void TeleportToEnemy(Enemy enemy)
+	{
+		if (enemy.enabled && crtMoveToEnemy == null)//dont teleport to dead/disabled enemies; will cause issues otherwise
+		{
+			Instantiate(model.deathPosePrefab, transform.position, transform.rotation);
+			cameraController.enabled = false;
+			movement.enabled = false;
+			movement.ResetVelocity();
+			movement.EnableCollider(false);
+			enemy.enabled = false;
+			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
+			{
+				Destroy(enemy.gameObject);
+				cameraController.enabled = true;
+				movement.EnableCollider(true);
+				movement.enabled = true;
+				crtMoveToEnemy = null;
+			}, EasingFunction.EaseInSine));
 		}
 	}
 }

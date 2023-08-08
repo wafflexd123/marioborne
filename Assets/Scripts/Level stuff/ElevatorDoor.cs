@@ -5,7 +5,7 @@ using UnityEngine;
 public class ElevatorDoor : MonoBehaviourPlus
 {
 	public Transform leftDoor, rightDoor;
-	public float speed, zMovement;
+	public float moveTime, zMovement;
 	public bool animateOnFirstFrame, isOpen;
 	Position leftOpen, leftClosed, rightOpen, rightClosed;
 	Coroutine crtLeft, crtRight;
@@ -43,8 +43,8 @@ public class ElevatorDoor : MonoBehaviourPlus
 	{
 		if (!isOpen)
 		{
-			ResetRoutine(LerpToPos(leftDoor, leftOpen, speed), ref crtLeft);
-			ResetRoutine(LerpToPos(rightDoor, rightOpen, speed, () => { isOpen = true; crtRight = null; }), ref crtRight);
+			ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor), ref crtLeft);
+			ResetRoutine(MoveToPosLocal(rightOpen, moveTime, rightDoor, () => { isOpen = true; crtRight = null; }), ref crtRight);
 		}
 	}
 
@@ -52,8 +52,8 @@ public class ElevatorDoor : MonoBehaviourPlus
 	{
 		if (isOpen)
 		{
-			ResetRoutine(LerpToPos(leftDoor, leftClosed, speed), ref crtLeft);
-			ResetRoutine(LerpToPos(rightDoor, rightClosed, speed, () => { isOpen = false; crtRight = null; }), ref crtRight);
+			ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor), ref crtLeft);
+			ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; }), ref crtRight);
 		}
 	}
 }
