@@ -12,12 +12,12 @@ public class Gun : WeaponBase
 	public Transform firePosition;
 	public AudioClip audioPickup, audioFire;
 
+	protected Ammo ammo;
 	new AudioSource audio;
 	Coroutine crtDelay;
 	GameObject ui, qToDrop;
 	Image imgReloadPercent;
 	TMP_Text txtAmmo;
-	Ammo ammo;
 	GunAnimator animator;
 
 	public override bool IsFiring => false;
@@ -89,7 +89,7 @@ public class Gun : WeaponBase
 
 	protected virtual void Shoot()
 	{
-		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder);
+		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder, ammo.color);
 	}
 
 	IEnumerator DelayWithUI()
@@ -118,6 +118,7 @@ public class Gun : WeaponBase
 	{
 		public bool isInfinite;
 		public int startAmount;
+		public Color color;
 		[HideInInspector] public int amount;
 
 		public bool TryFire()

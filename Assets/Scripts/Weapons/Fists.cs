@@ -6,7 +6,7 @@ public class Fists : MonoBehaviourPlus
 {
 	public float punchDelay, deflectDelay;
 	Coroutine crtDeflect, crtPunch;
-	GameObject reflectWindow;
+	ReflectWindow reflectWindow;
 	Player player;
 	Image deflectPercent;
 	new Collider collider;
@@ -18,7 +18,7 @@ public class Fists : MonoBehaviourPlus
 	{
 		collider = GetComponent<Collider>();
 		player = GetComponentInParent<Player>();
-		reflectWindow = player.transform.Find("ReflectWindow").gameObject;
+		reflectWindow = player.transform.Find("ReflectWindow").GetComponent<ReflectWindow>();
 		deflectPercent = player.transform.Find("UI").Find("Deflect").GetComponent<Image>();
 		player.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
 		{
@@ -56,13 +56,13 @@ public class Fists : MonoBehaviourPlus
 		IEnumerator Deflect()
 		{
 			player.model.deflect = true;
-			reflectWindow.SetActive(true);
+			reflectWindow.enabled = true;
 			_isFiring = true;
 			isDeflecting = true;
 			yield return new WaitUntil(() => !player.model.deflect);
 			isDeflecting = false;
 			_isFiring = false;
-			reflectWindow.SetActive(false);
+			reflectWindow.enabled = false;
 
 			float timer = 0;
 			deflectPercent.gameObject.SetActive(true);

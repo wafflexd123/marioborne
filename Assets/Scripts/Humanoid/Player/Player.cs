@@ -10,6 +10,7 @@ public class Player : Humanoid
 	public static Player singlePlayer;
 	public bool invincibility;
 	public float maxInteractDistance, teleportSpeed;
+	[SerializeField] LayerMask raycastIgnore;
 
 	//Public
 	public RaycastHit raycast;
@@ -42,6 +43,7 @@ public class Player : Humanoid
 		Transform ui = transform.Find("UI");
 		escMenu = ui.Find("Escape Menu").gameObject;
 		wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
+		raycastIgnore = ~raycastIgnore;//invert layermask
 	}
 
 	//private void Start()
@@ -54,7 +56,7 @@ public class Player : Humanoid
 		if (enableInput)
 		{
 			HandleInput();
-			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
+			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, raycastIgnore, QueryTriggerInteraction.Ignore);
 			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
 			if (Input.GetKeyDown(KeyCode.E) && FindComponent(raycast.transform, out Enemy e)) TeleportToEnemy(e);

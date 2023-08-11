@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 229424147370675689}
   - component: {fileID: 229424147370675686}
   - component: {fileID: 229424147370675687}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229424147370675685}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0.05}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1470589054315451327}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &229424147370675689
 MeshFilter:
@@ -94,17 +94,17 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 23753
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8452
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+    m_Bits: 0
+  m_LayerOverridePriority: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.0000005
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1470589054315451320
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 1470589054315451327}
   - component: {fileID: 1470589054315451325}
   - component: {fileID: 1470589054315451326}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -132,6 +132,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470589054315451320}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -140,7 +141,6 @@ Transform:
   - {fileID: 229424147370675684}
   - {fileID: 6793499346858625829}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1470589054315451325
 MonoBehaviour:
@@ -149,15 +149,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470589054315451320}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5c5d219cbff24a499aa5197ccb112d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canReflect: 1
-  speed: 0.5
   maxLifetime: 15
-  playerColor: {r: 1, g: 1, b: 1, a: 1}
+  direction: {x: 0, y: 0, z: 0}
+  speed: 0.5
 --- !u!54 &1470589054315451326
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,14 +173,14 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 23753
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8452
+    m_Bits: 45312
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 126
   m_CollisionDetection: 2
@@ -196,7 +195,7 @@ GameObject:
   - component: {fileID: 6793499346858625829}
   - component: {fileID: 7866365536060916841}
   - component: {fileID: 2213469304298971146}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Bullet Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,13 +209,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5608947100010310870}
+  serializedVersion: 2
   m_LocalRotation: {x: -1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1470589054315451327}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!198 &7866365536060916841
 ParticleSystem:

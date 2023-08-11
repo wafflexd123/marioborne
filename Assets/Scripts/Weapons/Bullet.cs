@@ -1,19 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviourPlus
 {
-	public bool canReflect;
-	public float speed, maxLifetime;
-	public Color playerColor;
-	public Vector3 Direction { get => _direction; set => _direction = value; }
-	Vector3 _direction;
-	Humanoid shooter;
+	//Inspector
+	public float maxLifetime;
+
+	//Script
+	[HideInInspector] public Vector3 direction;
+	[HideInInspector] public float speed;
+	public Type shooterType;
 	float timer;
-	bool reflected;
 	new ParticleSystem particleSystem;
 	new Renderer renderer;
+
+	public Color color
+	{
+		set
+		{
+			ParticleSystem.MainModule p = particleSystem.main;
+			p.startColor = value;
+			renderer.material.color = value;
+		}
+		get => renderer.material.color;
+	}
 
 	private void Awake()
 	{
@@ -21,67 +33,47 @@ public class Bullet : MonoBehaviourPlus
 		renderer = transform.Find("Model").GetComponent<Renderer>();
 	}
 
-	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter)
+	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color)
 	{
 		this.speed = speed;
-		this.Direction = direction;
-		this.shooter = shooter;
-		if (shooter is Player) SetColor(playerColor);
+		this.direction = direction;
+		shooterType = shooter.GetType();
+		this.color = color;
+		enabled = true;
 		return this;
 	}
 
 	private void FixedUpdate()
 	{
-		transform.rotation = Quaternion.LookRotation(Direction);
-		transform.position += speed * Time.fixedDeltaTime * Direction;
+		transform.rotation = Quaternion.LookRotation(direction);
+		transform.position += speed * Time.fixedDeltaTime * direction;
 		timer += Time.fixedDeltaTime;
 		if (timer >= maxLifetime) Destroy(gameObject);
 	}
 
-	void SetColor(Color color)
+	private void OnCollisionEnter(Collision collision)
 	{
-		ParticleSystem.MainModule p = particleSystem.main;
-		p.startColor = color;
-		renderer.material.color = color;
+		if (FindComponent(collision.transform, out IBulletReceiver bulletReceiver))
+		{
+			bulletReceiver.OnBulletHit(collision, this);
+		}
+		else Destroy(gameObject);
 	}
 
-	private void OnTriggerEnter(Collider other)
+	private void OnEnable()
 	{
-		if (canReflect && FindComponent(other.transform, out BulletReflectSurface brs) && brs.enableReflect)//if hit a reflect surface
-		{
-			if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;
-			else Direction = -Direction;
-			reflected = true;
-			SetColor(playerColor);
-		}
-		else if (FindComponent(other.transform, out Humanoid human))//if hit a humanoid
-		{
-			if (reflected || human.GetType() != shooter.GetType())//if reflected || if shooter and target are not both AI or both a player
-			{
-				human.Kill(DeathType.Bullet);
-				Destroy(gameObject);
-			}
-		}
-		else Destroy(gameObject);//if hit a normal object
+		GetComponent<Rigidbody>().isKinematic = false;
+		transform.Find("Model").GetComponent<Collider>().enabled = true;
 	}
 
-	//private void OnCollisionEnter(Collision collision)
-	//{
-	//	if (canReflect && FindComponent(collision.collider.transform, out BulletReflectSurface brs) && brs.enableReflect)//look for reflection surface first
-	//	{
-	//		reflected = true;
-	//		SetColor(playerColor);
-	//		if (FindComponent(brs.transform, out Humanoid humanoid)) Direction = humanoid.LookDirection;
-	//		else Direction = Vector3.Reflect(Direction, collision.contacts[0].normal);
-	//	}
-	//	else if (FindComponent(collision.collider.transform, out Humanoid human))
-	//	{
-	//		if (reflected || human.GetType() != shooter.GetType())//if reflected || if shooter and target are not both AI or both a player
-	//		{
-	//			human.Kill(DeathType.Bullet);
-	//			Destroy(gameObject);
-	//		}
-	//	}
-	//	else Destroy(gameObject);
-	//}
+	private void OnDisable()
+	{
+		GetComponent<Rigidbody>().isKinematic = true;
+		transform.Find("Model").GetComponent<Collider>().enabled = false;
+	}
+}
+
+public interface IBulletReceiver
+{
+	public void OnBulletHit(Collision collision, Bullet bullet);
 }

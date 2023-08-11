@@ -135,50 +135,16 @@ public class MonoBehaviourPlus : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Iterates through transform's parents to component in layer
-	/// </summary>
-	public static bool FindComponent<T>(int layerMask, Transform transform, out T result) where T : MonoBehaviour
-	{
-		while (transform != null)
-		{
-			if (((1 << transform.gameObject.layer) & layerMask) != 0)
-			{
-				if (transform.TryGetComponent<T>(out result)) return true;
-			}
-			transform = transform.parent;
-		}
-		result = null;
-		return false;
-	}
-
-	/// <summary>
-	/// Iterates through transform's parents to component with tag
-	/// </summary>
-	public static bool FindComponent<T>(string tag, Transform transform, out T result) where T : MonoBehaviour
-	{
-		while (transform != null)
-		{
-			if (transform.CompareTag(tag))
-			{
-				if (transform.TryGetComponent<T>(out result)) return true;
-			}
-			transform = transform.parent;
-		}
-		result = null;
-		return false;
-	}
-
-	/// <summary>
 	/// Iterates through transform's parents to component
 	/// </summary>
-	public static bool FindComponent<T>(Transform transform, out T result) where T : MonoBehaviour
+	public static bool FindComponent<T>(Transform transform, out T result)
 	{
 		while (transform != null)
 		{
-			if (transform.TryGetComponent<T>(out result)) return true;
+			if (transform.TryGetComponent(out result)) return true;
 			transform = transform.parent;
 		}
-		result = null;
+		result = default;
 		return false;
 	}
 
