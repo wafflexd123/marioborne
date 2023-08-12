@@ -15,6 +15,7 @@ public class FadeText : MonoBehaviourPlus
 	{
 		if (textArray == null || textArray.Length == 0)
 		{
+			Transform transform = this.transform.GetChild(0);
 			textArray = new TextMeshProUGUI[transform.childCount];
 			for (int i = 0; i < textArray.Length; i++)
 			{
