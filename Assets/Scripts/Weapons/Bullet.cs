@@ -73,12 +73,14 @@ public class Bullet : MonoBehaviourPlus
 	{
 		GetComponent<Rigidbody>().isKinematic = false;
 		transform.Find("Model").GetComponent<Collider>().enabled = true;
+		particleSystem.Play();
 	}
 
 	private void OnDisable()
 	{
 		GetComponent<Rigidbody>().isKinematic = true;
 		transform.Find("Model").GetComponent<Collider>().enabled = false;
+		particleSystem.Stop();
 	}
 }
 
