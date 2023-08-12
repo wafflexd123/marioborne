@@ -3,77 +3,115 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeText : MonoBehaviour
+public class FadeText : MonoBehaviourPlus
 {
-    [SerializeField] private float fadeTime = 1.0f;
-    [SerializeField] private TextMeshProUGUI[] textArray;
+	[SerializeField] bool fadeInAll, zeroAlphasOnStart, fadeOutOnTriggerExit, disableMultipleFadeIns;
+	[SerializeField] private float fadeTime = 1.0f;
+	[Header("Optional")]
+	[SerializeField] private TextMeshProUGUI[] textArray;
+	Coroutine crtFade;
 
-    public void FadeInTextByWord()
-    {
-        StartCoroutine(FadeInWords());
-    }
+	private void Start()
+	{
+		if (textArray == null || textArray.Length == 0)
+		{
+			textArray = new TextMeshProUGUI[transform.childCount];
+			for (int i = 0; i < textArray.Length; i++)
+			{
+				textArray[i] = transform.GetChild(i).GetComponent<TextMeshProUGUI>();
+			}
+		}
+		if (zeroAlphasOnStart)
+		{
+			for (int i = 0; i < textArray.Length; i++)
+			{
+				textArray[i].alpha = 0;
+			}
+		}
+	}
 
-    public void FadeInAllText()
-    {
-        StartCoroutine(FadeInAll());
-    }
+	public void FadeInTextByWord()
+	{
+		ResetRoutine(E(), ref crtFade);
+		IEnumerator E()
+		{
+			for (int i = 0; i < textArray.Length; i++)
+			{
+				while (textArray[i].alpha < 1.0f)
+				{
+					textArray[i].alpha += Time.deltaTime / fadeTime;
+					yield return null;
+				}
+			}
+		}
+	}
 
-    public void FadeOutAllText()
-    {
-        StartCoroutine(FadeOutAll());
-    }
+	public void FadeInAllText()
+	{
+		ResetRoutine(E(), ref crtFade);
+		IEnumerator E()
+		{
+			bool done = false;
 
-    private IEnumerator FadeInWords()
-    {
-        for (int i = 0; i < textArray.Length; i++)
-        {
-            while (textArray[i].color.a < 1.0f)
-            {
-                textArray[i].color = new Color(textArray[i].color.r, textArray[i].color.g, textArray[i].color.b, textArray[i].color.a + (Time.deltaTime / fadeTime));
-                yield return null;
-            }
-        }
-    }
+			while (!done)
+			{
+				done = true;
 
-    private IEnumerator FadeInAll()
-    {
-        bool done = false;
+				for (int i = 0; i < textArray.Length; i++)
+				{
+					if (textArray[i].alpha < 1.0f)
+					{
+						textArray[i].alpha += Time.deltaTime / fadeTime;
+						done = false;
+					}
+				}
 
-        while (!done)
-        {
-            done = true;
+				yield return null;
+			}
+		}
+	}
 
-            for (int i = 0; i < textArray.Length; i++)
-            {
-                if (textArray[i].color.a < 1.0f)
-                {
-                    textArray[i].color = new Color(textArray[i].color.r, textArray[i].color.g, textArray[i].color.b, textArray[i].color.a + (Time.deltaTime / fadeTime));
-                    done = false;
-                }
-            }
+	public void FadeOutAllText()
+	{
+		ResetRoutine(E(), ref crtFade);
+		IEnumerator E()
+		{
+			bool done = false;
 
-            yield return null;
-        }
-    }
+			while (!done)
+			{
+				done = true;
 
-    private IEnumerator FadeOutAll()
-    {
-        bool done = false;
+				for (int i = 0; i < textArray.Length; i++)
+				{
+					if (textArray[i].alpha > 0.0f)
+					{
+						textArray[i].alpha -= Time.deltaTime / fadeTime;
+						done = false;
+					}
+				}
 
-        while (!done)
-        {
-            done = true;
+				yield return null;
+			}
 
-            for (int i = 0; i < textArray.Length; i++)
-            {
-                if (textArray[i].color.a > 0.0f)
-                {
-                    textArray[i].color = new Color(textArray[i].color.r, textArray[i].color.g, textArray[i].color.b, textArray[i].color.a - (Time.deltaTime / fadeTime));
-                    done = false;
-                }
-            }
+			if (disableMultipleFadeIns) Destroy(gameObject);
+		}
+	}
 
-            yield return null;
-        }
-    }
+	private void OnTriggerEnter(Collider other)
+	{
+		if (FindComponent(other.transform, out Player _))
+		{
+			if (fadeInAll) FadeInAllText();
+			else FadeInTextByWord();
+		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (fadeOutOnTriggerExit && FindComponent(other.transform, out Player _))
+		{
+			FadeOutAllText();
+		}
+	}
 }
