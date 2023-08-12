@@ -11,12 +11,14 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	//Inspector
 	[SerializeField] Transform points;
-	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
+    [SerializeField] Transform coverPoints;
+	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, rangedSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
 
 	//Script
 	public WeaponBase weapon;
 	Vector3 lookingAt, velocity = Vector3.zero;
 	int destPoint = 0;
+    int destCoverPoint = 0;
 	float _agentSpeed, maxInvestigateTimer = 0, investigateTimer = 0, rangedCloseDistance;
 	NavMeshAgent agent;
 	FieldOfView fov;
@@ -33,7 +35,8 @@ public class Enemy : Humanoid, ITimeScaleListener
 	public override Vector3 LookingAt => lookingAt;
 	public float AgentSpeed { get => _agentSpeed; set { _agentSpeed = value; agent.speed = value * Time.timeScale; } }
 	public Transform Points { get => points; set { points = value; FindClosestPoint(); } }
-	public bool IsStopped { get => agent.isStopped; set { if (agent.isOnNavMesh) agent.isStopped = value; } }
+    public Transform CoverPoints { get => coverPoints; set { coverPoints = value; FindClosestPoint(); } }
+    public bool IsStopped { get => agent.isStopped; set { if (agent.isOnNavMesh) agent.isStopped = value; } }
 	public EnemyState State
 	{
 		get => _state;
@@ -92,6 +95,20 @@ public class Enemy : Humanoid, ITimeScaleListener
 				Investigate();
 				break;
 		}
+
+        //for debugging
+        for(int i=0; i<CoverPoints.childCount; i++)
+        {
+            Physics.Raycast(CoverPoints.GetChild(i).position, player.camera.transform.position - CoverPoints.GetChild(i).position, out RaycastHit hit, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
+            if (hit.collider != null && !hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
+            {
+                Debug.DrawRay(CoverPoints.GetChild(i).position, player.model.transform.position - CoverPoints.GetChild(i).position, Color.green);
+            }
+            else
+            {
+                Debug.DrawRay(CoverPoints.GetChild(i).position, player.model.transform.position - CoverPoints.GetChild(i).position, Color.red);
+            }
+        }
 	}
 
 	private void FixedUpdate()
@@ -104,8 +121,10 @@ public class Enemy : Humanoid, ITimeScaleListener
 		switch (typeOfWeapon)
 		{
 			case EnemyType.Ranged:
-				IsStopped = true;
-				rangedCloseDistance = UnityEngine.Random.Range(rangedCloseDistanceMin, rangedCloseDistanceMax);
+                //IsStopped = true;
+                AgentSpeed = rangedSpeed;
+                FindClosestCover();
+                rangedCloseDistance = UnityEngine.Random.Range(rangedCloseDistanceMin, rangedCloseDistanceMax);
 				break;
 			case EnemyType.Melee:
 				AgentSpeed = meleeSpeed;
@@ -115,11 +134,13 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	private void Engage()
 	{
+        /*
 		if (!fov.canSeePlayer && Vector3.Distance(transform.position, player.transform.position) > rangedCloseDistanceMin)
 		{
 			State = EnemyState.Investigate;
 			return;
 		}
+        */
 		if (!player.hasDied)
 		{
 			switch (typeOfWeapon)
@@ -135,7 +156,13 @@ public class Enemy : Humanoid, ITimeScaleListener
 					break;
 
 				case EnemyType.Ranged:
-					if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
+
+                    if(destCoverPoint >= 0)
+                    {
+                        agent.SetDestination(CoverPoints.GetChild(destCoverPoint).position);
+                    }
+                    /*
+					else if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
 					{
 						lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, ((Gun)weapon).bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
 					}
@@ -146,7 +173,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 					weapon.transform.LookAt(lookingAt);
 					transform.LookAt(player.transform);
-
+                    
 					if (Vector3.Distance(transform.position, player.transform.position) <= rangedCloseDistance)
 					{
 						IsStopped = true;
@@ -156,7 +183,9 @@ public class Enemy : Humanoid, ITimeScaleListener
 						agent.SetDestination(player.transform.position);
 						IsStopped = false;
 					}
+                    */
 					input.Press("Mouse", () => -1, () => false);//left click (shoot)
+                    
 					break;
 			}
 		}
@@ -204,6 +233,38 @@ public class Enemy : Humanoid, ITimeScaleListener
 		}
 		destPoint = -1;
 	}
+
+    void FindClosestCover()
+    {
+        if(CoverPoints != null)
+        {
+            if (coverPoints.childCount > 0)
+            {
+                int closestPoint = 0;
+                float dist = Mathf.Infinity;
+                for (int i = 0; i < CoverPoints.childCount; i++)
+                {
+                    float tempDist = Vector3.Distance(transform.position, CoverPoints.GetChild(i).position);
+                    if (tempDist < dist)
+                    {
+                        Physics.Raycast(CoverPoints.GetChild(i).position, player.camera.transform.position - CoverPoints.GetChild(i).position, out RaycastHit hit, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
+                        if(hit.collider != null && !hit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
+                        {
+                            closestPoint = i;
+                        }
+                    }
+                }
+                destCoverPoint = closestPoint;
+                return;
+            }
+            else
+            {
+                agent.SetDestination(CoverPoints.position);//if there is only 1 point, go to it and then idle
+                ResetRoutine(RotateTowardsPoint(), ref crtRotate);
+            }
+        }
+        destCoverPoint = -1;
+    }
 
 	IEnumerator RotateTowardsPoint()//temporary, idk how to get them to rotate on their own, and they rotate back anyway so rip
 	{
