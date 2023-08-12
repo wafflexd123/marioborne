@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviourPlus
@@ -9,28 +7,40 @@ public class Bullet : MonoBehaviourPlus
 	public float maxLifetime;
 
 	//Script
-	[HideInInspector] public Vector3 direction;
 	[HideInInspector] public float speed;
 	public Type shooterType;
 	float timer;
 	new ParticleSystem particleSystem;
 	new Renderer renderer;
+	new Rigidbody rigidbody;
+	Vector3 _direction;
+
+	public Vector3 direction
+	{
+		get => _direction;
+		set
+		{
+			_direction = value;
+			transform.rotation = Quaternion.LookRotation(_direction);
+		}
+	}
 
 	public Color color
 	{
+		get => renderer.material.color;
 		set
 		{
 			ParticleSystem.MainModule p = particleSystem.main;
 			p.startColor = value;
 			renderer.material.color = value;
 		}
-		get => renderer.material.color;
 	}
 
 	private void Awake()
 	{
 		particleSystem = transform.Find("Bullet Trail").GetComponent<ParticleSystem>();
 		renderer = transform.Find("Model").GetComponent<Renderer>();
+		rigidbody = GetComponent<Rigidbody>();
 	}
 
 	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color)
@@ -45,8 +55,7 @@ public class Bullet : MonoBehaviourPlus
 
 	private void FixedUpdate()
 	{
-		transform.rotation = Quaternion.LookRotation(direction);
-		transform.position += speed * Time.fixedDeltaTime * direction;
+		rigidbody.velocity = Time.timeScale * speed * direction;
 		timer += Time.fixedDeltaTime;
 		if (timer >= maxLifetime) Destroy(gameObject);
 	}

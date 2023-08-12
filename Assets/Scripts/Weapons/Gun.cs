@@ -89,7 +89,18 @@ public class Gun : WeaponBase
 
 	protected virtual void Shoot()
 	{
-		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder, ammo.color);
+		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color);
+	}
+
+	protected Vector3 DirectionWithSpread(float maxSpread)
+	{
+		if (maxSpread == 0) return (wielder.LookingAt - firePosition.position).normalized;
+		else return ((wielder.LookingAt - firePosition.position).normalized + RandomSpread(maxSpread)).normalized;
+	}
+
+	protected Vector3 RandomSpread(float maxSpread)
+	{
+		return maxSpread == 0 ? Vector3.zero : new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread));
 	}
 
 	IEnumerator DelayWithUI()
@@ -119,6 +130,7 @@ public class Gun : WeaponBase
 		public bool isInfinite;
 		public int startAmount;
 		public Color color;
+		public float maxSpread;
 		[HideInInspector] public int amount;
 
 		public bool TryFire()

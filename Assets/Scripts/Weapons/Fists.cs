@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UI;
 
 public class Fists : MonoBehaviourPlus
 {
-	public float punchDelay, deflectDelay;
+	public float punchDelay, deflectDelay, deflectTime;
 	Coroutine crtDeflect, crtPunch;
-	ReflectWindow reflectWindow;
+	[SerializeField] ReflectWindow reflectWindow;
 	Player player;
 	Image deflectPercent;
 	new Collider collider;
@@ -18,7 +19,7 @@ public class Fists : MonoBehaviourPlus
 	{
 		collider = GetComponent<Collider>();
 		player = GetComponentInParent<Player>();
-		reflectWindow = player.transform.Find("ReflectWindow").GetComponent<ReflectWindow>();
+		reflectWindow = Instantiate(reflectWindow).Initialise(player);
 		deflectPercent = player.transform.Find("UI").Find("Deflect").GetComponent<Image>();
 		player.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
 		{
@@ -59,16 +60,14 @@ public class Fists : MonoBehaviourPlus
 			reflectWindow.enabled = true;
 			_isFiring = true;
 			isDeflecting = true;
-			yield return new WaitUntil(() => !player.model.deflect);
+			for (float timer = 0; timer < deflectTime; timer += Time.fixedDeltaTime) yield return new WaitForFixedUpdate();
 			isDeflecting = false;
 			_isFiring = false;
 			reflectWindow.enabled = false;
 
-			float timer = 0;
 			deflectPercent.gameObject.SetActive(true);
-			while (timer < deflectDelay)
+			for (float timer = 0; timer < deflectDelay; timer += Time.fixedDeltaTime)
 			{
-				timer += Time.fixedDeltaTime;
 				deflectPercent.fillAmount = timer / deflectDelay;
 				yield return new WaitForFixedUpdate();
 			}
