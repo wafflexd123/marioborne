@@ -7,6 +7,7 @@ public class DreamLevelManager : MonoBehaviourPlus
 {
 	public RawImage whiteFade;
 	public float startTime, whiteFadeTime;
+	public GameObject firstSection;
 	IEnumerator Start()
 	{
 		float timer;
@@ -17,5 +18,11 @@ public class DreamLevelManager : MonoBehaviourPlus
 			yield return null;
 		}
 		Destroy(whiteFade.gameObject);
+		yield return new WaitUntil(() => firstSection == null);
+	}
+
+	public void TriggerDelete(GameObject gameObject)
+	{
+		Destroy(gameObject);
 	}
 }

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Console : MonoBehaviour
 {
-	public static bool Enabled { get => singleton.text.enabled; }
+	public static bool Enabled { get => singleton != null && singleton.text.enabled; }
 	static Console singleton;
 	static readonly List<Line> lines = new List<Line>();
 	static readonly StringBuilder stringBuilder = new StringBuilder();
