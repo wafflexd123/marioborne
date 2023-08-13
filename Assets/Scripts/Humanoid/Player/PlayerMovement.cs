@@ -135,8 +135,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	void FixedUpdate()
 	{
 		//Input
-		moveDirection = (collider.transform.forward * Input.GetAxis("Vertical") + collider.transform.right * Input.GetAxis("Horizontal")).normalized;
-
+		Debug.Log(transform.forward);
+	//	moveDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
+		moveDirection = transform.TransformDirection(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
 		//Control
 		CheckGround();
 		CheckWalls();
@@ -158,7 +159,7 @@ public class PlayerMovement : MonoBehaviourPlus
 			CheckGround();//this will call twice a frame but cant be bothered
 			if (IsGrounded)
 			{
-				float distance = lastGroundPos.y - collider.transform.position.y;
+				float distance = lastGroundPos.y - transform.position.y;
 				if (queueRoll && distance >= fallRollEngageDistance)//if queueing a roll & hit the ground at roll distance
 				{
 					animator.roll = true;
@@ -193,7 +194,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		Gizmos.color = Color.yellow;
 		if (collider == null) collider = transform.Find("Body").GetComponent<CapsuleCollider>();
-		Gizmos.DrawWireSphere(collider.transform.position + new Vector3(0, groundCheckYOffset + collider.radius), collider.radius);
+		Gizmos.DrawWireSphere(transform.position + new Vector3(0, groundCheckYOffset + collider.radius), collider.radius);
 	}
 	#endregion
 	#region Movement
@@ -220,11 +221,11 @@ public class PlayerMovement : MonoBehaviourPlus
 				}
 			}
 		}
-		else if (IsOnWall && (!Physics.Raycast(collider.transform.position + (collider.transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
+		else if (IsOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
 		{
 			if (!IsWallrunning) WallRun(true);
 			currentDrag = wallDrag;
-			if (moveDirection != Vector3.zero) xzVelocity.AddForce(wallForce, Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(collider.transform.forward, wallHit.normal).normalized, ForceMode.Acceleration);
+			if (moveDirection != Vector3.zero) xzVelocity.AddForce(wallForce, Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(transform.forward, wallHit.normal).normalized, ForceMode.Acceleration);
 			xzVelocity.AddForce(new Vector3(0, -wallRunGravity), ForceMode.Acceleration);
 		}
 		else//in air
@@ -280,10 +281,10 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void CheckGround()
 	{
-		if (Physics.SphereCast(collider.transform.position + (collider.transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -collider.transform.up, out groundHit, groundCheckDistance, ~(1 << 3)))
+		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance, ~(1 << 3)))
 		{
 			if (!IsGrounded) IsGrounded = true;
-			currentGroundPosition = collider.transform.position;
+			currentGroundPosition = transform.position;
 			return;
 		}
 		IsGrounded = false;
@@ -291,17 +292,17 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void CheckWalls()
 	{
-		if (!Raycast(collider.transform.right, 1) && !Raycast(-collider.transform.right, -1))
+		if (!Raycast(transform.right, 1) && !Raycast(-transform.right, -1))
 			wallDirection = 0;
 
 		bool Raycast(Vector3 vector, int direction)
 		{
-			if (Physics.Raycast(collider.transform.position, vector, out wallHit, wallCatchDistance))
+			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance))
 			{
 				if (Mathf.Abs(wallHit.normal.y) <= maxWallYNormal)
 				{
 					wallDirection = direction;
-					currentGroundPosition = collider.transform.position;//called after CheckGround(), using wall position as ground position for fall-damage checks
+					currentGroundPosition = transform.position;//called after CheckGround(), using wall position as ground position for fall-damage checks
 					return true;
 				}
 			}
@@ -350,16 +351,16 @@ public class PlayerMovement : MonoBehaviourPlus
 			{
 				if (IsWallrunning)
 				{
-					Force((collider.transform.up + wallHit.normal + wallJumpAngle).normalized * wallJumpForce);
+					Force((transform.up + wallHit.normal + wallJumpAngle).normalized * wallJumpForce);
 				}
 				else if (IsGrounded)
 				{
-					Force(collider.transform.up * jumpForce);
+					Force(transform.up * jumpForce);
 					canDoubleJump = false;
 				}
 				else if (canDoubleJump)
 				{
-					Force(collider.transform.up * doubleJumpForce);
+					Force(transform.up * doubleJumpForce);
 					canDoubleJump = false;
 				}
 			}

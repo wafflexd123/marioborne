@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class FadeText : MonoBehaviourPlus
 {
-	[SerializeField] bool fadeInAll, zeroAlphasOnStart, fadeOutOnTriggerExit, disableMultipleFadeIns;
+	[SerializeField] bool fadeInAll, zeroAlphasOnStart, fadeInOnStart, fadeOutOnTriggerExit, disableMultipleFadeIns;
 	[SerializeField] private float fadeTime = 1.0f;
 	[Header("Optional")]
 	[SerializeField] private TextMeshProUGUI[] textArray;
@@ -28,6 +28,11 @@ public class FadeText : MonoBehaviourPlus
 			{
 				textArray[i].alpha = 0;
 			}
+		}
+		if (fadeInOnStart)
+		{
+			if (fadeInAll) FadeInAllText();
+			else FadeInTextByWord();
 		}
 	}
 

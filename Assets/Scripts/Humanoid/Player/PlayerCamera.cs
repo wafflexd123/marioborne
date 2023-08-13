@@ -20,7 +20,7 @@ public class PlayerCamera : MonoBehaviour
 
 	void OnEnable()
 	{
-		rotation = transform.eulerAngles;
+		rotation = new Vector3(transform.localEulerAngles.x, transform.parent.localEulerAngles.y);
 	}
 
 	void Update()

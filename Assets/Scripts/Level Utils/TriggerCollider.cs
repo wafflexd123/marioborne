@@ -10,9 +10,8 @@ public class TriggerCollider : MonoBehaviour
 	private void Awake()
 	{
 		Collider collider = GetComponent<Collider>();
-		if (gameObject.layer == 0) gameObject.layer = 13;//ignore bullets layer
-		if (collider.excludeLayers == 0) collider.excludeLayers = 1 << 13;//ignore bullets layer
-		if (collider.includeLayers == 0) collider.includeLayers = ~(1 << 13);//ignore bullets layer
+		collider.isTrigger = true;
+		if (collider.excludeLayers == 0 || collider.includeLayers == 0) Debug.LogWarning("Trigger collider might not have correct include/exclude layers; might get unintentionally triggered", this);
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -32,5 +31,15 @@ public class TriggerCollider : MonoBehaviour
 		onExit.Invoke();
 		isTriggered = false;
 		if (this.other == other) this.other = null;
+	}
+
+	public static void TriggerDelete(GameObject gameObject)
+	{
+		Destroy(gameObject);
+	}
+
+	public void SetParent(Transform transform)
+	{
+		this.transform.SetParent(transform);
 	}
 }
