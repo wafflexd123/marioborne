@@ -14,6 +14,8 @@ public class Telekinesis : MonoBehaviour
     [SerializeField] private float wobbleFrequency = 1.0f;
     [SerializeField] private float wobbleAmplitude = 0.1f;
     [SerializeField] private float scrollSpeed = 1.0f;
+    [SerializeField] private float minDistance = 3.0f;
+    [SerializeField] private float maxDistance = 50.0f;
 
     private GameObject grabbedObject;
     private bool isGrabbing;
@@ -83,8 +85,8 @@ public class Telekinesis : MonoBehaviour
     {
         // Changing distance based on scroll wheel
         objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
-
-        // Calculating targetposition based on mouse input
+        objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
+        // Calculating target position based on mouse input
         Vector3 targetPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance)) + offset;
 
         // Adding wobble
