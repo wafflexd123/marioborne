@@ -135,9 +135,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	void FixedUpdate()
 	{
 		//Input
-		Debug.Log(transform.forward);
-	//	moveDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
-		moveDirection = transform.TransformDirection(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+		moveDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
+
 		//Control
 		CheckGround();
 		CheckWalls();
