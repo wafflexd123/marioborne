@@ -10,12 +10,12 @@ public interface IAIState
     //void Setup();
 
     public List<Transition> transitions { get; set; }
-    public AIController controller { get; set; }
+    //public AIController controller { get; set; }
 }
 //public abstract class IAIState
 
 public abstract class Transition
 {
     public IAIState targetState { get; private set; }
-    public bool RequirementsMet() { return false; }
+    public virtual bool RequirementsMet() { return false; }
 }

@@ -15,8 +15,9 @@ public class StandardAI : AIController
     protected ActiveShootingState activeShootingState;
     protected WaitState waitState;
     
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         states = new List<IAIState>();
         patrolState = new PatrolState();
         states.Add(patrolState);
@@ -28,6 +29,10 @@ public class StandardAI : AIController
         states.Add(activeShootingState);
         waitState = new WaitState();
         states.Add(waitState);
+
+        patrolState.transitions = new List<Transition>();
+        CanSeePlayerTransition NavigateFiring = new CanSeePlayerTransition(this);
+        patrolState.transitions.Add(NavigateFiring);
     }
 
     private void Start()
