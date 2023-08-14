@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviourPlus
 {
 	public Position handPosition;
-	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
+	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds, soundRadius;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
@@ -127,6 +127,21 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	{
 		if (FindComponent(other.transform, out Player player)) Pickup(player);
 	}
+
+    public void MakeSound()
+    {
+        if(wielder is Player)
+        {
+            Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius);
+            foreach (var enemyHeard in enemiesHeard)
+            { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+                if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+                {
+                    enemyHeard.GetComponentInParent<Enemy>().heardSound = true;
+                }
+            }
+        }
+    }
 
 	//private void OnCollisionEnter(Collision collision)
 	//{

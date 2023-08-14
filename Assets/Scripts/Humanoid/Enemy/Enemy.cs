@@ -13,6 +13,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 	[SerializeField] Transform points;
     [SerializeField] Transform coverPoints;
 	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, rangedSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
+    public bool heardSound = false;
 
 	//Script
 	public WeaponBase weapon;
@@ -48,9 +49,9 @@ public class Enemy : Humanoid, ITimeScaleListener
 				case EnemyState.Patrol:
 					InitPatrol();
 					break;
-				case EnemyState.Engage:
-					InitEngage();
-					break;
+				//case EnemyState.Engage:
+					//InitEngage();
+					//break;
 				case EnemyState.Investigate:
 					InitInvestigate();
 					break;
@@ -81,16 +82,16 @@ public class Enemy : Humanoid, ITimeScaleListener
 	{
 		model.velocity = agent.velocity;
 
-		if (fov.canSeePlayer) State = EnemyState.Engage; //changes to engage state once player is spotted
+		//if (fov.canSeePlayer) State = EnemyState.Engage; //changes to engage state once player is spotted
 
 		switch (State)//theoretically more efficient than if/else
 		{
 			case EnemyState.Patrol:
 				Patrol();
 				break;
-			case EnemyState.Engage:
-				Engage();
-				break;
+			//case EnemyState.Engage:
+				//Engage();
+				//break;
 			case EnemyState.Investigate:
 				Investigate();
 				break;
@@ -201,6 +202,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	private void Patrol()
 	{
+        if (heardSound) State = EnemyState.Investigate; //if a sound is heard, investigate
 		if (destPoint == -1) State = EnemyState.Idle;//if there are no points to patrol
 		else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
 		{
@@ -277,12 +279,14 @@ public class Enemy : Humanoid, ITimeScaleListener
 		lookingAt = Vector3.negativeInfinity;
 		AgentSpeed = investigateSpeed;
 		IsStopped = false;
+        heardSound = false;
 		agent.SetDestination(fov.playerLocation);
 	}
 
 	private void Investigate() //enemy moves to last seen player location, waits for x seconds, then goes back to patrol
 	{
-		maxInvestigateTimer += Time.deltaTime;
+        if (heardSound) InitInvestigate();
+        maxInvestigateTimer += Time.deltaTime;
 		if (maxInvestigateTimer >= maxInvestigateTime)//enemy will "forget" the player was there after maxInvestigateTime, even if they never reach the spot
 		{
 			maxInvestigateTimer = 0;
@@ -297,7 +301,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 			{
 				investigateTimer = 0;
 				State = EnemyState.Patrol;
-				return;
+                return;
 			}
 		}
 	}

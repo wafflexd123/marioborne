@@ -63,6 +63,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Tooltip("How far the ground-check spherecast travels")]
 	public float groundCheckDistance;
 
+    [Header("Player 'Sounds'")]
+    public float soundRadius;
+
+
 	//Private
 	int wallDirection;
 	float mass, _tilt, currentDrag, health;
@@ -217,7 +221,8 @@ public class PlayerMovement : MonoBehaviourPlus
 				{
 					currentDrag = walkDrag;
 					xzVelocity.AddForce(walkForce, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized, ForceMode.Acceleration);
-				}
+                    MakeSound();
+                }
 			}
 		}
 		else if (IsOnWall && (!Physics.Raycast(collider.transform.position + (collider.transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
@@ -235,10 +240,15 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	/// <summary>
-	/// Convert all input & calculations from this frame into rigidbody velocity
-	/// </summary>
-	void ControlRigidbody()
+    private void OnDrawGizmos() //for debugging
+    {
+        //Gizmos.DrawSphere(transform.position, movementRadius*rigidbody.velocity.magnitude);
+    }
+
+    /// <summary>
+    /// Convert all input & calculations from this frame into rigidbody velocity
+    /// </summary>
+    void ControlRigidbody()
 	{
 		if (useGravity && !IsGrounded) yVelocity.AddForce(gravity, ForceMode.Acceleration);//gravity
 		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
@@ -372,24 +382,36 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	//void Dash()
-	//{
-	//	if (queueDash)
-	//	{
-	//		queueDash = false;
-	//		if (crtDash == null && IsGrounded) crtDash = StartCoroutine(Routine());
-	//	}
+    public void MakeSound()
+    {
+        Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius * rigidbody.velocity.magnitude);
+        foreach (var enemyHeard in enemiesHeard)
+        { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+            if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+            {
+                enemyHeard.GetComponentInParent<Enemy>().heardSound = true;
+            }
+        }
+    }
 
-	//	IEnumerator Routine()
-	//	{
-	//		xzVelocity.AddForce(moveDirection * dashForce, ForceMode.VelocityChange);
-	//		yield return new WaitForSeconds(dashCooldown);
-	//		crtDash = null;
-	//	}
-	//}
-	#endregion
-	#region Misc
-	public void ResetVelocity()
+    //void Dash()
+    //{
+    //	if (queueDash)
+    //	{
+    //		queueDash = false;
+    //		if (crtDash == null && IsGrounded) crtDash = StartCoroutine(Routine());
+    //	}
+
+    //	IEnumerator Routine()
+    //	{
+    //		xzVelocity.AddForce(moveDirection * dashForce, ForceMode.VelocityChange);
+    //		yield return new WaitForSeconds(dashCooldown);
+    //		crtDash = null;
+    //	}
+    //}
+    #endregion
+    #region Misc
+    public void ResetVelocity()
 	{
 		xzVelocity.vector = Vector3.zero;
 		yVelocity.vector = Vector3.zero;
