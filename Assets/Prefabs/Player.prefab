@@ -5997,10 +5997,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 50
-    maxForce: 100
-    velocityAtMaxForce: 10
-  walkDrag: 10
+    minY: 50
+    maxY: 100
+    maxX: 10
+  <walkDrag>k__BackingField: 10
   noInputGroundDrag:
     curve:
       serializedVersion: 2
@@ -6026,18 +6026,18 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 0.5
-    maxForce: 12
-    velocityAtMaxForce: 10
+    minY: 8
+    maxY: 12
+    maxX: 10
   fovCurve:
     curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.8
+        time: 0.45
         value: 0
-        inSlope: 5.0000005
-        outSlope: 5.0000005
+        inSlope: 1.8181818
+        outSlope: 1.8181818
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
@@ -6045,8 +6045,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 5.0000005
-        outSlope: 5.0000005
+        inSlope: 1.8181818
+        outSlope: 1.8181818
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -6054,10 +6054,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 60
-    maxForce: 90
-    velocityAtMaxForce: 10
-  fovPerSecond: 50
+    minY: 60
+    maxY: 65
+    maxX: 10
+  <fovPerSecond>k__BackingField: 50
   airForce:
     curve:
       serializedVersion: 2
@@ -6092,36 +6092,44 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 1
-    maxForce: 2
-    velocityAtMaxForce: 10
-  airDrag: 0.5
-  jumpForce: 10
-  doubleJumpForce: 7.5
-  gravity: {x: 0, y: -30, z: 0}
-  useGravity: 1
+    minY: 7.33
+    maxY: 7.33
+    maxX: 10
+  <airDrag>k__BackingField: 0.8
+  <jumpForce>k__BackingField: 10
+  <gravity>k__BackingField: -30
+  <useGravity>k__BackingField: 1
   slideDrag:
     curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: -0.28631803
-        outSlope: -0.28631803
+        time: 0.0013198853
+        value: 0.9983406
+        inSlope: 0
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.058016878
+        outWeight: 0.06865192
       - serializedVersion: 3
-        time: 0.29806513
-        value: 0.6977661
-        inSlope: -2.8867176
-        outSlope: -2.8867176
+        time: 0.5383912
+        value: 0.842691
+        inSlope: -0.513663
+        outSlope: -0.513663
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.087164976
-        outWeight: 0.026398337
+        inWeight: 0.11862047
+        outWeight: 0.13359989
+      - serializedVersion: 3
+        time: 0.77141654
+        value: 0.12799758
+        inSlope: -1.8839899
+        outSlope: -1.8839899
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.14735964
+        outWeight: 0.08165434
       - serializedVersion: 3
         time: 1
         value: 0
@@ -6134,14 +6142,14 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 10
-    maxForce: 18
-    velocityAtMaxForce: 10
-  slopeDragMultiplier: 1.2
-  rollQueueTime: 0.3
-  rollRequeueTime: 1
-  fallRollEngageDistance: 5
-  fallCrouchEngageDistance: 3
+    minY: 11
+    maxY: 15
+    maxX: 10
+  <slopeDragMultiplier>k__BackingField: 0.8
+  <rollQueueTime>k__BackingField: 0.3
+  <rollRequeueTime>k__BackingField: 0.3
+  <fallRollEngageDistance>k__BackingField: 5
+  <fallCrouchEngageDistance>k__BackingField: 3
   wallForce:
     curve:
       serializedVersion: 2
@@ -6151,126 +6159,61 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 69
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.33333334
+        outWeight: 0
       - serializedVersion: 3
         time: 0.1
         value: 0
-        inSlope: 0
-        outSlope: 4.562791
-        tangentMode: 69
+        inSlope: -0
+        outSlope: 0.5805074
+        tangentMode: 5
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.2
-        value: 0.4562791
-        inSlope: 4.562791
-        outSlope: 0.05548149
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.3
-        value: 0.46182725
-        inSlope: 0.05548149
-        outSlope: 0.22192688
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.4
-        value: 0.48401994
-        inSlope: 0.22192688
-        outSlope: 0.5825586
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.5
-        value: 0.5422758
-        inSlope: 0.5825586
-        outSlope: 0.9709296
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.6
-        value: 0.6393688
-        inSlope: 0.9709296
-        outSlope: 0.9431896
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.7
-        value: 0.7336877
-        inSlope: 0.9431896
-        outSlope: 0.8599667
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.8
-        value: 0.8196844
-        inSlope: 0.8599667
-        outSlope: 0.91544896
-        tangentMode: 69
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.9
-        value: 0.91122925
-        inSlope: 0.91544896
-        outSlope: 0.88770723
-        tangentMode: 69
+        time: 0.79823256
+        value: 0.9421184
+        inSlope: 0.94248915
+        outSlope: 0.94248915
+        tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0.88770723
+        inSlope: 0
         outSlope: 0
-        tangentMode: 69
+        tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
+        inWeight: 0
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minForce: 15
-    maxForce: 100
-    velocityAtMaxForce: 10
-  wallDrag: 8.75
-  wallRunGravity: 10
-  wallJumpForce: 13
-  wallTilt: 10
-  tiltPerSecond: 60
-  maxWallUpwardsVelocity: 15
-  wallCatchDistance: 0.6
-  wallCatchHeight: 1
-  maxWallYNormal: 0.1
-  wallJumpAngle: {x: 0, y: 0, z: 0}
-  maxHealth: 100
-  healthRecoverDelay: 2
-  healthPerSecond: 20
-  minDamageDistance: 5
-  maxDamageDistance: 20
-  groundCheckYOffset: 0.01
-  groundCheckDistance: 0.011
+    minY: 50
+    maxY: 100
+    maxX: 10
+  <wallDrag>k__BackingField: 10
+  <wallRunGravity>k__BackingField: -10
+  <wallJumpForce>k__BackingField: 7.5
+  <wallDoubleJumpForce>k__BackingField: 10
+  <wallTilt>k__BackingField: 30
+  <tiltPerSecond>k__BackingField: 90
+  <maxWallUpwardsVelocity>k__BackingField: 5
+  <wallCatchHeight>k__BackingField: 1
+  <wallCatchDistance>k__BackingField: 0.15
+  <maxWallYNormal>k__BackingField: 0.1
+  <wallJumpAngle>k__BackingField: {x: 0, y: 0, z: 0}
+  <maxHealth>k__BackingField: 100
+  <healthRecoverDelay>k__BackingField: 3
+  <healthPerSecond>k__BackingField: 25
+  <minDamageDistance>k__BackingField: 10
+  <maxDamageDistance>k__BackingField: 30
   rigidbody: {fileID: 0}
   closestLeapObject: {fileID: 0}
-  closestCatchLedge: {fileID: 0}
 --- !u!54 &8405350626398470926
 Rigidbody:
   m_ObjectHideFlags: 0

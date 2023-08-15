@@ -10,7 +10,7 @@ public class CatchLedge : MonoBehaviourPlus
 	{
 		if (FindComponent(other.transform, out PlayerMovement player))
 		{
-			player.closestCatchLedge = this;
+			//player.closestCatchLedge = this;
 		}
 	}
 
@@ -18,7 +18,7 @@ public class CatchLedge : MonoBehaviourPlus
 	{
 		if (FindComponent(other.transform, out PlayerMovement player))
 		{
-			if (player.closestCatchLedge == this) player.closestCatchLedge = null;
+			//if (player.closestCatchLedge == this) player.closestCatchLedge = null;
 		}
 	}
 }
