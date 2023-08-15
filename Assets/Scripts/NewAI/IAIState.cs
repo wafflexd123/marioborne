@@ -10,7 +10,7 @@ public interface IAIState
     //void Setup();
 
     public List<Transition> transitions { get; set; }
-    //public AIController controller { get; set; }
+    public AIController controller { get; set; }
 }
 //public abstract class IAIState
 

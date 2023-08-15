@@ -5,7 +5,7 @@ using UnityEngine;
 public class PatrolState : IAIState
 {
     public List<Transition> transitions { get; set; }
-    //public AIController controller { get; set; }
+    public AIController controller { get; set; }
 
     private List<Vector3> patrolPoints;
     private int patrolIndex;
