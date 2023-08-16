@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public bool IsWallrunning { get => _isWallrunning; private set { _isWallrunning = value; animator.wallRunning = value; } }
 	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
 	public bool IsOnWall { get => wallDirection != 0; }
+	public bool EnableInput { get; set; }
 
 	//Private
 	int wallDirection;
@@ -77,7 +78,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	#endregion
 	#region Unity
-	IEnumerator Start()
+	void Start()
 	{
 		xzVelocity = new Vector(this);
 		yVelocity = new Vector(this);
@@ -102,13 +103,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		cnsDebug = Console.AddLine();
-		if (useGravity)
-		{
-			useGravity = false;
-			yield return null;
-			yield return new WaitForFixedUpdate();//bugs out for some reason if gravity is enabled on first frame
-			useGravity = true;
-		}
+		EnableInput = true;
 	}
 
 	void Update()
@@ -126,11 +121,13 @@ public class PlayerMovement : MonoBehaviourPlus
 		//Control
 		CheckGround();
 		CheckWalls();
-		//CatchWallLedge();
-		MovePlayer();
-		Jump();
-		//Dash();
-		Slide();
+		if (EnableInput)
+		{
+			MovePlayer();
+			Jump();
+			//Dash();
+			Slide();
+		}
 		ControlRigidbody();
 		ControlFOV();
 		ControlText();
