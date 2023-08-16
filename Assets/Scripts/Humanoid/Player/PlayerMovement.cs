@@ -6,73 +6,67 @@ public class PlayerMovement : MonoBehaviourPlus
 {
 	#region Variables
 	[Header("Walk/Run")]
-	[Tooltip("Input force to apply to rigidbody when walking/running, where x=magnitude of velocity and y=magnitude of force")]
-	public ForceCurve walkForce;
-	public float walkDrag;
-	[Tooltip("Drag curve, where x=magnitude of velocity and y=magnitude of drag, when no movement input is registered. This can be used to slow you down quickly at low velocity (so you're not on ice), but keep you moving when at higher velocities.")]
-	public ForceCurve noInputGroundDrag;
-	public ForceCurve fovCurve;
-	public float fovPerSecond;
+	[Tooltip("Input force to apply to rigidbody when walking/running, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve walkForce;
+	[field: SerializeField] public float walkDrag { get; set; }
+	[Tooltip("Drag curve, where x=magnitude of velocity and y=magnitude of drag, when no movement input is registered. This can be used to slow you down quickly at low velocity (so you're not on ice), but keep you moving when at higher velocities.")] public ForceCurve noInputGroundDrag;
+	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
+	[field: SerializeField][field: Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
 
 	[Header("Air/Jump")]
-	[Tooltip("Input force to apply to rigidbody when in air, where x=magnitude of velocity and y=magnitude of force")]
-	public ForceCurve airForce;
-	public float airDrag, jumpForce, doubleJumpForce;
-	[Tooltip("Player uses gravity independent of other physics objects")]
-	public Vector3 gravity;
-	[Tooltip("Do not use rigidbody.gravity, use this!")]
-	public bool useGravity;
+	[Tooltip("Input force to apply to rigidbody when in air, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve airForce;
+	[field: SerializeField] public float airDrag { get; set; }
+	[field: SerializeField] public float jumpForce { get; set; }
+	[field: SerializeField][field: Tooltip("Player uses gravity independent of other physics objects")] public float gravity { get; set; }
+	[field: SerializeField][field: Tooltip("Do not use rigidbody.gravity, use this!")] public bool useGravity { get; set; }
 
 	[Header("Roll & Slide/Crouch")]
-	[Tooltip("This curve is used to interpolate between high velocity sliding and slow velocity crouch walking, where x=magnitude of velocity and y=magnitude of drag")]
-	public ForceCurve slideDrag;
-	[Tooltip("Multiplier for the amount a slope's steepness affects sliding acceleration")]
-	public float slopeDragMultiplier;
-	[Tooltip("How many seconds before you hit the ground that a roll can be registered")]
-	public float rollQueueTime;
-	[Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")]
-	public float rollRequeueTime;
-	[Tooltip("Minimum distance fallen at which rolls can occur")]
-	public float fallRollEngageDistance;
-	[Tooltip("Minimum distance fallen at which the fall-crouch animation can occur")]
-	public float fallCrouchEngageDistance;
+	[Tooltip("This curve is used to interpolate between high velocity sliding and slow velocity crouch walking, where x=magnitude of velocity and y=magnitude of drag")] public ForceCurve slideDrag;
+	[field: SerializeField][field: Tooltip("Multiplier for the amount a slope's steepness affects sliding acceleration")] public float slopeDragMultiplier { get; set; }
+	[field: SerializeField][field: Tooltip("How many seconds before you hit the ground that a roll can be registered")] public float rollQueueTime { get; set; }
+	[field: SerializeField][field: Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")] public float rollRequeueTime { get; set; }
+	[field: SerializeField][field: Tooltip("Minimum distance fallen at which rolls can occur")] public float fallRollEngageDistance { get; set; }
+	[field: SerializeField][field: Tooltip("Minimum distance fallen at which the fall-crouch animation can occur")] public float fallCrouchEngageDistance { get; set; }
 
 	[Header("Wall Running")]
-	[Tooltip("Input force to apply to rigidbody when wall running, where x=magnitude of velocity and y=magnitude of force")]
-	public ForceCurve wallForce;
-	public float wallDrag, wallRunGravity, wallJumpForce, wallTilt, tiltPerSecond;
-	[Tooltip("Y velocity is clamped to this value when entering a wall run; helps prevent player from going over walls when hitting them")]
-	public float maxWallUpwardsVelocity;
-	[Tooltip("Distance from centre of player collider that walls are registered as being touched")]
-	public float wallCatchDistance = .6f;
-	[Tooltip("How high you have to be before grabbing a wall (means you have to jump onto a wall to wallrun/walljump, instead of just walk into it)")]
-	public float wallCatchHeight;
-	[Tooltip("Anything having a normal with an absolute y value at or below this variable is considered a wall")]
-	public float maxWallYNormal;
-	public Vector3 wallJumpAngle;
+	[Tooltip("Input force to apply to rigidbody when wall running, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve wallForce;
+	[field: SerializeField] public float wallDrag { get; set; }
+	[field: SerializeField] public float wallRunGravity { get; set; }
+	[field: SerializeField] public float wallJumpForce { get; set; }
+	[field: SerializeField] public float wallDoubleJumpForce { get; set; }
+	[field: SerializeField] public float wallTilt { get; set; }
+	[field: SerializeField] public float tiltPerSecond { get; set; }
+	[field: SerializeField][field: Tooltip("Y velocity is clamped to this value when entering a wall run; helps prevent player from going over walls when hitting them")] public float maxWallUpwardsVelocity { get; set; }
+	[field: SerializeField][field: Tooltip("How high you have to be before grabbing a wall (means you have to jump onto a wall to wallrun/walljump, instead of just walk into it)")] public float wallCatchHeight { get; set; }
+	[field: SerializeField][field: Tooltip("How far the wall check raycast travels beyond the collider")] public float wallCatchDistance { get; set; }
+	[field: SerializeField][field: Tooltip("Anything having a normal with an absolute y value at or below this variable is considered a wall")] public float maxWallYNormal { get; set; }
+	[field: SerializeField] public Vector3 wallJumpAngle { get; set; }
 
-	[Header("Fall Damage")]
-	public float maxHealth;
-	public float healthRecoverDelay, healthPerSecond;
-	[Tooltip("Min/max distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")]
-	public float minDamageDistance, maxDamageDistance;
+	[field: Header("Fall Damage")]
+	[field: SerializeField] public float maxHealth { get; set; }
+	[field: SerializeField] public float healthRecoverDelay { get; set; }
+	[field: SerializeField] public float healthPerSecond { get; set; }
+	[field: SerializeField][field: Tooltip("Min distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float minDamageDistance { get; set; }
+	[field: SerializeField][field: Tooltip("Max distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float maxDamageDistance { get; set; }
 
-	[Header("Collisions")]
-	[Tooltip("How far above/below y0 the ground-check spherecast starts")]
-	public float groundCheckYOffset;
-	[Tooltip("How far the ground-check spherecast travels")]
-	public float groundCheckDistance;
+	//Non-inspector public properties
+	public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
+	public bool IsGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
+	public bool IsWallrunning { get => _isWallrunning; private set { _isWallrunning = value; animator.wallRunning = value; } }
+	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
+	public bool IsOnWall { get => wallDirection != 0; }
+	public bool EnableInput { get; set; }
 
 	//Private
 	int wallDirection;
 	float mass, _tilt, currentDrag, health;
-	bool queueJump, /*queueDash,*/ canDoubleJump, _isGrounded, _isWallrunning, _isSliding, queueRoll;
+	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f;
+	bool queueJump, canDoubleJump, _isGrounded, _isWallrunning, _isSliding, queueRoll;
 	Vector3 moveDirection, currentGroundPosition;
 	RaycastHit groundHit, wallHit;
 	Vector xzVelocity, yVelocity;
 	PlayerCamera playerCamera;
 	Player player;
-	Coroutine /*crtDash,*/ crtTilt, crtSlide, crtQueueRoll, crtHealth;
+	Coroutine crtTilt, crtSlide, crtQueueRoll, crtHealth;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	TMP_Text txtWhereAmI;
@@ -81,17 +75,10 @@ public class PlayerMovement : MonoBehaviourPlus
 	new CapsuleCollider collider;
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
-	[HideInInspector] public CatchLedge closestCatchLedge;//not used rn
-	#endregion
-	#region Properties
-	public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
-	public bool IsGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
-	public bool IsWallrunning { get => _isWallrunning; private set { _isWallrunning = value; animator.wallRunning = value; } }
-	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
-	public bool IsOnWall { get => wallDirection != 0; }
+
 	#endregion
 	#region Unity
-	IEnumerator Start()
+	void Start()
 	{
 		xzVelocity = new Vector(this);
 		yVelocity = new Vector(this);
@@ -116,13 +103,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		cnsDebug = Console.AddLine();
-		if (useGravity)
-		{
-			useGravity = false;
-			yield return null;
-			yield return new WaitForFixedUpdate();//bugs out for some reason if gravity is enabled on first frame
-			useGravity = true;
-		}
+		EnableInput = true;
 	}
 
 	void Update()
@@ -135,17 +116,18 @@ public class PlayerMovement : MonoBehaviourPlus
 	void FixedUpdate()
 	{
 		//Input
-		Debug.Log(transform.forward);
-	//	moveDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
-		moveDirection = transform.TransformDirection(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+		moveDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
+
 		//Control
 		CheckGround();
 		CheckWalls();
-		//CatchWallLedge();
-		MovePlayer();
-		Jump();
-		//Dash();
-		Slide();
+		if (EnableInput)
+		{
+			MovePlayer();
+			Jump();
+			//Dash();
+			Slide();
+		}
 		ControlRigidbody();
 		ControlFOV();
 		ControlText();
@@ -166,7 +148,7 @@ public class PlayerMovement : MonoBehaviourPlus
 					queueRoll = false;
 					StopCoroutine(crtQueueRoll);
 					crtQueueRoll = null;
-					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
+					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), walkForce.maxY);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
 				}
 				else if (distance >= fallCrouchEngageDistance)//if hit the ground at crouch distance
 				{
@@ -194,8 +176,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		Gizmos.color = Color.yellow;
 		if (collider == null) collider = transform.Find("Body").GetComponent<CapsuleCollider>();
-		Gizmos.DrawWireSphere(transform.position + new Vector3(0, groundCheckYOffset + collider.radius), collider.radius);
+		Gizmos.DrawWireSphere(transform.position + new Vector3(0, -groundCheckDistance + collider.radius), collider.radius);
 	}
+
 	#endregion
 	#region Movement
 	void MovePlayer()
@@ -211,7 +194,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				{
 					currentDrag = slideDrag.Evaluate(xzVelocity.magnitude);
 					Vector3 force = Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized;
-					if (force.y < 0.001f) currentDrag *= groundHit.normal.y * slopeDragMultiplier;//if crouching down a slope, slide
+					if (force.y <= -0.001f) currentDrag *= groundHit.normal.y * slopeDragMultiplier;//if crouching down (down is <= -0.001f) a slope, slide
 					xzVelocity.AddForce(walkForce, force, ForceMode.Acceleration);
 				}
 				else//walking/running normally
@@ -226,7 +209,7 @@ public class PlayerMovement : MonoBehaviourPlus
 			if (!IsWallrunning) WallRun(true);
 			currentDrag = wallDrag;
 			if (moveDirection != Vector3.zero) xzVelocity.AddForce(wallForce, Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(transform.forward, wallHit.normal).normalized, ForceMode.Acceleration);
-			xzVelocity.AddForce(new Vector3(0, -wallRunGravity), ForceMode.Acceleration);
+			xzVelocity.AddForce(new Vector3(0, wallRunGravity), ForceMode.Acceleration);
 		}
 		else//in air
 		{
@@ -241,7 +224,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	/// </summary>
 	void ControlRigidbody()
 	{
-		if (useGravity && !IsGrounded) yVelocity.AddForce(gravity, ForceMode.Acceleration);//gravity
+		if (useGravity && !IsGrounded) yVelocity.AddForce(new Vector3(0, gravity), ForceMode.Acceleration);//gravity
 		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
 		velocity *= Time.timeScale;
 		rigidbody.velocity = velocity;
@@ -252,7 +235,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	/// <summary>
 	/// Will let a roll initiate when you hit the ground if the button was pressed during queueTime, will not let a roll initiate afterwards during requeueTime or until the frame after you hit the ground
 	/// </summary>
-	public void QueueRoll()
+	void QueueRoll()
 	{
 		if (crtQueueRoll == null) crtQueueRoll = StartCoroutine(Routine());
 		else queueRoll = false;//player cannot spam roll button, must only press once
@@ -281,7 +264,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void CheckGround()
 	{
-		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance, ~(1 << 3)))
+		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, ~(1 << 3)))
 		{
 			if (!IsGrounded) IsGrounded = true;
 			currentGroundPosition = transform.position;
@@ -297,7 +280,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		bool Raycast(Vector3 vector, int direction)
 		{
-			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance))
+			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius))
 			{
 				if (Mathf.Abs(wallHit.normal.y) <= maxWallYNormal)
 				{
@@ -360,7 +343,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				}
 				else if (canDoubleJump)
 				{
-					Force(transform.up * doubleJumpForce);
+					Force(transform.up * wallDoubleJumpForce);
 					canDoubleJump = false;
 				}
 			}
@@ -388,6 +371,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	//		crtDash = null;
 	//	}
 	//}
+
 	#endregion
 	#region Misc
 	public void ResetVelocity()
@@ -457,22 +441,23 @@ public class PlayerMovement : MonoBehaviourPlus
 	public class ForceCurve
 	{
 		public AnimationCurve curve;
-		public float minForce, maxForce, velocityAtMaxForce;
+		[Tooltip("When evaluating the curve: y0 = minY, y1 = maxY, x0 = 0, x1 = maxX")]
+		public float minY, maxY, maxX;
 
-		public Vector3 Evaluate(float currentVelocity, Vector3 direction)
+		public Vector3 Evaluate(float currentX, Vector3 direction)
 		{
-			return Mathf.Lerp(minForce, maxForce, curve.Evaluate(Mathf.Clamp01(currentVelocity / velocityAtMaxForce))) * direction;
+			return Mathf.Lerp(minY, maxY, curve.Evaluate(Mathf.Clamp01(currentX / maxX))) * direction;
 		}
 
-		public float Evaluate(float currentVelocity)
+		public float Evaluate(float currentX)
 		{
-			return Mathf.Lerp(minForce, maxForce, curve.Evaluate(Mathf.Clamp01(currentVelocity / velocityAtMaxForce)));
+			return Mathf.Lerp(minY, maxY, curve.Evaluate(Mathf.Clamp01(currentX / maxX)));
 		}
 
 		public void Multiply(float multiplier)
 		{
-			minForce *= multiplier;
-			maxForce *= multiplier;
+			minY *= multiplier;
+			maxY *= multiplier;
 		}
 	}
 
@@ -494,7 +479,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		public string curvePercentDebug
 		{
-			get => currentCurveDebug == null ? "" : $"{Mathf.InverseLerp(currentCurveDebug.minForce, currentCurveDebug.maxForce, currentCurveDebug.Evaluate(magnitude)) * 100:#0}%";
+			get => currentCurveDebug == null ? "" : $"{Mathf.InverseLerp(currentCurveDebug.minY, currentCurveDebug.maxY, currentCurveDebug.Evaluate(magnitude)) * 100:#0}%";
 		}
 
 		public void AddForce(ForceCurve forceCurve, Vector3 force, ForceMode forceMode)
