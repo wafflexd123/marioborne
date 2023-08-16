@@ -12,6 +12,7 @@ public class AIController : MonoBehaviour
     public FieldOfView fieldOfView { get; protected set; }
     public NavMeshAgent agent { get; protected set; }
     public Rigidbody rb { get; protected set; }
+    [SerializeField] protected WeaponBase weapon;
 
     protected virtual void Awake()
     {
@@ -39,5 +40,19 @@ public class AIController : MonoBehaviour
         {
             CurrentState.Tick();
         }
+    }
+
+    public void MoveTowards(Vector3 targetPosition) 
+    {
+        // someone please verify this
+        // according to Enemy.cs
+        Vector3 velocity = Vector3.zero; // does this suffice ???
+        transform.position = Vector3.SmoothDamp(transform.position, agent.nextPosition, ref velocity, 0.1f);
+    }
+
+    public void Fire()
+    {
+        // TO DO
+        
     }
 }

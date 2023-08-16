@@ -18,6 +18,7 @@ public class StandardAI : AIController
     protected override void Awake()
     {
         base.Awake();
+        var coroutineHelper = gameObject.AddComponent<CoroutineHelper>();
         states = new List<IAIState>();
         patrolState = new PatrolState();
         states.Add(patrolState);
@@ -30,9 +31,30 @@ public class StandardAI : AIController
         waitState = new WaitState();
         states.Add(waitState);
 
-        patrolState.transitions = new List<Transition>();
-        CanSeePlayerTransition NavigateFiring = new CanSeePlayerTransition(this);
-        patrolState.transitions.Add(NavigateFiring);
+        CanSeePlayerTransition NavigateFiring = new CanSeePlayerTransition(navigateFiringPosState, this);
+        patrolState.transitions = new List<Transition>() { NavigateFiring };
+
+        // reach destination -> active shooting
+        StartShootingTransition startShootingTransition = new StartShootingTransition(activeShootingState);
+        navigateFiringPosState.startShootingTransition = startShootingTransition;
+        // 10s pass -> patrol
+        ExternalControlTransition returnToPatrolNavi = new ExternalControlTransition(patrolState);
+        navigateFiringPosState.coroutineHelper = coroutineHelper;
+        navigateFiringPosState.transitions = new List<Transition>() { returnToPatrolNavi, startShootingTransition };
+
+        ExternalControlTransition investigateTransition = new ExternalControlTransition(investigatePlayerState);
+        ExternalControlTransition relocateTransition = new ExternalControlTransition(navigateFiringPosState);
+        activeShootingState.coroutineHelper = coroutineHelper;
+        activeShootingState.transitions = new List<Transition>() { investigateTransition, relocateTransition };
+
+        // TO DO
+        // investigate the player's last position
+        // sees player -> navigate to shooting
+        // reaches aprox last player position -> wait
+
+        // wait state
+        // sees player -> navigate to shooting position
+        // time passes -> patrol
     }
 
     private void Start()

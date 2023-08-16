@@ -18,4 +18,5 @@ public abstract class Transition
 {
     public IAIState targetState { get; private set; }
     public virtual bool RequirementsMet() { return false; }
+    public Transition(IAIState targetState) { this.targetState = targetState; }
 }

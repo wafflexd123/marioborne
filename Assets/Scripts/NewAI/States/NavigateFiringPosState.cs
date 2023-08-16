@@ -6,8 +6,11 @@ public class NavigateFiringPosState : IAIState
 {
     public List<Transition> transitions { get; set; }
     public AIController controller { get; set; }
+    public StartShootingTransition startShootingTransition { get; set; }
+    public CoroutineHelper coroutineHelper { get; set; }
 
     protected Vector3 targetLocation;
+    public float TimeBeforeReturningToPatrol = 10f;
 
     public void OnEntry()
     {
@@ -17,20 +20,42 @@ public class NavigateFiringPosState : IAIState
         // Set targetLocation
 
         // according to Enemy.cs
-        controller.agent.SetDestination(Player.singlePlayer.transform.position);
+        controller.MoveTowards(Player.singlePlayer.transform.position);
     }
 
-    public void OnExit()
-    {
-        throw new System.NotImplementedException();
-    }
+    public void OnExit() { }
 
     public void Tick()
     {
         // Move towards target location
-        // according to Enemy.cs
-        Vector3 velocity = Vector3.zero; // does this suffice ???
-        controller.transform.position = Vector3.SmoothDamp(controller.transform.position, controller.agent.nextPosition, ref velocity, 0.1f);
+        // *** REPLACE THIS, should instead go towards its decided target location. 
+        controller.MoveTowards(Player.singlePlayer.transform.position);
+        startShootingTransition.destination = Player.singlePlayer.transform.position;
+        startShootingTransition.position = controller.transform.position;
+
+        // keep this part
+        if (!controller.fieldOfView.canSeePlayer)
+        {
+            coroutineHelper.StartOrAddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
+        }
+        else
+        {
+            coroutineHelper.CancelCoroutine("returnToPatrol-Navi");
+        }
+    }
+
+    public IEnumerator WaitForTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        for (int i = 0; i < transitions.Count; i++)
+        {
+            if (transitions[i] is ExternalControlTransition)
+            {
+                ExternalControlTransition t = transitions[i] as ExternalControlTransition;
+                t.trigger = true;
+                break;
+            }
+        }
     }
 }
 
@@ -38,6 +63,8 @@ public class StartShootingTransition : Transition
 {
     public Vector3 destination = Vector3.zero;
     public Vector3 position = Vector3.one;
+
+    public StartShootingTransition(IAIState targetState) : base(targetState) { }
 
     public override bool RequirementsMet()
     {

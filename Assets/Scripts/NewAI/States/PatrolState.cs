@@ -10,20 +10,32 @@ public class PatrolState : IAIState
     private List<Vector3> patrolPoints;
     private int patrolIndex;
     public bool pingPong = true;
+    protected int pingpongDirection = 1;
 
     public void OnEntry()
     {
-        throw new System.NotImplementedException();
+        // find closest patrol points to go to next. 
+        float closestDistance = float.MaxValue;
+        for (int i=0; i<patrolPoints.Count; i++)
+        {
+            if (Vector3.Distance(controller.transform.position, patrolPoints[i]) < closestDistance)
+            {
+                patrolIndex = i;
+                closestDistance = Vector3.Distance(controller.transform.position, patrolPoints[i]);
+            }
+        }
     }
 
     public void OnExit()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void Tick()
     {
-        throw new System.NotImplementedException();
+        if (Vector3.Distance(controller.transform.position, patrolPoints[patrolIndex]) < 0.05f)
+            IncrementPatrolIndex();
+        controller.MoveTowards(patrolPoints[patrolIndex]);
     }
 
     //public void Setup()
@@ -33,6 +45,18 @@ public class PatrolState : IAIState
     //    transitions.Add(NavigateFiring);
     //}
 
+    protected void IncrementPatrolIndex()
+    {
+        if (pingPong)
+        {
+            //if (patrolIndex - 1 == -1 || patrolIndex + 1 == patrolPoints.Count)
+            if (patrolIndex + pingpongDirection == -1 || patrolIndex + pingpongDirection == patrolPoints.Count)
+                pingpongDirection *= -1;
+            patrolIndex = patrolIndex + pingpongDirection;
+        }
+        else
+            patrolIndex = (patrolIndex + 1) % patrolPoints.Count;
+    }
     public void SetPatrolPoints(List<Vector3> patrolPoints) { this.patrolPoints = patrolPoints; }
 }
 
@@ -40,7 +64,7 @@ public class CanSeePlayerTransition : Transition
 {
     public AIController controller;
 
-    public CanSeePlayerTransition(AIController controller)
+    public CanSeePlayerTransition(IAIState targetState, AIController controller) : base(targetState)
     {
         this.controller = controller;
     }
