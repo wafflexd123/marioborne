@@ -4,21 +4,37 @@ using UnityEngine;
 
 public class WaitState : IAIState
 {
-    public List<Transition> transitions { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public AIController controller { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public List<Transition> transitions { get; set; }
+    public AIController controller { get; set; }
+    public float waitBeforePatrollingDuration = 5f;
+    public CoroutineHelper coroutineHelper { get; set; }
 
     public void OnEntry()
     {
-        throw new System.NotImplementedException();
+        coroutineHelper.StartOrAddCoroutine("waiting", WaitAtLocation());
     }
 
     public void OnExit()
     {
-        throw new System.NotImplementedException();
+        coroutineHelper.CancelCoroutine("waiting");
     }
 
     public void Tick()
     {
-        throw new System.NotImplementedException();
+        // hmm sound. hmm
+    }
+
+    public IEnumerator WaitAtLocation()
+    {
+        yield return new WaitForSeconds(waitBeforePatrollingDuration);
+        for (int i = 0; i < transitions.Count; i++)
+        {
+            if (transitions[i] is ExternalControlTransition)
+            {
+                ExternalControlTransition t = transitions[i] as ExternalControlTransition;
+                t.trigger = true;
+                break;
+            }
+        }
     }
 }

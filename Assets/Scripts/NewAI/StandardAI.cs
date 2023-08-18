@@ -47,14 +47,17 @@ public class StandardAI : AIController
         activeShootingState.coroutineHelper = coroutineHelper;
         activeShootingState.transitions = new List<Transition>() { investigateTransition, relocateTransition };
 
-        // TO DO
-        // investigate the player's last position
-        // sees player -> navigate to shooting
+        // sees player -> active shooting
         // reaches aprox last player position -> wait
+        ReachedLastKnownPlayerPosTransition reachedLastKnownPlayerPosTransition = new ReachedLastKnownPlayerPosTransition(waitState, this, transform);
+        investigatePlayerState.transitions = new List<Transition>() { startShootingTransition, reachedLastKnownPlayerPosTransition };
 
         // wait state
         // sees player -> navigate to shooting position
         // time passes -> patrol
+        waitState.coroutineHelper = coroutineHelper;
+        ExternalControlTransition waitToPatrol = new ExternalControlTransition(patrolState);
+        waitState.transitions = new List<Transition>() { startShootingTransition, waitToPatrol };
     }
 
     private void Start()

@@ -23,7 +23,8 @@ public class ActiveShootingState : IAIState
     public void OnExit()
     {
         // stop coroutines
-
+        coroutineHelper.CancelCoroutine("relocate");
+        coroutineHelper.CancelCoroutine("investigate");
     }
 
     public void Tick()
