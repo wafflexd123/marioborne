@@ -6,8 +6,9 @@ using UnityEngine;
 public class Telekinesis : MonoBehaviour
 {
     private Camera mainCamera;
-    [SerializeField] private LayerMask objectLayer;
     private RaycastHit raycast;
+    [Header("Telekinetic Lift Variables")]
+    [SerializeField] private LayerMask objectLayer;
     [SerializeField] private float grabDistance = 100f;
     [SerializeField] private float followSpeed = 3.0f;
     [SerializeField] private float rotationSpeed = 30.0f;
@@ -16,6 +17,14 @@ public class Telekinesis : MonoBehaviour
     [SerializeField] private float scrollSpeed = 1.0f;
     [SerializeField] private float minDistance = 3.0f;
     [SerializeField] private float maxDistance = 50.0f;
+
+    [Header("Telekinetic Push Variables")]
+    [SerializeField] private float pushStrength = 30.0f;
+    [SerializeField] private float pushHeight = 5f;
+    [SerializeField] private float pushWidth = 14f;
+    [SerializeField] private float pushLength = 14f;
+    [SerializeField] private float upwardsPushForce = 0.2f;
+
 
     private GameObject grabbedObject;
     private bool isGrabbing;
@@ -41,6 +50,11 @@ public class Telekinesis : MonoBehaviour
             {
                 GrabObject(raycast.collider.gameObject);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            PushObjects();
         }
 
         if (isGrabbing)
@@ -100,4 +114,38 @@ public class Telekinesis : MonoBehaviour
         controlledObject.transform.Rotate(rotationDirection, rotationSpeed * UnityEngine.Time.deltaTime);
     }
 
+    void PushObjects()
+    {
+        Vector3 pushDirection = mainCamera.transform.forward;
+        Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
+
+        Collider[] objectsToPush = Physics.OverlapBox(boxCenter, new Vector3(pushWidth / 2, pushHeight / 2, pushLength / 2), mainCamera.transform.rotation, objectLayer);
+
+        foreach (Collider obj in objectsToPush)
+        {
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 adjustedPushDirection = pushDirection + Vector3.up * upwardsPushForce; 
+                adjustedPushDirection.Normalize();
+
+                rb.AddForce(adjustedPushDirection * pushStrength, ForceMode.Impulse);
+            }
+        }
+    }
+
+    #region Debugging
+    void OnDrawGizmos()
+    {
+        if (mainCamera != null)
+        {
+            Vector3 pushDirection = mainCamera.transform.forward;
+            Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
+
+            Gizmos.color = Color.red;
+            Gizmos.matrix = Matrix4x4.TRS(boxCenter, mainCamera.transform.rotation, new Vector3(pushWidth, pushHeight, pushLength));
+            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+        }
+    }
+    #endregion
 }
