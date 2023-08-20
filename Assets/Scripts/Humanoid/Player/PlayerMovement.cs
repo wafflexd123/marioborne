@@ -204,7 +204,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				}
 			}
 		}
-		else if (IsOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
+		else if (IsOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough. doesnt have to be a raycast, should change later
 		{
 			if (!IsWallrunning) WallRun(true);
 			currentDrag = wallDrag;

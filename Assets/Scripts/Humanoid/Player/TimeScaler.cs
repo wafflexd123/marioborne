@@ -8,11 +8,11 @@ public class TimeScaler : MonoBehaviourPlus
 	public float timeScaleSpeed, minTimeScale, scaleDuration, recoveryDelay;
 	public Image imgTimeleft;
 	float currentScaleDuration, recoveryTimer;
-	Console.Line cnsTime;
+	//Console.Line cnsTime;
 
 	void Awake()
 	{
-		cnsTime = Console.AddLine();
+		//cnsTime = Console.AddLine();
 		imgTimeleft.gameObject.SetActive(false);
 		//startUIWidth = -ui.rect.width;
 	}
@@ -67,8 +67,8 @@ public class TimeScaler : MonoBehaviourPlus
 			}
 		}
 
-		if (Console.Enabled) cnsTime.text =
-					$"Timescale: {Time.timeScale}, Unity timescale (should always be 1): {UnityEngine.Time.timeScale}\n" +
-					$"Scale duration: {currentScaleDuration:#.00}, time to recover: {recoveryDelay - recoveryTimer:#.00}";
+		//if (Console.Enabled) cnsTime.text =
+		//			$"Timescale: {Time.timeScale}, Unity timescale (should always be 1): {UnityEngine.Time.timeScale}\n" +
+		//			$"Scale duration: {currentScaleDuration:#.00}, time to recover: {recoveryDelay - recoveryTimer:#.00}";
 	}
 }

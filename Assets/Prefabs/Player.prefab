@@ -856,7 +856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7440442379320836975
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4021,6 +4021,69 @@ Transform:
   - {fileID: 7607518707787219010}
   m_Father: {fileID: 7339441236567848840}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4922924711923191795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3530598704430063040}
+  - component: {fileID: 8938428424990112216}
+  m_Layer: 3
+  m_Name: Awake Actions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3530598704430063040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4922924711923191795}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8405350626398470925}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8938428424990112216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4922924711923191795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4a31aa274d115240ab43de2a0c3f7b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  awake:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1140479940410986797}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  start:
+    m_PersistentCalls:
+      m_Calls: []
+  deleteAfterStart: 1
 --- !u!1 &5023175311478836485
 GameObject:
   m_ObjectHideFlags: 0
@@ -5925,6 +5988,7 @@ Transform:
   - {fileID: 8405350625105107542}
   - {fileID: 7440442379320836975}
   - {fileID: 1152462029552496157}
+  - {fileID: 3530598704430063040}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3347588759300335361
@@ -6201,7 +6265,7 @@ MonoBehaviour:
   <wallRunGravity>k__BackingField: -10
   <wallJumpForce>k__BackingField: 7.5
   <wallDoubleJumpForce>k__BackingField: 10
-  <wallTilt>k__BackingField: 30
+  <wallTilt>k__BackingField: 10
   <tiltPerSecond>k__BackingField: 90
   <maxWallUpwardsVelocity>k__BackingField: 5
   <wallCatchHeight>k__BackingField: 1
