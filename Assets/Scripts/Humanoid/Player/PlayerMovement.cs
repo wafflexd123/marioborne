@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	#endregion
 	#region Unity
-	void Start()
+	IEnumerator Start()
 	{
 		xzVelocity = new Vector(this);
 		yVelocity = new Vector(this);
@@ -104,6 +104,12 @@ public class PlayerMovement : MonoBehaviourPlus
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		cnsDebug = Console.AddLine();
 		EnableInput = true;
+		if (useGravity)
+		{
+			useGravity = false;
+			yield return null;//wait a frame before applying force; otherwise, player is occaisonally shot into the air in the first frame
+			useGravity = true;
+		}
 	}
 
 	void Update()
