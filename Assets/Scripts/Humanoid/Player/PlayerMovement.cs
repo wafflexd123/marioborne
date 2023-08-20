@@ -382,18 +382,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-    public void MakeSound()
-    {
-        Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius * rigidbody.velocity.magnitude);
-        foreach (var enemyHeard in enemiesHeard)
-        { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
-            if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
-            {
-                enemyHeard.GetComponentInParent<Enemy>().heardSound = true;
-            }
-        }
-    }
-
     //void Dash()
     //{
     //	if (queueDash)
@@ -464,6 +452,18 @@ public class PlayerMovement : MonoBehaviourPlus
 			} while (health < maxHealth);
 			health = maxHealth;
 			crtHealth = null;
+		}
+	}
+
+	public void MakeSound()
+	{
+		Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius * rigidbody.velocity.magnitude);
+		foreach (var enemyHeard in enemiesHeard)
+		{ //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+			if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+			{
+				enemyHeard.GetComponentInParent<Enemy>().soundLocation = player.transform;
+			}
 		}
 	}
 

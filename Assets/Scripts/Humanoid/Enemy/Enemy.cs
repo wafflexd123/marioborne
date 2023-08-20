@@ -12,8 +12,8 @@ public class Enemy : Humanoid, ITimeScaleListener
 	//Inspector
 	[SerializeField] Transform points;
     [SerializeField] Transform coverPoints;
-	public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, rangedSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
-    public bool heardSound = false;
+	public float sightRadius, meleeRadius, alertRadius, deathAnimationSpeed, patrolSpeed, rangedSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
+    public Transform soundLocation;
 
 	//Script
 	public WeaponBase weapon;
@@ -49,9 +49,9 @@ public class Enemy : Humanoid, ITimeScaleListener
 				case EnemyState.Patrol:
 					InitPatrol();
 					break;
-				//case EnemyState.Engage:
-					//InitEngage();
-					//break;
+				case EnemyState.Engage:
+					InitEngage();
+					break;
 				case EnemyState.Investigate:
 					InitInvestigate();
 					break;
@@ -82,16 +82,16 @@ public class Enemy : Humanoid, ITimeScaleListener
 	{
 		model.velocity = agent.velocity;
 
-		//if (fov.canSeePlayer) State = EnemyState.Engage; //changes to engage state once player is spotted
+		if (fov.canSeePlayer) State = EnemyState.Engage; //changes to engage state once player is spotted
 
 		switch (State)//theoretically more efficient than if/else
 		{
 			case EnemyState.Patrol:
 				Patrol();
 				break;
-			//case EnemyState.Engage:
-				//Engage();
-				//break;
+			case EnemyState.Engage:
+				Engage();
+				break;
 			case EnemyState.Investigate:
 				Investigate();
 				break;
@@ -122,7 +122,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 		switch (typeOfWeapon)
 		{
 			case EnemyType.Ranged:
-                //IsStopped = true;
+                IsStopped = true;
                 AgentSpeed = rangedSpeed;
                 FindClosestCover();
                 rangedCloseDistance = UnityEngine.Random.Range(rangedCloseDistanceMin, rangedCloseDistanceMax);
@@ -135,13 +135,13 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	private void Engage()
 	{
-        /*
+        
 		if (!fov.canSeePlayer && Vector3.Distance(transform.position, player.transform.position) > rangedCloseDistanceMin)
 		{
 			State = EnemyState.Investigate;
 			return;
 		}
-        */
+        
 		if (!player.hasDied)
 		{
 			switch (typeOfWeapon)
@@ -158,12 +158,12 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 				case EnemyType.Ranged:
 
-                    if(destCoverPoint >= 0)
-                    {
-                        agent.SetDestination(CoverPoints.GetChild(destCoverPoint).position);
-                    }
-                    /*
-					else if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
+                    //if(destCoverPoint >= 0)
+                    //{
+                    //    agent.SetDestination(CoverPoints.GetChild(destCoverPoint).position);
+                    //}
+                    
+					if (player.movement.rigidbody.velocity.magnitude > player.movement.walkForce.velocityAtMaxForce * aimAdjustVelocityMagnitude)
 					{
 						lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, ((Gun)weapon).bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
 					}
@@ -184,11 +184,13 @@ public class Enemy : Humanoid, ITimeScaleListener
 						agent.SetDestination(player.transform.position);
 						IsStopped = false;
 					}
-                    */
+                    
 					input.Press("Mouse", () => -1, () => false);//left click (shoot)
                     
 					break;
 			}
+
+			AlertOthers();
 		}
 	}
 
@@ -202,7 +204,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 
 	private void Patrol()
 	{
-        if (heardSound) State = EnemyState.Investigate; //if a sound is heard, investigate
+        if (soundLocation != null) State = EnemyState.Investigate; //if a sound is heard, investigate
 		if (destPoint == -1) State = EnemyState.Idle;//if there are no points to patrol
 		else if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
 		{
@@ -279,13 +281,14 @@ public class Enemy : Humanoid, ITimeScaleListener
 		lookingAt = Vector3.negativeInfinity;
 		AgentSpeed = investigateSpeed;
 		IsStopped = false;
-        heardSound = false;
-		agent.SetDestination(fov.playerLocation);
+		if (soundLocation != null) agent.SetDestination(soundLocation.position);
+		else agent.SetDestination(fov.playerLocation);
+		soundLocation = null;
 	}
 
 	private void Investigate() //enemy moves to last seen player location, waits for x seconds, then goes back to patrol
 	{
-        if (heardSound) InitInvestigate();
+        if (soundLocation != null) InitInvestigate();
         maxInvestigateTimer += Time.deltaTime;
 		if (maxInvestigateTimer >= maxInvestigateTime)//enemy will "forget" the player was there after maxInvestigateTime, even if they never reach the spot
 		{
@@ -304,6 +307,22 @@ public class Enemy : Humanoid, ITimeScaleListener
                 return;
 			}
 		}
+	}
+
+	private void AlertOthers()
+    {
+		Collider[] alertOthers = Physics.OverlapSphere(transform.position, alertRadius);
+		foreach (var alerted in alertOthers)
+		{ //creates an overlap sphere around enemy, checks if other enemies are in it and prompts them to investigate
+			if (alerted.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")) && Vector3.Distance(alerted.transform.position, transform.position) > 1f)
+			{
+				alerted.GetComponentInParent<Enemy>().soundLocation = transform;
+			}
+		}
+	}
+	private void OnDrawGizmos() //for debugging
+	{
+		//Gizmos.DrawSphere(transform.position, alertRadius);
 	}
 
 	public static Vector3 FirstOrderIntercept(Vector3 shooterPos, Vector3 shooterVelocity, float bulletSpeed, Vector3 targetPos, Vector3 targetVelocity)

@@ -137,7 +137,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
             { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
                 if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
                 {
-                    enemyHeard.GetComponentInParent<Enemy>().heardSound = true;
+                    enemyHeard.GetComponentInParent<Enemy>().soundLocation = transform;
                 }
             }
         }
