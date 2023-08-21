@@ -48,7 +48,6 @@ public class Fists : MonoBehaviourPlus
 			crtPunch = null;
 		}
 	}
-
 	void RightMouse()
 	{
 		if (crtDeflect == null && crtPunch == null && (player.weapon == null || !player.weapon.IsFiring))
@@ -76,7 +75,6 @@ public class Fists : MonoBehaviourPlus
 			crtDeflect = null;
 		}
 	}
-
 	void OnTriggerEnter(Collider collider)
 	{
 		if (FindComponent(collider.transform, out Enemy enemy))
