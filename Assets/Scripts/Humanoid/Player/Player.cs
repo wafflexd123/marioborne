@@ -11,7 +11,6 @@ public class Player : Humanoid
 	public bool invincibility;
 	public float maxInteractDistance, teleportSpeed;
 	[SerializeField] LayerMask raycastIgnore;
-	[SerializeField] private float dropForce = 5.0f;
 
 	//Public
 	public RaycastHit raycast;

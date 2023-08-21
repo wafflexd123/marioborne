@@ -6,7 +6,13 @@ using UnityEngine;
 [SelectionBase]
 public abstract class WeaponBase : MonoBehaviourPlus
 {
-	public Position handPosition;
+
+	[Header("Throw Variables")]
+    public float throwForce = 10f; // Initial force of the throw
+    public float throwSpeed = 1f; // How fast the object will go after being thrown
+    public float throwFallDelay = 1f; // Delay before object starts falling
+
+    public Position handPosition;
 	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
 	protected Humanoid wielder;
@@ -71,10 +77,46 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-	/// <summary>
-	/// Called just after OnWielderChange() when dropped
-	/// </summary>
-	protected virtual void OnDrop() { }
+    public virtual void Throw()
+    {
+        OnWielderChange();
+        OnDrop();
+        wielder = null;
+        transform.parent = null;
+        ResetRoutine(ThrowTimer(), ref crtDropTimer);
+        EnableRigidbody(true);
+        rigidbody.AddRelativeForce(Vector3.forward * throwForce, ForceMode.Impulse);
+        rigidbody.useGravity = false; // Disable gravity initially
+        rigidbody.velocity = transform.forward * throwSpeed;
+        StartCoroutine(ApplyGravityGradually()); // Start Coroutine to gradually apply gravity
+    }
+
+    IEnumerator ApplyGravityGradually()
+    {
+        float gravityIncrement = Physics.gravity.y / throwFallDelay; // Divide gravity by delay to get increment
+        float currentGravity = 0;
+
+        while (currentGravity > Physics.gravity.y) // Continue until reaching default gravity
+        {
+            currentGravity += gravityIncrement * Time.deltaTime; // Increment gravity
+            rigidbody.AddForce(new Vector3(0, currentGravity, 0), ForceMode.Acceleration); // Apply incremental gravity
+            yield return null; // Wait for next frame
+        }
+
+        rigidbody.useGravity = true; // Enable default gravity
+    }
+
+    IEnumerator ThrowTimer()
+    {
+        yield return new WaitForSeconds(throwFallDelay);
+        crtDropTimer = null;
+    }
+
+
+    /// <summary>
+    /// Called just after OnWielderChange() when dropped
+    /// </summary>
+    protected virtual void OnDrop() { }
 
 	/// <summary>
 	/// Called to prepare a weapon for being dropped OR swapping wielders without being dropped; always just before wielder is changed.
@@ -98,7 +140,8 @@ public abstract class WeaponBase : MonoBehaviourPlus
 			else RightMouse();
 		}));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop(dropForce)));
-	}
+        inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw()));
+    }
 
 	protected virtual void LeftMouse() { }
 

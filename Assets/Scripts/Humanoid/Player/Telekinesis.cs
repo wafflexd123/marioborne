@@ -54,7 +54,7 @@ public class Telekinesis : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            PushObjects();
+            //PushObjects();
         }
 
         if (isGrabbing)
