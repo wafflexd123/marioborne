@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	#endregion
 	#region Unity
-	void Start()
+	IEnumerator Start()
 	{
 		xzVelocity = new Vector(this);
 		yVelocity = new Vector(this);
@@ -104,6 +104,12 @@ public class PlayerMovement : MonoBehaviourPlus
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		cnsDebug = Console.AddLine();
 		EnableInput = true;
+		if (useGravity)
+		{
+			useGravity = false;
+			yield return null;//wait a frame before applying force; otherwise, player is occaisonally shot into the air in the first frame
+			useGravity = true;
+		}
 	}
 
 	void Update()
@@ -204,7 +210,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				}
 			}
 		}
-		else if (IsOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
+		else if (IsOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough. doesnt have to be a raycast, should change later
 		{
 			if (!IsWallrunning) WallRun(true);
 			currentDrag = wallDrag;

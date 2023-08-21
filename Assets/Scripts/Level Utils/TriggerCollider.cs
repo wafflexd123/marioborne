@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TriggerCollider : MonoBehaviour
+public class TriggerCollider : UnityEventHelper
 {
 	public UnityEvent onEnter, onStay, onExit;
 	[HideInInspector] public bool isTriggered;
@@ -31,15 +31,5 @@ public class TriggerCollider : MonoBehaviour
 		onExit.Invoke();
 		isTriggered = false;
 		if (this.other == other) this.other = null;
-	}
-
-	public static void TriggerDelete(GameObject gameObject)
-	{
-		Destroy(gameObject);
-	}
-
-	public void SetParent(Transform transform)
-	{
-		this.transform.SetParent(transform);
 	}
 }
