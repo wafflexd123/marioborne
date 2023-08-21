@@ -80,7 +80,8 @@ public class AIController : Humanoid, ITimeScaleListener
 
     public override void Kill(DeathType deathType = DeathType.General)
     {
-        throw new NotImplementedException();
+        if (weapon) input.Press("Drop");//drop weapon if holding one
+        Destroy(gameObject);
     }
 
     public override bool PickupObject(WeaponBase weapon, out Action onDrop)

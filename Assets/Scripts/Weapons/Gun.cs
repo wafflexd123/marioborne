@@ -40,7 +40,7 @@ public class Gun : WeaponBase
 	{
 		base.OnPickup();
 		//wielder.model.holdingPistol = true;
-		animator.StartAnimations();
+		//animator.StartAnimations();
 		if (wielder is Player)
 		{
 			ammo = playerAmmo;
@@ -68,9 +68,9 @@ public class Gun : WeaponBase
 
 	protected override void LeftMouse()
 	{
-		if ((wielder is not Player || !((Player)wielder).fists.IsFiring) && crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//(if wielder is ai || isnt punching) && not waiting for fireDelay && wielder is looking at something && can shoot
+		if ((!(wielder is Player) || !((Player)wielder).fists.IsFiring) && crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//(if wielder is ai || isnt punching) && not waiting for fireDelay && wielder is looking at something && can shoot
 		{
-			if (wielder is Player)
+            if (wielder is Player)
 			{
 				txtAmmo.text = $"{playerAmmo.amount}";
 				if (playerAmmo.amount <= 0) qToDrop.SetActive(true);
