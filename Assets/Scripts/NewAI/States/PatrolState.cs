@@ -14,6 +14,10 @@ public class PatrolState : IAIState
 
     public void OnEntry()
     {
+        for(int i=0; i<controller.patrolPoints.childCount-1; i++)
+        {
+            patrolPoints[i] = controller.patrolPoints.GetChild(i).transform.position;
+        }
         // find closest patrol points to go to next. 
         float closestDistance = float.MaxValue;
         for (int i=0; i<patrolPoints.Count; i++)
