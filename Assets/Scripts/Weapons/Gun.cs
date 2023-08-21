@@ -103,7 +103,12 @@ public class Gun : WeaponBase
 		return maxSpread == 0 ? Vector3.zero : new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread));
 	}
 
-	IEnumerator DelayWithUI()
+    public override void Drop(float dropForce)
+    {
+        base.Drop(dropForce);
+    }
+
+    IEnumerator DelayWithUI()
 	{
 		float timer = 0;
 		imgReloadPercent.gameObject.SetActive(true);

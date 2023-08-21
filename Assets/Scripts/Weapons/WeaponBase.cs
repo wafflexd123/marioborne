@@ -54,7 +54,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		return false;
 	}
 
-	public virtual void Drop()
+	public virtual void Drop(float dropForce)
 	{
 		OnWielderChange();
 		OnDrop();
@@ -97,7 +97,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 			if (direction < 0) LeftMouse();
 			else RightMouse();
 		}));
-		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop()));
+		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop(dropForce)));
 	}
 
 	protected virtual void LeftMouse() { }

@@ -11,6 +11,7 @@ public class Player : Humanoid
 	public bool invincibility;
 	public float maxInteractDistance, teleportSpeed;
 	[SerializeField] LayerMask raycastIgnore;
+	[SerializeField] private float dropForce = 5.0f;
 
 	//Public
 	public RaycastHit raycast;
@@ -133,7 +134,7 @@ public class Player : Humanoid
 			movement.ResetVelocity();
 			movement.EnableCollider(false);
 			enemy.enabled = false;
-			if (weapon) weapon.Drop();
+			if (weapon) weapon.Drop(0);
 			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
 			{
 				if (enemy.weapon) enemy.weapon.Pickup(this, true);
