@@ -180,7 +180,11 @@ public class PlayerMovement : MonoBehaviourPlus
 				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
 			}
 		}
-		xzVelocity.vector = rigidbody.velocity;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
+	}
+
+	private void OnCollisionStay(Collision collision)
+	{
+		xzVelocity.vector = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
 	}
 
 	void OnDrawGizmosSelected()
