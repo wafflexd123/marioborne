@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Tooltip("Drag curve, where x=magnitude of velocity and y=magnitude of drag, when no movement input is registered. This can be used to slow you down quickly at low velocity (so you're not on ice), but keep you moving when at higher velocities.")] public ForceCurve noInputGroundDrag;
 	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
 	[field: SerializeField][field: Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
+	[field: SerializeField] public float dashForce { get; set; }
+	[field: SerializeField] public float dashCooldown { get; set; }
 
 	[Header("Air/Jump")]
 	[Tooltip("Input force to apply to rigidbody when in air, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve airForce;
@@ -60,13 +62,13 @@ public class PlayerMovement : MonoBehaviourPlus
 	int wallDirection;
 	float mass, _tilt, currentDrag, health;
 	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f;
-	bool queueJump, canDoubleJump, _isGrounded, _isWallrunning, _isSliding, queueRoll;
+	bool queueJump, canDoubleJump, _isGrounded, _isWallrunning, _isSliding, queueRoll, queueDash;
 	Vector3 moveDirection, currentGroundPosition;
 	RaycastHit groundHit, wallHit;
 	Vector xzVelocity, yVelocity;
 	PlayerCamera playerCamera;
 	Player player;
-	Coroutine crtTilt, crtSlide, crtQueueRoll, crtHealth;
+	Coroutine crtTilt, crtSlide, crtQueueRoll, crtHealth, crtDash;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	TMP_Text txtWhereAmI;
@@ -114,9 +116,12 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void Update()
 	{
-		if (Input.GetButtonDown("Jump")) queueJump = true;
-		if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) QueueRoll();
-		//if (Input.GetButtonDown("Dash")) queueDash = true;
+		if (EnableInput)
+		{
+			if (Input.GetButtonDown("Jump")) queueJump = true;
+			if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) QueueRoll();
+			if (Input.GetButtonDown("Dash")) queueDash = true;
+		}
 	}
 
 	void FixedUpdate()
@@ -131,7 +136,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		{
 			MovePlayer();
 			Jump();
-			//Dash();
+			Dash();
 			Slide();
 		}
 		ControlRigidbody();
@@ -175,7 +180,11 @@ public class PlayerMovement : MonoBehaviourPlus
 				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
 			}
 		}
-		xzVelocity.vector = rigidbody.velocity;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
+	}
+
+	private void OnCollisionStay(Collision collision)
+	{
+		xzVelocity.vector = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions
 	}
 
 	void OnDrawGizmosSelected()
@@ -313,19 +322,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		//ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
 	}
 
-	//void CatchWallLedge()
-	//{
-	//	if (!OnLedge && !IsGrounded && closestCatchLedge != null && closestCatchLedge != lastLedge)
-	//	{
-	//		OnLedge = true;
-	//		velocity = Vector3.zero;
-	//		lastLedge = closestCatchLedge;
-	//		allowMovement = false;
-	//		rigidbody.isKinematic = true;
-	//		StartCoroutine(LerpToPos(transform, new Position(transform.position.x, lastLedge.bodyPos.position.y, transform.position.z), 5, () => allowMovement = !(rigidbody.isKinematic = false)));
-	//	}
-	//}
-
 	void Jump()
 	{
 		if (queueJump)
@@ -362,21 +358,21 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	//void Dash()
-	//{
-	//	if (queueDash)
-	//	{
-	//		queueDash = false;
-	//		if (crtDash == null && IsGrounded) crtDash = StartCoroutine(Routine());
-	//	}
+	void Dash()
+	{
+		if (queueDash)
+		{
+			queueDash = false;
+			if (crtDash == null) crtDash = StartCoroutine(Routine());
+		}
 
-	//	IEnumerator Routine()
-	//	{
-	//		xzVelocity.AddForce(moveDirection * dashForce, ForceMode.VelocityChange);
-	//		yield return new WaitForSeconds(dashCooldown);
-	//		crtDash = null;
-	//	}
-	//}
+		IEnumerator Routine()
+		{
+			xzVelocity.AddForce(moveDirection * dashForce, ForceMode.VelocityChange);
+			yield return new WaitForSeconds(dashCooldown);
+			crtDash = null;
+		}
+	}
 
 	#endregion
 	#region Misc
