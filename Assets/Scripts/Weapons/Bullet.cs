@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Bullet : MonoBehaviourPlus
 {
 	//Inspector
@@ -8,11 +9,12 @@ public class Bullet : MonoBehaviourPlus
 
 	//Script
 	[HideInInspector] public float speed;
-	public Type shooterType;
+	public Humanoid shooter;
 	float timer;
 	new ParticleSystem particleSystem;
 	new Renderer renderer;
 	new Rigidbody rigidbody;
+	new Collider collider;
 	Vector3 _direction;
 
 	public Vector3 direction
@@ -36,31 +38,32 @@ public class Bullet : MonoBehaviourPlus
 		}
 	}
 
-	private void Awake()
-	{
-		particleSystem = transform.Find("Bullet Trail").GetComponent<ParticleSystem>();
-		renderer = transform.Find("Model").GetComponent<Renderer>();
-		rigidbody = GetComponent<Rigidbody>();
-	}
-
-	public Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color)
+	public virtual Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color)
 	{
 		this.speed = speed;
 		this.direction = direction;
-		shooterType = shooter.GetType();
+		this.shooter = shooter;
 		this.color = color;
 		enabled = true;
 		return this;
 	}
 
-	private void FixedUpdate()
+	protected virtual void Awake()
+	{
+		particleSystem = transform.Find("Trail").GetComponent<ParticleSystem>();
+		renderer = transform.Find("Model").GetComponent<Renderer>();
+		collider = renderer.GetComponent<Collider>();
+		rigidbody = GetComponent<Rigidbody>();
+	}
+
+	protected virtual void FixedUpdate()
 	{
 		rigidbody.velocity = Time.timeScale * speed * direction;
 		timer += Time.fixedDeltaTime;
 		if (timer >= maxLifetime) Destroy(gameObject);
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	protected virtual void OnCollisionEnter(Collision collision)
 	{
 		if (FindComponent(collision.transform, out IBulletReceiver bulletReceiver))
 		{
@@ -69,17 +72,17 @@ public class Bullet : MonoBehaviourPlus
 		else Destroy(gameObject);
 	}
 
-	private void OnEnable()
+	protected virtual void OnEnable()
 	{
-		GetComponent<Rigidbody>().isKinematic = false;
-		transform.Find("Model").GetComponent<Collider>().enabled = true;
+		rigidbody.isKinematic = false;
+		collider.enabled = true;
 		particleSystem.Play();
 	}
 
-	private void OnDisable()
+	protected virtual void OnDisable()
 	{
-		GetComponent<Rigidbody>().isKinematic = true;
-		transform.Find("Model").GetComponent<Collider>().enabled = false;
+		rigidbody.isKinematic = true;
+		collider.enabled = false;
 		particleSystem.Stop();
 	}
 }

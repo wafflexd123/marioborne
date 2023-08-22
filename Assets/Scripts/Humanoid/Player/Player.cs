@@ -26,6 +26,7 @@ public class Player : Humanoid
 	WickUI wickUI;
 	GameObject escMenu;
 	bool enableInput = true;
+	Coroutine crtMoveToEnemy;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
@@ -118,6 +119,29 @@ public class Player : Humanoid
 			enableInput = false;
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
+		}
+	}
+
+	public void TeleportToEnemy(Enemy enemy, float teleportSpeed)
+	{
+		if (enemy.enabled && crtMoveToEnemy == null)//dont teleport to dead/disabled enemies; will cause issues otherwise
+		{
+			Instantiate(model.deathPosePrefab, transform.position, transform.rotation);
+			cameraController.enabled = false;
+			movement.enabled = false;
+			movement.ResetVelocity();
+			movement.EnableCollider(false);
+			enemy.enabled = false;
+			if (weapon) weapon.Drop(0);
+			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
+			{
+				if (enemy.weapon) enemy.weapon.Pickup(this, true);
+				cameraController.enabled = true;
+				movement.EnableCollider(true);
+				movement.enabled = true;
+				crtMoveToEnemy = null;
+				Destroy(enemy.gameObject);
+			}, EasingFunction.EaseInSine));
 		}
 	}
 }
