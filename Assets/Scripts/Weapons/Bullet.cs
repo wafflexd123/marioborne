@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviourPlus
 
 	//Script
 	[HideInInspector] public float speed;
-	public Humanoid shooter;
+	[HideInInspector] public MonoBehaviour shooter;
 	float timer;
 	new ParticleSystem particleSystem;
 	new Renderer renderer;

@@ -16,8 +16,8 @@ public class Grenade : WeaponBase
         base.OnWielderChange();
     }
 
-    protected override void LeftMouse()
+    protected override void Attack()
     {
-        base.LeftMouse();
+        base.Attack();
     }
 }

@@ -156,7 +156,7 @@ public class Enemy : Humanoid, ITimeScaleListener
 						agent.SetDestination(player.transform.position);
 						IsStopped = false;
 					}
-					input.Press("Mouse", () => -1, () => false);//left click (shoot)
+					input.Press("Attack", () => 1, () => false);//left click (shoot)
 					break;
 			}
 		}

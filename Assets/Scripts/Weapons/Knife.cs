@@ -43,9 +43,9 @@ public class Knife : WeaponBase
 		wielder.model.holdingMelee = false;
 	}
 
-	protected override void LeftMouse()
+	protected override void Attack()
 	{
-		if ((wielder is not Player || !((Player)wielder).fists.IsFiring) && crtDelay == null)
+		if (crtDelay == null)
 		{
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()

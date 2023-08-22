@@ -66,9 +66,9 @@ public class Gun : WeaponBase
 		}
 	}
 
-	protected override void LeftMouse()
+	protected override void Attack()
 	{
-		if ((wielder is not Player || !((Player)wielder).fists.IsFiring) && crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//(if wielder is ai || isnt punching) && not waiting for fireDelay && wielder is looking at something && can shoot
+		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//not waiting for fireDelay && wielder is looking at something && can shoot
 		{
 			if (wielder is Player)
 			{
@@ -103,12 +103,12 @@ public class Gun : WeaponBase
 		return maxSpread == 0 ? Vector3.zero : new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread));
 	}
 
-    public override void Drop(float dropForce)
-    {
-        base.Drop(dropForce);
-    }
+	public override void Drop(float dropForce)
+	{
+		base.Drop(dropForce);
+	}
 
-    IEnumerator DelayWithUI()
+	IEnumerator DelayWithUI()
 	{
 		float timer = 0;
 		imgReloadPercent.gameObject.SetActive(true);

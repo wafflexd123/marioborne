@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum InputType { OnPress, OnHold, OnRelease }
-public enum InputAxes { Vertical, Horizontal, Drop, Mouse, Ability, Throw }
+public enum InputAxes { Attack, Drop, Throw }
 
 public class UniInput
 {
@@ -39,7 +39,9 @@ public class UniInput
 	/// <param name="hold">While this func returns true, the button is held down</param>
 	public void Press(string axis, Func<float> value, Func<bool> hold)
 	{
-		FindAxis(axis).Press(value, hold);
+		InputAxis button = FindAxis(axis);
+		if (button == null) Debug.LogWarning($"Could not find axis {axis}, make sure it is in the InputAxes enum and isn't misspelt");
+		else button.Press(value, hold);
 	}
 
 	InputAxis FindAxis(string axis)

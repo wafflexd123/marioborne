@@ -34,13 +34,13 @@ public class Telekinesis : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = GetComponentInChildren<Camera>();
+        mainCamera = Player.singlePlayer.camera;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetButtonDown("Ability"))
         {
             if (isGrabbing)
             {

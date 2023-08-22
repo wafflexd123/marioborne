@@ -43,7 +43,7 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
 	public void OnBulletHit(Collision collision, Bullet bullet)
 	{
 		bullet.enabled = false;
-		bullet.shooterType = GetType();
+		bullet.shooter = this;
 		bullet.color = bulletColor;
 		bullets.Add(bullet);
 	}

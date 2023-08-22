@@ -8,11 +8,11 @@ public abstract class WeaponBase : MonoBehaviourPlus
 {
 
 	[Header("Throw Variables")]
-    public float throwForce = 10f; // Initial force of the throw
-    public float throwSpeed = 1f; // How fast the object will go after being thrown
-    public float throwFallDelay = 1f; // Delay before object starts falling
+	public float throwForce = 10f; // Initial force of the throw
+	public float throwSpeed = 1f; // How fast the object will go after being thrown
+	public float throwFallDelay = 1f; // Delay before object starts falling
 
-    public Position handPosition;
+	public Position handPosition;
 	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
 	protected Humanoid wielder;
@@ -77,46 +77,45 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-    public virtual void Throw()
-    {
-        OnWielderChange();
-        OnDrop();
-        wielder = null;
-        transform.parent = null;
-        ResetRoutine(ThrowTimer(), ref crtDropTimer);
-        EnableRigidbody(true);
-        rigidbody.AddRelativeForce(Vector3.forward * throwForce, ForceMode.Impulse);
-        rigidbody.useGravity = false; // Disable gravity initially
-        rigidbody.velocity = transform.forward * throwSpeed;
-        StartCoroutine(ApplyGravityGradually()); // Start Coroutine to gradually apply gravity
-    }
+	public virtual void Throw()
+	{
+		OnWielderChange();
+		OnDrop();
+		wielder = null;
+		transform.parent = null;
+		ResetRoutine(ThrowTimer(), ref crtDropTimer);
+		EnableRigidbody(true);
+		rigidbody.AddRelativeForce(Vector3.forward * throwForce, ForceMode.Impulse);
+		rigidbody.useGravity = false; // Disable gravity initially
+		rigidbody.velocity = transform.forward * throwSpeed;
+		StartCoroutine(ApplyGravityGradually()); // Start Coroutine to gradually apply gravity
 
-    IEnumerator ApplyGravityGradually()
-    {
-        float gravityIncrement = Physics.gravity.y / throwFallDelay; // Divide gravity by delay to get increment
-        float currentGravity = 0;
+		IEnumerator ThrowTimer()
+		{
+			yield return new WaitForSeconds(throwFallDelay);
+			crtDropTimer = null;
+		}
+	}
 
-        while (currentGravity > Physics.gravity.y) // Continue until reaching default gravity
-        {
-            currentGravity += gravityIncrement * Time.deltaTime; // Increment gravity
-            rigidbody.AddForce(new Vector3(0, currentGravity, 0), ForceMode.Acceleration); // Apply incremental gravity
-            yield return null; // Wait for next frame
-        }
+	IEnumerator ApplyGravityGradually()
+	{
+		float gravityIncrement = Physics.gravity.y / throwFallDelay; // Divide gravity by delay to get increment
+		float currentGravity = 0;
 
-        rigidbody.useGravity = true; // Enable default gravity
-    }
+		while (currentGravity > Physics.gravity.y) // Continue until reaching default gravity
+		{
+			currentGravity += gravityIncrement * Time.deltaTime; // Increment gravity
+			rigidbody.AddForce(new Vector3(0, currentGravity, 0), ForceMode.Acceleration); // Apply incremental gravity
+			yield return null; // Wait for next frame
+		}
 
-    IEnumerator ThrowTimer()
-    {
-        yield return new WaitForSeconds(throwFallDelay);
-        crtDropTimer = null;
-    }
+		rigidbody.useGravity = true; // Enable default gravity
+	}
 
-
-    /// <summary>
-    /// Called just after OnWielderChange() when dropped
-    /// </summary>
-    protected virtual void OnDrop() { }
+	/// <summary>
+	/// Called just after OnWielderChange() when dropped
+	/// </summary>
+	protected virtual void OnDrop() { }
 
 	/// <summary>
 	/// Called to prepare a weapon for being dropped OR swapping wielders without being dropped; always just before wielder is changed.
@@ -134,18 +133,12 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		inputActions.Add(wielder.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
-		{
-			if (direction < 0) LeftMouse();
-			else RightMouse();
-		}));
-		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (float _) => Drop(dropForce)));
-        inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (float _) => Throw()));
-    }
+		inputActions.Add(wielder.input.AddListener("Attack", InputType.OnPress, (_) => Attack()));
+		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
+		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
+	}
 
-	protected virtual void LeftMouse() { }
-
-	protected virtual void RightMouse() { }
+	protected virtual void Attack() { }
 
 	/// <summary>
 	/// When an object with a rigidbody is set as a child of another object with a rigidbody, it gets buggy. This destroys the rigidbody and saves its data for later use.

@@ -12,7 +12,7 @@ public class BulletReflectSurface : MonoBehaviourPlus, IBulletReceiver
 		if (enableReflect)
 		{
 			bullet.direction = Vector3.Reflect(bullet.direction, collision.GetContact(0).normal);
-			bullet.shooterType = GetType();
+			bullet.shooter = this;
 			bullet.color = bulletColor;
 		}
 		else Destroy(bullet.gameObject);
