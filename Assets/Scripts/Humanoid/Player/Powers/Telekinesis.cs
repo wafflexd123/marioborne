@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Telekinesis : MonoBehaviour
+public class Telekinesis : MonoBehaviour, IPlayerPower
 {
     private Camera mainCamera;
     private RaycastHit raycast;
@@ -31,8 +31,10 @@ public class Telekinesis : MonoBehaviour
     private Vector3 offset;
     private float objectDistance;
 
-    // Start is called before the first frame update
-    void Start()
+    public bool CanDisable => true;
+
+	// Start is called before the first frame update
+	void Start()
     {
         mainCamera = Player.singlePlayer.camera;
     }

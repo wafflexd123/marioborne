@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeslowDeflect : MonoBehaviour
+public class TimeslowDeflect : MonoBehaviour, IPlayerPower
 {
 	public float timeScaleSpeed, minTimeScale, scaleDuration, recoveryTime;
 	[SerializeField] ReflectWindow reflectWindowPrefab;
 	Coroutine crtDeflect;
 	Image imgTimeleft;
 	Player player;
+
+	public bool CanDisable => crtDeflect == null;
 
 	private void Awake()
 	{

@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodySwapLauncher : MonoBehaviourPlus
+public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 {
 	public Bullet projectile;
 	public float projectileSpeed, fireDelay;
 	public Transform firePosition;
 	Player player;
 	Coroutine crtDelay;
+
+	public bool CanDisable => true;
 
 	private void Awake()
 	{

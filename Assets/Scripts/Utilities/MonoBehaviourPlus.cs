@@ -3,6 +3,22 @@ using System.Collections;
 using UnityEngine;
 public class MonoBehaviourPlus : MonoBehaviour
 {
+	/// <summary>
+	/// min = inclusive; max = exclusive
+	/// </summary>
+	public static bool InRange(int i, int min, int max)
+	{
+		return i >= min && i < max;
+	}
+
+	/// <summary>
+	/// min = inclusive; max = inclusive
+	/// </summary>
+	public static bool InRange(float f, float min, float max)
+	{
+		return f >= min && f <= max;
+	}
+
 	public IEnumerator TweenFloat(Func<float> inFloat, Action<float> outFloat, float target, float speed)
 	{
 		if (inFloat() != target)
