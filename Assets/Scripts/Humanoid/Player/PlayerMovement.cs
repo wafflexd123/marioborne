@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
 	public bool IsOnWall { get => wallDirection != 0; }
 	public bool EnableInput { get; set; }
+	public Vector3 LookDirection => camera.transform.forward;
 
 	//Private
 	int wallDirection;
@@ -368,7 +369,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		IEnumerator Routine()
 		{
-			xzVelocity.AddForce(moveDirection * dashForce, ForceMode.VelocityChange);
+			xzVelocity.AddForce(LookDirection * dashForce, ForceMode.VelocityChange);
 			yield return new WaitForSeconds(dashCooldown);
 			crtDash = null;
 		}
