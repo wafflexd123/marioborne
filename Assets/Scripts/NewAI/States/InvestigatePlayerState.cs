@@ -9,7 +9,8 @@ public class InvestigatePlayerState : IAIState
 
     public void OnEntry()
     {
-        
+        if(controller.soundLocation != null) controller.LastKnownPlayerPosition = controller.soundLocation.position;
+        controller.soundLocation = null;
     }
 
     public void OnExit()
@@ -20,6 +21,7 @@ public class InvestigatePlayerState : IAIState
     public void Tick()
     {
         controller.MoveTowards(controller.LastKnownPlayerPosition);
+        if (controller.soundLocation != null) OnEntry();
     }
 }
 

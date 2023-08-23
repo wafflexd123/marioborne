@@ -90,7 +90,8 @@ public class Gun : WeaponBase
 	protected virtual void Shoot()
 	{
 		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (wielder.LookingAt - firePosition.position).normalized, wielder, ammo.color);
-	}
+        MakeSound();
+    }
 
 	IEnumerator DelayWithUI()
 	{

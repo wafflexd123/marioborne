@@ -46,7 +46,6 @@ public class ActiveShootingState : IAIState
         }
         else
         {
-            Debug.Log("yes");
             coroutineHelper.CancelCoroutine("relocate");
             relocateInvoked = false;
             if (!investigateInvoked)

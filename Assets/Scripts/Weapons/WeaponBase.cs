@@ -15,6 +15,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 	Action onWielderChange;//registered by wielder when picked up, to be called just before the weapon is dropped
 	Coroutine crtDropTimer;
+    public float soundRadius;
 
 	bool IsMoving { get => rigidbody != null && rigidbody.velocity != Vector3.zero; }
 	public abstract bool IsFiring { get; }
@@ -124,7 +125,22 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-	private void OnCollisionEnter(Collision other)
+    public void MakeSound()
+    {
+        if (wielder is Player)
+        {
+            Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius);
+            foreach (var enemyHeard in enemiesHeard)
+            { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+                if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+                {
+                    enemyHeard.GetComponentInParent<AIController>().soundLocation = transform;
+                }
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
 	{
 		if (FindComponent(other.transform, out Player player)) Pickup(player);
 	}

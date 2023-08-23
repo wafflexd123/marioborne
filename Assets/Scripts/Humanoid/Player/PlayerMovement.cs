@@ -63,6 +63,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Tooltip("How far the ground-check spherecast travels")]
 	public float groundCheckDistance;
 
+    [Header("Sounds")]
+    public float soundRadius;
+
 	//Private
 	int wallDirection;
 	float mass, _tilt, currentDrag, health;
@@ -217,7 +220,8 @@ public class PlayerMovement : MonoBehaviourPlus
 				{
 					currentDrag = walkDrag;
 					xzVelocity.AddForce(walkForce, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized, ForceMode.Acceleration);
-				}
+                    MakeSound();
+                }
 			}
 		}
 		else if (IsOnWall && (!Physics.Raycast(collider.transform.position + (collider.transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player has jumped high enough
@@ -445,7 +449,19 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	void ControlText()
+    public void MakeSound()
+    {
+        Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius * rigidbody.velocity.magnitude);
+        foreach (var enemyHeard in enemiesHeard)
+        { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+            if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+            {
+                enemyHeard.GetComponentInParent<AIController>().soundLocation = player.transform;
+            }
+        }
+    }
+
+    void ControlText()
 	{
 		if (wallHit.transform != null) txtWhereAmI.text = wallHit.transform.name;
 		else if (IsGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;

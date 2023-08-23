@@ -48,7 +48,8 @@ public class StandardAI : AIController
 
         CanSeePlayerTransition NavigateFiring = new CanSeePlayerTransition(navigateFiringPosState, this);
         patrolState.transitions = new List<Transition>() { NavigateFiring };
-
+        CanHearPlayerTransition investigateSound = new CanHearPlayerTransition(investigatePlayerState, this);
+        patrolState.transitions = new List<Transition>() { investigateSound };
         // reach destination -> active shooting
         StartShootingTransition startShootingTransition = new StartShootingTransition(activeShootingState);
         navigateFiringPosState.startShootingTransition = startShootingTransition;

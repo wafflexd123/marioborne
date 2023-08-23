@@ -95,3 +95,18 @@ public class CanSeePlayerTransition : Transition
         return controller.fieldOfView.canSeePlayer;
     }
 }
+
+public class CanHearPlayerTransition : Transition
+{
+    public AIController controller;
+
+    public CanHearPlayerTransition(IAIState targetState, AIController controller) : base(targetState)
+    {
+        this.controller = controller;
+    }
+
+    public override bool RequirementsMet()
+    {
+        return controller.soundLocation != null;
+    }
+}
