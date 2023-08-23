@@ -6762,7 +6762,7 @@ MonoBehaviour:
     minY: 60
     maxY: 65
     maxX: 10
-  <fovPerSecond>k__BackingField: 50
+  <fovPerSecond>k__BackingField: 10
   <dashForce>k__BackingField: 12.5
   <dashCooldown>k__BackingField: 0.5
   airForce:
@@ -6871,38 +6871,56 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.1
-        value: 0
-        inSlope: -0
-        outSlope: 0.5805074
-        tangentMode: 5
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.79823256
-        value: 0.9421184
-        inSlope: 0.94248915
-        outSlope: 0.94248915
+        time: 0.49911076
+        value: 0.57778895
+        inSlope: 1.6410931
+        outSlope: 1.6410931
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.56397927
+        value: 0.6349282
+        inSlope: -0.0057984283
+        outSlope: -0.0057984283
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.42570326
+      - serializedVersion: 3
+        time: 0.7574879
+        value: 0.68197864
+        inSlope: 0.6241832
+        outSlope: 0.6241832
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.3583267
+        outWeight: 0.37689242
+      - serializedVersion: 3
+        time: 0.9010807
+        value: 0.8374693
+        inSlope: 1.6616616
+        outSlope: 1.6616616
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.192116
+        outWeight: 0.3536886
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: 1.2420571
+        outSlope: 1.2420571
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.28973588
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    minY: 50
-    maxY: 100
-    maxX: 10
+    minY: 75
+    maxY: 150
+    maxX: 12.5
   <wallDrag>k__BackingField: 10
   <wallRunGravity>k__BackingField: -10
   <wallJumpForce>k__BackingField: 7.5
