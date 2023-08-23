@@ -30,7 +30,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 
 	public virtual bool Pickup(Humanoid humanoid, bool forcePickup = false)
 	{
-		if (forcePickup && wielder)//forced pickups only need to occur if the weapon is being wielded already
+        if (forcePickup && wielder)//forced pickups only need to occur if the weapon is being wielded already
 		{
 			if (humanoid.PickupObject(this, out Action onWielderChange))
 			{
@@ -40,16 +40,17 @@ public abstract class WeaponBase : MonoBehaviourPlus
 				wielder = humanoid;
 				transform.localPosition = handPosition;
 				transform.localEulerAngles = handPosition.eulers;
-				OnPickup();
+                OnPickup();
 				return true;
 			}
 		}
 		else if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			wielder = humanoid;
-			EnableRigidbody(false);
-			StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
-			return true;
+            EnableRigidbody(false);
+            OnPickup();
+            StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
+            return true;
 		}
 		return false;
 	}
@@ -92,7 +93,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		inputActions.Add(wielder.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
+        inputActions.Add(wielder.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
 		{
 			if (direction < 0) LeftMouse();
 			else RightMouse();

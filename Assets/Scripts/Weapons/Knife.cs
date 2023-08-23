@@ -45,7 +45,7 @@ public class Knife : WeaponBase
 
 	protected override void LeftMouse()
 	{
-		if ((wielder is not Player || !((Player)wielder).fists.IsFiring) && crtDelay == null)
+		if ((!(wielder is Player) || !((Player)wielder).fists.IsFiring) && crtDelay == null)
 		{
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
