@@ -9,19 +9,22 @@ public class InvestigatePlayerState : IAIState
 
     public void OnEntry()
     {
-        if(controller.soundLocation != null) controller.LastKnownPlayerPosition = controller.soundLocation.position;
+        if(controller.soundLocation != null) //only follow sound if patrolling or already investigating
+        {
+            controller.LastKnownPlayerPosition = controller.soundLocation.position;
+        }
         controller.soundLocation = null;
     }
 
     public void OnExit()
     {
-        
+
     }
 
     public void Tick()
     {
         controller.MoveTowards(controller.LastKnownPlayerPosition);
-        if (controller.soundLocation != null) OnEntry();
+        if (controller.soundLocation != null) OnEntry(); //while investigating, sounds will give away position
     }
 }
 
@@ -36,4 +39,19 @@ public class ReachedLastKnownPlayerPosTransition : Transition
     }
 
     public override bool RequirementsMet() { return Vector3.Distance(controller.LastKnownPlayerPosition, transform.position) < 1f; }
+}
+
+public class FoundPlayerTransition : Transition
+{
+    public AIController controller;
+
+    public FoundPlayerTransition(IAIState targetState, AIController controller) : base(targetState)
+    {
+        this.controller = controller;
+    }
+
+    public override bool RequirementsMet()
+    {
+        return controller.fieldOfView.canSeePlayer;
+    }
 }

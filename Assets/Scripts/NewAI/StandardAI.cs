@@ -9,6 +9,8 @@ public class StandardAI : AIController
     protected bool patrolPingPong = true;
     [SerializeField] public Transform patrolPoints;
     [SerializeField] public Transform coverPoints;
+    public float defaultSpeed;
+    public float runToCoverSpeed; //will extend these for each state if needed
 
     // AI States
     protected PatrolState patrolState;
@@ -46,10 +48,9 @@ public class StandardAI : AIController
         waitState.controller = this;
         states.Add(waitState);
 
-        CanSeePlayerTransition NavigateFiring = new CanSeePlayerTransition(navigateFiringPosState, this);
-        patrolState.transitions = new List<Transition>() { NavigateFiring };
+        CanSeePlayerTransition navigateFiring = new CanSeePlayerTransition(navigateFiringPosState, this);
         CanHearPlayerTransition investigateSound = new CanHearPlayerTransition(investigatePlayerState, this);
-        patrolState.transitions = new List<Transition>() { investigateSound };
+        patrolState.transitions = new List<Transition>() { navigateFiring, investigateSound };
         // reach destination -> active shooting
         StartShootingTransition startShootingTransition = new StartShootingTransition(activeShootingState);
         navigateFiringPosState.startShootingTransition = startShootingTransition;
@@ -65,8 +66,9 @@ public class StandardAI : AIController
 
         // sees player -> active shooting
         // reaches aprox last player position -> wait
+        FoundPlayerTransition foundPlayerTransition = new FoundPlayerTransition(navigateFiringPosState, this);
         ReachedLastKnownPlayerPosTransition reachedLastKnownPlayerPosTransition = new ReachedLastKnownPlayerPosTransition(waitState, this, transform);
-        investigatePlayerState.transitions = new List<Transition>() { startShootingTransition, reachedLastKnownPlayerPosTransition };
+        investigatePlayerState.transitions = new List<Transition>() { foundPlayerTransition, reachedLastKnownPlayerPosTransition };
 
         // wait state
         // sees player -> navigate to shooting position
@@ -91,7 +93,8 @@ public class StandardAI : AIController
         patrolState.SetPatrolPoints(pointsList);
     }
 
-    public void SetCoverPoints(Transform[] points)
+    //idk if we'll need this at some point
+    /*public void SetCoverPoints(Transform[] points)
     {
         List<Vector3> pointsList = new List<Vector3>();
         for (int i = 0; i < points.Length; i++)
@@ -101,7 +104,7 @@ public class StandardAI : AIController
         if (navigateFiringPosState == null)
             navigateFiringPosState = new NavigateFiringPosState();
         navigateFiringPosState.SetCoverPoints(pointsList);
-    }
+    }*/
 
     private void Start()
     {

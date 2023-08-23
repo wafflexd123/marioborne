@@ -20,6 +20,7 @@ public class ActiveShootingState : IAIState
         standardAI = controller as StandardAI;
         investigateInvoked = false;
         relocateInvoked = false;
+        controller.transform.LookAt(controller.player.transform.position);
     }   
 
     public void OnExit()
@@ -33,8 +34,9 @@ public class ActiveShootingState : IAIState
     {
         if (controller.fieldOfView.canSeePlayer)
         {
-            controller.transform.LookAt(standardAI.player.transform.position);
+            controller.transform.LookAt(controller.player.transform.position);
             controller.Fire();
+            controller.LastKnownPlayerPosition = controller.player.transform.position;
             if (!relocateInvoked)
             {
                 coroutineHelper.StartOrAddCoroutine("relocate", WaitForTime(TimeBeforeRelocating, true));
@@ -50,6 +52,7 @@ public class ActiveShootingState : IAIState
             relocateInvoked = false;
             if (!investigateInvoked)
             {
+                Debug.Log("investigate proc");
                 coroutineHelper.StartOrAddCoroutine("investigate", WaitForTime(TimeBeforePursuingPlayer, false));
                 investigateInvoked = true;
             }
@@ -65,12 +68,13 @@ public class ActiveShootingState : IAIState
     public IEnumerator WaitForTime(float time, bool relocation)
     {
         yield return new WaitForSeconds(time);
-        if (relocation)
+        /*if (relocation) //relocation not implemented atm
         {
             ExternalControlTransition t = transitions[1] as ExternalControlTransition;
             t.trigger = true;
         }
-        else
+        else*/
+        if(!relocation)
         {
             ExternalControlTransition t = transitions[0] as ExternalControlTransition;
             t.trigger = true;

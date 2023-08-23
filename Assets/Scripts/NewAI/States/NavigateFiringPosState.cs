@@ -14,6 +14,7 @@ public class NavigateFiringPosState : IAIState
     private int coverIndex;
     protected Vector3 targetLocation;
     public float TimeBeforeReturningToPatrol = 10f;
+    protected StandardAI standardAI;
 
     public void OnEntry()
     {
@@ -22,10 +23,8 @@ public class NavigateFiringPosState : IAIState
         // And somewhere they have some cover
         // Set targetLocation
 
-        // according to Enemy.cs
-        //controller.MoveTowards(Player.singlePlayer.transform.position);
-
-        StandardAI standardAI = controller as StandardAI;
+        standardAI = controller as StandardAI;
+        controller.agent.speed = standardAI.runToCoverSpeed;
         coverPoints = new List<Vector3>();
         for (int i = 0; i < standardAI.coverPoints.childCount - 1; i++)
         {
@@ -49,24 +48,27 @@ public class NavigateFiringPosState : IAIState
         coroutineHelper.AddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
     }
 
-    public void OnExit() { }
+    public void OnExit() 
+    {
+        controller.agent.speed = standardAI.defaultSpeed;
+        startShootingTransition.destination = Vector3.zero;
+        startShootingTransition.position = Vector3.one; //resets requirements, otherwise the guy goes a bit wonky
+    }
 
     public void Tick()
-    {
-        // Move towards target location
-        // *** REPLACE THIS, should instead go towards its decided target location. 
+    { 
         controller.MoveTowards(targetLocation);
         startShootingTransition.destination = targetLocation;
         startShootingTransition.position = controller.transform.position;
 
-        // keep this part
+        //needs work i think
         if (!controller.fieldOfView.canSeePlayer)
         {
-            coroutineHelper.StartOrAddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
+            //coroutineHelper.StartOrAddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
         }
         else
         {
-            coroutineHelper.CancelCoroutine("returnToPatrol-Navi");
+            //coroutineHelper.CancelCoroutine("returnToPatrol-Navi");
         }
     }
 
@@ -83,12 +85,14 @@ public class NavigateFiringPosState : IAIState
             }
         }
     }
-    public void SetCoverPoints(List<Vector3> coverPoints)
+
+    //idk if we'll need this at some point
+    /* public void SetCoverPoints(List<Vector3> coverPoints)
     {
         this.coverPoints = new List<Vector3>() { };
         for (int i = 0; i < coverPoints.Count; i++)
             this.coverPoints.Add(coverPoints[i]);
-    }
+    } */
 }
 
 public class StartShootingTransition : Transition
