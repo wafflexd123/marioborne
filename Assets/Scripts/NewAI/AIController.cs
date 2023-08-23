@@ -13,13 +13,13 @@ public class AIController : Humanoid, ITimeScaleListener
     public FieldOfView fieldOfView { get; protected set; }
     public NavMeshAgent agent { get; protected set; }
     public Rigidbody rb { get; protected set; }
-    Vector3 lookingAt;
+    [HideInInspector] public Vector3 lookingAt;
+    [HideInInspector] public Player player;
 
     public override Vector3 LookDirection => fieldOfView.eyes.transform.TransformDirection(Vector3.forward);
     public override Vector3 LookingAt => lookingAt;
 
     [SerializeField] protected WeaponBase weapon;
-    protected Player player;
 
     protected Vector3 velocity;
 
@@ -36,6 +36,8 @@ public class AIController : Humanoid, ITimeScaleListener
     // Update is called once per frame
     void FixedUpdate()
     {
+        print(CurrentState);
+        model.velocity = agent.velocity;
         //MoveTowards(GameObject.Find("Player").transform.position); //for debugging
         //Fire(); //for debugging
         bool TransitionedThisFrame = false;

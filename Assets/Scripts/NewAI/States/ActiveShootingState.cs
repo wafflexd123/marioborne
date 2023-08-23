@@ -13,9 +13,11 @@ public class ActiveShootingState : IAIState
 
     protected bool investigateInvoked = false;
     protected bool relocateInvoked = false;
+    protected StandardAI standardAI;
 
     public void OnEntry()
     {
+        standardAI = controller as StandardAI;
         investigateInvoked = false;
         relocateInvoked = false;
     }   
@@ -31,6 +33,7 @@ public class ActiveShootingState : IAIState
     {
         if (controller.fieldOfView.canSeePlayer)
         {
+            controller.transform.LookAt(standardAI.player.transform.position);
             controller.Fire();
             if (!relocateInvoked)
             {
@@ -43,6 +46,7 @@ public class ActiveShootingState : IAIState
         }
         else
         {
+            Debug.Log("yes");
             coroutineHelper.CancelCoroutine("relocate");
             relocateInvoked = false;
             if (!investigateInvoked)

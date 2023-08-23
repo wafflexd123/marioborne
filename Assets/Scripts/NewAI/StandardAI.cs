@@ -8,6 +8,7 @@ public class StandardAI : AIController
     [SerializeField, Tooltip("Whether the patrol path should be run in reverse when completed, or looping from the 0th patrol point")] 
     protected bool patrolPingPong = true;
     [SerializeField] public Transform patrolPoints;
+    [SerializeField] public Transform coverPoints;
 
     // AI States
     protected PatrolState patrolState;
@@ -36,10 +37,13 @@ public class StandardAI : AIController
         navigateFiringPosState.controller = this;
         states.Add(navigateFiringPosState);
         investigatePlayerState = new InvestigatePlayerState();
+        investigatePlayerState.controller = this;
         states.Add(investigatePlayerState);
         activeShootingState = new ActiveShootingState();
+        activeShootingState.controller = this;
         states.Add(activeShootingState);
         waitState = new WaitState();
+        waitState.controller = this;
         states.Add(waitState);
 
         CanSeePlayerTransition NavigateFiring = new CanSeePlayerTransition(navigateFiringPosState, this);
@@ -84,6 +88,18 @@ public class StandardAI : AIController
         if (patrolState == null)
             patrolState = new PatrolState();
         patrolState.SetPatrolPoints(pointsList);
+    }
+
+    public void SetCoverPoints(Transform[] points)
+    {
+        List<Vector3> pointsList = new List<Vector3>();
+        for (int i = 0; i < points.Length; i++)
+        {
+            pointsList.Add(points[i].position);
+        }
+        if (navigateFiringPosState == null)
+            navigateFiringPosState = new NavigateFiringPosState();
+        navigateFiringPosState.SetCoverPoints(pointsList);
     }
 
     private void Start()
