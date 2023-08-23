@@ -9,15 +9,15 @@ public class CoroutineHelper : MonoBehaviour
 {
     [Header("I am a stupid bastard required for other code to work, please ignore me in inspector.")]
     //private HashSet<Coroutine> coroutines;
-    private Dictionary<string, Coroutine> coroutines = new Dictionary<string, Coroutine>();
-    private Dictionary<string, IEnumerator> coroutineFunctions = new Dictionary<string, IEnumerator>();
+    //private Dictionary<string, Coroutine> coroutines = new Dictionary<string, Coroutine>();
+    //private Dictionary<string, IEnumerator> coroutineFunctions = new Dictionary<string, IEnumerator>();
     //private Dictionary<string, System.Func<IEnumerator>> coroutineFunctions = new Dictionary<string, System.Func<IEnumerator>>();
+    private Dictionary<string, CorouCollection> routines = new Dictionary<string, CorouCollection>();
 
     //public void StartOrAddCoroutine(string name, System.Func<IEnumerator> coroutine)
     public void StartOrAddCoroutine(string name, IEnumerator coroutine)
     {
-        // I am sure this could be optimised, it looks smelly. 
-        if (coroutineFunctions.ContainsKey(name))
+        if (routines.ContainsKey(name))
         {
             StartKnownCoroutine(name);
         }
@@ -29,17 +29,23 @@ public class CoroutineHelper : MonoBehaviour
     }
 
     //public void AddCoroutine(string name, System.Func<IEnumerator> coroutine)
-    public void AddCoroutine(string name, IEnumerator coroutine)
+    public void AddCoroutine(string name, IEnumerator coroutine_)
     {
-        coroutineFunctions.Add(name, coroutine);
+        CorouCollection newCollection = new CorouCollection
+        {
+            running = false,
+            coroutine = null,
+            coroutineFunction = coroutine_,
+        };
+        routines.Add(name, newCollection);
     }
 
     public void StartKnownCoroutine(string name)
     {
-        //if (coroutineFunctions.TryGetValue(name, out System.Func<IEnumerator> func))
-        if (coroutineFunctions.TryGetValue(name, out IEnumerator func))
+        if (routines.TryGetValue(name, out CorouCollection collection)) 
         {
-            coroutines.Add(name, StartCoroutine(func));
+            collection.running = true;
+            collection.coroutine = StartCoroutine(collection.coroutineFunction);
         }
         else
         {
@@ -49,14 +55,22 @@ public class CoroutineHelper : MonoBehaviour
 
     public void CancelCoroutine(string name)
     {
-        if (coroutines.TryGetValue(name, out Coroutine coroutine))
+        if (routines.TryGetValue(name, out CorouCollection collection))
         {
-            // calling this every frame is probably really inefficient but I don't know how else to do this as of this moment
-            StopCoroutine(coroutine);
+            if (!collection.running) return;
+            collection.running = false;
+            StopCoroutine(collection.coroutine);
         }
         else
         {
             Debug.LogWarning($"Coroutine Helper asked to stop a coroutine it does not know. Asked to stop: {name}");
         }
+    }
+
+    private struct CorouCollection
+    {
+        public Coroutine coroutine;
+        public IEnumerator coroutineFunction;
+        public bool running;
     }
 }
