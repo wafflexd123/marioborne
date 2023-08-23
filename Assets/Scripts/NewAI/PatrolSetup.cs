@@ -10,7 +10,9 @@ public class PatrolSetup : MonoBehaviour
 
     public void SetPatrolRoute()
     {
-
+        if ( standardAI == null )
+            standardAI = GetComponent<StandardAI>();
+        standardAI.SetPatrolPoints(points);
     }
 
     private void Awake()

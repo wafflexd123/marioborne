@@ -37,7 +37,12 @@ public class CoroutineHelper : MonoBehaviour
             coroutine = null,
             coroutineFunction = coroutine_,
         };
-        routines.Add(name, newCollection);
+        if (routines.ContainsKey(name))
+        {
+            routines[name] = newCollection;
+        }
+        else
+            routines.Add(name, newCollection);
     }
 
     public void StartKnownCoroutine(string name)

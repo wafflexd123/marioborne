@@ -20,7 +20,10 @@ public class NavigateFiringPosState : IAIState
         // Set targetLocation
 
         // according to Enemy.cs
-        controller.MoveTowards(Player.singlePlayer.transform.position);
+        //controller.MoveTowards(Player.singlePlayer.transform.position);
+
+
+        coroutineHelper.AddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
     }
 
     public void OnExit() { }

@@ -19,7 +19,6 @@ public class AIController : Humanoid, ITimeScaleListener
     public override Vector3 LookingAt => lookingAt;
 
     [SerializeField] protected WeaponBase weapon;
-    [SerializeField] public Transform patrolPoints;
     protected Player player;
 
     protected Vector3 velocity;
@@ -37,13 +36,14 @@ public class AIController : Humanoid, ITimeScaleListener
     // Update is called once per frame
     void FixedUpdate()
     {
-        MoveTowards(GameObject.Find("Player").transform.position); //for debugging
-        Fire(); //for debugging
+        //MoveTowards(GameObject.Find("Player").transform.position); //for debugging
+        //Fire(); //for debugging
         bool TransitionedThisFrame = false;
-        /*for (int i = 0; i < CurrentState.transitions.Count; i++)
+        for (int i = 0; i < CurrentState.transitions.Count; i++)
         {
             if (CurrentState.transitions[i].RequirementsMet()) // transition state
             {
+                print($"{name} has is transitioning: \t{i}: {CurrentState.GetType().Name} -> {CurrentState.transitions[i].targetState.GetType().Name}");
                 CurrentState.OnExit();
                 CurrentState = CurrentState.transitions[i].targetState;
                 CurrentState.OnEntry();
@@ -55,7 +55,6 @@ public class AIController : Humanoid, ITimeScaleListener
         {
             CurrentState.Tick();
         }
-        */
     }
 
     public void MoveTowards(Vector3 targetPosition) 
