@@ -18,16 +18,21 @@ public class Time
 		}
 	}
 	static float _timeScale = 1;
-	public static float deltaTime { get => timeScale * UnityEngine.Time.unscaledDeltaTime; }
-	public static float unscaledDeltaTime { get => UnityEngine.Time.unscaledDeltaTime; }
-	public static float fixedDeltaTime { get => timeScale * UnityEngine.Time.fixedUnscaledDeltaTime; }
-	public static float fixedUnscaledDeltaTime { get => UnityEngine.Time.fixedUnscaledDeltaTime; }
+	public static float deltaTime { get => Clamp(timeScale * UnityEngine.Time.unscaledDeltaTime, UnityEngine.Time.maximumDeltaTime); }
+	public static float unscaledDeltaTime { get => Clamp(UnityEngine.Time.unscaledDeltaTime, UnityEngine.Time.maximumDeltaTime); }
+	public static float fixedDeltaTime { get => Clamp(timeScale * UnityEngine.Time.fixedUnscaledDeltaTime, UnityEngine.Time.maximumDeltaTime); }
+	public static float fixedUnscaledDeltaTime { get => Clamp(UnityEngine.Time.fixedUnscaledDeltaTime, UnityEngine.Time.maximumDeltaTime); }
 
 	public static readonly List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();
 
 	public static void OnSceneChange()
 	{
 		timeScaleListeners.Clear();
+	}
+
+	static float Clamp(float f, float clampTo)
+	{
+		return f > clampTo ? clampTo : f;
 	}
 }
 
