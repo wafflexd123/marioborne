@@ -185,7 +185,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	private void OnCollisionStay(Collision collision)
 	{
-		xzVelocity.vector = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z) / Time.timeScale;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions. kinda broken when time-slowing but no one will notice (i hope)
+		xzVelocity.vector = (rigidbody.velocity / Time.timeScale) - yVelocity.vector;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions. kinda broken when time-slowing but no one will notice (i hope)
 	}
 
 	void OnDrawGizmosSelected()
