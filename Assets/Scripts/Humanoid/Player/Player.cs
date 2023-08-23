@@ -27,6 +27,7 @@ public class Player : Humanoid
 	GameObject escMenu;
 	bool enableInput = true;
 	Coroutine crtMoveToEnemy;
+	Transform leftHand;
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
@@ -34,6 +35,7 @@ public class Player : Humanoid
 	protected override void Awake()
 	{
 		base.Awake();
+		leftHand = transform.Find("Left Hand");
 		cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = cameraController.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
 		fists = transform.Find("Body").Find("Hand").GetComponent<Fists>();
@@ -95,7 +97,7 @@ public class Player : Humanoid
 		if (!this.weapon)//if nothing in hand
 		{
 			this.weapon = weapon;
-			weapon.transform.SetParent(camera.transform.parent);
+			weapon.transform.SetParent(leftHand);
 			onDrop = () => this.weapon = null;
 			return true;
 		}

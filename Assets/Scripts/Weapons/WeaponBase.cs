@@ -12,7 +12,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	public float throwSpeed = 1f; // How fast the object will go after being thrown
 	public float throwFallDelay = 1f; // Delay before object starts falling
 
-	public Position handPosition;
+	public Position handPosition, thirdPersonPosition;
 	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
 	protected Humanoid wielder;
@@ -44,8 +44,16 @@ public abstract class WeaponBase : MonoBehaviourPlus
 				OnWielderChange();
 				this.onWielderChange = onWielderChange;
 				wielder = humanoid;
-				transform.localPosition = handPosition;
-				transform.localEulerAngles = handPosition.eulers;
+				if (wielder is Player)
+				{
+					transform.localPosition = handPosition;
+					transform.localEulerAngles = handPosition.eulers;
+				}
+				else
+				{
+					transform.localPosition = thirdPersonPosition;
+					transform.localEulerAngles = thirdPersonPosition.eulers;
+				}
 				OnPickup();
 				return true;
 			}
