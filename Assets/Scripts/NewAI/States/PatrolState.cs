@@ -9,7 +9,7 @@ public class PatrolState : IAIState
 
     private List<Vector3> patrolPoints;
     private int patrolIndex;
-    public bool pingPong = true;
+    public bool pingpong = true;
     protected int pingpongDirection = 1;
 
     public void OnEntry()
@@ -47,7 +47,7 @@ public class PatrolState : IAIState
 
     protected void IncrementPatrolIndex()
     {
-        if (pingPong)
+        if (pingpong)
         {
             //if (patrolIndex - 1 == -1 || patrolIndex + 1 == patrolPoints.Count)
             if (patrolIndex + pingpongDirection == -1 || patrolIndex + pingpongDirection == patrolPoints.Count)

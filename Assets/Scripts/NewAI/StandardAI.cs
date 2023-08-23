@@ -14,11 +14,19 @@ public class StandardAI : AIController
     protected InvestigatePlayerState investigatePlayerState;
     protected ActiveShootingState activeShootingState;
     protected WaitState waitState;
+
+    // helpers
+    protected CoroutineHelper coroutineHelper;
+    protected PatrolSetup patrolSetup;
     
     protected override void Awake()
     {
         base.Awake();
-        var coroutineHelper = gameObject.AddComponent<CoroutineHelper>();
+        try { coroutineHelper = gameObject.GetComponent<CoroutineHelper>(); }
+        catch { coroutineHelper = gameObject.AddComponent<CoroutineHelper>(); }
+        try { patrolSetup = gameObject.GetComponent<PatrolSetup>(); }
+        catch { patrolSetup = gameObject.AddComponent<PatrolSetup>(); }
+
         states = new List<IAIState>();
         patrolState = new PatrolState();
         states.Add(patrolState);
@@ -60,8 +68,18 @@ public class StandardAI : AIController
         waitState.transitions = new List<Transition>() { startShootingTransition, waitToPatrol };
     }
 
+    public void SetPatrolPoints(Transform[] points)
+    {
+        List<Vector3> pointsList = new List<Vector3>();
+        for (int i = 0; i < points.Length; i++)
+        {
+            pointsList.Add(points[i].position);
+        }
+        patrolState.SetPatrolPoints(pointsList);
+    }
+
     private void Start()
     {
-        patrolState.pingPong = patrolPingPong;
+        patrolState.pingpong = patrolPingPong;
     }
 }
