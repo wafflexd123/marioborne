@@ -150,8 +150,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (!IsGrounded)
 		{
 			Vector3 lastGroundPos = currentGroundPosition;
-			CheckGround();//this will call twice a frame but cant be bothered
-			if (IsGrounded)
+			if (rigidbody.velocity.y > yVelocity.y)
 			{
 				float distance = lastGroundPos.y - transform.position.y;
 				if (queueRoll && distance >= fallRollEngageDistance)//if queueing a roll & hit the ground at roll distance
@@ -179,6 +178,7 @@ public class PlayerMovement : MonoBehaviourPlus
 					}
 				}
 				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
+				rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);//set velocity instantly to 0 instead of lerping over a few frames
 			}
 		}
 	}
@@ -369,7 +369,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		IEnumerator Routine()
 		{
-			xzVelocity.AddForce(LookDirection * dashForce, ForceMode.VelocityChange);
+			yVelocity.AddForce(LookDirection * dashForce, ForceMode.VelocityChange);
 			yield return new WaitForSeconds(dashCooldown);
 			crtDash = null;
 		}
