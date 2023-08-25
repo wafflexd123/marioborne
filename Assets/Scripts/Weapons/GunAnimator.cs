@@ -16,7 +16,7 @@ public class GunAnimator : MonoBehaviourPlus
 
 	public void StopAnimations()
 	{
-		StopCoroutine(crtAnimate);
+        if(crtAnimate != null) StopCoroutine(crtAnimate);
 		crtAnimate = null;
 		startPosition.ApplyToTransform(transform, true);
 	}

@@ -69,13 +69,12 @@ public class ActiveShootingState : IAIState
     public IEnumerator WaitForTime(float time, bool relocation)
     {
         yield return new WaitForSeconds(time);
-        /*if (relocation) //relocation not implemented atm
+        if (relocation) //currently relocation just swaps the two closest positions. any idea on how we can improve it?
         {
             ExternalControlTransition t = transitions[1] as ExternalControlTransition;
             t.trigger = true;
         }
-        else*/
-        if(!relocation)
+        else
         {
             ExternalControlTransition t = transitions[0] as ExternalControlTransition;
             t.trigger = true;

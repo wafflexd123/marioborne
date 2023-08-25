@@ -59,7 +59,7 @@ public class Player : Humanoid
 			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, raycastIgnore, QueryTriggerInteraction.Ignore);
 			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
-			if (Input.GetKeyDown(KeyCode.E) && FindComponent(raycast.transform, out Enemy e)) TeleportToEnemy(e);
+			if (Input.GetKeyDown(KeyCode.E) && FindComponent(raycast.transform, out AIController e)) TeleportToEnemy(e);
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
@@ -123,7 +123,7 @@ public class Player : Humanoid
 		}
 	}
 
-	void TeleportToEnemy(Enemy enemy)
+	void TeleportToEnemy(AIController enemy)
 	{
 		if (enemy.enabled && crtMoveToEnemy == null)//dont teleport to dead/disabled enemies; will cause issues otherwise
 		{
@@ -133,7 +133,7 @@ public class Player : Humanoid
 			movement.ResetVelocity();
 			movement.EnableCollider(false);
 			enemy.enabled = false;
-			if (weapon) weapon.Drop();
+			if (weapon) weapon.Drop(0);
 			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
 			{
 				if (enemy.weapon) enemy.weapon.Pickup(this, true);

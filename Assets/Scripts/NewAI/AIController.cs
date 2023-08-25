@@ -21,7 +21,7 @@ public class AIController : Humanoid, ITimeScaleListener
     public override Vector3 LookDirection => fieldOfView.eyes.transform.TransformDirection(Vector3.forward);
     public override Vector3 LookingAt => lookingAt;
 
-    [SerializeField] protected WeaponBase weapon;
+    [SerializeField] public WeaponBase weapon;
 
     protected Vector3 velocity;
 
@@ -71,8 +71,11 @@ public class AIController : Humanoid, ITimeScaleListener
     {
         // TO DO
         lookingAt = player.camera.transform.position;
-        weapon.transform.LookAt(lookingAt);
-        input.Press("Mouse", () => -1, () => false);
+        if (weapon)
+        {
+            weapon.transform.LookAt(lookingAt);
+            input.Press("Attack", () => -1, () => false);
+        }
     }
 
     public void OnTimeSlow()
@@ -91,7 +94,6 @@ public class AIController : Humanoid, ITimeScaleListener
         if (!this.weapon)
         {
             this.weapon = weapon;
-            //typeOfWeapon = weapon is Gun ? EnemyType.Ranged : EnemyType.Melee;
             onDrop = () => this.weapon = null;
             return true;
         }

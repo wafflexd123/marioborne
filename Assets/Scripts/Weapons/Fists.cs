@@ -20,7 +20,7 @@ public class Fists : MonoBehaviourPlus
 		player = GetComponentInParent<Player>();
 		reflectWindow = player.transform.Find("ReflectWindow").GetComponent<ReflectWindow>();
 		deflectPercent = player.transform.Find("UI").Find("Deflect").GetComponent<Image>();
-		player.input.AddListener("Mouse", InputType.OnPress, (float direction) =>
+		player.input.AddListener("Attack", InputType.OnPress, (float direction) =>
 		{
 			if (!FindComponent(player.raycast.transform, out WeaponBase weapon) || Vector3.Distance(player.transform.position, weapon.transform.position) >= player.maxInteractDistance)//if player is not looking at a weapon or weapon is too far away
 			{
