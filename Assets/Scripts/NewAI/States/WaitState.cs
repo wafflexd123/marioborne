@@ -11,7 +11,8 @@ public class WaitState : IAIState
 
     public void OnEntry()
     {
-        coroutineHelper.StartOrAddCoroutine("waiting", WaitAtLocation());
+        coroutineHelper.AddCoroutine("waiting", WaitAtLocation());
+        coroutineHelper.StartKnownCoroutine("waiting");
     }
 
     public void OnExit()

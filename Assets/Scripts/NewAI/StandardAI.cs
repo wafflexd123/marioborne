@@ -75,7 +75,7 @@ public class StandardAI : AIController
         // time passes -> patrol
         waitState.coroutineHelper = coroutineHelper;
         ExternalControlTransition waitToPatrol = new ExternalControlTransition(patrolState);
-        waitState.transitions = new List<Transition>() { startShootingTransition, waitToPatrol };
+        waitState.transitions = new List<Transition>() { navigateFiring, waitToPatrol };
 
         CurrentState = patrolState;
         CurrentState.OnEntry();

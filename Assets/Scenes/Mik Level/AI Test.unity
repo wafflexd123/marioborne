@@ -3705,6 +3705,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6666721045559162365, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
+      propertyPath: viewAngle
+      value: 33
+      objectReference: {fileID: 0}
     - target: {fileID: 941658140, guid: bb0902b7dbf938541b5adecd04d18242, type: 3}
       propertyPath: m_Speed
       value: 1
@@ -4100,7 +4104,7 @@ MonoBehaviour:
   patrolPingPong: 1
   patrolPoints: {fileID: 728962180}
   coverPoints: {fileID: 808979411}
-  defaultSpeed: 1
+  defaultSpeed: 2
   runToCoverSpeed: 5
 --- !u!114 &1637065429
 MonoBehaviour:

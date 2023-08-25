@@ -9,7 +9,7 @@ public class ActiveShootingState : IAIState
     public CoroutineHelper coroutineHelper { get; set; }
 
     public float TimeBeforeRelocating = 10f;
-    public float TimeBeforePursuingPlayer = 4f;
+    public float TimeBeforePursuingPlayer = 5f;
 
     protected bool investigateInvoked = false;
     protected bool relocateInvoked = false;
@@ -20,6 +20,8 @@ public class ActiveShootingState : IAIState
         standardAI = controller as StandardAI;
         investigateInvoked = false;
         relocateInvoked = false;
+        coroutineHelper.AddCoroutine("investigate", WaitForTime(TimeBeforePursuingPlayer, false));
+        coroutineHelper.AddCoroutine("relocate", WaitForTime(TimeBeforeRelocating, true));
         controller.transform.LookAt(controller.player.transform.position);
     }   
 
@@ -39,7 +41,7 @@ public class ActiveShootingState : IAIState
             controller.LastKnownPlayerPosition = controller.player.transform.position;
             if (!relocateInvoked)
             {
-                coroutineHelper.StartOrAddCoroutine("relocate", WaitForTime(TimeBeforeRelocating, true));
+                coroutineHelper.StartKnownCoroutine("relocate");
                 relocateInvoked = true;
                 //Invoke("Relocate", TimeBeforeRelocating); // man I wish I could just do this, but its only on monobehaviours
             }
@@ -52,8 +54,7 @@ public class ActiveShootingState : IAIState
             relocateInvoked = false;
             if (!investigateInvoked)
             {
-                Debug.Log("investigate proc");
-                coroutineHelper.StartOrAddCoroutine("investigate", WaitForTime(TimeBeforePursuingPlayer, false));
+                coroutineHelper.StartKnownCoroutine("investigate");
                 investigateInvoked = true;
             }
         }
