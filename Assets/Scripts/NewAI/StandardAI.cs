@@ -11,6 +11,7 @@ public class StandardAI : AIController
     [SerializeField] public Transform coverPoints;
     public float defaultSpeed;
     public float runToCoverSpeed; //will extend these for each state if needed
+    public float relocateDistance = 0.5f;
 
     // AI States
     protected PatrolState patrolState;

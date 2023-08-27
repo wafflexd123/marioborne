@@ -39,6 +39,7 @@ public class ActiveShootingState : IAIState
             controller.transform.LookAt(controller.player.transform.position);
             controller.Fire();
             controller.LastKnownPlayerPosition = controller.player.transform.position;
+            controller.AlertOthers();
             if (!relocateInvoked)
             {
                 coroutineHelper.StartKnownCoroutine("relocate");

@@ -9,7 +9,7 @@ public class InvestigatePlayerState : IAIState
 
     public void OnEntry()
     {
-        if(controller.soundLocation != null) //only follow sound if patrolling or already investigating
+        if (controller.soundLocation != null) //only follow sound if patrolling or already investigating
         {
             controller.LastKnownPlayerPosition = controller.soundLocation.position;
         }

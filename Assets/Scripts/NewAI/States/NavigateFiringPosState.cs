@@ -29,7 +29,7 @@ public class NavigateFiringPosState : IAIState
         coverPoints = new List<Vector3>();
         for (int i = 0; i < standardAI.coverPoints.childCount - 1; i++)
         {
-            if (Vector3.Distance(standardAI.coverPoints.GetChild(i).position, controller.transform.position) > 0.5f)
+            if (Vector3.Distance(standardAI.coverPoints.GetChild(i).position, controller.transform.position) > standardAI.relocateDistance)
                 coverPoints.Add(standardAI.coverPoints.GetChild(i).position);
         }
         // find closest cover point to go to

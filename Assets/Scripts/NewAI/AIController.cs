@@ -16,12 +16,12 @@ public class AIController : Humanoid, ITimeScaleListener
     [HideInInspector] public Vector3 lookingAt;
     [HideInInspector] public Player player;
     [HideInInspector] public Transform soundLocation;
-
-
+    
     public override Vector3 LookDirection => fieldOfView.eyes.transform.TransformDirection(Vector3.forward);
     public override Vector3 LookingAt => lookingAt;
 
     [SerializeField] public WeaponBase weapon;
+    [SerializeField] public float alertRadius;
 
     protected Vector3 velocity;
 
@@ -69,12 +69,23 @@ public class AIController : Humanoid, ITimeScaleListener
 
     public void Fire()
     {
-        // TO DO
         lookingAt = player.camera.transform.position;
         if (weapon)
         {
             weapon.transform.LookAt(lookingAt);
             input.Press("Attack", () => -1, () => false);
+        }
+    }
+
+    public void AlertOthers()
+    {
+        Collider[] alertOthers = Physics.OverlapSphere(transform.position, alertRadius);
+        foreach (var alerted in alertOthers)
+        { //creates an overlap sphere around enemy, checks if other enemies are in it and prompts them to investigate
+            if (alerted.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")) && Vector3.Distance(alerted.transform.position, transform.position) > 1f)
+            {
+                alerted.GetComponentInParent<AIController>().soundLocation = transform;
+            }
         }
     }
 
