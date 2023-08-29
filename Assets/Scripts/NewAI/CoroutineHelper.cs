@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public class CoroutineHelper : MonoBehaviour
 {
-    [Header("I am a stupid bastard required for other code to work, please ignore me in inspector.")]
     //private HashSet<Coroutine> coroutines;
     //private Dictionary<string, Coroutine> coroutines = new Dictionary<string, Coroutine>();
     //private Dictionary<string, IEnumerator> coroutineFunctions = new Dictionary<string, IEnumerator>();
@@ -39,6 +38,8 @@ public class CoroutineHelper : MonoBehaviour
         };
         if (routines.ContainsKey(name))
         {
+            if (routines[name].coroutine != null)
+                StopCoroutine(routines[name].coroutine);
             routines[name] = newCollection;
         }
         else
@@ -49,6 +50,7 @@ public class CoroutineHelper : MonoBehaviour
     {
         if (routines.TryGetValue(name, out CorouCollection collection)) 
         {
+            if (collection.running) return;
             collection.running = true;
             collection.coroutine = StartCoroutine(collection.coroutineFunction);
         }
@@ -72,10 +74,47 @@ public class CoroutineHelper : MonoBehaviour
         }
     }
 
+    public void StartTimer(string name, float duration, ExternalControlTransition externalControlTransition)
+    {
+        var timer = StartCoroutine(StandardTimer(duration, externalControlTransition));
+        CorouCollection newCollection = new CorouCollection
+        {
+            running = true,
+            coroutine = timer,
+            coroutineFunction = null,
+        };
+
+        if (routines.ContainsKey(name))
+        {
+            StopCoroutine(routines[name].coroutine);
+            routines[name] = newCollection;
+        }
+        else
+            routines.Add(name, newCollection);
+    }
+
+    public void CancelTimer(string name)
+    {
+        if (routines.TryGetValue(name, out CorouCollection collection))
+        {
+            if (!collection.running) return;
+            collection.running = false;
+            StopCoroutine(collection.coroutine);
+        }
+        else
+            Debug.LogWarning($"Coroutine Helper asked to stop a coroutine it does not know. Asked to stop: {name}");
+    }
+
     private struct CorouCollection
     {
         public Coroutine coroutine;
         public IEnumerator coroutineFunction;
         public bool running;
+    }
+
+    private IEnumerator StandardTimer(float duration, ExternalControlTransition externalControlTransition)
+    {
+        yield return new WaitForSeconds(duration);
+        externalControlTransition.trigger = true;
     }
 }

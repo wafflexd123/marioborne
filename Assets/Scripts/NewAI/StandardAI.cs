@@ -58,6 +58,7 @@ public class StandardAI : AIController
         // 10s pass -> patrol
         ExternalControlTransition returnToPatrolNavi = new ExternalControlTransition(patrolState);
         navigateFiringPosState.coroutineHelper = coroutineHelper;
+        navigateFiringPosState.returnToPatrolTransition = returnToPatrolNavi;
         navigateFiringPosState.transitions = new List<Transition>() { returnToPatrolNavi, startShootingTransition };
 
         ExternalControlTransition investigateTransition = new ExternalControlTransition(investigatePlayerState);
@@ -69,7 +70,9 @@ public class StandardAI : AIController
         // reaches aprox last player position -> wait
         FoundPlayerTransition foundPlayerTransition = new FoundPlayerTransition(navigateFiringPosState, this);
         ReachedLastKnownPlayerPosTransition reachedLastKnownPlayerPosTransition = new ReachedLastKnownPlayerPosTransition(waitState, this, transform);
-        investigatePlayerState.transitions = new List<Transition>() { foundPlayerTransition, reachedLastKnownPlayerPosTransition };
+        investigatePlayerState.coroutineHelper = coroutineHelper;
+        ExternalControlTransition investigateTimeout = new ExternalControlTransition(patrolState);
+        investigatePlayerState.transitions = new List<Transition>() { foundPlayerTransition, reachedLastKnownPlayerPosTransition, investigateTimeout };
 
         // wait state
         // sees player -> navigate to shooting position

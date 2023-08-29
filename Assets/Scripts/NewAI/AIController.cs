@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,9 @@ public class AIController : Humanoid, ITimeScaleListener
 
     protected Vector3 velocity;
 
+    public string stateName;
+    private float timeEnteredState = 0f;
+
     protected override void Awake()
     {
         base.Awake();
@@ -46,11 +50,13 @@ public class AIController : Humanoid, ITimeScaleListener
         {
             if (CurrentState.transitions[i].RequirementsMet()) // transition state
             {
-                print($"{name} has is transitioning: \t{i}: {CurrentState.GetType().Name} -> {CurrentState.transitions[i].targetState.GetType().Name}");
-                CurrentState.OnExit();
+                print($"{name} is transitioning: \t{i}: {CurrentState.GetType().Name} -> {CurrentState.transitions[i].targetState.GetType().Name}, \t time in state: {UnityEngine.Time.time - timeEnteredState}");
+                CurrentState.OnExit(); 
                 CurrentState = CurrentState.transitions[i].targetState;
                 CurrentState.OnEntry();
+                stateName = CurrentState.GetType().Name;
                 TransitionedThisFrame = true;
+                timeEnteredState = UnityEngine.Time.time;
                 break;
             }
         }

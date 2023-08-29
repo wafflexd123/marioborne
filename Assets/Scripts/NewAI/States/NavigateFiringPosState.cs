@@ -16,6 +16,7 @@ public class NavigateFiringPosState : IAIState
     protected Vector3 targetLocation;
     public float TimeBeforeReturningToPatrol = 10f;
     protected StandardAI standardAI;
+    public ExternalControlTransition returnToPatrolTransition;
 
     public void OnEntry()
     {
@@ -23,6 +24,7 @@ public class NavigateFiringPosState : IAIState
         // Target location should be somewhere the AI can see the player
         // And somewhere they have some cover
         // Set targetLocation
+        //coroutineHelper.AddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
 
         standardAI = controller as StandardAI;
         controller.agent.speed = standardAI.runToCoverSpeed;
@@ -66,7 +68,6 @@ public class NavigateFiringPosState : IAIState
         if (closestSightDistance < float.MaxValue) targetLocation = coverPoints[sightCoverIndex];
         else if (closestDistance < float.MaxValue) targetLocation = coverPoints[coverIndex];
         else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
-        coroutineHelper.AddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
     }
 
     public void OnExit() 
@@ -74,6 +75,8 @@ public class NavigateFiringPosState : IAIState
         controller.agent.speed = standardAI.defaultSpeed;
         startShootingTransition.destination = Vector3.zero;
         startShootingTransition.position = Vector3.one; //resets requirements, otherwise the guy goes a bit wonky
+        //coroutineHelper.CancelCoroutine("returnToPatrol-Navi");
+        coroutineHelper.CancelTimer("returnToPatrol");
     }
 
     public void Tick()
@@ -86,16 +89,21 @@ public class NavigateFiringPosState : IAIState
         if (!controller.fieldOfView.canSeePlayer)
         {
             //coroutineHelper.StartOrAddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
+            //coroutineHelper.StartKnownCoroutine("returnToPatrol-Navi");
+            coroutineHelper.StartTimer("returnToPatrol", TimeBeforeReturningToPatrol, returnToPatrolTransition);
         }
         else
         {
             //coroutineHelper.CancelCoroutine("returnToPatrol-Navi");
+            coroutineHelper.CancelTimer("returnToPatrol");
         }
     }
 
     public IEnumerator WaitForTime(float time)
     {
-        yield return new WaitForSeconds(time);
+        //yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(TimeBeforeReturningToPatrol);
+        Debug.Log($"Navigate firing pos WaitForTime has waited its time: {TimeBeforeReturningToPatrol}");
         for (int i = 0; i < transitions.Count; i++)
         {
             if (transitions[i] is ExternalControlTransition)
