@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,7 +18,9 @@ public class AIController : Humanoid, ITimeScaleListener
     [HideInInspector] public Vector3 lookingAt;
     [HideInInspector] public Player player;
     [HideInInspector] public Transform soundLocation;
-    
+    [SerializeField] protected float rotationSpeed = 10f;
+
+
     public override Vector3 LookDirection => fieldOfView.eyes.transform.TransformDirection(Vector3.forward);
     public override Vector3 LookingAt => lookingAt;
 
@@ -71,6 +74,14 @@ public class AIController : Humanoid, ITimeScaleListener
         velocity = agent.velocity;
         transform.position = Vector3.SmoothDamp(transform.position, agent.nextPosition, ref velocity, 0.1f);
         agent.SetDestination(targetPosition);
+    }
+
+    public void RotateTowards(Vector3 lookTarget)
+    {
+        Vector3 dir = lookTarget - transform.position;
+        dir.y = 0;//This allows the object to only rotate on its y axis
+        Quaternion rot = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotationSpeed * Time.deltaTime);
     }
 
     public void Fire()

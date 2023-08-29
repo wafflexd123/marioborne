@@ -14,9 +14,11 @@ public class NavigateFiringPosState : IAIState
     private int coverIndex;
     private int sightCoverIndex;
     protected Vector3 targetLocation;
-    public float TimeBeforeReturningToPatrol = 10f;
     protected StandardAI standardAI;
     public ExternalControlTransition returnToPatrolTransition;
+    // settings
+    public float TimeBeforeReturningToPatrol = 10f;
+    protected float lookingDistance = 3f;   // will start to rotate to look at last known player position when this close to firing position
 
     public void OnEntry()
     {
@@ -84,6 +86,11 @@ public class NavigateFiringPosState : IAIState
         controller.MoveTowards(targetLocation);
         startShootingTransition.destination = targetLocation;
         startShootingTransition.position = controller.transform.position;
+
+        if (Vector3.Distance(controller.transform.position, targetLocation) < lookingDistance)
+        {
+            controller.RotateTowards(controller.LastKnownPlayerPosition);
+        }
 
         //needs work i think
         if (!controller.fieldOfView.canSeePlayer)

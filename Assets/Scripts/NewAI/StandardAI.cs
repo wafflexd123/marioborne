@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class StandardAI : AIController
     public float defaultSpeed;
     public float runToCoverSpeed; //will extend these for each state if needed
     public float relocateDistance = 0.5f;
+    //[SerializeField] private CoverPriority coverPriority = CoverPriority.IfNear;
+    //[SerializeField] private float nearCoverDistance = 5f;
 
     // AI States
     protected PatrolState patrolState;
@@ -58,6 +61,7 @@ public class StandardAI : AIController
         // 10s pass -> patrol
         ExternalControlTransition returnToPatrolNavi = new ExternalControlTransition(patrolState);
         navigateFiringPosState.coroutineHelper = coroutineHelper;
+        coroutineHelper.AddTimer("returnToPatrol");
         navigateFiringPosState.returnToPatrolTransition = returnToPatrolNavi;
         navigateFiringPosState.transitions = new List<Transition>() { returnToPatrolNavi, startShootingTransition };
 
@@ -113,5 +117,13 @@ public class StandardAI : AIController
     private void Start()
     {
         patrolState.pingpong = patrolPingPong;
+    }
+
+    [Serializable]
+    private enum CoverPriority
+    {
+        IgnoreCover = 0,
+        IfNear = 1,
+        RequireCover = 2
     }
 }

@@ -86,11 +86,23 @@ public class CoroutineHelper : MonoBehaviour
 
         if (routines.ContainsKey(name))
         {
-            StopCoroutine(routines[name].coroutine);
+            if (routines[name].coroutine != null)
+                StopCoroutine(routines[name].coroutine);
             routines[name] = newCollection;
         }
         else
             routines.Add(name, newCollection);
+    }
+
+    public void AddTimer(string name)
+    {
+        CorouCollection newCollection = new CorouCollection
+        {
+            running = false,
+            coroutine = null,
+            coroutineFunction = null,
+        };
+        routines.Add(name, newCollection);
     }
 
     public void CancelTimer(string name)
