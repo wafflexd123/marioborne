@@ -1218,12 +1218,18 @@ MonoBehaviour:
   lookingAt: {x: 0, y: 0, z: 0}
   player: {fileID: 0}
   soundLocation: {fileID: 0}
+  rotationSpeed: 10
   weapon: {fileID: 0}
+  alertRadius: 0
+  stateName: 
   patrolPingPong: 0
   patrolPoints: {fileID: 0}
   coverPoints: {fileID: 0}
   defaultSpeed: 1
   runToCoverSpeed: 5
+  relocateDistance: 0.5
+  coverPriority: 1
+  nearCoverDistance: 8
 --- !u!114 &6587345493690171063
 MonoBehaviour:
   m_ObjectHideFlags: 0

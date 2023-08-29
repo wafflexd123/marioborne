@@ -29,6 +29,13 @@ public class NavigateFiringPosState : IAIState
         //coroutineHelper.AddCoroutine("returnToPatrol-Navi", WaitForTime(TimeBeforeReturningToPatrol));
 
         standardAI = controller as StandardAI;
+
+        if (standardAI.GetCoverPriority() == CoverPriority.IgnoreCover)
+        {
+            targetLocation = standardAI.transform.position;
+            return;
+        }
+
         controller.agent.speed = standardAI.runToCoverSpeed;
         coverPoints = new List<Vector3>();
         for (int i = 0; i < standardAI.coverPoints.childCount - 1; i++)
@@ -59,7 +66,7 @@ public class NavigateFiringPosState : IAIState
                 Physics.Raycast(coverPoints[i], standardAI.player.camera.transform.position - coverPoints[i], out RaycastHit cover, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
                 if (cover.collider != null && !cover.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
                 { //raycast to find out whether cover is valid (cover cannot see player)
-                    
+
                     coverIndex = i;
                     closestDistance = Vector3.Distance(controller.transform.position, coverPoints[i]);
                 }
@@ -67,9 +74,18 @@ public class NavigateFiringPosState : IAIState
 
         }
 
-        if (closestSightDistance < float.MaxValue) targetLocation = coverPoints[sightCoverIndex];
-        else if (closestDistance < float.MaxValue) targetLocation = coverPoints[coverIndex];
-        else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
+        if (standardAI.GetCoverPriority() == CoverPriority.RequireCover)
+        {
+            if (closestSightDistance < float.MaxValue) targetLocation = coverPoints[sightCoverIndex];
+            else if (closestDistance < float.MaxValue) targetLocation = coverPoints[coverIndex];
+            else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
+        }
+        else // CoverPrioirty.IfNear
+        {
+            if (closestSightDistance <= standardAI.GetNearCoverDistance()) targetLocation = coverPoints[sightCoverIndex];
+            else if (closestDistance <= standardAI.GetNearCoverDistance()) targetLocation = coverPoints[coverIndex];
+            else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
+        }
     }
 
     public void OnExit() 

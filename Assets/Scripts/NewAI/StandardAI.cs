@@ -13,8 +13,8 @@ public class StandardAI : AIController
     public float defaultSpeed;
     public float runToCoverSpeed; //will extend these for each state if needed
     public float relocateDistance = 0.5f;
-    //[SerializeField] private CoverPriority coverPriority = CoverPriority.IfNear;
-    //[SerializeField] private float nearCoverDistance = 5f;
+    [SerializeField] protected CoverPriority coverPriority = CoverPriority.IfNear;
+    [SerializeField] protected float nearCoverDistance = 5f;
 
     // AI States
     protected PatrolState patrolState;
@@ -119,11 +119,14 @@ public class StandardAI : AIController
         patrolState.pingpong = patrolPingPong;
     }
 
-    [Serializable]
-    private enum CoverPriority
-    {
-        IgnoreCover = 0,
-        IfNear = 1,
-        RequireCover = 2
-    }
+    public CoverPriority GetCoverPriority() { return coverPriority; }
+    public float GetNearCoverDistance() { return nearCoverDistance; }
+}
+
+[Serializable]
+public enum CoverPriority
+{
+    IgnoreCover = 0,
+    IfNear = 1,
+    RequireCover = 2
 }
