@@ -13,6 +13,8 @@ public class ActiveShootingState : IAIState
 
     protected bool investigateInvoked = false;
     protected bool relocateInvoked = false;
+    protected Coroutine invCoroutine; //not sure why, but it seems only using default monobehaviour coroutine functions works
+    protected Coroutine relCoroutine;
     protected StandardAI standardAI;
 
     public void OnEntry()
@@ -20,42 +22,46 @@ public class ActiveShootingState : IAIState
         standardAI = controller as StandardAI;
         investigateInvoked = false;
         relocateInvoked = false;
-        coroutineHelper.AddCoroutine("investigate", WaitForTime(TimeBeforePursuingPlayer, false));
-        coroutineHelper.AddCoroutine("relocate", WaitForTime(TimeBeforeRelocating, true));
+        //coroutineHelper.AddCoroutine("investigate", WaitForTime(TimeBeforePursuingPlayer, false));
+        //coroutineHelper.AddCoroutine("relocate", WaitForTime(TimeBeforeRelocating, true));
         controller.transform.LookAt(controller.player.transform.position);
     }   
 
     public void OnExit()
     {
         // stop coroutines
-        coroutineHelper.CancelCoroutine("relocate");
-        coroutineHelper.CancelCoroutine("investigate");
+        coroutineHelper.StopAllCoroutines();
+        //coroutineHelper.CancelCoroutine("relocate");
+        //coroutineHelper.CancelCoroutine("investigate");
     }
 
     public void Tick()
     {
         if (controller.fieldOfView.canSeePlayer)
         {
+            
             controller.transform.LookAt(controller.player.transform.position);
             controller.Fire();
             controller.LastKnownPlayerPosition = controller.player.transform.position;
             controller.AlertOthers();
             if (!relocateInvoked)
             {
-                coroutineHelper.StartKnownCoroutine("relocate");
+                Debug.Log("timer start: relocating");
+                relCoroutine = coroutineHelper.StartCoroutine(WaitForTime(TimeBeforeRelocating, true));
                 relocateInvoked = true;
                 //Invoke("Relocate", TimeBeforeRelocating); // man I wish I could just do this, but its only on monobehaviours
             }
-            coroutineHelper.CancelCoroutine("investigate");
+            if(invCoroutine != null) coroutineHelper.StopCoroutine(invCoroutine);
             investigateInvoked = false;
         }
         else
         {
-            coroutineHelper.CancelCoroutine("relocate");
+            if (relCoroutine != null) coroutineHelper.StopCoroutine(relCoroutine); ;
             relocateInvoked = false;
             if (!investigateInvoked)
             {
-                coroutineHelper.StartKnownCoroutine("investigate");
+                Debug.Log("timer start: investigating");
+                invCoroutine = coroutineHelper.StartCoroutine(WaitForTime(TimeBeforePursuingPlayer, false));
                 investigateInvoked = true;
             }
         }
@@ -77,6 +83,7 @@ public class ActiveShootingState : IAIState
         }
         else
         {
+            Debug.Log("timer end: investigated");
             ExternalControlTransition t = transitions[0] as ExternalControlTransition;
             t.trigger = true;
         }
