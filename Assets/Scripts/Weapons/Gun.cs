@@ -39,7 +39,7 @@ public class Gun : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-		//wielder.model.holdingPistol = true;
+		if(wielder is AIController) wielder.model.holdingPistol = true;
 		animator.StartAnimations();
 		if (wielder is Player)
 		{
@@ -56,7 +56,7 @@ public class Gun : WeaponBase
 	protected override void OnWielderChange()
 	{
 		base.OnWielderChange();
-		//wielder.model.holdingPistol = false;
+		if (wielder is AIController) wielder.model.holdingPistol = false;
 		animator.StopAnimations();
 		ui.SetActive(false);
 		if (crtDelay != null)
@@ -81,7 +81,7 @@ public class Gun : WeaponBase
 				crtDelay = StartCoroutine(Delay());
 			}
 			audio.PlayOneShot(audioFire);
-			//wielder.model.shoot = true;
+			if (wielder is AIController) wielder.model.shoot = true;
 			animator.Shoot();
 			Shoot();
 		}
@@ -90,6 +90,7 @@ public class Gun : WeaponBase
 	protected virtual void Shoot()
 	{
 		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color);
+		MakeSound();
 	}
 
 	protected Vector3 DirectionWithSpread(float maxSpread)
@@ -119,7 +120,7 @@ public class Gun : WeaponBase
 			yield return new WaitForFixedUpdate();
 		}
 		imgReloadPercent.gameObject.SetActive(false);
-		//if (wielder) wielder.model.shooting = false;
+		if (wielder is AIController) if (wielder) wielder.model.shoot = false;
 		crtDelay = null;
 	}
 

@@ -13,7 +13,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	public float throwFallDelay = 1f; // Delay before object starts falling
 
 	public Position handPosition, thirdPersonPosition;
-	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
+	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds, soundRadius;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
@@ -164,6 +164,21 @@ public abstract class WeaponBase : MonoBehaviourPlus
 			rigidbodyStore = new RigidbodyStore(rigidbody);//store rigidbody data
 			Destroy(rigidbody);
 			for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = true;
+		}
+	}
+
+	public void MakeSound()
+	{
+		if (wielder is Player)
+		{
+			Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius);
+			foreach (var enemyHeard in enemiesHeard)
+			{ //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+				if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+				{
+					enemyHeard.GetComponentInParent<AIController>().soundLocation = transform;
+				}
+			}
 		}
 	}
 
