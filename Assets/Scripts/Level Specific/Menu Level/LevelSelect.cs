@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelSelect : MonoBehaviour
 {
@@ -49,7 +48,7 @@ public class LevelSelect : MonoBehaviour
     }
 
     public void Exit()
-	{
+    {
         Application.Quit();
     }
 

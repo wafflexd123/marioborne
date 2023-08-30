@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Telekinesis : MonoBehaviour, IPlayerPower
@@ -25,16 +22,22 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     [SerializeField] private float pushLength = 14f;
     [SerializeField] private float upwardsPushForce = 0.2f;
 
+    [Header("Telekinetic Push Charge Variables")]
+    [SerializeField] private float maxChargeTime = 2.0f;
+    [SerializeField] private float minPushStrength = 10.0f;
+
 
     private GameObject grabbedObject;
     private bool isGrabbing;
+    private bool isCharging;
     private Vector3 offset;
     private float objectDistance;
-
+    private float chargeTime;
+   
     public bool CanDisable => true;
 
-	// Start is called before the first frame update
-	void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         mainCamera = Player.singlePlayer.camera;
     }
@@ -44,19 +47,43 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     {
         if (Input.GetButtonDown("Ability"))
         {
-            if (isGrabbing)
-            {
-                ReleaseObject();
-            }
-            else if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out raycast, grabDistance, objectLayer))
-            {
-                GrabObject(raycast.collider.gameObject);
-            }
+            isCharging = true;
+            chargeTime = 0f;  // Reset charge time
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetButtonUp("Ability"))
         {
-            //PushObjects();
+            if (isCharging && chargeTime < 0.2f)  // Threshold to differentiate between click and hold
+            {
+                if (isGrabbing)
+                {
+                    ReleaseObject();
+                }
+                else if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out raycast, grabDistance, objectLayer))
+                {
+                    GrabObject(raycast.collider.gameObject);
+                }
+            }
+            else
+            {
+                float chargedPushStrength = Mathf.Lerp(minPushStrength, pushStrength, chargeTime / maxChargeTime);
+                if (isGrabbing)
+                {
+                    PushGrabbedObject(chargedPushStrength);
+                }
+                else
+                {
+                    PushObjects(chargedPushStrength);
+                }
+            }
+
+            isCharging = false;
+        }
+
+        if (isCharging)
+        {
+            chargeTime += Time.deltaTime;
+            chargeTime = Mathf.Clamp(chargeTime, 0f, maxChargeTime);
         }
 
         if (isGrabbing)
@@ -102,6 +129,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         // Changing distance based on scroll wheel
         objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
         objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
+
         // Calculating target position based on mouse input
         Vector3 targetPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance)) + offset;
 
@@ -111,12 +139,24 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         // Move object towards target position
         controlledObject.transform.position = Vector3.Lerp(controlledObject.transform.position, targetPosition, UnityEngine.Time.deltaTime * followSpeed);
 
+        float currentRotationSpeed;
+        if (isCharging)
+        {
+            // Increase rotation speed up to 5x when fully charged
+            currentRotationSpeed = Mathf.Lerp(rotationSpeed, rotationSpeed * 100f, chargeTime / maxChargeTime);
+        }
+        else
+        {
+            currentRotationSpeed = rotationSpeed;
+        }
+
         // Apply rotation effect based on mouse movement
         Vector3 rotationDirection = (targetPosition - controlledObject.transform.position).normalized;
-        controlledObject.transform.Rotate(rotationDirection, rotationSpeed * UnityEngine.Time.deltaTime);
+        controlledObject.transform.Rotate(rotationDirection, currentRotationSpeed * UnityEngine.Time.deltaTime);
+
     }
 
-    void PushObjects()
+    void PushObjects(float strength)
     {
         Vector3 pushDirection = mainCamera.transform.forward;
         Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
@@ -128,12 +168,23 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                Vector3 adjustedPushDirection = pushDirection + Vector3.up * upwardsPushForce; 
+                Vector3 adjustedPushDirection = pushDirection + Vector3.up * upwardsPushForce;
                 adjustedPushDirection.Normalize();
 
-                rb.AddForce(adjustedPushDirection * pushStrength, ForceMode.Impulse);
+                rb.AddForce(adjustedPushDirection * strength, ForceMode.Impulse);
             }
         }
+    }
+
+    void PushGrabbedObject(float strength)
+    {
+        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 pushDirection = mainCamera.transform.forward;
+            rb.AddForce(pushDirection.normalized * strength, ForceMode.Impulse);
+        }
+        ReleaseObject();
     }
 
     #region Debugging

@@ -7,6 +7,6 @@ public class ConstantRotator : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(axis, speed * Time.deltaTime);        
+        transform.Rotate(axis, speed * Time.deltaTime);
     }
 }
