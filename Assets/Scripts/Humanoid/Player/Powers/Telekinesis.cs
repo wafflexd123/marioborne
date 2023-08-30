@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Telekinesis : MonoBehaviour, IPlayerPower
 {
@@ -25,6 +26,13 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     [Header("Telekinetic Push Charge Variables")]
     [SerializeField] private float maxChargeTime = 2.0f;
     [SerializeField] private float minPushStrength = 10.0f;
+
+    [Header("UI Elements")]
+    public GameObject sliderObject;
+    public Slider chargeSlider;
+    public Image chargeSliderFill;
+    public Color maxChargeColor = Color.red;
+    public Color minChargeColor = Color.blue; 
 
 
     private GameObject grabbedObject;
@@ -90,6 +98,8 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         {
             ControlObject(grabbedObject);
         }
+
+        UpdateChargeUI();
     }
 
     void GrabObject(GameObject targetObject)
@@ -142,7 +152,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         float currentRotationSpeed;
         if (isCharging)
         {
-            // Increase rotation speed up to 5x when fully charged
+            // Increase rotation speed up to 100x when fully charged
             currentRotationSpeed = Mathf.Lerp(rotationSpeed, rotationSpeed * 100f, chargeTime / maxChargeTime);
         }
         else
@@ -185,6 +195,38 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
             rb.AddForce(pushDirection.normalized * strength, ForceMode.Impulse);
         }
         ReleaseObject();
+    }
+
+    void UpdateChargeUI()
+    {
+        if (isCharging)
+        {
+            float chargeRatio = chargeTime / maxChargeTime;
+            chargeSlider.value = chargeRatio;
+
+            chargeSliderFill.color = Color.Lerp(minChargeColor, maxChargeColor, chargeRatio);
+        }
+        else
+        {
+            chargeSlider.value = 0;
+            chargeSliderFill.color = Color.clear;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (sliderObject != null)
+        {
+            sliderObject.SetActive(true);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (sliderObject != null)
+        {
+            sliderObject.SetActive(false);
+        }
     }
 
     #region Debugging
