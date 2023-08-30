@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class WickUI : MonoBehaviourPlus
 {
-	string[][] general =
-	{
+    string[][] general =
+    {
 new string[] {"Get back up, maybe", "you won't die", "this time." },
 new string[] {"That's not the canonical ending, John Matrix can", "never die." },
 new string[] {"John Matrix is amazing. His player is", "clearly not."},
@@ -35,9 +35,9 @@ new string[] {"*Double Face Palm*"},
 new string[] {"*Triple Face Palm*"},
 new string[] {"*Quadra Face Palm*"},
 new string[] {"","*PENTA FACE PALM*"},
-	};
+    };
 
-	string[][] bullet = {
+    string[][] bullet = {
 new string[] {"You're supposed to", "catch bullets with your hands", "not your face."},
 new string[] {"The art of dodging eludes you."},
 new string[] {"You could say you just", "BIT THE BULLET.", "HAHAHAHA."},
@@ -52,9 +52,9 @@ new string[] {"The boom boom stick is a no no if you want to not be die die."},
 new string[] {"He shot you with his gun.", "Avoid that."},
 new string[] {"DODGE!"},
 new string[] {"Hey that guy was shooting you!"},
-	};
+    };
 
-	string[][] melee = {
+    string[][] melee = {
 new string[] {"Defeated in hand-to-hand combat.", "Pathetic."},
 new string[] {"You're supposed to be the time puncher, not the", "time punched."},
 new string[] {"Got shanked in the showers,", "unlucky."},
@@ -64,9 +64,9 @@ new string[] {"The time puncher just got", "time punched."},
 new string[] {"Words cannot describe my disappointment."},
 new string[] {"A lifetime of training and you got", "shanked."},
 new string[] {"Who would win? A superhuman with time slowing abilities or a stabby red boi? The answer will disappoint you."},
-	};
+    };
 
-	string[][] fall = {
+    string[][] fall = {
 new string[] {"Wheeeeeee", "oop", "you died."},
 //new string[] {"If your death was wallrun related, hold movement towards the wall you idgit."},--not sure yet
 new string[] {"It's a bird, it's a plane, oop it's a stain on the sidewalk."},
@@ -77,140 +77,140 @@ new string[] {"Next time, do a flip."},
 new string[] {"A lifetime of training and you ate it into the pavement."},
 new string[] {"Gravity 1, you 0."},
 new string[] { "While you may think he could, John Matrix can't fly. But he should, someone", "write that down." }
-	};
+    };
 
 
-	public bool demoMode;
-	public float demoDelay = 3, typeDelay;
-	TextMeshProUGUI[] textBoxes = new TextMeshProUGUI[3];
-	Transform subText;
-	Coroutine crtType;
-	Action onEnd;
+    public bool demoMode;
+    public float demoDelay = 3, typeDelay;
+    TextMeshProUGUI[] textBoxes = new TextMeshProUGUI[3];
+    Transform subText;
+    Coroutine crtType;
+    Action onEnd;
 
-	private void Awake()
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			textBoxes[i] = transform.GetChild(i).GetComponent<TextMeshProUGUI>();
-		}
-		subText = transform.GetChild(3);
-	}
+    private void Awake()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            textBoxes[i] = transform.GetChild(i).GetComponent<TextMeshProUGUI>();
+        }
+        subText = transform.GetChild(3);
+    }
 
-	public void DisplayRandom(DeathType deathType = DeathType.General)
-	{
-		switch (deathType)
-		{
-			case DeathType.General:
-				Display(general[UnityEngine.Random.Range(0, general.Length)]);
-				break;
-			case DeathType.Fall:
-				Display(UnityEngine.Random.Range(0f, 1f) > .5f ? fall[UnityEngine.Random.Range(0, fall.Length)] : general[UnityEngine.Random.Range(0, general.Length)]);
-				break;
-			case DeathType.Bullet:
-				Display(UnityEngine.Random.Range(0f, 1f) > .5f ? bullet[UnityEngine.Random.Range(0, bullet.Length)] : general[UnityEngine.Random.Range(0, general.Length)]);
-				break;
-			case DeathType.Melee:
-				Display(UnityEngine.Random.Range(0f, 1f) > .5f ? melee[UnityEngine.Random.Range(0, melee.Length)] : general[UnityEngine.Random.Range(0, general.Length)]);
-				break;
-			default:
-				break;
-		}
-	}
+    public void DisplayRandom(DeathType deathType = DeathType.General)
+    {
+        switch (deathType)
+        {
+            case DeathType.General:
+                Display(general[UnityEngine.Random.Range(0, general.Length)]);
+                break;
+            case DeathType.Fall:
+                Display(UnityEngine.Random.Range(0f, 1f) > .5f ? fall[UnityEngine.Random.Range(0, fall.Length)] : general[UnityEngine.Random.Range(0, general.Length)]);
+                break;
+            case DeathType.Bullet:
+                Display(UnityEngine.Random.Range(0f, 1f) > .5f ? bullet[UnityEngine.Random.Range(0, bullet.Length)] : general[UnityEngine.Random.Range(0, general.Length)]);
+                break;
+            case DeathType.Melee:
+                Display(UnityEngine.Random.Range(0f, 1f) > .5f ? melee[UnityEngine.Random.Range(0, melee.Length)] : general[UnityEngine.Random.Range(0, general.Length)]);
+                break;
+            default:
+                break;
+        }
+    }
 
-	public void DisplayImmediate(string[] strings, bool showSubText = true)
-	{
-		gameObject.SetActive(true);
-		subText.gameObject.SetActive(showSubText);
-		for (int f = 0; f < 3; f++)
-		{
-			textBoxes[f].text = f < strings.Length ? strings[f] : "";
-		}
-	}
+    public void DisplayImmediate(string[] strings, bool showSubText = true)
+    {
+        gameObject.SetActive(true);
+        subText.gameObject.SetActive(showSubText);
+        for (int f = 0; f < 3; f++)
+        {
+            textBoxes[f].text = f < strings.Length ? strings[f] : "";
+        }
+    }
 
-	public void Display(string[] strings, Action onEnd = null, bool showSubText = true, int animateMask = 1 << 1)
-	{
-		gameObject.SetActive(true);
-		subText.gameObject.SetActive(showSubText);
-		this.onEnd?.Invoke();//call onEnd from last Display() call if it was ended early
-		this.onEnd = onEnd;
-		ResetRoutine(Type(), ref crtType);
-		IEnumerator Type()
-		{
-			for (int i = 0; i < 3; i++) textBoxes[i].text = "";
+    public void Display(string[] strings, Action onEnd = null, bool showSubText = true, int animateMask = 1 << 1)
+    {
+        gameObject.SetActive(true);
+        subText.gameObject.SetActive(showSubText);
+        this.onEnd?.Invoke();//call onEnd from last Display() call if it was ended early
+        this.onEnd = onEnd;
+        ResetRoutine(Type(), ref crtType);
+        IEnumerator Type()
+        {
+            for (int i = 0; i < 3; i++) textBoxes[i].text = "";
 
-			for (int i = 0; i < strings.Length; i++)
-			{
-				if ((animateMask & (1 << i)) == 0) textBoxes[i].text = strings[i];//lol decipher this
-				else for (int ii = 0; ii < strings[i].Length; ii++)
-					{
-						textBoxes[i].text += strings[i][ii];
-						yield return new WaitForSecondsRealtime(typeDelay);
-					}
-			}
+            for (int i = 0; i < strings.Length; i++)
+            {
+                if ((animateMask & (1 << i)) == 0) textBoxes[i].text = strings[i];//lol decipher this
+                else for (int ii = 0; ii < strings[i].Length; ii++)
+                    {
+                        textBoxes[i].text += strings[i][ii];
+                        yield return new WaitForSecondsRealtime(typeDelay);
+                    }
+            }
 
-			onEnd?.Invoke();
-			this.onEnd = null;
-		}
-	}
+            onEnd?.Invoke();
+            this.onEnd = null;
+        }
+    }
 
-	public void UnDisplay(int animateMask = 1 << 1)
-	{
-		subText.gameObject.SetActive(false);
-		onEnd?.Invoke();//call onEnd from last Display() call if it was ended early
-		onEnd = null;
-		ResetRoutine(Type(), ref crtType);
-		IEnumerator Type()
-		{
-			for (int i = 0; i < textBoxes.Length; i++)
-			{
-				if ((animateMask & (1 << i)) == 0) textBoxes[i].text = "";
-				else while (textBoxes[i].text.Length > 0)
-					{
-						textBoxes[i].text = textBoxes[i].text[..^1];//deciper this as well
-						yield return new WaitForSecondsRealtime(typeDelay);
-					}
-			}
-		}
-	}
+    public void UnDisplay(int animateMask = 1 << 1)
+    {
+        subText.gameObject.SetActive(false);
+        onEnd?.Invoke();//call onEnd from last Display() call if it was ended early
+        onEnd = null;
+        ResetRoutine(Type(), ref crtType);
+        IEnumerator Type()
+        {
+            for (int i = 0; i < textBoxes.Length; i++)
+            {
+                if ((animateMask & (1 << i)) == 0) textBoxes[i].text = "";
+                else while (textBoxes[i].text.Length > 0)
+                    {
+                        textBoxes[i].text = textBoxes[i].text[..^1];//deciper this as well
+                        yield return new WaitForSecondsRealtime(typeDelay);
+                    }
+            }
+        }
+    }
 
-	IEnumerator Start()
-	{
-		if (demoMode)
-		{
-			while (true)
-			{
-				for (int i = 0; i < general.Length; i++)
-				{
-					bool wait = true;
-					Display(general[i], () => wait = false);
-					yield return new WaitWhile(() => wait);
-					yield return new WaitForSeconds(demoDelay);
-				}
+    IEnumerator Start()
+    {
+        if (demoMode)
+        {
+            while (true)
+            {
+                for (int i = 0; i < general.Length; i++)
+                {
+                    bool wait = true;
+                    Display(general[i], () => wait = false);
+                    yield return new WaitWhile(() => wait);
+                    yield return new WaitForSeconds(demoDelay);
+                }
 
-				for (int i = 0; i < bullet.Length; i++)
-				{
-					bool wait = true;
-					Display(bullet[i], () => wait = false);
-					yield return new WaitWhile(() => wait);
-					yield return new WaitForSeconds(demoDelay);
-				}
+                for (int i = 0; i < bullet.Length; i++)
+                {
+                    bool wait = true;
+                    Display(bullet[i], () => wait = false);
+                    yield return new WaitWhile(() => wait);
+                    yield return new WaitForSeconds(demoDelay);
+                }
 
-				for (int i = 0; i < melee.Length; i++)
-				{
-					bool wait = true;
-					Display(melee[i], () => wait = false);
-					yield return new WaitWhile(() => wait);
-					yield return new WaitForSeconds(demoDelay);
-				}
+                for (int i = 0; i < melee.Length; i++)
+                {
+                    bool wait = true;
+                    Display(melee[i], () => wait = false);
+                    yield return new WaitWhile(() => wait);
+                    yield return new WaitForSeconds(demoDelay);
+                }
 
-				for (int i = 0; i < fall.Length; i++)
-				{
-					bool wait = true;
-					Display(fall[i], () => wait = false);
-					yield return new WaitWhile(() => wait);
-					yield return new WaitForSeconds(demoDelay);
-				}
-			}
-		}
-	}
+                for (int i = 0; i < fall.Length; i++)
+                {
+                    bool wait = true;
+                    Display(fall[i], () => wait = false);
+                    yield return new WaitWhile(() => wait);
+                    yield return new WaitForSeconds(demoDelay);
+                }
+            }
+        }
+    }
 }
