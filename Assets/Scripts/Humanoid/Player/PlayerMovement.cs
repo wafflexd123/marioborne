@@ -50,6 +50,8 @@ public class PlayerMovement : MonoBehaviourPlus
     [field: SerializeField][field: Tooltip("Min distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float minDamageDistance { get; set; }
     [field: SerializeField][field: Tooltip("Max distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float maxDamageDistance { get; set; }
 
+    [field: Header("Sounds")]
+    [SerializeField] public float soundRadius;
     //Non-inspector public properties
     public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
     public bool IsGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
@@ -430,6 +432,18 @@ public class PlayerMovement : MonoBehaviourPlus
             } while (health < maxHealth);
             health = maxHealth;
             crtHealth = null;
+        }
+    }
+
+    public void MakeSound()
+    {
+        Collider[] enemiesHeard = Physics.OverlapSphere(transform.position, soundRadius * rigidbody.velocity.magnitude);
+        foreach (var enemyHeard in enemiesHeard)
+        { //creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
+            if (enemyHeard.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+            {
+                enemyHeard.GetComponentInParent<AIController>().soundLocation = player.transform;
+            }
         }
     }
 
