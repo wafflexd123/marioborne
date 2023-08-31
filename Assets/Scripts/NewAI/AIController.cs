@@ -20,6 +20,8 @@ public class AIController : Humanoid, ITimeScaleListener
     [HideInInspector] public Transform soundLocation;
     [SerializeField] protected float rotationSpeed = 10f;
 
+    public StateHelper stateHelper;
+
 
     public override Vector3 LookDirection => fieldOfView.eyes.transform.TransformDirection(Vector3.forward);
     public override Vector3 LookingAt => lookingAt;
@@ -39,6 +41,8 @@ public class AIController : Humanoid, ITimeScaleListener
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
         player = Player.singlePlayer;
+        try { stateHelper = gameObject.GetComponent<StateHelper>(); }
+        catch { stateHelper = gameObject.AddComponent<StateHelper>(); }
         Time.timeScaleListeners.Add(this);
     }
 

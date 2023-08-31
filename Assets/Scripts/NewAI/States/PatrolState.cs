@@ -6,19 +6,24 @@ public class PatrolState : IAIState
 {
     public List<Transition> transitions { get; set; }
     public AIController controller { get; set; }
-
     private List<Vector3> patrolPoints;
     private int patrolIndex = 0;
     public bool pingpong = true;
     protected int pingpongDirection = 1;
+    public enum EnemyType { Standard, Melee, Shield }
+    public EnemyType type { get; set; }
 
     public void OnEntry()
     {
-        StandardAI standardAI = controller as StandardAI;
+        
+        //Debug.Log(controller);
+        patrolPoints = controller.stateHelper.SetPatrolRoute(type);
+        patrolIndex = controller.stateHelper.GetPatrolIndex();
+        /*
         patrolPoints = new List<Vector3>();
-        for(int i=0; i< standardAI.patrolPoints.childCount-1; i++)
+        for(int i=0; i< controller.patrolPoints.childCount-1; i++)
         {
-            patrolPoints.Add(standardAI.patrolPoints.GetChild(i).position);
+           patrolPoints.Add(meleeAI.patrolPoints.GetChild(i).position);
         }
         // find closest patrol points to go to next. 
         float closestDistance = float.MaxValue;
@@ -30,6 +35,7 @@ public class PatrolState : IAIState
                 closestDistance = Vector3.Distance(controller.transform.position, patrolPoints[i]);
             }
         }
+        */
     }
 
     public void OnExit()

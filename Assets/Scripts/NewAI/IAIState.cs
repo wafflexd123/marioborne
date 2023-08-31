@@ -11,6 +11,7 @@ public interface IAIState
 
     public List<Transition> transitions { get; set; }
     public AIController controller { get; set; }
+    //public enum EnemyType { Standard, Melee, Shield }
 }
 //public abstract class IAIState
 

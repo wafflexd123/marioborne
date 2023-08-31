@@ -19,7 +19,6 @@ public class ActiveShootingState : IAIState
 
     public void OnEntry()
     {
-        standardAI = controller as StandardAI;
         investigateInvoked = false;
         relocateInvoked = false;
         //coroutineHelper.AddCoroutine("investigate", WaitForTime(TimeBeforePursuingPlayer, false));

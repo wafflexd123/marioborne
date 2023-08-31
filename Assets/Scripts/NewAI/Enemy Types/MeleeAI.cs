@@ -4,78 +4,76 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.VersionControl.Asset;
 
-public class StandardAI : AIController
+public class MeleeAI : AIController
 {
-    [SerializeField, Tooltip("Whether the patrol path should be run in reverse when completed, or looping from the 0th patrol point")] 
+    [SerializeField, Tooltip("Whether the patrol path should be run in reverse when completed, or looping from the 0th patrol point")]
     protected bool patrolPingPong = true;
     [SerializeField] public Transform patrolPoints;
-    [SerializeField] public Transform coverPoints;
     public float defaultSpeed;
-    public float runToCoverSpeed; //will extend these for each state if needed
-    public float relocateDistance = 0.5f;
-    [SerializeField] protected CoverPriority coverPriority = CoverPriority.IfNear;
-    [SerializeField] protected float nearCoverDistance = 5f;
+    public float chaseSpeed;
+    public float meleeDistance;
 
     // AI States
     protected PatrolState patrolState;
-    protected NavigateFiringPosState navigateFiringPosState;
+    //protected NavigateFiringPosState navigateFiringPosState;
     protected InvestigatePlayerState investigatePlayerState;
-    protected ActiveShootingState activeShootingState;
+    protected AttackingState attackingState;
     protected WaitState waitState;
 
     // helpers
     protected CoroutineHelper coroutineHelper;
-    protected PatrolSetup patrolSetup;
-    
+    //protected PatrolSetup patrolSetup;
+
     protected override void Awake()
     {
         base.Awake();
         try { coroutineHelper = gameObject.GetComponent<CoroutineHelper>(); }
         catch { coroutineHelper = gameObject.AddComponent<CoroutineHelper>(); }
-        try { patrolSetup = gameObject.GetComponent<PatrolSetup>(); }
-        catch { patrolSetup = gameObject.AddComponent<PatrolSetup>(); }
-
+        //try { patrolSetup = gameObject.GetComponent<PatrolSetup>(); }
+        //catch { patrolSetup = gameObject.AddComponent<PatrolSetup>(); }
+        stateHelper.controller = this;
         states = new List<IAIState>();
         patrolState ??= new PatrolState();
         patrolState.controller = this;
+        patrolState.type = PatrolState.EnemyType.Melee;
         states.Add(patrolState);
-        navigateFiringPosState = new NavigateFiringPosState();
-        navigateFiringPosState.controller = this;
-        states.Add(navigateFiringPosState);
+        //navigateFiringPosState = new NavigateFiringPosState();
+        //navigateFiringPosState.controller = this;
+        //states.Add(navigateFiringPosState);
         investigatePlayerState = new InvestigatePlayerState();
         investigatePlayerState.controller = this;
         states.Add(investigatePlayerState);
-        activeShootingState = new ActiveShootingState();
-        activeShootingState.controller = this;
-        states.Add(activeShootingState);
+        attackingState = new AttackingState();
+        attackingState.controller = this;
+        attackingState.type = AttackingState.EnemyType.Melee;
+        states.Add(attackingState);
         waitState = new WaitState();
         waitState.controller = this;
         states.Add(waitState);
 
-        CanSeePlayerTransition navigateFiring = new CanSeePlayerTransition(navigateFiringPosState, this);
+        CanSeePlayerTransition attacking = new CanSeePlayerTransition(attackingState, this);
         CanHearPlayerTransition investigateSound = new CanHearPlayerTransition(investigatePlayerState, this);
-        patrolState.transitions = new List<Transition>() { navigateFiring, investigateSound };
+        patrolState.transitions = new List<Transition>() { attacking, investigateSound };
         // reach destination -> active shooting
-        StartShootingTransition startShootingTransition = new StartShootingTransition(activeShootingState);
-        navigateFiringPosState.startShootingTransition = startShootingTransition;
+        //AttackingTransition attackingTransition = new AttackingTransition(attackingState);
+        //navigateFiringPosState.startShootingTransition = startShootingTransition;
         // 10s pass -> patrol
-        ExternalControlTransition returnToPatrolNavi = new ExternalControlTransition(patrolState);
-        navigateFiringPosState.coroutineHelper = coroutineHelper;
-        coroutineHelper.AddTimer("returnToPatrol");
-        navigateFiringPosState.returnToPatrolTransition = returnToPatrolNavi;
-        navigateFiringPosState.transitions = new List<Transition>() { returnToPatrolNavi, startShootingTransition };
+        //ExternalControlTransition returnToPatrolNavi = new ExternalControlTransition(patrolState);
+        //navigateFiringPosState.coroutineHelper = coroutineHelper;
+        //coroutineHelper.AddTimer("returnToPatrol");
+        //navigateFiringPosState.returnToPatrolTransition = returnToPatrolNavi;
+        //navigateFiringPosState.transitions = new List<Transition>() { returnToPatrolNavi, startShootingTransition };
 
-        ExternalControlTransition investigateTransition = new ExternalControlTransition(investigatePlayerState);
-        ExternalControlTransition relocateTransition = new ExternalControlTransition(navigateFiringPosState);
-        activeShootingState.coroutineHelper = coroutineHelper;
-        activeShootingState.transitions = new List<Transition>() { investigateTransition, relocateTransition };
+        InvestigateTransition investigateTransition = new InvestigateTransition(investigatePlayerState);
+        attackingState.coroutineHelper = coroutineHelper;
+        attackingState.transitions = new List<Transition>() { investigateTransition };
 
         // sees player -> active shooting
         // reaches aprox last player position -> wait
-        FoundPlayerTransition foundPlayerTransition = new FoundPlayerTransition(navigateFiringPosState, this);
+        FoundPlayerTransition foundPlayerTransition = new FoundPlayerTransition(attackingState, this);
         ReachedLastKnownPlayerPosTransition reachedLastKnownPlayerPosTransition = new ReachedLastKnownPlayerPosTransition(waitState, this, transform);
         investigatePlayerState.coroutineHelper = coroutineHelper;
-        ExternalControlTransition investigateTimeout = new ExternalControlTransition(patrolState);
+        InvestigateTransition investigateTimeout = new InvestigateTransition(patrolState);
         investigatePlayerState.transitions = new List<Transition>() { foundPlayerTransition, reachedLastKnownPlayerPosTransition, investigateTimeout };
 
         // wait state
@@ -83,7 +81,7 @@ public class StandardAI : AIController
         // time passes -> patrol
         waitState.coroutineHelper = coroutineHelper;
         ExternalControlTransition waitToPatrol = new ExternalControlTransition(patrolState);
-        waitState.transitions = new List<Transition>() { navigateFiring, waitToPatrol };
+        waitState.transitions = new List<Transition>() { attacking, waitToPatrol };
 
         CurrentState = patrolState;
         CurrentState.OnEntry();
@@ -118,15 +116,4 @@ public class StandardAI : AIController
     {
         patrolState.pingpong = patrolPingPong;
     }
-
-    public CoverPriority GetCoverPriority() { return coverPriority; }
-    public float GetNearCoverDistance() { return nearCoverDistance; }
-}
-
-[Serializable]
-public enum CoverPriority
-{
-    IgnoreCover = 0,
-    IfNear = 1,
-    RequireCover = 2
 }

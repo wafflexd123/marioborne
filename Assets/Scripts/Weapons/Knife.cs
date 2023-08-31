@@ -13,7 +13,7 @@ public class Knife : WeaponBase
     protected override void OnPickup()
     {
         base.OnPickup();
-        wielder.model.holdingMelee = true;
+        if(wielder is AIController) wielder.model.holdingMelee = true;
         for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = false;
         for (int i = 0; i < bladeColliders.Length; i++)
         {
@@ -40,7 +40,7 @@ public class Knife : WeaponBase
             StopCoroutine(crtDelay); //if dropped while attacking
             crtDelay = null;
         }
-        wielder.model.holdingMelee = false;
+        if (wielder is AIController) wielder.model.holdingMelee = false;
     }
 
     protected override void Attack()
@@ -50,10 +50,19 @@ public class Knife : WeaponBase
             crtDelay = StartCoroutine(Delay());
             IEnumerator Delay()
             {
-                wielder.model.slash = true;
+                if (wielder is AIController)
+                {
+                    wielder.model.slash = true;
+                    wielder.GetComponent<AIController>().agent.isStopped = true;
+                } 
                 for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
                 _isFiring = true;
-                yield return new WaitUntil(() => !wielder.model.slash);
+                if (wielder is AIController) 
+                {
+                    yield return new WaitUntil(() => !wielder.model.slash);
+                    wielder.GetComponent<AIController>().agent.isStopped = false;
+                } 
+                else yield return new WaitForSeconds(0.5f); //placeholder
                 _isFiring = false;
                 for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
                 yield return new WaitForSeconds(hitDelay);

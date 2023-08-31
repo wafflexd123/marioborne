@@ -1178,9 +1178,10 @@ GameObject:
   - component: {fileID: 6587345493690171063}
   - component: {fileID: 8370709848382519432}
   - component: {fileID: 6506784361473440158}
+  - component: {fileID: 7060508063380745432}
   - component: {fileID: 6834663909314435510}
   m_Layer: 11
-  m_Name: New Enemy
+  m_Name: Ranged Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1219,8 +1220,9 @@ MonoBehaviour:
   player: {fileID: 0}
   soundLocation: {fileID: 0}
   rotationSpeed: 10
+  stateHelper: {fileID: 0}
   weapon: {fileID: 0}
-  alertRadius: 0
+  alertRadius: 5
   stateName: 
   patrolPingPong: 0
   patrolPoints: {fileID: 0}
@@ -1228,7 +1230,7 @@ MonoBehaviour:
   defaultSpeed: 1
   runToCoverSpeed: 5
   relocateDistance: 0.5
-  coverPriority: 1
+  coverPriority: 2
   nearCoverDistance: 8
 --- !u!114 &6587345493690171063
 MonoBehaviour:
@@ -1302,6 +1304,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 3
+--- !u!114 &7060508063380745432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3608175937353701527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa82d81ec5adba149887ea49cecf7aee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints: []
 --- !u!114 &6834663909314435510
 MonoBehaviour:
   m_ObjectHideFlags: 0
