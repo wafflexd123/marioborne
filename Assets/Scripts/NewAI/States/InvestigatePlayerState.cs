@@ -14,9 +14,9 @@ public class InvestigatePlayerState : IAIState
     {
         if (controller.soundLocation != null) //only follow sound if patrolling or already investigating
         {
-            controller.LastKnownPlayerPosition = controller.soundLocation.position;
+            controller.LastKnownPlayerPosition = controller.soundLocation;
         }
-        controller.soundLocation = null;
+        controller.soundLocation = Vector3.zero;
         coroutineHelper.StartOrAddCoroutine("investigate-timeout", WaitForTime());
     }
 

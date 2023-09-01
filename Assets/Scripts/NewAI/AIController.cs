@@ -17,7 +17,7 @@ public class AIController : Humanoid, ITimeScaleListener
     public Rigidbody rb { get; protected set; }
     [HideInInspector] public Vector3 lookingAt;
     [HideInInspector] public Player player;
-    [HideInInspector] public Transform soundLocation;
+    [HideInInspector] public Vector3 soundLocation;
     [SerializeField] protected float rotationSpeed = 10f;
 
     public StateHelper stateHelper;
@@ -100,12 +100,12 @@ public class AIController : Humanoid, ITimeScaleListener
 
     public void AlertOthers()
     {
-        Collider[] alertOthers = Physics.OverlapSphere(transform.position, alertRadius);
+        Collider[] alertOthers = Physics.OverlapSphere(transform.position, alertRadius, 1 << 11);
         foreach (var alerted in alertOthers)
         { //creates an overlap sphere around enemy, checks if other enemies are in it and prompts them to investigate
-            if (alerted.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")) && Vector3.Distance(alerted.transform.position, transform.position) > 1f)
+            if (Vector3.Distance(alerted.transform.position, transform.position) > 1f)
             {
-                alerted.GetComponentInParent<AIController>().soundLocation = transform;
+                alerted.GetComponentInParent<AIController>().soundLocation = soundLocation;
             }
         }
     }
