@@ -10,23 +10,24 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
     public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, minStepVolume, maxStepVolume, velocityAtMaxStepVolume;
     public GameObject deathPosePrefab;
 
-    //Script
-    private AudioSource audioSource;
-    private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
-    private bool _wallRunning, _grounded, _punching, _deflect, _slashing;
-    private Vector3 colliderCentre;
-    private Animator animator;
-    private Coroutine crtGroundState, crtCrouch, crtPunch, crtDeflect, crtSlash;
-    new private CapsuleCollider collider;
-    private Vector3 _velocity;
+	//Script
+	private AudioSource audioSource;
+	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
+	private bool _punching, _deflect, _slashing;
+	private Vector3 colliderCentre;
+	private Animator animator;
+	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash;
+	new private CapsuleCollider collider;
+	private Vector3 _velocity;
 
     //PROPERTIES
 
-    //Movement
-    public bool roll { set { if (value) animator.SetTrigger("roll"); } }
-    public bool land { set { if (value) animator.SetTrigger("land"); } }
-    public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
-    public bool hanging { set => animator.SetBool("hanging", value); }
+	//Movement
+	public bool roll { set { if (value) animator.SetTrigger("roll"); } }
+	public bool land { set { if (value) animator.SetTrigger("land"); } }
+	public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
+	public bool hanging { set => animator.SetBool("hanging", value); }
+	public bool falling { set => animator.SetBool("falling", value); }
 
     //Attacks
     public bool holdingMelee { set; get; }
@@ -48,22 +49,22 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
         get => _deflect;
     }
 
-    //Other
-    public bool dying { set => animator.SetTrigger("die"); }
-    public bool grounded { set { _grounded = value; CheckGroundState(); } }
-    public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
-    public Vector3 velocity
-    {
-        set
-        {
-            _velocity = value;
-            float magnitude = Mathf.Sqrt((value.x * value.x) + (value.z * value.z));
-            magnitude = ((int)(magnitude * 100)) / 100f;//round to 2 decimals
-            animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
-            animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
-            //animator.SetBool("falling", Mathf.Abs(value.y) >= airSpeed);
-        }
-    }
+	//Other
+	public bool dying { set => animator.SetTrigger("die"); }
+	public bool grounded { set => falling = false; }
+	public bool wallRunning { set => falling = false; }
+	public Vector3 velocity
+	{
+		set
+		{
+			_velocity = value;
+			float magnitude = Mathf.Sqrt((value.x * value.x) + (value.z * value.z));
+			magnitude = ((int)(magnitude * 100)) / 100f;//round to 2 decimals
+			animator.SetFloat("walkMagnitude", Mathf.InverseLerp(0, walkSpeed, magnitude));
+			animator.SetFloat("runMagnitude", Mathf.InverseLerp(walkSpeed, runSpeed, magnitude));
+			//animator.SetBool("falling", Mathf.Abs(value.y) >= airSpeed);
+		}
+	}
 
     private void Awake()
     {
@@ -87,42 +88,31 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
         }
     }
 
-    void CheckGroundState()
-    {
-        if (crtGroundState == null) crtGroundState = StartCoroutine(Routine());
-        IEnumerator Routine()
-        {
-            yield return new WaitForFixedUpdate();
-            animator.SetBool("falling", !_grounded && !_wallRunning);
-            crtGroundState = null;
-        }
-    }
-
-    IEnumerator Crouch(bool crouch)
-    {
-        animator.SetBool("sliding", crouch);
-        float percent, timer = 0;
-        float centreStart = collider.center.y, centreEnd;
-        float heightStart = collider.height, heightEnd;
-        if (crouch)
-        {
-            centreEnd = colliderCentreCrouch;
-            heightEnd = colliderHeightCrouch;
-        }
-        else
-        {
-            centreEnd = colliderCentre.y;
-            heightEnd = colliderHeight;
-        }
-        do
-        {
-            timer += Time.fixedDeltaTime;
-            percent = Mathf.Clamp01(timer / colliderCrouchTime);
-            collider.center = new Vector3(colliderCentre.x, Mathf.Lerp(centreStart, centreEnd, percent), colliderCentre.z);
-            collider.height = Mathf.Lerp(heightStart, heightEnd, percent);
-            yield return new WaitForFixedUpdate();
-        } while (percent != 1);
-    }
+	IEnumerator Crouch(bool crouch)
+	{
+		animator.SetBool("sliding", crouch);
+		float percent, timer = 0;
+		float centreStart = collider.center.y, centreEnd;
+		float heightStart = collider.height, heightEnd;
+		if (crouch)
+		{
+			centreEnd = colliderCentreCrouch;
+			heightEnd = colliderHeightCrouch;
+		}
+		else
+		{
+			centreEnd = colliderCentre.y;
+			heightEnd = colliderHeight;
+		}
+		do
+		{
+			timer += Time.fixedDeltaTime;
+			percent = Mathf.Clamp01(timer / colliderCrouchTime);
+			collider.center = new Vector3(colliderCentre.x, Mathf.Lerp(centreStart, centreEnd, percent), colliderCentre.z);
+			collider.height = Mathf.Lerp(heightStart, heightEnd, percent);
+			yield return new WaitForFixedUpdate();
+		} while (percent != 1);
+	}
 
     void SetTrigger(string name, ref Coroutine crt, Action onEnd)
     {

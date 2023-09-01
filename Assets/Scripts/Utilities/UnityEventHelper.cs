@@ -1,22 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UnityEventHelper : MonoBehaviour
+public class UnityEventHelper : MonoBehaviourPlus
 {
-    public void TriggerDelete(MonoBehaviour monoBehaviour)
-    {
-        Destroy(monoBehaviour);
-    }
+	new public void Destroy(Object obj)
+	{
+		Object.Destroy(obj);
+	}
 
-    public void TriggerDelete(GameObject gameObject)
-    {
-        Destroy(gameObject);
-    }
+	public void SetPosition(Transform t)
+	{
+		transform.position = t.position;
+	}
 
-    public void SetParent(Transform transform)
-    {
-        this.transform.SetParent(transform);
-    }
+	public void SetRotation(Transform t)
+	{
+		transform.rotation = t.rotation;
+	}
 
     public void DebugLog(string message)
     {

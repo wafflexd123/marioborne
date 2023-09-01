@@ -1,12 +1,15 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ElevatorDoor : MonoBehaviourPlus
 {
-    public Transform leftDoor, rightDoor;
-    public float moveTime, zMovement;
-    public bool animateOnFirstFrame, isOpen;
-    Position leftOpen, leftClosed, rightOpen, rightClosed;
-    Coroutine crtLeft, crtRight;
+	public Transform leftDoor, rightDoor;
+	public TriggerCollider triggerCollider;
+	public float moveTime, zMovement;
+	public bool animateOnFirstFrame, isOpen;
+	public UnityEvent playerInElevatorDoorClosedEvent;
+	Position leftOpen, leftClosed, rightOpen, rightClosed;
+	Coroutine crtLeft, crtRight;
 
     public bool IsFullyOpen => isOpen && crtRight == null;
     public bool IsFullyClosed => !isOpen && crtRight == null;
@@ -46,12 +49,17 @@ public class ElevatorDoor : MonoBehaviourPlus
         }
     }
 
-    public void Close()
-    {
-        if (isOpen)
-        {
-            ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor), ref crtLeft);
-            ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; }), ref crtRight);
-        }
-    }
+	public void Close()
+	{
+		if (isOpen)
+		{
+			ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor), ref crtLeft);
+			ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; CheckForPlayer(); }), ref crtRight);
+		}
+	}
+
+	void CheckForPlayer()
+	{
+		if (triggerCollider.isTriggered) playerInElevatorDoorClosedEvent.Invoke();
+	}
 }

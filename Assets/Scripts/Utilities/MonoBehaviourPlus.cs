@@ -201,9 +201,10 @@ public class MonoBehaviourPlus : MonoBehaviour
             }
         }
 
-        public static implicit operator Vector3(Position p) => p.coords;
-        public static implicit operator Quaternion(Position p) => Quaternion.Euler(p.eulers);
-        public static Position operator +(Position a, Position b) => new Position(a.coords + b.coords, a.eulers + b.eulers);
-        public static Position operator -(Position a, Position b) => new Position(a.coords - b.coords, a.eulers - b.eulers);
-    }
+		public static implicit operator Vector3(Position p) => p.coords;
+		public static implicit operator Quaternion(Position p) => Quaternion.Euler(p.eulers);
+		public static implicit operator Position(Transform p) => new Position(p);
+		public static Position operator +(Position a, Position b) => new Position(a.coords + b.coords, a.eulers + b.eulers);
+		public static Position operator -(Position a, Position b) => new Position(a.coords - b.coords, a.eulers - b.eulers);
+	}
 }
