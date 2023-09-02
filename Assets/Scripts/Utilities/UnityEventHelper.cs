@@ -27,4 +27,9 @@ public class UnityEventHelper : MonoBehaviourPlus
     {
         SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
+
+	public void RemoveParent(Transform transform)
+	{
+		transform.SetParent(null);
+	}
 }

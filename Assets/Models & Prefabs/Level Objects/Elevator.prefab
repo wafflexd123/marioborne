@@ -1049,19 +1049,7 @@ MonoBehaviour:
       m_Calls: []
   onExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7119252663072885157}
-        m_TargetAssemblyTypeName: ElevatorDoor, Assembly-CSharp
-        m_MethodName: Open
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   isTriggered: 0
   other: {fileID: 0}
 --- !u!1 &7119252661462460980
@@ -1219,16 +1207,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21318a5ed7b5cb46a11f889d79624bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorEasing: 3
   leftDoor: {fileID: 7119252663593818407}
   rightDoor: {fileID: 7119252661462460976}
   triggerCollider: {fileID: 4904235115776666547}
-  moveTime: 1.5
+  moveTime: 2
   zMovement: 0.9
-  animateOnFirstFrame: 0
+  animateOnEnable: 0
   isOpen: 0
   playerInElevatorDoorClosedEvent:
     m_PersistentCalls:
       m_Calls: []
+  emptyElevatorDoorClosedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7119252663072885157}
+        m_TargetAssemblyTypeName: ElevatorDoor, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7119252663593818411
 GameObject:
   m_ObjectHideFlags: 0
