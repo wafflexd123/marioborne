@@ -9,7 +9,7 @@ public class ElevatorDoor : MonoBehaviourPlus
 	public float moveTime, zMovement;
 	public bool animateOnEnable, isOpen;
 	public UnityEvent playerInElevatorDoorClosedEvent, emptyElevatorDoorClosedEvent;
-	Position leftOpen, leftClosed, rightOpen, rightClosed;
+	PositionAndScale leftOpen, leftClosed, rightOpen, rightClosed;
 	Coroutine crtLeft, crtRight;
 
 	public bool IsFullyOpen => isOpen && crtRight == null;
@@ -19,17 +19,17 @@ public class ElevatorDoor : MonoBehaviourPlus
 	{
 		if (isOpen)
 		{
-			leftOpen = new Position(leftDoor, true);
-			leftClosed = new Position(leftDoor.localPosition - new Vector3(0, 0, zMovement), leftDoor.localEulerAngles);
-			rightOpen = new Position(rightDoor, true);
-			rightClosed = new Position(rightDoor.localPosition - new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles);
+			leftOpen = new PositionAndScale(leftDoor, true);
+			leftClosed = new PositionAndScale(leftDoor.localPosition - new Vector3(0, 0, zMovement), leftDoor.localEulerAngles, leftDoor.localScale);
+			rightOpen = new PositionAndScale(rightDoor, true);
+			rightClosed = new PositionAndScale(rightDoor.localPosition - new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles, rightDoor.localScale);
 		}
 		else
 		{
-			leftClosed = new Position(leftDoor, true);
-			leftOpen = new Position(leftDoor.localPosition + new Vector3(0, 0, zMovement), leftDoor.localEulerAngles);
-			rightClosed = new Position(rightDoor, true);
-			rightOpen = new Position(rightDoor.localPosition + new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles);
+			leftClosed = new PositionAndScale(leftDoor, true);
+			leftOpen = new PositionAndScale(leftDoor.localPosition + new Vector3(0, 0, zMovement), leftDoor.localEulerAngles, leftDoor.localScale);
+			rightClosed = new PositionAndScale(rightDoor, true);
+			rightOpen = new PositionAndScale(rightDoor.localPosition + new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles, rightDoor.localScale);
 		}
 	}
 
