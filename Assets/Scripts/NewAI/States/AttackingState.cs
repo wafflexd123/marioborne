@@ -70,16 +70,3 @@ public class AttackingState : IAIState
     }
 }
 
-public class InvestigateTransition : Transition
-{
-    public bool trigger = false;
-
-    public InvestigateTransition(IAIState targetState) : base(targetState) { }
-
-    public override bool RequirementsMet()
-    {
-        bool internalTrigger = trigger;
-        trigger = false;
-        return internalTrigger;
-    }
-}

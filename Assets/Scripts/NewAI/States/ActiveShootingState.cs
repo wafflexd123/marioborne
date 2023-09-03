@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveShootingState : IAIState
+public class ActiveShootingState : MonoBehaviour, IAIState
 {
     public List<Transition> transitions { get; set; }
     public AIController controller { get; set; }
-    public CoroutineHelper coroutineHelper { get; set; }
 
     public float TimeBeforeRelocating = 10f;
     public float TimeBeforePursuingPlayer = 5f;
@@ -86,16 +85,3 @@ public class ActiveShootingState : IAIState
     }
 }
 
-public class ExternalControlTransition : Transition
-{
-    public bool trigger = false;
-
-    public ExternalControlTransition(IAIState targetState) : base(targetState) { }
-
-    public override bool RequirementsMet()
-    {
-        bool internalTrigger = trigger;
-        trigger = false;
-        return internalTrigger;
-    }
-}
