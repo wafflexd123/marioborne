@@ -1,6 +1,6 @@
 using UnityEngine.Events;
 
-public class ActionOnAwake : UnityEventHelper
+public class EventOnAwake : UnityEventHelper
 {
     public UnityEvent awake, start;
     public bool deleteAfterStart = true;
