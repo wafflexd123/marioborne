@@ -1,41 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitState : IAIState
+public class WaitState : AIState
 {
-    public List<Transition> transitions { get; set; }
-    public AIController controller { get; set; }
-    public float waitBeforePatrollingDuration = 5f;
-    public CoroutineHelper coroutineHelper { get; set; }
+	public float waitBeforePatrollingDuration = 5f;
+	Coroutine crtWait;
+	ExternalControlTransition waitTransition;
 
-    public void OnEntry()
-    {
-        coroutineHelper.AddCoroutine("waiting", WaitAtLocation());
-        coroutineHelper.StartKnownCoroutine("waiting");
-    }
+	public override AIState Setup(params Transition[] transitions)
+	{
+		foreach (Transition transition in transitions)
+		{
+			if (transition is ExternalControlTransition t)
+			{
+				waitTransition = t;
+				break;
+			}
+		}
+		return base.Setup(transitions);
+	}
 
-    public void OnExit()
-    {
-        coroutineHelper.CancelCoroutine("waiting");
-    }
+	protected override void OnEntry()
+	{
+		crtWait = StartCoroutine(StandardTimer(waitBeforePatrollingDuration, waitTransition));
+	}
 
-    public void Tick()
-    {
-        // hmm sound. hmm
-    }
+	protected override void OnExit()
+	{
+		StopCoroutine(ref crtWait);
+	}
 
-    public IEnumerator WaitAtLocation()
-    {
-        yield return new WaitForSeconds(waitBeforePatrollingDuration);
-        for (int i = 0; i < transitions.Count; i++)
-        {
-            if (transitions[i] is ExternalControlTransition)
-            {
-                ExternalControlTransition t = transitions[i] as ExternalControlTransition;
-                t.trigger = true;
-                break;
-            }
-        }
-    }
+	public override void Tick()
+	{
+		// hmm sound. hmm
+		/// ^^^^ do not delete this comment. the game will not compile without it, specifically and exactly as it is. too hard to explain. trust me.
+	}
 }

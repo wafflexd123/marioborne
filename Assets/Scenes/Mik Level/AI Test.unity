@@ -4378,14 +4378,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 0}
-  lookingAt: {x: 0, y: 0, z: 0}
-  player: {fileID: 0}
-  soundLocation: {x: 0, y: 0, z: 0}
-  rotationSpeed: 1
-  stateHelper: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 5
-  stateName: 
+  rotationSpeed: 1
   patrolPingPong: 1
   patrolPoints: {fileID: 728962180}
   defaultSpeed: 1
@@ -5016,10 +5011,26 @@ PrefabInstance:
       propertyPath: patrolPoints
       value: 
       objectReference: {fileID: 728962180}
+    - target: {fileID: 3534690032015782569, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.55267507
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534690032015782569, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.55267394
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534690032015782569, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.44107938
+      objectReference: {fileID: 0}
     - target: {fileID: 3608175937353701527, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
       propertyPath: m_Name
       value: New Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5351555704058958410, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: patrolPoints
+      value: 
+      objectReference: {fileID: 728962180}
     - target: {fileID: 7020093058031366038, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.255857
@@ -5060,7 +5071,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8172099334322591058, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: coverPointsTransform
+      value: 
+      objectReference: {fileID: 808979411}
+    m_RemovedComponents:
+    - {fileID: 7060508063380745432, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -5824,6 +5840,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Melee Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3771824679759711126, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4430802973714058838, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
       propertyPath: patrolPoints
       value: 
@@ -5867,6 +5887,18 @@ PrefabInstance:
     - target: {fileID: 5114831308696380425, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673751305091367724, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.55267507
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673751305091367724, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.55267394
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673751305091367724, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.44107938
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

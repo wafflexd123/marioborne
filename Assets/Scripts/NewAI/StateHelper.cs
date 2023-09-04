@@ -12,38 +12,38 @@ public class StateHelper : MonoBehaviour
     protected MeleeAI meleeAI;
     protected ShieldAI shieldAI;
 
-    public List<Vector3> SetPatrolRoute(PatrolState.EnemyType type)
-    {
-        patrolPoints = new List<Vector3>();
-        if (type == PatrolState.EnemyType.Standard)
-        {
-            standardAI = GetComponent<StandardAI>();
-            for (int i = 0; i < standardAI.patrolPoints.childCount - 1; i++)
-            {
-                patrolPoints.Add(standardAI.patrolPoints.GetChild(i).position);
-            }
-            FindClosest(patrolPoints);
-        }
-        if (type == PatrolState.EnemyType.Melee)
-        {
-            meleeAI = GetComponent<MeleeAI>();
-            for (int i = 0; i < meleeAI.patrolPoints.childCount - 1; i++)
-            {
-                patrolPoints.Add(meleeAI.patrolPoints.GetChild(i).position);
-            }
-            FindClosest(patrolPoints);
-        }
-        if (type == PatrolState.EnemyType.Shield)
-        {
-            shieldAI = GetComponent<ShieldAI>();
-            for (int i = 0; i < shieldAI.patrolPoints.childCount - 1; i++)
-            {
-                patrolPoints.Add(shieldAI.patrolPoints.GetChild(i).position);
-            }
-            FindClosest(patrolPoints);
-        }
-        return patrolPoints;
-    }
+    //public List<Vector3> SetPatrolRoute(PatrolState.EnemyType type)
+    //{
+    //    patrolPoints = new List<Vector3>();
+    //    if (type == PatrolState.EnemyType.Standard)
+    //    {
+    //        standardAI = GetComponent<StandardAI>();
+    //        for (int i = 0; i < standardAI.patrolPoints.childCount - 1; i++)
+    //        {
+    //            patrolPoints.Add(standardAI.patrolPoints.GetChild(i).position);
+    //        }
+    //        FindClosest(patrolPoints);
+    //    }
+    //    if (type == PatrolState.EnemyType.Melee)
+    //    {
+    //        meleeAI = GetComponent<MeleeAI>();
+    //        for (int i = 0; i < meleeAI.patrolPoints.childCount - 1; i++)
+    //        {
+    //            patrolPoints.Add(meleeAI.patrolPoints.GetChild(i).position);
+    //        }
+    //        FindClosest(patrolPoints);
+    //    }
+    //    if (type == PatrolState.EnemyType.Shield)
+    //    {
+    //        shieldAI = GetComponent<ShieldAI>();
+    //        for (int i = 0; i < shieldAI.patrolPoints.childCount - 1; i++)
+    //        {
+    //            patrolPoints.Add(shieldAI.patrolPoints.GetChild(i).position);
+    //        }
+    //        FindClosest(patrolPoints);
+    //    }
+    //    return patrolPoints;
+    //}
 
     public int GetPatrolIndex()
     {

@@ -11,26 +11,23 @@ public class AIController : Humanoid, ITimeScaleListener
 	public float rotationSpeed = 10f;
 
 	//Properties
-	public IAIState CurrentState { get; protected set; }
+	[field: SerializeField][field: ReadOnly] public AIState CurrentState { get; protected set; }
 	public Vector3 LastKnownPlayerPosition { get; set; }
+	public Vector3? SoundLocation { get; set; }
 	public FieldOfView fieldOfView { get; protected set; }
 	protected NavMeshAgent agent { get; set; }
 	public new Rigidbody rigidbody { get; protected set; }
 	public Player player { get; protected set; }
 	public float AgentSpeed { get => agentSpeed; set { agentSpeed = value; agent.speed = value * Time.timeScale; } }
+	public bool IsStopped { get => isStopped; set { isStopped = value; agent.isStopped = value; } }
 	public override Vector3 LookDirection => fieldOfView.eyes.forward;
 	public override Vector3 LookingAt => lookingAt;
 
-	//Script protected
-	protected Vector3 soundLocation;
-	protected List<IAIState> states = new List<IAIState>();
+	//Script
 	protected Vector3 velocity;
-
-	//Script private
 	float agentSpeed;
+	bool isStopped;
 	Vector3 lookingAt;
-	//string stateName;
-	//float timeEnteredState = 0f;
 
 	protected override void Awake()
 	{
@@ -44,26 +41,12 @@ public class AIController : Humanoid, ITimeScaleListener
 
 	void FixedUpdate()
 	{
-		model.velocity = agent.velocity;
-		bool TransitionedThisFrame = false;
-		for (int i = 0; i < CurrentState.transitions.Count; i++)
-		{
-			if (CurrentState.transitions[i].RequirementsMet()) // transition state
-			{
-				//print($"{name} is transitioning: \t{i}: {CurrentState.GetType().Name} -> {CurrentState.transitions[i].targetState.GetType().Name}, \t time in state: {UnityEngine.Time.time - timeEnteredState}");
-				CurrentState.OnExit();
-				CurrentState = CurrentState.transitions[i].targetState;
-				CurrentState.OnEntry();
-				TransitionedThisFrame = true;
-				//string stateName = CurrentState.GetType().Name;
-				//timeEnteredState = UnityEngine.Time.time;
-				break;
-			}
-		}
-		if (!TransitionedThisFrame)
-		{
+		if (CurrentState.TryTransition(out AIState newState))
+			CurrentState = newState;
+		else
 			CurrentState.Tick();
-		}
+
+		model.velocity = agent.velocity;
 	}
 
 	public void MoveTowards(Vector3 targetPosition)
@@ -98,7 +81,7 @@ public class AIController : Humanoid, ITimeScaleListener
 		{ //creates an overlap sphere around enemy, checks if other enemies are in it and prompts them to investigate
 			if (Vector3.Distance(alerted.transform.position, transform.position) > 1f)
 			{
-				alerted.GetComponentInParent<AIController>().soundLocation = soundLocation;
+				alerted.GetComponentInParent<AIController>().SoundLocation = SoundLocation;
 			}
 		}
 	}

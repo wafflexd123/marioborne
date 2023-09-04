@@ -4,11 +4,8 @@ using UnityEngine;
 
 public enum CoverPriority { IgnoreCover, IfNear, RequireCover }
 
-public class NavigateFiringPosState : MonoBehaviourPlus, IAIState
+public class NavigateFiringPosState : AIState
 {
-	public List<Transition> transitions { get; set; }
-	public AIController controller { get; set; }
-
 	//Inspector
 	public Transform coverPointsTransform;
 	public CoverPriority coverPriority = CoverPriority.IfNear;
@@ -24,13 +21,22 @@ public class NavigateFiringPosState : MonoBehaviourPlus, IAIState
 	Coroutine crtReturnToPatrolTimer;
 	float defaultSpeed;
 
-	public void Initialise(StartShootingTransition startShootingTransition, ExternalControlTransition returnToPatrolTransition)
+	public override AIState Setup(params Transition[] transitions)
 	{
-		this.startShootingTransition = startShootingTransition;
-		this.returnToPatrolTransition = returnToPatrolTransition;
+		if (transitions[0] is ExternalControlTransition)//probably should change how this works
+		{
+			returnToPatrolTransition = (ExternalControlTransition)transitions[0];
+			startShootingTransition = (StartShootingTransition)transitions[1];
+		}
+		else
+		{
+			returnToPatrolTransition = (ExternalControlTransition)transitions[1];
+			startShootingTransition = (StartShootingTransition)transitions[0];
+		}
+		return base.Setup(transitions);
 	}
 
-	public void OnEntry()
+	protected override void OnEntry()
 	{
 		defaultSpeed = controller.AgentSpeed;
 		if (coverPriority == CoverPriority.IgnoreCover)
@@ -91,7 +97,7 @@ public class NavigateFiringPosState : MonoBehaviourPlus, IAIState
 		}
 	}
 
-	public void OnExit()
+	protected override void OnExit()
 	{
 		controller.AgentSpeed = defaultSpeed;
 		startShootingTransition.destination = Vector3.zero;
@@ -99,7 +105,7 @@ public class NavigateFiringPosState : MonoBehaviourPlus, IAIState
 		if (crtReturnToPatrolTimer != null) StopCoroutine(crtReturnToPatrolTimer);
 	}
 
-	public void Tick()
+	public override void Tick()
 	{
 		controller.MoveTowards(targetLocation);
 		startShootingTransition.destination = targetLocation;
