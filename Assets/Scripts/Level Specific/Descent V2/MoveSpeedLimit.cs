@@ -11,7 +11,8 @@ public class MoveSpeedLimit : MonoBehaviour
             PlayerMovement playerMovement = player.GetComponentInParent<PlayerMovement>();
             if (playerMovement != null)
             {
-                playerMovement.walkDrag = 10;
+                playerMovement.currentState.values.YdragXvelocity.minY = 10;//this probably wont work properly
+                playerMovement.currentState.values.YdragXvelocity.maxY = 10;
             }
             else
             {
