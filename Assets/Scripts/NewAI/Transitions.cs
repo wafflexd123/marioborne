@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public abstract class Transition
@@ -7,6 +6,21 @@ public abstract class Transition
 	public readonly AIState targetState;
 	public virtual bool RequirementsMet() { return false; }
 	public Transition(AIState targetState) { this.targetState = targetState; }
+}
+
+public class SimpleTransition : Transition
+{
+	readonly Func<bool> requirementsMet;
+
+	public SimpleTransition(AIState targetState, Func<bool> requirementsMet) : base(targetState)
+	{
+		this.requirementsMet = requirementsMet;
+	}
+
+	public override bool RequirementsMet()
+	{
+		return requirementsMet();
+	}
 }
 
 public class ExternalControlTransition : Transition
@@ -90,19 +104,5 @@ public class CanHearPlayerTransition : Transition
 	public override bool RequirementsMet()
 	{
 		return controller.SoundLocation != null;
-	}
-}
-
-public class InvestigateTransition : Transition
-{
-	public bool trigger = false;
-
-	public InvestigateTransition(AIState targetState) : base(targetState) { }
-
-	public override bool RequirementsMet()
-	{
-		bool internalTrigger = trigger;
-		trigger = false;
-		return internalTrigger;
 	}
 }
