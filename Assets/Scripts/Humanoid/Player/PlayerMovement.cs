@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviourPlus
+public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 {
 	#region Variables
 	public MovementValues wall, slide, ground, air;
@@ -55,8 +55,6 @@ public class PlayerMovement : MonoBehaviourPlus
 	bool queueJump, _isGrounded, queueRoll, queueDash;
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
 	RaycastHit groundHit, wallHit;
-	Vector xzVelocity, yVelocity;
-	PlayerCamera playerCamera;
 	Player player;
 	Coroutine crtTilt, crtQueueRoll, crtHealth, crtDash;
 	HumanoidAnimatorManager animator;
@@ -68,6 +66,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	readonly State[] movementStates = new State[4];
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
+	public Vector xzVelocity, yVelocity;
+	public PlayerCamera playerCamera;
 
 	#endregion
 	#region Unity
@@ -481,6 +481,21 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (wallHit.transform != null) txtWhereAmI.text = wallHit.transform.name;
 		else if (isGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;
 	}
+
+	public void Rewind(float seconds)
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void StartRewind()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void StopRewind()
+	{
+		throw new System.NotImplementedException();
+	}
 	#endregion
 	#region Classes
 	[System.Serializable]
@@ -508,7 +523,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	class Vector
+	public class Vector
 	{
 		public Vector3 vector;
 		ForceCurve currentCurveDebug;
