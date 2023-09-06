@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
 	[field: SerializeField, Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
 	[field: SerializeField, Tooltip("Do not use rigidbody.gravity, use this!")] public bool useGravity { get; set; }
+	[SerializeField] LayerMask invisibleWallLayer;
 
 	//Non-inspector public properties
 	public float currentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
@@ -66,8 +67,8 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	readonly State[] movementStates = new State[4];
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
+	[HideInInspector] public PlayerCamera playerCamera;
 	public Vector xzVelocity, yVelocity;
-	public PlayerCamera playerCamera;
 
 	#endregion
 	#region Unity
@@ -83,6 +84,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 		health = maxHealth;
 		enableInput = true;
 		cnsDebug = Console.AddLine();
+		invisibleWallLayer = ~invisibleWallLayer;
 
 		//GetComponents
 		player = GetComponent<Player>();
@@ -374,7 +376,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 
 	void CheckGround()
 	{
-		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, ~(1 << 3)))
+		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, invisibleWallLayer, QueryTriggerInteraction.Ignore))
 		{
 			if (!isGrounded) isGrounded = true;
 			currentGroundPosition = transform.position;
@@ -390,7 +392,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 
 		bool Raycast(Vector3 vector, int direction)
 		{
-			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius))
+			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius, invisibleWallLayer, QueryTriggerInteraction.Ignore))
 			{
 				if (Mathf.Abs(wallHit.normal.y) <= maxWallYNormal)
 				{
