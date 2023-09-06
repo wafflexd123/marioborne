@@ -4,7 +4,7 @@ public class TimeslowAudio : MonoBehaviour, ITimeScaleListener
 {
     AudioSource audioSource;
     float startPitch;
-    public float minTimescale = .25f, minPitch = .7f;
+    public float minPitch = .7f;
 
     private void Awake()
     {
@@ -15,7 +15,7 @@ public class TimeslowAudio : MonoBehaviour, ITimeScaleListener
 
     public void OnTimeSlow()
     {
-        audioSource.pitch = Mathf.Lerp(minPitch, startPitch, Mathf.InverseLerp(minTimescale, 1, Time.timeScale));
+        audioSource.pitch = Mathf.Lerp(minPitch, startPitch, Mathf.InverseLerp(Time.minTimeScale, 1, Time.timeScale));
     }
 
     private void OnDestroy()

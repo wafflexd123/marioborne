@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class TimeslowDeflect : MonoBehaviour, IPlayerPower
 {
-    public float timeScaleSpeed, minTimeScale, scaleDuration, recoveryTime;
+    public float timeScaleSpeed, scaleDuration, recoveryTime;
     [SerializeField] ReflectWindow reflectWindowPrefab;
     Coroutine crtDeflect;
     Image imgTimeleft;
@@ -35,10 +35,10 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
             reflectWindowPrefab.enabled = true;
             while (Input.GetButton("Ability") && timer < scaleDuration)//slow time until timer has elapsed or button is released
             {
-                if (Time.timeScale > minTimeScale)
+                if (Time.timeScale > Time.minTimeScale)
                 {
                     Time.timeScale -= timeScaleSpeed * Time.deltaTime;
-                    if (Time.timeScale < minTimeScale) Time.timeScale = minTimeScale;
+                    if (Time.timeScale < Time.minTimeScale) Time.timeScale = Time.minTimeScale;
                 }
                 timer += Time.unscaledDeltaTime;
                 if (timer > scaleDuration) timer = scaleDuration;
