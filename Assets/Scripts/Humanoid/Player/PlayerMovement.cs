@@ -101,14 +101,9 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 
 		//Rigidbody
 		rigidbody = GetComponent<Rigidbody>();
-		rigidbody.isKinematic = false;
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;
 		rigidbody.drag = 0;
-		rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-		rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-		rigidbody.excludeLayers = 1 << 12;
-		rigidbody.includeLayers = ~rigidbody.excludeLayers;
 		mass = rigidbody.mass;
 
 		//Wait a frame before applying force; otherwise, player is occaisonally shot into the air in the first frame
