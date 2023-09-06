@@ -2,11 +2,7 @@ using UnityEngine;
 
 public class AttackingState : AIState
 {
-	public enum EnemyType { Standard, Melee, Shield }
-
-	//Inspector
-	public EnemyType type;
-	public float timeBeforePursuingPlayer = 5f, chaseSpeed = 1.5f, meleeDistance = 1f;
+	public float timeBeforePursuingPlayer = 5f, chaseSpeed, meleeDistance;
 
 	//Script
 	protected Coroutine crtInvestigate;

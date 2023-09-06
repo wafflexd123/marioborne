@@ -44,7 +44,7 @@ public class StateHelper : MonoBehaviour
     //    }
     //    return patrolPoints;
     //}
-
+    /*
     public int GetPatrolIndex()
     {
         return patrolIndex;
@@ -113,4 +113,5 @@ public class StateHelper : MonoBehaviour
     {
 
     }
+    */
 }
