@@ -1,75 +1,44 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InvestigatePlayerState : IAIState
+public class InvestigatePlayerState : AIState
 {
-    public List<Transition> transitions { get; set; }
-    public AIController controller { get; set; }
-    public CoroutineHelper coroutineHelper { get; set; }
-    public float maxInvestigateTime = 7f;
-    public float minInvestigateTime = 3f;
+	public float minInvestigateTime = 3f, maxInvestigateTime = 7f;
+	Coroutine crtInvestigateTimeout;
+	ExternalControlTransition timeoutTransition;
 
-    public void OnEntry()
-    {
-        if (controller.soundLocation != null) //only follow sound if patrolling or already investigating
-        {
-            controller.LastKnownPlayerPosition = controller.soundLocation;
-        }
-        controller.soundLocation = Vector3.zero;
-        coroutineHelper.StartOrAddCoroutine("investigate-timeout", WaitForTime());
-    }
+	public override AIState Setup(params Transition[] transitions)
+	{
+		foreach (Transition transition in transitions)
+		{
+			if (transition is ExternalControlTransition t)
+			{
+				timeoutTransition = t;
+				break;
+			}
+		}
+		return base.Setup(transitions);
+	}
 
-    public void OnExit()
-    {
-        coroutineHelper.CancelCoroutine("investigate-timeout");
-    }
+	protected override void OnEntry()
+	{
+		if (controller.SoundLocation != null) //only follow sound if patrolling or already investigating
+		{
+			controller.LastKnownPlayerPosition = (Vector3)controller.SoundLocation;
+		}
+		controller.SoundLocation = null;
+		ResetRoutine(StandardTimer(Random.Range(minInvestigateTime, maxInvestigateTime), timeoutTransition), ref crtInvestigateTimeout);
+	}
 
-    public void Tick()
-    {
-        controller.MoveTowards(controller.LastKnownPlayerPosition);
-        if (controller.soundLocation != null) OnEntry(); //while investigating, sounds will give away position
-    }
+	protected override void OnExit()
+	{
+		StopCoroutine(ref crtInvestigateTimeout);
+	}
 
-    public IEnumerator WaitForTime()
-    {
-        yield return new WaitForSeconds(Random.Range(minInvestigateTime, maxInvestigateTime));
-        for (int i = 0; i < transitions.Count; i++)
-        {
-            if (transitions[i] is ExternalControlTransition)
-            {
-                ExternalControlTransition t = transitions[i] as ExternalControlTransition;
-                t.trigger = true;
-                break;
-            }
-        }
-    }
+	public override void Tick()
+	{
+		controller.MoveTowards(controller.LastKnownPlayerPosition);
+		if (controller.SoundLocation != null) OnEntry(); //while investigating, sounds will give away position
+	}
 }
 
-public class ReachedLastKnownPlayerPosTransition : Transition
-{
-    public AIController controller;
-    public Transform transform;
-    public ReachedLastKnownPlayerPosTransition(IAIState targetState, AIController controller, Transform myTransform) : base(targetState)
-    {
-        this.controller = controller;
-        this.transform = myTransform;
-    }
-
-    public override bool RequirementsMet() { return Vector3.Distance(controller.LastKnownPlayerPosition, transform.position) < 1f; }
-}
-
-public class FoundPlayerTransition : Transition
-{
-    public AIController controller;
-
-    public FoundPlayerTransition(IAIState targetState, AIController controller) : base(targetState)
-    {
-        this.controller = controller;
-    }
-
-    public override bool RequirementsMet()
-    {
-        return controller.fieldOfView.canSeePlayer;
-    }
-}

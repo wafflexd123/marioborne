@@ -4,6 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// this is the worst guy I have ever made. 
+/// 
+/// it's ok. he has been laid to rest.
 /// </summary>
 public class CoroutineHelper : MonoBehaviour
 {

@@ -10,7 +10,7 @@ public static class Sound
 			Collider[] enemiesHeard = Physics.OverlapSphere(position, radius, 1 << 11);
 			foreach (Collider enemyHeard in enemiesHeard)//creates an overlap sphere around player, checks if enemies are in it and prompts them to investigate
 			{
-				enemyHeard.GetComponentInParent<AIController>().soundLocation = position;
+				enemyHeard.GetComponentInParent<AIController>().SoundLocation = position;
 			}
 		}
 	}

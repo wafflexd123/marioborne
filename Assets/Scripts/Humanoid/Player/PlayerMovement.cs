@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviourPlus
+public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 {
 	#region Variables
 	public MovementValues wall, slide, ground, air;
@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
 	[field: SerializeField, Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
 	[field: SerializeField, Tooltip("Do not use rigidbody.gravity, use this!")] public bool useGravity { get; set; }
+	[SerializeField] LayerMask invisibleWallLayer;
 
 	//Non-inspector public properties
 	public float currentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
@@ -55,8 +56,6 @@ public class PlayerMovement : MonoBehaviourPlus
 	bool queueJump, _isGrounded, queueRoll, queueDash;
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
 	RaycastHit groundHit, wallHit;
-	Vector xzVelocity, yVelocity;
-	PlayerCamera playerCamera;
 	Player player;
 	Coroutine crtTilt, crtQueueRoll, crtHealth, crtDash;
 	HumanoidAnimatorManager animator;
@@ -68,6 +67,8 @@ public class PlayerMovement : MonoBehaviourPlus
 	readonly State[] movementStates = new State[4];
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
+	[HideInInspector] public PlayerCamera playerCamera;
+	public Vector xzVelocity, yVelocity;
 
 	#endregion
 	#region Unity
@@ -83,6 +84,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		health = maxHealth;
 		enableInput = true;
 		cnsDebug = Console.AddLine();
+		invisibleWallLayer = ~invisibleWallLayer;
 
 		//GetComponents
 		player = GetComponent<Player>();
@@ -99,14 +101,9 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		//Rigidbody
 		rigidbody = GetComponent<Rigidbody>();
-		rigidbody.isKinematic = false;
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;
 		rigidbody.drag = 0;
-		rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-		rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-		rigidbody.excludeLayers = 1 << 12;
-		rigidbody.includeLayers = ~rigidbody.excludeLayers;
 		mass = rigidbody.mass;
 
 		//Wait a frame before applying force; otherwise, player is occaisonally shot into the air in the first frame
@@ -374,7 +371,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	void CheckGround()
 	{
-		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, ~(1 << 3)))
+		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, invisibleWallLayer, QueryTriggerInteraction.Ignore))
 		{
 			if (!isGrounded) isGrounded = true;
 			currentGroundPosition = transform.position;
@@ -390,7 +387,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		bool Raycast(Vector3 vector, int direction)
 		{
-			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius))
+			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius, invisibleWallLayer, QueryTriggerInteraction.Ignore))
 			{
 				if (Mathf.Abs(wallHit.normal.y) <= maxWallYNormal)
 				{
@@ -481,6 +478,21 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (wallHit.transform != null) txtWhereAmI.text = wallHit.transform.name;
 		else if (isGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;
 	}
+
+	public void Rewind(float seconds)
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void StartRewind()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void StopRewind()
+	{
+		throw new System.NotImplementedException();
+	}
 	#endregion
 	#region Classes
 	[System.Serializable]
@@ -508,7 +520,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	class Vector
+	public class Vector
 	{
 		public Vector3 vector;
 		ForceCurve currentCurveDebug;

@@ -1,23 +1,50 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public interface IAIState
+public abstract class AIState : MonoBehaviourPlus
 {
-    void Tick();
-    void OnEntry();
-    void OnExit();
-    //void Setup();
+	protected Transition[] transitions;
+	protected AIController controller;
 
-    public List<Transition> transitions { get; set; }
-    public AIController controller { get; set; }
-    //public enum EnemyType { Standard, Melee, Shield }
-}
-//public abstract class IAIState
+	protected virtual void Awake()
+	{
+		controller = gameObject.GetComponent<AIController>();
+	}
 
-public abstract class Transition
-{
-    public IAIState targetState { get; private set; }
-    public virtual bool RequirementsMet() { return false; }
-    public Transition(IAIState targetState) { this.targetState = targetState; }
+	public virtual AIState Setup(params Transition[] transitions)
+	{
+		this.transitions = transitions;
+		return this;
+	}
+
+	public bool TryTransition(out AIState newState)
+	{
+		foreach (Transition transition in transitions)
+		{
+			if (transition.RequirementsMet())
+			{
+				OnExit();
+				transition.targetState.OnEntry();
+				newState = transition.targetState;
+				return true;
+			}
+		}
+		newState = null;
+		return false;
+	}
+
+	public AIState BeginState()
+	{
+		OnEntry();
+		return this;
+	}
+
+	protected IEnumerator StandardTimer(float duration, ExternalControlTransition externalControlTransition)
+	{
+		yield return new WaitForSeconds(duration);
+		externalControlTransition.trigger = true;
+	}
+
+	public virtual void Tick() { }
+	protected virtual void OnEntry() { }
+	protected virtual void OnExit() { }
 }

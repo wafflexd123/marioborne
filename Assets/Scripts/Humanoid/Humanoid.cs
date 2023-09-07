@@ -7,6 +7,7 @@ public enum DeathType { General, Fall, Bullet, Melee }
 public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
 {
     [HideInInspector] public HumanoidAnimatorManager model;
+    [HideInInspector] public WeaponBase weapon;
     public UniInput input;
 
     public abstract Vector3 LookDirection { get; }

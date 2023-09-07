@@ -15,7 +15,6 @@ public class Player : Humanoid
     [HideInInspector] public bool hasDied;
     [HideInInspector] public PlayerMovement movement;
     [HideInInspector] public PlayerCamera cameraController;
-    [HideInInspector] public WeaponBase weapon;
     [HideInInspector] public Fists fists;
     [HideInInspector] public new Camera camera;
 
@@ -122,7 +121,7 @@ public class Player : Humanoid
         }
     }
 
-    public void TeleportToEnemy(Enemy enemy, float teleportSpeed)
+    public void TeleportToEnemy(Humanoid enemy, float teleportSpeed)
     {
         if (enemy.enabled && crtMoveToEnemy == null)//dont teleport to dead/disabled enemies; will cause issues otherwise
         {

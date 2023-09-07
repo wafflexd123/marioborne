@@ -1,135 +1,111 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-//using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(FieldOfView), typeof(Rigidbody))]
+[RequireComponent(typeof(FieldOfView), typeof(Rigidbody), typeof(NavMeshAgent))]
 public class AIController : Humanoid, ITimeScaleListener
 {
-    protected List<IAIState> states = new List<IAIState>();
-    public IAIState CurrentState { get; protected set; }
-    public Vector3 LastKnownPlayerPosition { get; set; }
-    public FieldOfView fieldOfView { get; protected set; }
-    public NavMeshAgent agent { get; protected set; }
-    public Rigidbody rb { get; protected set; }
-    [HideInInspector] public Vector3 lookingAt;
-    [HideInInspector] public Player player;
-    [HideInInspector] public Vector3 soundLocation;
-    [SerializeField] protected float rotationSpeed = 10f;
+	//Inspector
+	public float alertRadius;
+	public float rotationSpeed = 10f;
 
-    public StateHelper stateHelper;
+	//Properties
+	[field: SerializeField][field: ReadOnly] public AIState CurrentState { get; protected set; }
+	public Vector3 LastKnownPlayerPosition { get; set; }
+	public Vector3? SoundLocation { get; set; }
+	public FieldOfView fieldOfView { get; protected set; }
+	protected NavMeshAgent agent { get; set; }
+	public new Rigidbody rigidbody { get; protected set; }
+	public Player player { get; protected set; }
+	public float AgentSpeed { get => agentSpeed; set { agentSpeed = value; agent.speed = value * Time.timeScale; } }
+	public bool IsStopped { get => isStopped; set { isStopped = value; agent.isStopped = value; } }
+	public override Vector3 LookDirection => fieldOfView.eyes.forward;
+	public override Vector3 LookingAt => lookingAt;
 
+	//Script
+	protected Vector3 velocity;
+	float agentSpeed;
+	bool isStopped;
+	Vector3 lookingAt;
 
-    public override Vector3 LookDirection => fieldOfView.eyes.transform.TransformDirection(Vector3.forward);
-    public override Vector3 LookingAt => lookingAt;
+	protected override void Awake()
+	{
+		base.Awake();
+		fieldOfView = GetComponent<FieldOfView>();
+		agent = GetComponent<NavMeshAgent>();
+		rigidbody = GetComponent<Rigidbody>();
+		player = Player.singlePlayer;
+		Time.timeScaleListeners.Add(this);
+	}
 
-    [SerializeField] public WeaponBase weapon;
-    [SerializeField] public float alertRadius;
+	void FixedUpdate()
+	{
+		if (CurrentState.TryTransition(out AIState newState))
+			CurrentState = newState;
+		else
+			CurrentState.Tick();
 
-    protected Vector3 velocity;
+		model.velocity = agent.velocity;
+	}
 
-    public string stateName;
-    private float timeEnteredState = 0f;
+	public void MoveTowards(Vector3 targetPosition)
+	{
+		velocity = agent.velocity;
+		transform.position = Vector3.SmoothDamp(transform.position, agent.nextPosition, ref velocity, 0.1f);
+		agent.SetDestination(targetPosition);
+	}
 
-    protected override void Awake()
-    {
-        base.Awake();
-        fieldOfView = GetComponent<FieldOfView>();
-        agent = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>();
-        player = Player.singlePlayer;
-        try { stateHelper = gameObject.GetComponent<StateHelper>(); }
-        catch { stateHelper = gameObject.AddComponent<StateHelper>(); }
-        Time.timeScaleListeners.Add(this);
-    }
+	public void RotateTowards(Vector3 lookTarget)
+	{
+		Vector3 dir = lookTarget - transform.position;
+		dir.y = 0;//This allows the object to only rotate on its y axis
+		Quaternion rot = Quaternion.LookRotation(dir);
+		transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotationSpeed * Time.deltaTime);
+	}
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        model.velocity = agent.velocity;
-        //MoveTowards(GameObject.Find("Player").transform.position); //for debugging
-        //Fire(); //for debugging
-        bool TransitionedThisFrame = false;
-        for (int i = 0; i < CurrentState.transitions.Count; i++)
-        {
-            if (CurrentState.transitions[i].RequirementsMet()) // transition state
-            {
-                print($"{name} is transitioning: \t{i}: {CurrentState.GetType().Name} -> {CurrentState.transitions[i].targetState.GetType().Name}, \t time in state: {UnityEngine.Time.time - timeEnteredState}");
-                CurrentState.OnExit(); 
-                CurrentState = CurrentState.transitions[i].targetState;
-                CurrentState.OnEntry();
-                stateName = CurrentState.GetType().Name;
-                TransitionedThisFrame = true;
-                timeEnteredState = UnityEngine.Time.time;
-                break;
-            }
-        }
-        if (!TransitionedThisFrame)
-        {
-            CurrentState.Tick();
-        }
-    }
+	public void Fire()
+	{
+		lookingAt = Player.singlePlayer.camera.transform.position;
+		if (weapon)
+		{
+			weapon.transform.LookAt(lookingAt);
+			input.Press("Attack", () => -1, () => false);
+		}
+	}
 
-    public void MoveTowards(Vector3 targetPosition) 
-    {
-        velocity = agent.velocity;
-        transform.position = Vector3.SmoothDamp(transform.position, agent.nextPosition, ref velocity, 0.1f);
-        agent.SetDestination(targetPosition);
-    }
+	public void AlertOthers()
+	{
+		Collider[] alertOthers = Physics.OverlapSphere(transform.position, alertRadius, 1 << 11);
+		foreach (Collider alerted in alertOthers)
+		{ //creates an overlap sphere around enemy, checks if other enemies are in it and prompts them to investigate
+			if (Vector3.Distance(alerted.transform.position, transform.position) > 1f)
+			{
+				alerted.GetComponentInParent<AIController>().SoundLocation = SoundLocation;
+			}
+		}
+	}
 
-    public void RotateTowards(Vector3 lookTarget)
-    {
-        Vector3 dir = lookTarget - transform.position;
-        dir.y = 0;//This allows the object to only rotate on its y axis
-        Quaternion rot = Quaternion.LookRotation(dir);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, rotationSpeed * Time.deltaTime);
-    }
+	public void OnTimeSlow()
+	{
+		agent.speed = AgentSpeed * Time.timeScale;
+	}
 
-    public void Fire()
-    {
-        lookingAt = player.camera.transform.position;
-        if (weapon)
-        {
-            weapon.transform.LookAt(lookingAt);
-            input.Press("Attack", () => -1, () => false);
-        }
-    }
+	public override void Kill(DeathType deathType = DeathType.General)
+	{
+		if (weapon) input.Press("Drop");//drop weapon if holding one
+		Destroy(gameObject);
+	}
 
-    public void AlertOthers()
-    {
-        Collider[] alertOthers = Physics.OverlapSphere(transform.position, alertRadius, 1 << 11);
-        foreach (var alerted in alertOthers)
-        { //creates an overlap sphere around enemy, checks if other enemies are in it and prompts them to investigate
-            if (Vector3.Distance(alerted.transform.position, transform.position) > 1f)
-            {
-                alerted.GetComponentInParent<AIController>().soundLocation = soundLocation;
-            }
-        }
-    }
-
-    public void OnTimeSlow()
-    {
-        agent.speed = agent.speed * Time.timeScale;
-    }
-
-    public override void Kill(DeathType deathType = DeathType.General)
-    {
-        if (weapon) input.Press("Drop");//drop weapon if holding one
-        Destroy(gameObject);
-    }
-
-    public override bool PickupObject(WeaponBase weapon, out Action onDrop)
-    {
-        if (!this.weapon)
-        {
-            this.weapon = weapon;
-            onDrop = () => this.weapon = null;
-            return true;
-        }
-        onDrop = null;
-        return false;
-    }
+	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
+	{
+		if (!this.weapon)
+		{
+			this.weapon = weapon;
+			onDrop = () => this.weapon = null;
+			return true;
+		}
+		onDrop = null;
+		return false;
+	}
 }

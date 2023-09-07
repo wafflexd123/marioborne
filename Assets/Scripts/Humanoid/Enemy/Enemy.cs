@@ -13,7 +13,7 @@ public class Enemy : Humanoid, ITimeScaleListener
     public float sightRadius, meleeRadius, deathAnimationSpeed, patrolSpeed, meleeSpeed, investigateSpeed, investigateSpotTime, maxInvestigateTime, rangedCloseDistanceMin, rangedCloseDistanceMax, aimAdjustVelocityMagnitude;
 
     //Script
-    public WeaponBase weapon;
+    //public WeaponBase weapon;
     Vector3 lookingAt, velocity = Vector3.zero;
     int destPoint = 0;
     float _agentSpeed, maxInvestigateTimer = 0, investigateTimer = 0, rangedCloseDistance;
