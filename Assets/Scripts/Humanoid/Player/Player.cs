@@ -21,6 +21,7 @@ public class Player : Humanoid
     //Script
     Console.Line cnsRaycast;
     WickUI wickUI;
+    MessageManager messageManager;
     GameObject escMenu;
     bool enableInput = true;
     Coroutine crtMoveToEnemy;
@@ -41,7 +42,8 @@ public class Player : Humanoid
         movement = GetComponent<PlayerMovement>();
         Transform ui = transform.Find("UI");
         escMenu = ui.Find("Escape Menu").gameObject;
-        wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
+        //wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
+        messageManager = ui.Find("Death Message").GetComponent<MessageManager>();
         raycastIgnore = ~raycastIgnore;//invert layermask
     }
 
@@ -108,7 +110,8 @@ public class Player : Humanoid
         else if (!hasDied)
         {
             hasDied = true;
-            wickUI.DisplayRandom(deathType);
+            //wickUI.DisplayRandom(deathType);
+            messageManager.DisplayRandomMessage(deathType, true);
             model.dying = true;
             Destroy(GetComponent<PlayerMovement>());
             Rigidbody rb = GetComponent<Rigidbody>();

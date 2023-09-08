@@ -12,39 +12,50 @@ public class MessageManager : MonoBehaviour
     }
 
     [SerializeField] private TMP_Text textMesh;
-    [SerializeField] private GlitchyText glitchyTextScript;
+    [SerializeField] private TMP_Text restartText;
+    [SerializeField] private GlitchyText glitchyTextMain;
+    [SerializeField] private GlitchyText glitchyTextRestart;
     [SerializeField] private List<NamedMessageList> messageLists = new List<NamedMessageList>();
     [SerializeField] private int historyLength = 5;
 
     private Dictionary<string, List<string>> messageHistory = new Dictionary<string, List<string>>();
 
-    private void Start()
+    public void DisplayRandomMessage(DeathType deathType, bool fastReveal = false)
     {
-        // Below is to test the death message function
-        // DisplayRandomMessage("General Death", true);
-    }
-
-    public void DisplayRandomMessage(string listName, bool fastReveal = false)
-    {
-        foreach (var list in messageLists)
+        string listName = "";
+        switch (deathType)
         {
-            if (list.listName == listName)
-            {
-                string message = GetRandomMessage(list.messageList.messages, listName);
-
-                if (fastReveal)
-                {
-                    glitchyTextScript.FastRevealText(message);
-                }
-                else
-                {
-                    glitchyTextScript.DisplayTextWithGlitch(message);
-                }
-
-                UpdateMessageHistory(listName, message);
+            case DeathType.General:
+                listName = "General Death";
                 break;
-            }
+            case DeathType.Bullet:
+                listName = "Bullet Death";
+                break;
+            case DeathType.Fall:
+                listName = "Fall Death";
+                break;
+            case DeathType.Melee:
+                listName = "Melee Death";
+                break;
         }
+
+        NamedMessageList list = messageLists.Find(l => l.listName == listName);
+        if (list == null) return;
+
+        string message = GetRandomMessage(list.messageList.messages, listName);
+        if (fastReveal)
+        {
+            glitchyTextMain.FastRevealText(message);
+            if (deathType != DeathType.General)
+                ShowRestartKey();
+        }
+        else
+        {
+            glitchyTextMain.DisplayTextWithGlitch(message);
+            if (deathType != DeathType.General)
+                ShowRestartKey();
+        }
+        UpdateMessageHistory(listName, message);
     }
 
     private string GetRandomMessage(List<string> messages, string listName)
@@ -84,5 +95,10 @@ public class MessageManager : MonoBehaviour
         {
             messageHistory[listName].RemoveAt(0);
         }
+    }
+
+    private void ShowRestartKey()
+    {
+        glitchyTextRestart.FastRevealText("Press R to Restart");
     }
 }
