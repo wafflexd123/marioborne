@@ -23,20 +23,30 @@ public class MessageManager : MonoBehaviour
     public void DisplayRandomMessage(DeathType deathType, bool fastReveal = false)
     {
         string listName = "";
-        switch (deathType)
+        float generalDeathProbability = 0.5f; // 50% chance to show general message
+
+        // Decide if we should show a general death message
+        if (Random.value < generalDeathProbability)
         {
-            case DeathType.General:
-                listName = "General Death";
-                break;
-            case DeathType.Bullet:
-                listName = "Bullet Death";
-                break;
-            case DeathType.Fall:
-                listName = "Fall Death";
-                break;
-            case DeathType.Melee:
-                listName = "Melee Death";
-                break;
+            listName = "General Death";
+        }
+        else
+        {
+            switch (deathType)
+            {
+                case DeathType.General:
+                    listName = "General Death";
+                    break;
+                case DeathType.Bullet:
+                    listName = "Bullet Death";
+                    break;
+                case DeathType.Fall:
+                    listName = "Fall Death";
+                    break;
+                case DeathType.Melee:
+                    listName = "Melee Death";
+                    break;
+            }
         }
 
         NamedMessageList list = messageLists.Find(l => l.listName == listName);
@@ -57,6 +67,7 @@ public class MessageManager : MonoBehaviour
         }
         UpdateMessageHistory(listName, message);
     }
+
 
     private string GetRandomMessage(List<string> messages, string listName)
     {
