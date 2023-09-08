@@ -2,125 +2,125 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviourPlus
+public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 {
 	#region Variables
-	[Header("Walk/Run")]
-	[Tooltip("Input force to apply to rigidbody when walking/running, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve walkForce;
-	[field: SerializeField] public float walkDrag { get; set; }
-	[Tooltip("Drag curve, where x=magnitude of velocity and y=magnitude of drag, when no movement input is registered. This can be used to slow you down quickly at low velocity (so you're not on ice), but keep you moving when at higher velocities.")] public ForceCurve noInputGroundDrag;
-	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
-	[field: SerializeField][field: Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
-	[field: SerializeField] public float dashForce { get; set; }
-	[field: SerializeField] public float dashCooldown { get; set; }
+	public MovementValues wall, slide, ground, air;
 
-	[Header("Air/Jump")]
-	[Tooltip("Input force to apply to rigidbody when in air, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve airForce;
-	[field: SerializeField] public float airDrag { get; set; }
-	[field: SerializeField] public float jumpForce { get; set; }
-	[field: SerializeField][field: Tooltip("Player uses gravity independent of other physics objects")] public float gravity { get; set; }
-	[field: SerializeField][field: Tooltip("Do not use rigidbody.gravity, use this!")] public bool useGravity { get; set; }
-
-	[Header("Roll & Slide/Crouch")]
-	[Tooltip("This curve is used to interpolate between high velocity sliding and slow velocity crouch walking, where x=magnitude of velocity and y=magnitude of drag")] public ForceCurve slideDrag;
-	[field: SerializeField][field: Tooltip("Multiplier for the amount a slope's steepness affects sliding acceleration")] public float slopeDragMultiplier { get; set; }
-	[field: SerializeField][field: Tooltip("How many seconds before you hit the ground that a roll can be registered")] public float rollQueueTime { get; set; }
-	[field: SerializeField][field: Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")] public float rollRequeueTime { get; set; }
-	[field: SerializeField][field: Tooltip("Minimum distance fallen at which rolls can occur")] public float fallRollEngageDistance { get; set; }
-	[field: SerializeField][field: Tooltip("Minimum distance fallen at which the fall-crouch animation can occur")] public float fallCrouchEngageDistance { get; set; }
-
-	[Header("Wall Running")]
-	[Tooltip("Input force to apply to rigidbody when wall running, where x=magnitude of velocity and y=magnitude of force")] public ForceCurve wallForce;
-	[field: SerializeField] public float wallDrag { get; set; }
-	[field: SerializeField] public float wallRunGravity { get; set; }
-	[field: SerializeField] public float wallJumpForce { get; set; }
-	[field: SerializeField] public float wallDoubleJumpForce { get; set; }
+	[field: Header("Wall")]
 	[field: SerializeField] public float wallTilt { get; set; }
 	[field: SerializeField] public float tiltPerSecond { get; set; }
-	[field: SerializeField][field: Tooltip("Y velocity is clamped to this value when entering a wall run; helps prevent player from going over walls when hitting them")] public float maxWallUpwardsVelocity { get; set; }
-	[field: SerializeField][field: Tooltip("How high you have to be before grabbing a wall (means you have to jump onto a wall to wallrun/walljump, instead of just walk into it)")] public float wallCatchHeight { get; set; }
-	[field: SerializeField][field: Tooltip("How far the wall check raycast travels beyond the collider")] public float wallCatchDistance { get; set; }
-	[field: SerializeField][field: Tooltip("Anything having a normal with an absolute y value at or below this variable is considered a wall")] public float maxWallYNormal { get; set; }
-	[field: SerializeField] public Vector3 wallJumpAngle { get; set; }
+	[field: SerializeField, Tooltip("Y velocity is clamped to this value when entering a wall run; helps prevent player from going over walls when hitting them")] public float maxWallUpwardsVelocity { get; set; }
+	[field: SerializeField, Tooltip("How high you have to be before grabbing a wall (means you have to jump onto a wall to wallrun/walljump, instead of just walk into it)")] public float wallCatchHeight { get; set; }
+	[field: SerializeField, Tooltip("How far the wall check raycast travels beyond the collider")] public float wallCatchDistance { get; set; }
+	[field: SerializeField, Tooltip("Anything having a normal with an absolute y value at or below this variable is considered a wall")] public float maxWallYNormal { get; set; }
+
+	[field: Header("Slide")]
+	[field: SerializeField, Tooltip("Multiplier for the amount a slope's steepness affects sliding acceleration")] public float slopeDragMultiplier { get; set; }
+
+	[field: Header("Air")]
+	[field: SerializeField] public int maxAirJumps { get; set; }
+	[field: SerializeField] public int maxAirDashes { get; set; }
+	[field: SerializeField] public float dashForce { get; set; }
+	[field: SerializeField, Tooltip("How many seconds before you hit the ground that a roll can be registered")] public float rollQueueTime { get; set; }
+	[field: SerializeField, Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")] public float rollRequeueTime { get; set; }
+	[field: SerializeField, Tooltip("Minimum distance fallen at which rolls can occur")] public float fallRollEngageDistance { get; set; }
+	[field: SerializeField, Tooltip("Minimum distance fallen at which the fall-crouch animation can occur")] public float fallCrouchEngageDistance { get; set; }
 
 	[field: Header("Fall Damage")]
 	[field: SerializeField] public float maxHealth { get; set; }
 	[field: SerializeField] public float healthRecoverDelay { get; set; }
 	[field: SerializeField] public float healthPerSecond { get; set; }
-	[field: SerializeField][field: Tooltip("Min distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float minDamageDistance { get; set; }
-	[field: SerializeField][field: Tooltip("Max distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float maxDamageDistance { get; set; }
+	[field: SerializeField, Tooltip("Min distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float minDamageDistance { get; set; }
+	[field: SerializeField, Tooltip("Max distance fallen at which fall damage can occur. Damage is lerped between 0 and maxHealth where minDistance = (0) damage & maxDistance = (maxHealth) damage.")] public float maxDamageDistance { get; set; }
+
+	[Header("Misc")]
+	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
+	[field: SerializeField, Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
+	[field: SerializeField, Tooltip("Do not use rigidbody.gravity, use this!")] public bool useGravity { get; set; }
+	[SerializeField] LayerMask invisibleWallLayer;
 
 	//Non-inspector public properties
-	public float CurrentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
-	public bool IsGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
-	public bool IsWallrunning { get => _isWallrunning; private set { _isWallrunning = value; animator.wallRunning = value; } }
-	public bool IsSliding { get => _isSliding; private set { _isSliding = value; animator.sliding = value; } }
-	public bool IsOnWall { get => wallDirection != 0; }
-	public bool EnableInput { get; set; }
-	public Vector3 LookDirection => camera.transform.forward;
+	public float currentTilt { get => _tilt; private set { _tilt = value; playerCamera.rotationOffset = new Vector3(0, 0, _tilt); } }
+	public bool isGrounded { get => _isGrounded; private set { _isGrounded = value; animator.grounded = value; } }
+	public bool isSliding { get; private set; }
+	public State currentState { get; private set; }
+	public bool enableInput { get; set; }
+	public Vector3 lookDirection => camera.transform.forward;
+	public bool isOnWall => wallDirection != 0;
 
 	//Private
-	int wallDirection;
+	int wallDirection, airJumpCount, airDashCount;
 	float mass, _tilt, currentDrag, health;
 	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f;
-	bool queueJump, canDoubleJump, _isGrounded, _isWallrunning, _isSliding, queueRoll, queueDash;
-	Vector3 moveDirection, currentGroundPosition;
+	bool queueJump, _isGrounded, queueRoll, queueDash;
+	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
 	RaycastHit groundHit, wallHit;
-	Vector xzVelocity, yVelocity;
-	PlayerCamera playerCamera;
 	Player player;
-	Coroutine crtTilt, crtSlide, crtQueueRoll, crtHealth, crtDash;
+	Coroutine crtTilt, crtQueueRoll, crtHealth, crtDash;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	TMP_Text txtWhereAmI;
 	VignetteControl healthVignette;
 	new Camera camera;
 	new CapsuleCollider collider;
+	readonly State[] movementStates = new State[4];
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
+	[HideInInspector] public PlayerCamera playerCamera;
+	public Vector xzVelocity, yVelocity;
 
 	#endregion
 	#region Unity
 	IEnumerator Start()
 	{
+		//Init methods
+		StartCoroutine(AdjustVelocityForCollisions());
+		InitialiseStates();
+
+		//Variable init
 		xzVelocity = new Vector(this);
 		yVelocity = new Vector(this);
 		health = maxHealth;
+		enableInput = true;
+		cnsDebug = Console.AddLine();
+		invisibleWallLayer = ~invisibleWallLayer;
+
+		//GetComponents
 		player = GetComponent<Player>();
 		collider = transform.Find("Body").GetComponent<CapsuleCollider>();
 		animator = collider.transform.Find("Model").GetComponent<HumanoidAnimatorManager>();
+		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
+		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+
+		//UI
 		Transform ui = transform.Find("UI");
 		txtWhereAmI = ui.Find("WhereAmI").GetComponent<TMP_Text>();
 		txtWhereAmI.text = "";
 		healthVignette = ui.Find("Health Vignette").GetComponent<VignetteControl>();
+
+		//Rigidbody
 		rigidbody = GetComponent<Rigidbody>();
-		rigidbody.isKinematic = false;
 		rigidbody.freezeRotation = true;
 		rigidbody.useGravity = false;
 		rigidbody.drag = 0;
-		rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-		rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-		rigidbody.excludeLayers = 1 << 12;
-		rigidbody.includeLayers = ~rigidbody.excludeLayers;
 		mass = rigidbody.mass;
-		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
-		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
-		cnsDebug = Console.AddLine();
-		EnableInput = true;
-		if (useGravity)
-		{
-			useGravity = false;
-			yield return null;//wait a frame before applying force; otherwise, player is occaisonally shot into the air in the first frame
-			useGravity = true;
-		}
+
+		//Wait a frame before applying force; otherwise, player is occaisonally shot into the air in the first frame
+		bool temp = useGravity;
+		useGravity = false;
+		currentGroundPosition = transform.position;
+		yield return null;
+		useGravity = temp;
+		ResetVelocity();
 	}
 
 	void Update()
 	{
-		if (EnableInput)
+		if (enableInput)
 		{
 			if (Input.GetButtonDown("Jump")) queueJump = true;
-			if (Input.GetButtonDown("Crouch") && !IsGrounded && !IsSliding) QueueRoll();
+			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
 			if (Input.GetButtonDown("Dash")) queueDash = true;
 		}
 	}
@@ -128,18 +128,12 @@ public class PlayerMovement : MonoBehaviourPlus
 	void FixedUpdate()
 	{
 		//Input
-		moveDirection = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
+		moveDirection = enableInput ? (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized : Vector3.zero;
 
 		//Control
 		CheckGround();
 		CheckWalls();
-		if (EnableInput)
-		{
-			MovePlayer();
-			Jump();
-			Dash();
-			Slide();
-		}
+		MovementState();
 		ControlRigidbody();
 		ControlFOV();
 		ControlText();
@@ -147,10 +141,10 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (!IsGrounded)
+		if (!isGrounded)
 		{
 			Vector3 lastGroundPos = currentGroundPosition;
-			if (rigidbody.velocity.y > yVelocity.y)
+			if ((rigidbody.velocity.y / Time.timeScale) - xzVelocity.y - yVelocity.y > .01f)//if there is a difference between the actual rigidbody y velocity and the applied y velocity; probably not 100% reliable when jumping off non-level ground, should fix
 			{
 				float distance = lastGroundPos.y - transform.position.y;
 				if (queueRoll && distance >= fallRollEngageDistance)//if queueing a roll & hit the ground at roll distance
@@ -159,7 +153,7 @@ public class PlayerMovement : MonoBehaviourPlus
 					queueRoll = false;
 					StopCoroutine(crtQueueRoll);
 					crtQueueRoll = null;
-					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), walkForce.maxY);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
+					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (-yVelocity.y * moveDirection), ground.YforceXvelocity.maxY);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
 				}
 				else if (distance >= fallCrouchEngageDistance)//if hit the ground at crouch distance
 				{
@@ -178,14 +172,9 @@ public class PlayerMovement : MonoBehaviourPlus
 					}
 				}
 				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
-				rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);//set velocity instantly to 0 instead of lerping over a few frames
+				rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);//set velocity instantly to 0 instead of lerping over a few frames. doesn't work. nice.
 			}
 		}
-	}
-
-	private void OnCollisionStay(Collision collision)
-	{
-		xzVelocity.vector = (rigidbody.velocity / Time.timeScale) - yVelocity.vector;//set lateral velocity to rigidbody velocity; bodge-job way to account for collisions. kinda broken when time-slowing but no one will notice (i hope)
 	}
 
 	void OnDrawGizmosSelected()
@@ -197,42 +186,158 @@ public class PlayerMovement : MonoBehaviourPlus
 
 	#endregion
 	#region Movement
-	void MovePlayer()
+	void MovementState()
 	{
-		if (IsGrounded)//on ground
+		foreach (State state in movementStates)
 		{
-			if (IsWallrunning) WallRun(false);
-
-			if (moveDirection == Vector3.zero) currentDrag = noInputGroundDrag.Evaluate(xzVelocity.magnitude);//not pressing any input
-			else
+			if (state == currentState)
 			{
-				if (IsSliding)//crouching/sliding
-				{
-					currentDrag = slideDrag.Evaluate(xzVelocity.magnitude);
-					Vector3 force = Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized;
-					if (force.y <= -0.001f) currentDrag *= groundHit.normal.y * slopeDragMultiplier;//if crouching down (down is <= -0.001f) a slope, slide
-					xzVelocity.AddForce(walkForce, force, ForceMode.Acceleration);
-				}
-				else//walking/running normally
-				{
-					currentDrag = walkDrag;
-					xzVelocity.AddForce(walkForce, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized, ForceMode.Acceleration);
-				}
+				if (!currentState.wantsExit()) break;//unless state wants to force exit, only previous states in array can override and enter
+			}
+			else if (state.canEnter())
+			{
+				currentState.exitState();
+				state.enterState();
+				currentState = state;
+				break;
 			}
 		}
-		else if (IsOnWall && Input.GetAxisRaw("Horizontal") == wallDirection && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2))))//if touching a wall and the player is high enough off the ground
+
+		currentState.move();
+		if (queueJump)
 		{
-			if (!IsWallrunning) WallRun(true);
-			currentDrag = wallDrag;
-			if (moveDirection != Vector3.zero) xzVelocity.AddForce(wallForce, Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(transform.forward, wallHit.normal).normalized, ForceMode.Acceleration);
-			xzVelocity.AddForce(new Vector3(0, wallRunGravity), ForceMode.Acceleration);
+			currentState.jump();
+			queueJump = false;
 		}
-		else//in air
-		{
-			if (IsWallrunning) WallRun(false);
-			currentDrag = airDrag;
-			if (moveDirection != Vector3.zero) xzVelocity.AddForce(airForce, moveDirection, ForceMode.Acceleration);
-		}
+	}
+
+	void InitialiseStates()
+	{
+		//----WALL STATE----
+		movementStates[0] = new State("Wall", wall,
+			move: () =>
+			{
+				State.DefaultMove(this, wall, Input.GetAxis("Vertical") * Vector3.ProjectOnPlane(transform.forward, wallHit.normal).normalized);
+			},
+			jump: () =>
+			{
+				State.DefaultJump(this, wall, wallHit.normal);
+			},
+			enterState: () =>
+			{
+				animator.wallRunning = true;
+				if (yVelocity.y > maxWallUpwardsVelocity) yVelocity.vector.y = maxWallUpwardsVelocity;//prevent player from going over wall when hitting it
+				ResetRoutine(TweenFloat(() => currentTilt, (float tilt) => currentTilt = tilt, wallTilt * wallDirection, tiltPerSecond), ref crtTilt);
+			},
+			exitState: () =>
+			{
+				ResetRoutine(TweenFloat(() => currentTilt, (float tilt) => currentTilt = tilt, 0, tiltPerSecond), ref crtTilt);
+			},
+			canEnter: () =>
+			{
+				return isOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2)));//if touching wall && far enough from ground
+			},
+			wantsExit: () =>
+			{
+				return !isOnWall || Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2));//if not touching a wall || too close to the ground
+			});
+
+		//----SLIDE STATE----
+		movementStates[1] = new State("Slide", slide,
+			move: () =>
+			{
+				Vector3 force = Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized;
+				if (force.y <= -0.001f) currentDrag *= groundHit.normal.y * slopeDragMultiplier;//if crouching down (down is <= -0.001f) a slope, slide
+				State.DefaultMove(this, slide, force);
+			},
+			jump: () =>
+			{
+				State.DefaultJump(this, slide, Vector3.zero);
+			},
+			enterState: () =>
+			{
+				isSliding = true;
+				animator.sliding = true;
+			},
+			exitState: () =>
+			{
+				isSliding = false;
+				animator.sliding = false;
+			},
+			canEnter: () =>
+			{
+				return Input.GetButton("Crouch") && isGrounded;
+			},
+			wantsExit: () =>
+			{
+				return !Input.GetButton("Crouch") || !isGrounded;
+			});
+
+		//----GROUND STATE----
+		movementStates[2] = new State("Ground", ground,
+			move: () =>
+			{
+				State.DefaultMove(this, ground, Vector3.ProjectOnPlane(moveDirection, groundHit.normal).normalized);
+			},
+			jump: () =>
+			{
+				State.DefaultJump(this, ground, Vector3.zero);
+			},
+			enterState: () =>
+			{
+			},
+			exitState: () =>
+			{
+			},
+			canEnter: () =>
+			{
+				return isGrounded;
+			},
+			wantsExit: () =>
+			{
+				return !isGrounded;
+			});
+
+		//----AIR STATE----
+		currentState = movementStates[3] = new State("Air", air,
+			move: () =>
+			{
+				State.DefaultMove(this, air, moveDirection);
+				if (queueDash)
+				{
+					queueDash = false;
+					if (airDashCount < maxAirDashes)
+					{
+						yVelocity.AddForce(lookDirection * dashForce, ForceMode.VelocityChange);
+						airDashCount++;
+					}
+				}
+			},
+			jump: () =>
+			{
+				if (airJumpCount < maxAirJumps)
+				{
+					State.DefaultJump(this, air, Vector3.zero);
+					airJumpCount++;
+				}
+			},
+			enterState: () =>
+			{
+			},
+			exitState: () =>
+			{
+				airJumpCount = 0;
+				airDashCount = 0;
+				queueDash = false;
+			},
+			canEnter: () =>
+			{
+				return true;//last in array; if nothing else can enter, surely we are in the air (i hope)
+			},
+			wantsExit: () =>
+			{
+				return false;//other states will enter before this is checked, no need to add anything here
+			});
 	}
 
 	/// <summary>
@@ -240,7 +345,6 @@ public class PlayerMovement : MonoBehaviourPlus
 	/// </summary>
 	void ControlRigidbody()
 	{
-		if (useGravity && !IsGrounded) yVelocity.AddForce(new Vector3(0, gravity), ForceMode.Acceleration);//gravity
 		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
 		velocity *= Time.timeScale;
 		rigidbody.velocity = velocity;
@@ -265,28 +369,15 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	void Slide()
-	{
-		if (Input.GetButton("Crouch") && IsGrounded && crtSlide == null) crtSlide = StartCoroutine(Routine());
-		IEnumerator Routine()
-		{
-			IsSliding = true;
-			do yield return new WaitForFixedUpdate();
-			while (Input.GetButton("Crouch") && IsGrounded);
-			IsSliding = false;
-			crtSlide = null;
-		}
-	}
-
 	void CheckGround()
 	{
-		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, ~(1 << 3)))
+		if (Physics.SphereCast(transform.position + (transform.up * (groundCheckYOffset + collider.radius)), collider.radius, -transform.up, out groundHit, groundCheckDistance + groundCheckYOffset, invisibleWallLayer, QueryTriggerInteraction.Ignore))
 		{
-			if (!IsGrounded) IsGrounded = true;
+			if (!isGrounded) isGrounded = true;
 			currentGroundPosition = transform.position;
 			return;
 		}
-		IsGrounded = false;
+		isGrounded = false;
 	}
 
 	void CheckWalls()
@@ -296,7 +387,7 @@ public class PlayerMovement : MonoBehaviourPlus
 
 		bool Raycast(Vector3 vector, int direction)
 		{
-			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius))
+			if (Physics.Raycast(transform.position, vector, out wallHit, wallCatchDistance + collider.radius, invisibleWallLayer, QueryTriggerInteraction.Ignore))
 			{
 				if (Mathf.Abs(wallHit.normal.y) <= maxWallYNormal)
 				{
@@ -309,69 +400,19 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	void WallRun(bool enable)
+	IEnumerator AdjustVelocityForCollisions()
 	{
-		IsWallrunning = enable;
-		useGravity = !enable;
-		if (enable)
+		while (true)
 		{
-			canDoubleJump = true;
-			if (yVelocity.y > maxWallUpwardsVelocity)
-				yVelocity.vector.y = maxWallUpwardsVelocity;//prevent player from going over wall when hitting it
-		}
-		ResetRoutine(TweenFloat(() => CurrentTilt, (float tilt) => CurrentTilt = tilt, enable ? wallTilt * wallDirection : 0, tiltPerSecond), ref crtTilt);
-		//ResetRoutine(LerpFloat(() => camera.fieldOfView, (float fov) => camera.fieldOfView = fov, fov, fovPerSecond), ref crtFOV); --not using wallrun fov rn
-	}
+			yield return new WaitForFixedUpdate();
+			//Vector3 rigidbodyVelocity = rigidbody.velocity / Time.timeScale;
+			//rigidbodyVelocity.y -= yVelocity.y;
+			//if (Mathf.Abs(rigidbodyVelocity.y) < 0.1f) rigidbodyVelocity.y = 0;//floating point precision workaround
+			//if (Mathf.Abs(rigidbodyVelocity.x) < Mathf.Abs(xzVelocity.x)) xzVelocity.x = rigidbodyVelocity.x;
+			//if (Mathf.Abs(rigidbodyVelocity.y) < Mathf.Abs(xzVelocity.y)) xzVelocity.y = rigidbodyVelocity.y;
+			//if (Mathf.Abs(rigidbodyVelocity.z) < Mathf.Abs(xzVelocity.z)) xzVelocity.z = rigidbodyVelocity.z;
 
-	void Jump()
-	{
-		if (queueJump)
-		{
-			queueJump = false;
-			if (closestLeapObject != null && closestLeapObject.CanLeap(camera.transform))
-			{
-				Force(closestLeapObject.GetLeapForce(1));
-				canDoubleJump = false;
-			}
-			else
-			{
-				if (IsWallrunning)
-				{
-					Force((transform.up + wallHit.normal + wallJumpAngle).normalized * wallJumpForce);
-				}
-				else if (IsGrounded)
-				{
-					Force(transform.up * jumpForce);
-					canDoubleJump = false;
-				}
-				else if (canDoubleJump)
-				{
-					Force(transform.up * wallDoubleJumpForce);
-					canDoubleJump = false;
-				}
-			}
-		}
-
-		void Force(Vector3 force)
-		{
-			yVelocity.vector.y = 0f;
-			yVelocity.AddForce(force, ForceMode.VelocityChange);
-		}
-	}
-
-	void Dash()
-	{
-		if (queueDash)
-		{
-			queueDash = false;
-			if (crtDash == null) crtDash = StartCoroutine(Routine());
-		}
-
-		IEnumerator Routine()
-		{
-			yVelocity.AddForce(LookDirection * dashForce, ForceMode.VelocityChange);
-			yield return new WaitForSeconds(dashCooldown);
-			crtDash = null;
+			lastActualVelocity = rigidbody.velocity;//for debug screen
 		}
 	}
 
@@ -393,14 +434,13 @@ public class PlayerMovement : MonoBehaviourPlus
 	{
 		if (Console.Enabled)
 		{
-			cnsDebug.text = $"X & Z force: {xzVelocity.magnitude:#.00} {xzVelocity} ({xzVelocity.curvePercentDebug} of current curve)\n" +
+			cnsDebug.text =
+				$"X & Z force: {xzVelocity.magnitude:#.00} {xzVelocity} ({xzVelocity.curvePercentDebug} of force curve)\n" +
 				$"Y force: {yVelocity.magnitude:#.00} {yVelocity}\n" +
-				$"Intended velocity: {intendedVelocity.magnitude:#.00} {intendedVelocity}, actual rigidbody velocity: {rigidbody.velocity.magnitude:#.00} {rigidbody.velocity}\n" +
-				$"Drag: {currentDrag:#00.00}\n" +
-				$"Grounded: {IsGrounded}, last object walked on: {(groundHit.transform != null ? groundHit.transform.name : "not found")}\n" +
-				$"Wallrunning: {IsWallrunning}, in air: {!IsGrounded && !IsWallrunning}, on wall: {(IsOnWall ? $"True, direction: {wallDirection})" : "False")}\n" +
-				$"Can doublejump: {canDoubleJump}\n" +
-				$"Health: {health:#0.00}, last ground/wall positon: {currentGroundPosition}";
+				$"Intended velocity: {intendedVelocity.magnitude:#.00} {intendedVelocity}\n" +
+				$"Actual velocity: {lastActualVelocity.magnitude:#.00} {lastActualVelocity}\n" +
+				$"Drag: {currentDrag:#00.00}, state: {currentState.name}, last ground/wall: {currentGroundPosition}\n" +
+				$"Health: {health:#0.00}";
 		}
 	}
 
@@ -436,7 +476,22 @@ public class PlayerMovement : MonoBehaviourPlus
 	void ControlText()
 	{
 		if (wallHit.transform != null) txtWhereAmI.text = wallHit.transform.name;
-		else if (IsGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;
+		else if (isGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;
+	}
+
+	public void Rewind(float seconds)
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void StartRewind()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public void StopRewind()
+	{
+		throw new System.NotImplementedException();
 	}
 	#endregion
 	#region Classes
@@ -444,8 +499,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	public class ForceCurve
 	{
 		public AnimationCurve curve;
-		[Tooltip("When evaluating the curve: y0 = minY, y1 = maxY, x0 = 0, x1 = maxX")]
-		public float minY, maxY, maxX;
+		[Tooltip("eg: minimum force or drag")] public float minY;
+		[Tooltip("eg: maximum force or drag")] public float maxY;
+		[Tooltip("eg: velocity at which force or drag is maximum")] public float maxX;
 
 		public Vector3 Evaluate(float currentX, Vector3 direction)
 		{
@@ -464,7 +520,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 	}
 
-	class Vector
+	public class Vector
 	{
 		public Vector3 vector;
 		ForceCurve currentCurveDebug;
@@ -476,13 +532,14 @@ public class PlayerMovement : MonoBehaviourPlus
 		}
 
 		public float magnitude { get => vector.magnitude; }
-		public float x { get => vector.x; }
-		public float y { get => vector.y; }
-		public float z { get => vector.z; }
+		public float x { get => vector.x; set => vector.x = value; }
+		public float y { get => vector.y; set => vector.y = value; }
+		public float z { get => vector.z; set => vector.z = value; }
+		public float this[int i] { get => vector[i]; set => vector[i] = value; }
 
 		public string curvePercentDebug
 		{
-			get => currentCurveDebug == null ? "" : $"{Mathf.InverseLerp(currentCurveDebug.minY, currentCurveDebug.maxY, currentCurveDebug.Evaluate(magnitude)) * 100:#0}%";
+			get => currentCurveDebug == null ? "?%" : $"{Mathf.InverseLerp(currentCurveDebug.minY, currentCurveDebug.maxY, currentCurveDebug.Evaluate(magnitude)) * 100:#0}%";
 		}
 
 		public void AddForce(ForceCurve forceCurve, Vector3 force, ForceMode forceMode)
@@ -520,46 +577,58 @@ public class PlayerMovement : MonoBehaviourPlus
 			return vector.ToString();
 		}
 	}
-	#endregion
-}
 
-/*
- * if (rigidbody.velocity.y > yVelocity.y)//rigidbody y velocity will differ from intended velocity if a ground collision occurred, but will not always equal 0 due to interpolation (i think)
+	[System.Serializable]
+	public class MovementValues
+	{
+		[field: SerializeField] public ForceCurve YforceXvelocity { get; set; }
+		[field: SerializeField] public ForceCurve YdragXvelocity { get; set; }
+		[field: SerializeField] public ForceCurve noInputYdragXvelocity { get; set; }
+		[field: SerializeField] public float jumpForce { get; set; }
+		[field: SerializeField] public Vector3 gravity { get; set; }
+	}
+
+	public class State
+	{
+		public string name;
+		public System.Action move, jump, enterState, exitState;
+		public System.Func<bool> canEnter, wantsExit;
+		public MovementValues values;
+
+		public State(string name, MovementValues stateInspector, System.Action move, System.Action jump, System.Action enterState, System.Action exitState, System.Func<bool> canEnter, System.Func<bool> wantsExit)
 		{
-			CheckGround();//this will call twice a frame but cant be bothered
-			if (IsGrounded)
+			this.name = name;
+			this.values = stateInspector;
+			this.move = move;
+			this.jump = jump;
+			this.enterState = enterState;
+			this.exitState = exitState;
+			this.canEnter = canEnter;
+			this.wantsExit = wantsExit;
+		}
+
+		public static void DefaultMove(PlayerMovement p, MovementValues s, Vector3 forceDirection)
+		{
+			if (p.moveDirection != Vector3.zero)
 			{
-				if (queueRoll && yVelocity.y <= -fallRollEngageSpeed)//if queueing a roll & hit the ground at roll speed
-				{
-					animator.roll = true;
-					queueRoll = false;
-					StopCoroutine(crtQueueRoll);
-					crtQueueRoll = null;
+				p.xzVelocity.AddForce(s.YforceXvelocity, forceDirection, ForceMode.Acceleration);
+				p.currentDrag = s.YdragXvelocity.Evaluate(p.xzVelocity.magnitude);
+			}
+			else
+			{
+				p.currentDrag = s.noInputYdragXvelocity.Evaluate(p.xzVelocity.magnitude);
+			}
+			if (p.useGravity) p.yVelocity.AddForce(s.gravity, ForceMode.Acceleration);
+		}
 
-					lastFallVelocity = -yVelocity.y;//store y value as positive
-					yVelocity.vector.y = 0;//set y velocity to 0
-					xzVelocity.vector = Vector3.ClampMagnitude(xzVelocity.vector + (lastFallVelocity * moveDirection), walkForce.maxForce);//add y velocity to forward velocity in direction of movement, dont go faster than maxForce
-					return;
-				}
-				else if (yVelocity.y <= -fallCrouchEngageSpeed)//if hit the ground at crouch speed
-				{
-					animator.land = true;
-					if (crtQueueRoll != null)//if a queued roll is currently waiting for requeueTime, re-enable rolls
-					{
-						queueRoll = false;
-						StopCoroutine(crtQueueRoll);
-						crtQueueRoll = null;
-					}
-
-					lastFallVelocity = -yVelocity.y;
-					yVelocity.vector.y = 0;//set y velocity to 0
-					float velocityPercent = Mathf.InverseLerp(minDamageVelocity, maxDamageVelocity, lastFallVelocity);
-					xzVelocity.vector *= 1 - velocityPercent;//reduce lateral velocity according to percent of health decreased
-					Health(Mathf.Lerp(0, maxHealth, velocityPercent), DeathType.Fall);
-					return;
-				}
+		public static void DefaultJump(PlayerMovement p, MovementValues s, Vector3 angle)
+		{
+			if (p.enableInput)
+			{
+				p.yVelocity.vector.y = 0f;
+				p.yVelocity.AddForce((p.transform.up + angle).normalized * s.jumpForce, ForceMode.VelocityChange);
 			}
 		}
-		//if collision wasn't a ground collision
-		xzVelocity.vector = rigidbody.velocity;//account for collisions
- */
+	}
+	#endregion
+}

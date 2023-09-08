@@ -1,27 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeslowAudio : MonoBehaviour, ITimeScaleListener
+public class TimeslowAudio : MonoBehaviour, ITimeScaleListener, IRewindListener
 {
-	AudioSource audioSource;
-	float startPitch;
-	public float minTimescale = .25f, minPitch =.7f;
+    AudioSource audioSource;
+    float startPitch;
+    public float minPitch = .7f;
+    int pitchDirection = 1;
 
-	private void Awake()
-	{
-		audioSource = GetComponent<AudioSource>();
-		startPitch = audioSource.pitch;
-		Time.timeScaleListeners.Add(this);
-	}
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        startPitch = audioSource.pitch;
+        Time.timeScaleListeners.Add(this);
+        Time.rewindListeners.Add(this);
+    }
 
-	public void OnTimeSlow()
-	{
-		audioSource.pitch = Mathf.Lerp(minPitch, startPitch, Mathf.InverseLerp(minTimescale, 1, Time.timeScale));
-	}
+    public void OnTimeSlow()
+    {
+        audioSource.pitch = Mathf.Lerp(minPitch, startPitch, Mathf.InverseLerp(Time.minTimeScale, 1, Time.timeScale)) * pitchDirection;
+    }
 
-	private void OnDestroy()
+    private void OnDestroy()
+    {
+        Time.timeScaleListeners.Remove(this);
+        Time.rewindListeners.Remove(this);
+    }
+
+    public void Rewind(float seconds)
 	{
-		Time.timeScaleListeners.Remove(this);
-	}
+        OnTimeSlow();
+    }
+
+	public void StartRewind()
+	{
+        pitchDirection = -1;
+    }
+
+    public void StopRewind()
+	{
+        pitchDirection = 1;
+        OnTimeSlow();
+    }
 }

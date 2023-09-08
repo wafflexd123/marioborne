@@ -1,4 +1,4 @@
 public abstract class Raycastable : MonoBehaviourPlus
 {
-	public abstract void OnRaycast(Player player);
+    public abstract void OnRaycast(Player player);
 }

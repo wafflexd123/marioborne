@@ -6,14 +6,12 @@ using UnityEngine;
 [SelectionBase]
 public abstract class WeaponBase : MonoBehaviourPlus
 {
-
-	[Header("Throw Variables")]
 	public float throwForce = 10f; // Initial force of the throw
 	public float throwSpeed = 1f; // How fast the object will go after being thrown
 	public float throwFallDelay = 1f; // Delay before object starts falling
 
 	public Position handPosition, thirdPersonPosition;
-	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
+	public float pickupSpeed, dropForce, soundRadius, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;

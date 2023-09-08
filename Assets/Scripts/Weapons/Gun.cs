@@ -39,7 +39,7 @@ public class Gun : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-		//wielder.model.holdingPistol = true;
+		if (wielder is AIController) wielder.model.holdingPistol = true;
 		animator.StartAnimations();
 		if (wielder is Player)
 		{
@@ -56,7 +56,7 @@ public class Gun : WeaponBase
 	protected override void OnWielderChange()
 	{
 		base.OnWielderChange();
-		//wielder.model.holdingPistol = false;
+		if (wielder is AIController) wielder.model.holdingPistol = false;
 		animator.StopAnimations();
 		ui.SetActive(false);
 		if (crtDelay != null)
@@ -75,14 +75,14 @@ public class Gun : WeaponBase
 				txtAmmo.text = $"{playerAmmo.amount}";
 				if (playerAmmo.amount <= 0) qToDrop.SetActive(true);
 				crtDelay = StartCoroutine(DelayWithUI());
+				animator.Shoot();
 			}
 			else
 			{
+				wielder.model.shoot = true;
 				crtDelay = StartCoroutine(Delay());
 			}
-			audio.PlayOneShot(audioFire);
-			//wielder.model.shoot = true;
-			animator.Shoot();
+			Sound.MakeSound(transform.position, soundRadius, audioFire, audio, 1, wielder);
 			Shoot();
 		}
 	}
@@ -119,7 +119,7 @@ public class Gun : WeaponBase
 			yield return new WaitForFixedUpdate();
 		}
 		imgReloadPercent.gameObject.SetActive(false);
-		//if (wielder) wielder.model.shooting = false;
+		if (wielder is AIController) wielder.model.shoot = false;
 		crtDelay = null;
 	}
 

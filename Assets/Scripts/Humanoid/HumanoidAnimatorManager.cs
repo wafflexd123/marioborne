@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
@@ -8,18 +7,19 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
 	//Inspector
 	public AudioClip[] footstepSounds, jumpingSounds, landingSounds;
-	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, minStepVolume, maxStepVolume, velocityAtMaxStepVolume;
+	public float footStepSoundRadius, walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, minStepVolume, maxStepVolume, velocityAtMaxStepVolume;
 	public GameObject deathPosePrefab;
 
 	//Script
 	private AudioSource audioSource;
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
-	private bool _wallRunning, _grounded, _punching, _deflect, _slashing;
+	private bool _punching, _deflect, _slashing;
 	private Vector3 colliderCentre;
 	private Animator animator;
-	private Coroutine crtGroundState, crtCrouch, crtPunch, crtDeflect, crtSlash;
+	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash;
 	new private CapsuleCollider collider;
 	private Vector3 _velocity;
+	Humanoid humanoid;
 
 	//PROPERTIES
 
@@ -28,6 +28,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public bool land { set { if (value) animator.SetTrigger("land"); } }
 	public bool sliding { set => ResetRoutine(Crouch(value), ref crtCrouch); }
 	public bool hanging { set => animator.SetBool("hanging", value); }
+	public bool falling { set => animator.SetBool("falling", value); }
 
 	//Attacks
 	public bool holdingMelee { set; get; }
@@ -51,8 +52,8 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	//Other
 	public bool dying { set => animator.SetTrigger("die"); }
-	public bool grounded { set { _grounded = value; CheckGroundState(); } }
-	public bool wallRunning { set { _wallRunning = value; CheckGroundState(); } }
+	public bool grounded { set => falling = false; }
+	public bool wallRunning { set => falling = false; }
 	public Vector3 velocity
 	{
 		set
@@ -75,6 +76,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
 		colliderCentre = collider.center;
 		colliderCentreCrouch = colliderCentre.y * crouchHeightMultiplier;
+		humanoid = GetComponentInParent<Humanoid>();
 
 		if (transform.localPosition != Vector3.zero)
 		{
@@ -85,17 +87,6 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		{
 			transform.localEulerAngles = Vector3.zero;
 			Debug.LogWarning("The model rotation of " + name + " is not zero. Resetting.");
-		}
-	}
-
-	void CheckGroundState()
-	{
-		if (crtGroundState == null) crtGroundState = StartCoroutine(Routine());
-		IEnumerator Routine()
-		{
-			yield return new WaitForFixedUpdate();
-			animator.SetBool("falling", !_grounded && !_wallRunning);
-			crtGroundState = null;
 		}
 	}
 
@@ -144,8 +135,9 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		AudioClip footstepSound = footstepSounds[UnityEngine.Random.Range(0, footstepSounds.Length)];
 
 		// Change the volume based on the player's velocity
-		float volume = Mathf.Lerp(minStepVolume, maxStepVolume, Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z)) / velocityAtMaxStepVolume);
-		audioSource.PlayOneShot(footstepSound, volume);
+		float velocityMagnitude = Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z));//should fix so this works on ramps
+		float volume = Mathf.Lerp(minStepVolume, maxStepVolume, velocityMagnitude / velocityAtMaxStepVolume);
+		Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, footstepSound, audioSource, volume, humanoid);
 	}
 
 	public void PlayJumpSound()

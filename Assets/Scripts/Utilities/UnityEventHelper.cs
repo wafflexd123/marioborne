@@ -1,30 +1,35 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UnityEventHelper : MonoBehaviour
+public class UnityEventHelper : MonoBehaviourPlus
 {
-	public void TriggerDelete(MonoBehaviour monoBehaviour)
+	new public void Destroy(Object obj)
 	{
-		Destroy(monoBehaviour);
+		Object.Destroy(obj);
 	}
 
-	public void TriggerDelete(GameObject gameObject)
+	public void SetPosition(Transform t)
 	{
-		Destroy(gameObject);
+		transform.position = t.position;
 	}
 
-	public void SetParent(Transform transform)
+	public void SetRotation(Transform t)
 	{
-		this.transform.SetParent(transform);
+		transform.rotation = t.rotation;
 	}
 
-	public void DebugLog(string message)
-	{
-		Debug.Log(message, this);
-	}
+    public void DebugLog(string message)
+    {
+        Debug.Log(message, this);
+    }
 
-	public void LoadScene(string scene)
+    public void LoadScene(string scene)
+    {
+        SceneManager.LoadScene(scene, LoadSceneMode.Single);
+    }
+
+	public void RemoveParent(Transform transform)
 	{
-		SceneManager.LoadScene(scene, LoadSceneMode.Single);
+		transform.SetParent(null);
 	}
 }

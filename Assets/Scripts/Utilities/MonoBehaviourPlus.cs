@@ -94,11 +94,11 @@ public class MonoBehaviourPlus : MonoBehaviour
 		onEnd?.Invoke();
 	}
 
-	public IEnumerator LerpToPos(Position worldPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
+	public IEnumerator LerpToPos(PositionAndScale worldPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
 	{
 		if (transform == null) transform = this.transform;
 		if (easingFunction == null) easingFunction = EasingFunction.Linear;
-		Position startPosition = new Position(transform);
+		PositionAndScale startPosition = new PositionAndScale(transform);
 		float timer = 0, percent, ease;
 		do
 		{
@@ -108,16 +108,17 @@ public class MonoBehaviourPlus : MonoBehaviour
 			ease = easingFunction(percent);
 			transform.eulerAngles = Vector3.LerpUnclamped(startPosition.eulers, worldPosition.eulers, ease);
 			transform.position = Vector3.LerpUnclamped(startPosition.coords, worldPosition.coords, ease);
+			transform.localScale = Vector3.LerpUnclamped(startPosition.scale, worldPosition.scale, ease);
 			yield return new WaitForFixedUpdate();
 		} while (percent < 1);
 		onEnd?.Invoke();
 	}
 
-	public IEnumerator LerpToPosLocal(Position localPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
+	public IEnumerator LerpToPosLocal(PositionAndScale localPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
 	{
 		if (transform == null) transform = this.transform;
 		if (easingFunction == null) easingFunction = EasingFunction.Linear;
-		Position startPosition = new Position(transform, true);
+		PositionAndScale startPosition = new PositionAndScale(transform, true);
 		float timer = 0, percent, ease;
 		do
 		{
@@ -127,6 +128,7 @@ public class MonoBehaviourPlus : MonoBehaviour
 			ease = easingFunction(percent);
 			transform.localEulerAngles = Vector3.LerpUnclamped(startPosition.eulers, localPosition.eulers, ease);
 			transform.localPosition = Vector3.LerpUnclamped(startPosition.coords, localPosition.coords, ease);
+			transform.localScale = Vector3.LerpUnclamped(startPosition.scale, localPosition.scale, ease);
 			yield return new WaitForFixedUpdate();
 		} while (percent < 1);
 		onEnd?.Invoke();
@@ -203,7 +205,60 @@ public class MonoBehaviourPlus : MonoBehaviour
 
 		public static implicit operator Vector3(Position p) => p.coords;
 		public static implicit operator Quaternion(Position p) => Quaternion.Euler(p.eulers);
+		public static implicit operator Position(Transform p) => new Position(p);
+		public static implicit operator Position(PositionAndScale p) => new Position(p.coords, p.eulers);
 		public static Position operator +(Position a, Position b) => new Position(a.coords + b.coords, a.eulers + b.eulers);
 		public static Position operator -(Position a, Position b) => new Position(a.coords - b.coords, a.eulers - b.eulers);
+	}
+
+	public struct PositionAndScale
+	{
+		public Vector3 coords, eulers, scale;
+
+		public PositionAndScale(Vector3 coords, Vector3 eulers, Vector3 scale)
+		{
+			this.coords = coords;
+			this.eulers = eulers;
+			this.scale = scale;
+		}
+
+		public PositionAndScale(Transform transform, bool useLocal = false)
+		{
+			if (useLocal)
+			{
+				this.coords = transform.localPosition;
+				this.eulers = transform.localEulerAngles;
+				this.scale = transform.localScale;
+			}
+			else
+			{
+				this.coords = transform.position;
+				this.eulers = transform.eulerAngles;
+				this.scale = transform.lossyScale;
+			}
+		}
+
+		public void ApplyToTransform(Transform t, bool useLocal = false)
+		{
+			if (useLocal)
+			{
+				t.localPosition = coords;
+				t.localEulerAngles = eulers;
+				t.localScale = scale;
+			}
+			else
+			{
+				t.position = coords;
+				t.eulerAngles = eulers;
+				t.localScale = scale;//might not work
+			}
+		}
+
+		public static implicit operator Vector3(PositionAndScale p) => p.coords;
+		public static implicit operator Quaternion(PositionAndScale p) => Quaternion.Euler(p.eulers);
+		public static implicit operator PositionAndScale(Transform p) => new PositionAndScale(p);
+		public static implicit operator PositionAndScale(Position p) => new PositionAndScale(p.coords, p.eulers, Vector3.one);
+		public static PositionAndScale operator +(PositionAndScale a, PositionAndScale b) => new PositionAndScale(a.coords + b.coords, a.eulers + b.eulers, a.scale + b.scale);
+		public static PositionAndScale operator -(PositionAndScale a, PositionAndScale b) => new PositionAndScale(a.coords - b.coords, a.eulers - b.eulers, a.scale - b.scale);
 	}
 }

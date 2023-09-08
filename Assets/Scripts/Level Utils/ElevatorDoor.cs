@@ -1,13 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ElevatorDoor : MonoBehaviourPlus
 {
+	public EasingFunction.Enum doorEasing;
 	public Transform leftDoor, rightDoor;
+	public TriggerCollider triggerCollider;
 	public float moveTime, zMovement;
-	public bool animateOnFirstFrame, isOpen;
-	Position leftOpen, leftClosed, rightOpen, rightClosed;
+	public bool animateOnEnable, isOpen;
+	public UnityEvent playerInElevatorDoorClosedEvent, emptyElevatorDoorClosedEvent;
+	PositionAndScale leftOpen, leftClosed, rightOpen, rightClosed;
 	Coroutine crtLeft, crtRight;
 
 	public bool IsFullyOpen => isOpen && crtRight == null;
@@ -17,20 +19,18 @@ public class ElevatorDoor : MonoBehaviourPlus
 	{
 		if (isOpen)
 		{
-			leftOpen = new Position(leftDoor, true);
-			leftClosed = new Position(leftDoor.localPosition - new Vector3(0, 0, zMovement), leftDoor.localEulerAngles);
-			rightOpen = new Position(rightDoor, true);
-			rightClosed = new Position(rightDoor.localPosition - new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles);
+			leftOpen = new PositionAndScale(leftDoor, true);
+			leftClosed = new PositionAndScale(leftDoor.localPosition - new Vector3(0, 0, zMovement), leftDoor.localEulerAngles, leftDoor.localScale);
+			rightOpen = new PositionAndScale(rightDoor, true);
+			rightClosed = new PositionAndScale(rightDoor.localPosition - new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles, rightDoor.localScale);
 		}
 		else
 		{
-			leftClosed = new Position(leftDoor, true);
-			leftOpen = new Position(leftDoor.localPosition + new Vector3(0, 0, zMovement), leftDoor.localEulerAngles);
-			rightClosed = new Position(rightDoor, true);
-			rightOpen = new Position(rightDoor.localPosition + new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles);
+			leftClosed = new PositionAndScale(leftDoor, true);
+			leftOpen = new PositionAndScale(leftDoor.localPosition + new Vector3(0, 0, zMovement), leftDoor.localEulerAngles, leftDoor.localScale);
+			rightClosed = new PositionAndScale(rightDoor, true);
+			rightOpen = new PositionAndScale(rightDoor.localPosition + new Vector3(0, 0, -zMovement), rightDoor.localEulerAngles, rightDoor.localScale);
 		}
-
-		if (animateOnFirstFrame) Toggle();
 	}
 
 	public void Toggle()
@@ -41,19 +41,24 @@ public class ElevatorDoor : MonoBehaviourPlus
 
 	public void Open()
 	{
-		if (!isOpen)
-		{
-			ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor), ref crtLeft);
-			ResetRoutine(MoveToPosLocal(rightOpen, moveTime, rightDoor, () => { isOpen = true; crtRight = null; }), ref crtRight);
-		}
+		ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
+		ResetRoutine(LerpToPosLocal(rightOpen, moveTime, rightDoor, () => { isOpen = true; crtRight = null; }, EasingFunction.Get(doorEasing)), ref crtRight);
 	}
 
 	public void Close()
 	{
-		if (isOpen)
-		{
-			ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor), ref crtLeft);
-			ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; }), ref crtRight);
-		}
+		ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
+		ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; CheckForPlayer(); }, EasingFunction.Get(doorEasing)), ref crtRight);
+	}
+
+	void CheckForPlayer()
+	{
+		if (triggerCollider.isTriggered) playerInElevatorDoorClosedEvent.Invoke();
+		else emptyElevatorDoorClosedEvent.Invoke();
+	}
+
+	private void OnEnable()
+	{
+		if (animateOnEnable) Toggle();
 	}
 }
