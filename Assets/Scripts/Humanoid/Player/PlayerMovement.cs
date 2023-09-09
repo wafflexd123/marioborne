@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	public State currentState { get; private set; }
 	public bool enableInput { get; set; }
 	public Vector3 lookDirection => camera.transform.forward;
-	public bool isOnWall => wallDirection != 0;
+	public bool isOnWall => wallDirection != -2;
 
 	//Private
 	int wallDirection, airJumpCount, airDashCount;
@@ -254,11 +254,11 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			},
 			canEnter: () =>
 			{
-				return isOnWall && !climbingLedge && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2)));//if touching wall && far enough from ground
+				return !Input.GetButton("Crouch") && Input.GetAxisRaw("Horizontal") == wallDirection && !climbingLedge && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2)));//not crouching && touching and holding input into wall && far enough from ground
 			},
 			wantsExit: () =>
 			{
-				return !isOnWall || Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2));//if not touching a wall || too close to the ground
+				return Input.GetButton("Crouch") || !isOnWall || Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2));//if pressing crouch || if not touching a wall || too close to the ground
 			});
 
 		//----SLIDE STATE----
@@ -385,8 +385,6 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			{
 				return climbingLedge;//other states will enter before this is checked, no need to add anything here
 			});
-
-
 	}
 
 	/// <summary>
@@ -432,7 +430,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	void CheckWalls()
 	{
 		if (!Raycast(transform.right, 1) && !Raycast(-transform.right, -1))
-			wallDirection = 0;
+			wallDirection = -2;
 
 		bool Raycast(Vector3 vector, int direction)
 		{
@@ -450,9 +448,9 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	}
 
 	void CheckWallClimb()
-    {
-        if (climbPossible)
-        { // if the player collides with anything and is holding space (jump), add force up
+	{
+		if (climbPossible)
+		{ // if the player collides with anything and is holding space (jump), add force up
 			if (climbHeld && Physics.Raycast(playerCamera.transform.position, player.transform.forward, climbDistance))
 			{
 				ResetVelocity();
@@ -463,7 +461,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	}
 
 	void WallClimbDelay()
-    {
+	{
 		if (crtClimbDelay == null) crtClimbDelay = StartCoroutine(Routine());
 		IEnumerator Routine() // we create a window, only within which the player can wallclimb. this prevents climbing too early or climbing after falling a long distance
 		{
@@ -476,18 +474,18 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	}
 
 	void CheckLedgeClimb()
-    {
-		if(climbHeld && !isGrounded && !climbingLedge && canClimbLedge)
-        {
+	{
+		if (climbHeld && !isGrounded && !climbingLedge && canClimbLedge)
+		{
 			LedgeClimb();
-        }
-    }
+		}
+	}
 
 	public void LedgeClimb()
 	{
 		Vector3[] raycastOrigins = new Vector3[] { player.transform.position, playerCamera.transform.position }; //establishes 2 (could be more) body parts to raycast from
-		foreach(Vector3 origin in raycastOrigins)
-        {
+		foreach (Vector3 origin in raycastOrigins)
+		{
 			RaycastHit hit;
 			if (Physics.Raycast(origin, player.transform.forward, out hit, climbDistance) && !Physics.Raycast(playerCamera.transform.position, Vector3.up, ledgeHeadCheck))
             {
