@@ -142,10 +142,6 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 
 			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
 			if (Input.GetButtonDown("Dash")) queueDash = true;
-			Debug.DrawRay(player.transform.position, player.transform.forward);
-			Debug.DrawRay(playerCamera.transform.position, player.transform.forward);
-			Physics.Raycast(playerCamera.transform.position, player.transform.forward, climbDistance);
-			Physics.Raycast(player.transform.position, player.transform.forward, climbDistance);
 		}
 	}
 
@@ -607,17 +603,6 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			health = maxHealth;
 			crtHealth = null;
 		}
-	}
-
-	bool FacingObject(Vector3 obj, float threshold)
-    {
-		Vector3 dir = obj - playerCamera.transform.position;
-		float angle = Vector3.Angle(dir, playerCamera.transform.forward);
-		if (angle < threshold)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	void ControlText()
