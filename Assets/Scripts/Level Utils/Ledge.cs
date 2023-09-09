@@ -6,6 +6,7 @@ public class Ledge : MonoBehaviourPlus
 {
     public GameObject top;
 
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (FindComponent(other.transform, out PlayerMovement player))
@@ -13,4 +14,5 @@ public class Ledge : MonoBehaviourPlus
             player.LedgeClimb(top.transform.position);
         }
     }
+    */
 }
