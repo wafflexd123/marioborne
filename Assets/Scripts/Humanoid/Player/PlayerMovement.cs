@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 {
 	#region Variables
-	public MovementValues wall, slide, ground, air;
+	public MovementValues wall, slide, ground, air, climb;
 
 	[field: Header("Wall")]
 	[field: SerializeField] public float wallTilt { get; set; }
@@ -26,6 +26,16 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	[field: SerializeField, Tooltip("How many seconds, after rollQueueTime, before allowing a roll again (stops player from pressing the roll button too early)")] public float rollRequeueTime { get; set; }
 	[field: SerializeField, Tooltip("Minimum distance fallen at which rolls can occur")] public float fallRollEngageDistance { get; set; }
 	[field: SerializeField, Tooltip("Minimum distance fallen at which the fall-crouch animation can occur")] public float fallCrouchEngageDistance { get; set; }
+
+	[field: Header("Climbing")]
+	[field: SerializeField, Tooltip("How far from the wall you need to be to be able to climb or step up it")] public float climbDistance { get; set; }
+	[field: SerializeField, Tooltip("How far you step up the wall when holding space")] public float climbForce { get; set; }
+	[field: SerializeField, Tooltip("Start of window where player can step up wall")] public float climbEnableTime { get; set; }
+	[field: SerializeField, Tooltip("End of window where player can step up wall")] public float climbDisableTime { get; set; }
+	[field: SerializeField] public float ledgeClimbTime { get; set; }
+	[field: SerializeField, Tooltip("Basically, how long your arms can reach up to grab the ledge")] public float ledgeClimbHeight { get; set; }
+	[field: SerializeField, Tooltip("Detects the wall's top surface")] public float surfaceAngleThreshold { get; set; }
+	[field: SerializeField, Tooltip("The angle threshold needed to be able to climb a ledge (mostly to stop conflicts with wallrunning)")] public float forwardAngleThreshold { get; set; }
 
 	[field: Header("Fall Damage")]
 	[field: SerializeField] public float maxHealth { get; set; }
@@ -53,18 +63,19 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	int wallDirection, airJumpCount, airDashCount;
 	float mass, _tilt, currentDrag, health;
 	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f;
-	bool queueJump, _isGrounded, queueRoll, queueDash;
+	bool queueJump, _isGrounded, queueRoll, queueDash, climbHeld, climbPossible, canClimbLedge, climbingLedge;
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
+	Vector3 climbLedgeRay, climbLedgeRayTemp;
 	RaycastHit groundHit, wallHit;
 	Player player;
-	Coroutine crtTilt, crtQueueRoll, crtHealth, crtDash;
+	Coroutine crtTilt, crtQueueRoll, crtHealth, crtDash, crtClimbDelay, crtClimbLedgeDelay;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	TMP_Text txtWhereAmI;
 	VignetteControl healthVignette;
 	new Camera camera;
 	new CapsuleCollider collider;
-	readonly State[] movementStates = new State[4];
+	readonly State[] movementStates = new State[5];
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
 	[HideInInspector] public PlayerCamera playerCamera;
@@ -119,7 +130,13 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 	{
 		if (enableInput)
 		{
-			if (Input.GetButtonDown("Jump")) queueJump = true;
+			if (Input.GetButtonDown("Jump"))
+			{
+				queueJump = true;
+				climbHeld = true;
+			}
+			if (Input.GetButtonUp("Jump")) climbHeld = false;
+
 			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
 			if (Input.GetButtonDown("Dash")) queueDash = true;
 		}
@@ -133,6 +150,8 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 		//Control
 		CheckGround();
 		CheckWalls();
+		CheckWallClimb();
+		CheckLedgeClimb();
 		MovementState();
 		ControlRigidbody();
 		ControlFOV();
@@ -235,7 +254,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			},
 			canEnter: () =>
 			{
-				return isOnWall && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2)));//if touching wall && far enough from ground
+				return isOnWall && !climbingLedge && (!Physics.Raycast(transform.position + (transform.up * (collider.height / 2)), Vector3.down, wallCatchHeight + (collider.height / 2)));//if touching wall && far enough from ground
 			},
 			wantsExit: () =>
 			{
@@ -282,6 +301,7 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			jump: () =>
 			{
 				State.DefaultJump(this, ground, Vector3.zero);
+				WallClimbDelay();
 			},
 			enterState: () =>
 			{
@@ -298,8 +318,33 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 				return !isGrounded;
 			});
 
+		//----CLIMBING STATE----
+		movementStates[3] = new State("Climb", climb,
+			move: () =>
+			{
+			},
+			jump: () =>
+			{
+			},
+			enterState: () =>
+			{
+				ResetVelocity();
+			},
+			exitState: () =>
+			{
+				crtClimbDelay = null;
+			},
+			canEnter: () =>
+			{
+				return climbingLedge;
+			},
+			wantsExit: () =>
+			{
+				return isGrounded || !climbingLedge;
+			});
+
 		//----AIR STATE----
-		currentState = movementStates[3] = new State("Air", air,
+		currentState = movementStates[4] = new State("Air", air,
 			move: () =>
 			{
 				State.DefaultMove(this, air, moveDirection);
@@ -323,12 +368,14 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			},
 			enterState: () =>
 			{
+				canClimbLedge = true;
 			},
 			exitState: () =>
 			{
 				airJumpCount = 0;
 				airDashCount = 0;
 				queueDash = false;
+				canClimbLedge = false;
 			},
 			canEnter: () =>
 			{
@@ -336,8 +383,10 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			},
 			wantsExit: () =>
 			{
-				return false;//other states will enter before this is checked, no need to add anything here
+				return climbingLedge;//other states will enter before this is checked, no need to add anything here
 			});
+
+
 	}
 
 	/// <summary>
@@ -399,6 +448,86 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 			return false;
 		}
 	}
+
+	void CheckWallClimb()
+    {
+        if (climbPossible)
+        { // if the player collides with anything and is holding space (jump), add force up
+			if (climbHeld && Physics.Raycast(playerCamera.transform.position, player.transform.forward, climbDistance))
+			{
+				ResetVelocity();
+				yVelocity.AddForce(Vector3.up * climbForce, ForceMode.VelocityChange);
+				climbPossible = false;
+			}
+		}
+	}
+
+	void WallClimbDelay()
+    {
+		if (crtClimbDelay == null) crtClimbDelay = StartCoroutine(Routine());
+		IEnumerator Routine() // we create a window, only within which the player can wallclimb. this prevents climbing too early or climbing after falling a long distance
+		{
+			yield return new WaitForSeconds(climbEnableTime);
+			climbPossible = true;
+			yield return new WaitForSeconds(climbDisableTime);
+			climbPossible = false;
+			crtClimbDelay = null;
+		}
+	}
+
+	void CheckLedgeClimb()
+    {
+		if(climbHeld && !isGrounded && !climbingLedge && canClimbLedge)
+        {
+			LedgeClimb();
+        }
+    }
+
+	public void LedgeClimb()
+	{
+		Vector3[] raycastOrigins = new Vector3[] { player.transform.position, playerCamera.transform.position }; //establishes 2 (could be more) body parts to raycast from
+		foreach(Vector3 origin in raycastOrigins)
+        {
+			RaycastHit hit;
+			if (Physics.Raycast(origin, player.transform.forward, out hit, climbDistance, LayerMask.NameToLayer("Climbable")))
+            {
+				float surfaceAngle = Vector3.Angle(hit.normal, Vector3.up);
+				float forwardAngle = Vector3.Angle(player.transform.forward, hit.normal);
+				if (surfaceAngle > surfaceAngleThreshold && forwardAngle > forwardAngleThreshold) //if wall top surface detected and facing wall within threshold
+				{
+					Collider hitCollider = hit.collider;
+					Bounds objectBounds = hitCollider.bounds;
+					Vector3 top = objectBounds.max; //gets bounds of object and finds the top
+
+					Vector3 midPos = new Vector3(transform.position.x, top.y, transform.position.z); //creates 2 positions to lerp to so player does not clip too much through geometry
+					Vector3 endPos = new Vector3(transform.position.x + transform.forward.x, top.y, transform.position.z + transform.forward.z);
+                    if (Vector3.Distance(origin, midPos) < ledgeClimbHeight) //makes sure distance is within climbing height so player cannot climb infinitely tall things
+                    {
+						Vector3[] positions = new Vector3[] { midPos, endPos };
+						ledgeClimbTime = 1f;
+						if (crtClimbLedgeDelay == null) crtClimbLedgeDelay = StartCoroutine(Routine());
+						IEnumerator Routine()
+						{
+							climbingLedge = true;
+							foreach (Vector3 position in positions) //loop through lerp positions
+							{
+								Vector3 startPos = transform.position;
+								float t = 0f;
+								while (t < 0.75f)
+								{
+									t += Time.deltaTime * 2 / (ledgeClimbTime / 2);
+									transform.position = Vector3.Lerp(startPos, position, t);
+									crtClimbLedgeDelay = null;
+									yield return null;
+								}
+							}
+							climbingLedge = false;
+						}
+					}
+				}
+			}
+		}
+    }
 
 	IEnumerator AdjustVelocityForCollisions()
 	{

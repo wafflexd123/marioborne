@@ -106,3 +106,17 @@ public class CanHearPlayerTransition : Transition
 		return controller.SoundLocation != null;
 	}
 }
+
+public class LostPlayerTransition : Transition
+{
+	public bool trigger = false;
+
+	public LostPlayerTransition(AIState targetState) : base(targetState) { }
+
+	public override bool RequirementsMet()
+	{
+		bool internalTrigger = trigger;
+		trigger = false;
+		return internalTrigger;
+	}
+}
