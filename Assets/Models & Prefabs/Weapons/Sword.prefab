@@ -83,17 +83,19 @@ MonoBehaviour:
   throwSpeed: 1
   throwFallDelay: 1
   handPosition:
-    coords: {x: 0, y: 0, z: 0}
+    coords: {x: 0.3, y: -0.6, z: 0}
     eulers: {x: -30, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
   pickupSpeed: 10
   dropForce: 2
-  disablePickupAfterDropSeconds: 0
+  soundRadius: 0
+  disablePickupAfterDropSeconds: 2
   colliders:
   - {fileID: 9168183806498204485}
   - {fileID: 8272787707482933958}
+  reflectWindow: {fileID: 0}
   hitDelay: 0.5
   bladeColliders:
   - {fileID: 9168183806498204485}

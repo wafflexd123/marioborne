@@ -16,7 +16,7 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
     {
         player = GetComponentInParent<Player>();
         imgTimeleft = player.transform.Find("UI").Find("Deflect Time").GetComponent<Image>();
-        reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(player);
+        //reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(player);
     }
 
     private void Update()

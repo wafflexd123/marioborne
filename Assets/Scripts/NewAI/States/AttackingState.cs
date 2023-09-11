@@ -8,6 +8,7 @@ public class AttackingState : AIState
 	protected Coroutine crtInvestigate;
 	float defaultSpeed;
 	ExternalControlTransition leaveTransition;
+	public ReflectWindow reflectWindow;
 
 	public override AIState Setup(params Transition[] transitions)
 	{
@@ -20,12 +21,14 @@ public class AttackingState : AIState
 		defaultSpeed = controller.AgentSpeed;
 		controller.AgentSpeed = chaseSpeed;
 		controller.transform.LookAt(controller.player.transform.position);
+		reflectWindow.enabled = true;
 	}
 
 	protected override void OnExit()
 	{
 		StopCoroutine(ref crtInvestigate);
 		controller.AgentSpeed = defaultSpeed;
+		reflectWindow.enabled = false;
 	}
 
 	public override void Tick()
@@ -36,7 +39,7 @@ public class AttackingState : AIState
 			controller.LastKnownPlayerPosition = controller.player.transform.position;
 			controller.AlertOthers();
 			StopCoroutine(ref crtInvestigate);
-			if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < meleeDistance)
+			if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < meleeDistance || reflectWindow.hit)
 			{
 				controller.Fire();
 			}

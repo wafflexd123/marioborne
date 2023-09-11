@@ -10,6 +10,7 @@ public class AIController : Humanoid, ITimeScaleListener
 	public float alertRadius;
 	public float rotationSpeed = 10f;
 
+
 	//Properties
 	[field: SerializeField][field: ReadOnly] public AIState CurrentState { get; protected set; }
 	public Vector3 LastKnownPlayerPosition { get; set; }

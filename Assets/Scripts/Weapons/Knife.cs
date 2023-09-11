@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Knife : WeaponBase
 {
+	public ReflectWindow reflectWindow;
 	public float hitDelay;
 	public Collider[] bladeColliders, hiltColliders;
 	Coroutine crtDelay;
@@ -13,7 +14,12 @@ public class Knife : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-		if (wielder is AIController) wielder.model.holdingMelee = true;
+		if (wielder is AIController)
+		{
+			wielder.model.holdingMelee = true;
+			reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
+		}
+		if (wielder is Player) reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
 		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = false;
 		for (int i = 0; i < bladeColliders.Length; i++)
 		{
@@ -45,6 +51,8 @@ public class Knife : WeaponBase
 
 	protected override void Attack()
 	{
+		if (wielder is AIController) reflectWindow.EnemyReflect(hitDelay);
+		if (wielder is Player) reflectWindow.PlayerReflect(hitDelay);
 		if (crtDelay == null)
 		{
 			crtDelay = StartCoroutine(Delay());
@@ -58,18 +66,19 @@ public class Knife : WeaponBase
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
-				if (wielder is AIController ai2)
-				{
-					yield return new WaitUntil(() => !wielder.model.slash);
-					ai2.IsStopped = false;
-				}
-				else yield return new WaitForSeconds(0.5f); //placeholder
+				//if (wielder is AIController ai2)
+				//{
+				//	yield return new WaitUntil(() => !wielder.model.slash);
+				//}
+				//else yield return new WaitForSeconds(0.5f); //placeholder
 				_isFiring = false;
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
 				yield return new WaitForSeconds(hitDelay);
+				if (wielder is AIController ai2) ai2.IsStopped = false;
 				crtDelay = null;
 			}
 		}
+		
 	}
 
 	public void Trigger(TriggerCollider triggerCollider)
