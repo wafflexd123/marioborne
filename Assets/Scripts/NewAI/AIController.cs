@@ -10,7 +10,6 @@ public class AIController : Humanoid, ITimeScaleListener
 	public float alertRadius;
 	public float rotationSpeed = 10f;
 
-
 	//Properties
 	[field: SerializeField][field: ReadOnly] public AIState CurrentState { get; protected set; }
 	public Vector3 LastKnownPlayerPosition { get; set; }
@@ -28,6 +27,7 @@ public class AIController : Humanoid, ITimeScaleListener
 	protected Vector3 velocity;
 	float agentSpeed;
 	bool isStopped;
+	bool isDead;
 	Vector3 lookingAt;
 
 	protected override void Awake()
@@ -89,12 +89,13 @@ public class AIController : Humanoid, ITimeScaleListener
 
 	public void OnTimeSlow()
 	{
-		agent.speed = AgentSpeed * Time.timeScale;
+		if(!isDead) agent.speed = AgentSpeed * Time.timeScale;
 	}
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		if (weapon) input.Press("Drop");//drop weapon if holding one
+		isDead = true;
 		Destroy(gameObject);
 	}
 

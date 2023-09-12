@@ -474,7 +474,7 @@ Transform:
   m_GameObject: {fileID: 1696820110434406407}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5526738, y: 0.44107944, z: 0.44107914, w: 0.55267525}
-  m_LocalPosition: {x: 0.91900384, y: 1.3930786, z: -0.0048999786}
+  m_LocalPosition: {x: 0.91900396, y: 1.3930786, z: -0.0048999786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1187,7 +1187,6 @@ GameObject:
   - component: {fileID: 6856182187344883230}
   - component: {fileID: 7483016878962683047}
   - component: {fileID: 716382230466263913}
-  - component: {fileID: 9043436628504510768}
   - component: {fileID: 1115237525483106475}
   - component: {fileID: 2470172569493805769}
   - component: {fileID: 3392038699118831380}
@@ -1233,6 +1232,7 @@ MonoBehaviour:
   alertRadius: 5
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  reflectWindow: {fileID: 4862965222740863655, guid: 6cb7d01168cff574faa67af9bbb72494, type: 3}
 --- !u!114 &6856182187344883230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1305,19 +1305,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 3
---- !u!114 &9043436628504510768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3771824679759711126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa82d81ec5adba149887ea49cecf7aee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolPoints: []
 --- !u!114 &1115237525483106475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1371,8 +1358,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBeforePursuingPlayer: 5
-  chaseSpeed: 0
-  meleeDistance: 0
+  chaseSpeed: 3
+  meleeDistance: 2
+  reflectWindow: {fileID: 0}
 --- !u!114 &7865497907627117812
 MonoBehaviour:
   m_ObjectHideFlags: 0

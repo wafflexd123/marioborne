@@ -44,11 +44,6 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
         return this;
     }
 
-    public void Update()
-    {
-        Debug.Log($"hit: {hit}, enabled: {enabled}");
-    }
-
     private void OnEnable()
     {
         collider.enabled = true;
