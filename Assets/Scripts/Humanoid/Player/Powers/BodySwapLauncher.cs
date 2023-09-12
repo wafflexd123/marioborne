@@ -29,7 +29,7 @@ public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
         if (crtDelay == null) crtDelay = StartCoroutine(E());
         IEnumerator E()
         {
-            Instantiate(projectile, firePosition.position, Quaternion.identity).Initialise(projectileSpeed, (player.LookingAt - firePosition.position).normalized, player, Color.green);
+            Instantiate(projectile, firePosition.position, Quaternion.identity).Initialise(projectileSpeed, (player.LookingAt - firePosition.position).normalized, player, Color.green, false);
             yield return new WaitForSeconds(fireDelay);
             crtDelay = null;
         }

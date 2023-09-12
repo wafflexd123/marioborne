@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviourPlus
     //Script
     [HideInInspector] public float speed;
     [HideInInspector] public MonoBehaviour shooter;
+    [HideInInspector] public bool penetrates;
     float timer;
     new ParticleSystem particleSystem;
     new Renderer renderer;
@@ -37,12 +38,13 @@ public class Bullet : MonoBehaviourPlus
         }
     }
 
-    public virtual Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color)
+    public virtual Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color, bool penetrates)
     {
         this.speed = speed;
         this.direction = direction;
         this.shooter = shooter;
         this.color = color;
+        this.penetrates = penetrates;
         enabled = true;
         return this;
     }
