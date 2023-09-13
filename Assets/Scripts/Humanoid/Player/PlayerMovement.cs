@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviourPlus, IRewindListener
+public class PlayerMovement : MonoBehaviourPlus
 {
 	#region Variables
 	public MovementValues wall, slide, ground, air, climb;
@@ -201,6 +201,11 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 		Gizmos.color = Color.yellow;
 		if (collider == null) collider = transform.Find("Body").GetComponent<CapsuleCollider>();
 		Gizmos.DrawWireSphere(transform.position + new Vector3(0, -groundCheckDistance + collider.radius), collider.radius);
+	}
+
+	private void OnDisable()
+	{
+		ResetVelocity();
 	}
 
 	#endregion
@@ -608,20 +613,6 @@ public class PlayerMovement : MonoBehaviourPlus, IRewindListener
 		else if (isGrounded && groundHit.transform != null) txtWhereAmI.text = groundHit.transform.name;
 	}
 
-	public void Rewind(float seconds)
-	{
-		throw new System.NotImplementedException();
-	}
-
-	public void StartRewind()
-	{
-		throw new System.NotImplementedException();
-	}
-
-	public void StopRewind()
-	{
-		throw new System.NotImplementedException();
-	}
 	#endregion
 	#region Classes
 	[System.Serializable]

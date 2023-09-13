@@ -8,14 +8,16 @@ public class PlayerRewinder : MonoBehaviourPlus, IRewindListener
 	readonly List<PositionAndVelocity> positions = new List<PositionAndVelocity>();
 	PositionAndVelocity lastPos;
 	new Rigidbody rigidbody;
-	PlayerMovement player;
+	PlayerMovement playerMovement;
+	Player player;
 
 	void Awake()
 	{
 		targetSeconds = 1f / Time.targetFrameRate;
 		maxPositions = Time.targetFrameRate * Time.maxRewindTime;
 		rigidbody = GetComponent<Rigidbody>();
-		player = GetComponent<PlayerMovement>();
+		playerMovement = GetComponent<PlayerMovement>();
+		player = GetComponent<Player>();
 		Time.rewindListeners.Add(this);
 	}
 
@@ -25,7 +27,7 @@ public class PlayerRewinder : MonoBehaviourPlus, IRewindListener
 		if (windTimer >= targetSeconds)
 		{
 			if (positions.Count > maxPositions) positions.RemoveAt(0);
-			positions.Add(new PositionAndVelocity(transform.position, player.xzVelocity.vector, player.yVelocity.vector));
+			positions.Add(new PositionAndVelocity(transform.position, playerMovement.xzVelocity.vector, playerMovement.yVelocity.vector));
 			windTimer = 0;
 		}
 	}
@@ -34,7 +36,8 @@ public class PlayerRewinder : MonoBehaviourPlus, IRewindListener
 	{
 		rewindTimer = 0;
 		enabled = false;
-		player.enabled = false;
+		playerMovement.enabled = false;
+		player.ResetDeath();
 		rigidbody.isKinematic = true;
 	}
 
@@ -56,10 +59,10 @@ public class PlayerRewinder : MonoBehaviourPlus, IRewindListener
 	public void StopRewind()
 	{
 		enabled = true;
-		player.enabled = true;
+		playerMovement.enabled = true;
 		rigidbody.isKinematic = false;
-		player.xzVelocity.vector = lastPos.xzVelocity;
-		player.yVelocity.vector = lastPos.yVelocity;
+		playerMovement.xzVelocity.vector = lastPos.xzVelocity;
+		playerMovement.yVelocity.vector = lastPos.yVelocity;
 		rigidbody.velocity = lastPos.xzVelocity + lastPos.yVelocity;
 	}
 

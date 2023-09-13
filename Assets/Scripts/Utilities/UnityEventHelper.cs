@@ -32,4 +32,9 @@ public class UnityEventHelper : MonoBehaviourPlus
 	{
 		transform.SetParent(null);
 	}
+
+	public void SetTimeScale(float time)
+	{
+		Time.timeScale = time;
+	}
 }

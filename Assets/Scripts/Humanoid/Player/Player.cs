@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,10 +19,10 @@ public class Player : Humanoid
     [HideInInspector] public PlayerCamera cameraController;
     [HideInInspector] public Fists fists;
     [HideInInspector] public new Camera camera;
+    [HideInInspector] public PowerManager powers;
 
     //Script
     Console.Line cnsRaycast;
-    WickUI wickUI;
     MessageManager messageManager;
     GameObject escMenu;
     bool enableInput = true;
@@ -34,6 +35,7 @@ public class Player : Humanoid
     protected override void Awake()
     {
         base.Awake();
+        powers = transform.Find("Right Hand").GetComponent<PowerManager>();
         leftHand = transform.Find("Left Hand");
         cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
         camera = cameraController.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
@@ -106,24 +108,36 @@ public class Player : Humanoid
         return false;
     }
 
+    public void ForceKill(DeathType deathType = DeathType.General)
+    {
+        KillInternal(deathType);
+    }
+
     public override void Kill(DeathType deathType = DeathType.General)
     {
         if (invincibility) Debug.Log("You would have died, but no one can kill John Matrix.");
-        else if (!hasDied)
-        {
-            hasDied = true;
-            //wickUI.DisplayRandom(deathType);
-            messageManager.DisplayRandomMessage(deathType, true);
-            model.dying = true;
-            Destroy(GetComponent<PlayerMovement>());
-            Rigidbody rb = GetComponent<Rigidbody>();
-            rb.velocity = Vector3.zero;
-            rb.useGravity = true;
-            Destroy(transform.Find("Head").GetComponent<PlayerCamera>());
-            enableInput = false;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+        else if (!hasDied) KillInternal(deathType);
+    }
+
+    void KillInternal(DeathType deathType)
+	{
+        Time.timeScale = 0;
+        powers.SelectPower<Rewinder>(true);
+        hasDied = true;
+        messageManager.DisplayRandomMessage(deathType, true);
+        model.dying = true;
+        movement.enabled = false;
+        cameraController.enabled = false;
+        enableInput = false;
+    }
+
+    public void ResetDeath()
+	{
+        hasDied = false;
+        messageManager.Hide();
+        model.dying = false;
+        cameraController.enabled = true;
+        enableInput = false;
     }
 
     public void TeleportToEnemy(Humanoid enemy, float teleportSpeed)
@@ -133,7 +147,6 @@ public class Player : Humanoid
             Instantiate(model.deathPosePrefab, transform.position, transform.rotation);
             cameraController.enabled = false;
             movement.enabled = false;
-            movement.ResetVelocity();
             movement.EnableCollider(false);
             enemy.enabled = false;
             if (weapon) weapon.Drop(0);

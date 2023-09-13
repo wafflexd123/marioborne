@@ -33,7 +33,8 @@ public class Lerper : UnityEventHelper, IRewindListener
 			startPos = transform;
 			StartCoroutine(LerpToPos(LerpTo, TimeToLerp, transform, () => DirectionChange(true), EasingFunction.Get(easingFunction)));//loops dont rewind rn, probs dont need it yet
 		}
-		else StartCoroutine(LerpToPosRewindable(LerpTo, TimeToLerp, () => rewindSeconds, transform, () => onFinish.Invoke(), EasingFunction.Get(easingFunction)));
+		//else StartCoroutine(LerpToPosRewindable(LerpTo, TimeToLerp, () => rewindSeconds, transform, () => onFinish.Invoke(), EasingFunction.Get(easingFunction)));
+		else StartCoroutine(LerpToPos(LerpTo, TimeToLerp, transform, () => onFinish.Invoke(), EasingFunction.Get(easingFunction)));
 	}
 
 	void DirectionChange(bool lerpBack)

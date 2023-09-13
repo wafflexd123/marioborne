@@ -20,11 +20,13 @@ public class GlitchyText : MonoBehaviour
 
     public void DisplayTextWithGlitch(string message)
     {
+        gameObject.SetActive(true);
         StartCoroutine(GlitchyTextRoutine(message));
     }
 
     public void FastRevealText(string message)
     {
+        gameObject.SetActive(true);
         StartCoroutine(FastRevealRoutine(message));
     }
 

@@ -11,8 +11,6 @@ public class MessageManager : MonoBehaviour
         public MessageListSO messageList;
     }
 
-    [SerializeField] private TMP_Text textMesh;
-    [SerializeField] private TMP_Text restartText;
     [SerializeField] private GlitchyText glitchyTextMain;
     [SerializeField] private GlitchyText glitchyTextRestart;
     [SerializeField] private List<NamedMessageList> messageLists = new List<NamedMessageList>();
@@ -68,6 +66,11 @@ public class MessageManager : MonoBehaviour
         UpdateMessageHistory(listName, message);
     }
 
+    public void Hide()
+	{
+        glitchyTextMain.gameObject.SetActive(false);
+        glitchyTextRestart.gameObject.SetActive(false);
+    }
 
     private string GetRandomMessage(List<string> messages, string listName)
     {
