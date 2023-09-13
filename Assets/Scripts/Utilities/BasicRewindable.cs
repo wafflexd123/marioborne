@@ -23,7 +23,7 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 		if (windTimer >= targetSeconds)
 		{
 			if (positions.Count > maxPositions) positions.RemoveAt(0);
-			positions.Add(new PositionAndVelocity(transform, rigidbody.velocity));
+			positions.Add(new PositionAndVelocity(transform, rigidbody != null ? rigidbody.velocity : Vector3.zero));
 			windTimer = 0;
 		}
 	}
