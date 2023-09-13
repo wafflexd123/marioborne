@@ -1230,8 +1230,11 @@ MonoBehaviour:
   model: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 5
+  defaultSpeed: 1
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
   reflectWindow: {fileID: 4862965222740863655, guid: 6cb7d01168cff574faa67af9bbb72494, type: 3}
 --- !u!114 &6856182187344883230
 MonoBehaviour:
@@ -1675,7 +1678,7 @@ GameObject:
   m_Component:
   - component: {fileID: 785074014240103066}
   - component: {fileID: 1303493811099124165}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alpha_Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}

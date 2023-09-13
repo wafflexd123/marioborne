@@ -2054,7 +2054,7 @@ GameObject:
   m_Component:
   - component: {fileID: 377232768587943262}
   - component: {fileID: 318964829142951818}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alpha_Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2726,8 +2726,11 @@ MonoBehaviour:
   model: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 5
+  defaultSpeed: 1
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &4971283120863737039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2843,6 +2846,7 @@ MonoBehaviour:
   timeBeforePursuingPlayer: 5
   chaseSpeed: 1.5
   meleeDistance: 1
+  reflectWindow: {fileID: 0}
 --- !u!114 &8946313642581743143
 MonoBehaviour:
   m_ObjectHideFlags: 0

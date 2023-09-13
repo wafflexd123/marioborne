@@ -296,7 +296,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7533345576620041947}
   - component: {fileID: 8916289802124109368}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alpha_Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ Transform:
   m_GameObject: {fileID: 1195912533850544102}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5526738, y: 0.44107944, z: 0.44107914, w: 0.55267525}
-  m_LocalPosition: {x: 0.91900396, y: 1.3930786, z: -0.0048999786}
+  m_LocalPosition: {x: 0.9190035, y: 1.3930786, z: -0.0048999786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1221,8 +1221,11 @@ MonoBehaviour:
   model: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 5
+  defaultSpeed: 1
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &6587345493690171063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,7 +1275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dcbf98b462202844a188985be7e4bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coverPointsTransform: {fileID: 0}
   coverPriority: 1
   runToCoverSpeed: 1.5
   nearCoverDistance: 5
