@@ -592,7 +592,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6593462731512842086}
   - component: {fileID: 9081367657466641870}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alpha_Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2683,8 +2683,11 @@ MonoBehaviour:
   model: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 0
+  defaultSpeed: 1
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2961583063290066192
 MonoBehaviour:
   m_ObjectHideFlags: 0
