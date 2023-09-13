@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviourPlus
     [HideInInspector] public MonoBehaviour shooter;
     [HideInInspector] public bool penetrates;
     float timer;
-    new ParticleSystem particleSystem;
+    //new ParticleSystem particleSystem;
     new Renderer renderer;
     new Rigidbody rigidbody;
     new Collider collider;
@@ -32,8 +32,8 @@ public class Bullet : MonoBehaviourPlus
         get => renderer.material.color;
         set
         {
-            ParticleSystem.MainModule p = particleSystem.main;
-            p.startColor = value;
+            //ParticleSystem.MainModule p = GetComponent<ParticleSystem>().main;
+            //p.startColor = value;
             renderer.material.color = value;
         }
     }
@@ -51,7 +51,7 @@ public class Bullet : MonoBehaviourPlus
 
     protected virtual void Awake()
     {
-        particleSystem = transform.Find("Trail").GetComponent<ParticleSystem>();
+        //particleSystem = transform.Find("Trail").GetComponent<ParticleSystem>();
         renderer = transform.Find("Model").GetComponent<Renderer>();
         collider = renderer.GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
@@ -77,14 +77,14 @@ public class Bullet : MonoBehaviourPlus
     {
         rigidbody.isKinematic = false;
         collider.enabled = true;
-        particleSystem.Play();
+        //particleSystem.Play();
     }
 
     protected virtual void OnDisable()
     {
         rigidbody.isKinematic = true;
         collider.enabled = false;
-        particleSystem.Stop();
+        //particleSystem.Stop();
     }
 }
 
