@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 519406736}
-  m_IndirectSpecularColor: {r: 0.9956053, g: 0.9956053, b: 0.9956053, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -243,6 +243,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151554
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &21411384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,13 +468,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21411379}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.19235073, w: 0.9813263}
   m_LocalPosition: {x: 1.1, y: 0.95, z: 16.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1906577875}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -22.18}
 --- !u!43 &72105740
 Mesh:
@@ -1054,7 +1055,6 @@ RectTransform:
   m_Children:
   - {fileID: 1937388305}
   m_Father: {fileID: 772821187}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1101,6 +1101,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1397,6 +1398,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151555
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &412095890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1621,6 +1623,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 412095885}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.63, y: -12.32, z: 82}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -1643,7 +1646,6 @@ Transform:
   - {fileID: 1430901547}
   - {fileID: 1328162776}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &412095892
 MonoBehaviour:
@@ -1672,7 +1674,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.083333336
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 1375ea9f76938ec458b4cd62d34c1dfe, type: 2}
   m_BuildHeightMesh: 0
@@ -1764,13 +1766,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 466906243}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &466906245
 MonoBehaviour:
@@ -2108,13 +2110,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519406735}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!43 &605394545
 Mesh:
@@ -3149,6 +3151,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151555
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &772821186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3373,6 +3376,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 772821181}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3.45, z: 39.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -3383,7 +3387,6 @@ Transform:
   - {fileID: 2142912188}
   - {fileID: 1080714021}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &781795746
 GameObject:
@@ -3416,7 +3419,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1788622262}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3490,13 +3492,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858560555}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -426.5, y: -320, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1469829475}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &858560557
 MonoBehaviour:
@@ -3818,6 +3820,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151576
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &926946056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4042,13 +4045,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926946051}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: -4.712329, y: 4.925027, z: 4.3908157}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2142912188}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &941965003
 GameObject:
@@ -4170,6 +4173,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151554
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &941965008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4394,13 +4398,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 941965003}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.19235203, w: 0.98132604}
   m_LocalPosition: {x: -3.2977788, y: 0.95, z: 8.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1906577875}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 22.18}
 --- !u!43 &980362986
 Mesh:
@@ -4712,7 +4716,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1469829475}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -4802,13 +4805,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048969521}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.11}
   m_LocalScale: {x: 0.0015, y: 0.0015, z: 0.0015}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1889886324}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1048969523
 MeshRenderer:
@@ -4888,13 +4891,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080714020}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.5291794, y: 0.4690088, z: 0.6751496, w: 0.21017358}
   m_LocalPosition: {x: -10.17, y: -8.11, z: 21.667255}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772821187}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -24.259, y: 90, z: 121.158}
 --- !u!64 &1080714022
 MeshCollider:
@@ -4995,6 +4998,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151575
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &1080714026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6022,6 +6026,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -6043,7 +6048,6 @@ RectTransform:
   - {fileID: 984917772}
   - {fileID: 1640621498}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6210,16 +6214,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5216613447995396114, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
   m_PrefabInstance: {fileID: 1519665501}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1519665503 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5216613447229458761, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-  m_PrefabInstance: {fileID: 1519665501}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1519665504 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8939213946993166141, guid: b0d11b6f009d6824dbf93a1eec5dfaff, type: 3}
-  m_PrefabInstance: {fileID: 1519665501}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1527715434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7075314950136490295, guid: cf786c248a459bf47a50441802017534, type: 3}
@@ -6262,6 +6256,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612385802}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.12860203, y: 1.75, z: 0.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -6269,7 +6264,6 @@ Transform:
   m_Children:
   - {fileID: 1889886324}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1630326666
 GameObject:
@@ -6392,6 +6386,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151556
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &1630326671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6616,6 +6611,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630326666}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.42939782, y: 3.5029817, z: -6.2873}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -6623,7 +6619,6 @@ Transform:
   m_Children:
   - {fileID: 1788622262}
   m_Father: {fileID: 412095891}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1630326673
 MonoBehaviour:
@@ -6638,6 +6633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableReflect: 1
+  bulletColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1640621497
 GameObject:
   m_ObjectHideFlags: 0
@@ -6671,7 +6667,6 @@ RectTransform:
   m_Children:
   - {fileID: 1875439353}
   m_Father: {fileID: 1469829475}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7057,6 +7052,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151573
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &1709782089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7281,13 +7277,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1709782084}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.060267925, y: 5.473336, z: -6.000126}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 772821187}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1764127695
 GameObject:
@@ -7409,6 +7405,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151554
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &1764127700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7633,13 +7630,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764127695}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.19235203, w: 0.98132604}
   m_LocalPosition: {x: -3.2977788, y: 0.95, z: 24.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1906577875}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 22.18}
 --- !u!4 &1778878795 stripped
 Transform:
@@ -7678,7 +7675,6 @@ RectTransform:
   m_Children:
   - {fileID: 781795747}
   m_Father: {fileID: 1630326672}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7725,6 +7721,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -7850,6 +7847,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151557
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &1791313734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8074,13 +8072,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791313729}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.36299038, y: 6.9827104, z: 0.6639595}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 412095891}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1802637550
 PrefabInstance:
@@ -8351,7 +8349,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1640621498}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8431,6 +8428,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1889886323}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -8438,7 +8436,6 @@ Transform:
   m_Children:
   - {fileID: 1048969522}
   m_Father: {fileID: 1612385804}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1889886325
 MonoBehaviour:
@@ -8452,9 +8449,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075673d4e0a4d154faed16a948c7f8f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sens: 200
-  orientation: {fileID: 1519665504}
-  playerTransform: {fileID: 1519665503}
+  sensitivity: 0
+  minAngle: 0
+  maxAngle: 0
+  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!81 &1889886326
 AudioListener:
   m_ObjectHideFlags: 0
@@ -8634,6 +8632,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151555
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &1906577874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8858,6 +8857,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1906577869}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -8867,7 +8867,6 @@ Transform:
   - {fileID: 21411385}
   - {fileID: 1764127701}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1937388304
 GameObject:
@@ -8900,7 +8899,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 353101043}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9488,6 +9486,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151579
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &2140442744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9712,13 +9711,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140442739}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 27.634232, y: -58.45127, z: 57.04596}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2140442746
 MonoBehaviour:
@@ -9732,6 +9731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1563cb0d2d70f94a9153d18e511d758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathType: 0
 --- !u!1 &2142912182
 GameObject:
   m_ObjectHideFlags: 0
@@ -9853,6 +9853,7 @@ MonoBehaviour:
     RefIds:
     - rid: 1087579848896151574
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
+      data: 
 --- !u!114 &2142912187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10077,6 +10078,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2142912182}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.43, y: -4.35, z: 23.060001}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -10085,7 +10087,6 @@ Transform:
   - {fileID: 1340463374}
   - {fileID: 926946057}
   m_Father: {fileID: 772821187}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2142912189
 MonoBehaviour:
@@ -10114,7 +10115,20 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.083333336
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: b7e173545a3caab479bf39a3ee5112ba, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1469829475}
+  - {fileID: 1612385804}
+  - {fileID: 1519665501}
+  - {fileID: 519406737}
+  - {fileID: 1906577875}
+  - {fileID: 412095891}
+  - {fileID: 772821187}
+  - {fileID: 466906244}
+  - {fileID: 2140442745}
