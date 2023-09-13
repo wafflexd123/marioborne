@@ -724,7 +724,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2892680483172206263}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.55267394, y: 0.44107938, z: 0.44107914, w: 0.55267507}
+  m_LocalRotation: {x: 0.5526738, y: 0.44107944, z: 0.44107914, w: 0.55267525}
   m_LocalPosition: {x: 0.91900384, y: 1.3930786, z: -0.0048999786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1679,7 +1679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b12c97551941647aceb68a375a6aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minTimescale: 0.25
   minPitch: 0.7
 --- !u!114 &4290613740616242188
 MonoBehaviour:
@@ -2055,7 +2054,7 @@ GameObject:
   m_Component:
   - component: {fileID: 377232768587943262}
   - component: {fileID: 318964829142951818}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alpha_Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2097,7 +2096,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e83ce33a8976f5d4eb80de33bcd82a3c, type: 2}
+  - {fileID: 2100000, guid: ad2fac5596420214789f9593a12d983c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2695,7 +2694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6596702289937269916
 Transform:
   m_ObjectHideFlags: 0
@@ -2727,8 +2726,11 @@ MonoBehaviour:
   model: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 5
+  defaultSpeed: 1
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &4971283120863737039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2844,6 +2846,7 @@ MonoBehaviour:
   timeBeforePursuingPlayer: 5
   chaseSpeed: 1.5
   meleeDistance: 1
+  reflectWindow: {fileID: 0}
 --- !u!114 &8946313642581743143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3456,7 +3459,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -840037777384891287, guid: da7de4a8338e26644ab1d95219d8ab21, type: 3}
+  - {fileID: 2100000, guid: ad2fac5596420214789f9593a12d983c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

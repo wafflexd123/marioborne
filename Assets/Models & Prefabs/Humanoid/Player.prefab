@@ -5550,7 +5550,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 31743
+    m_Bits: 64511
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -7525,6 +7525,7 @@ MonoBehaviour:
   raycastIgnore:
     serializedVersion: 2
     m_Bits: 17420
+  reflectWindowPrefab: {fileID: 4862965222740863655, guid: 6cb7d01168cff574faa67af9bbb72494, type: 3}
   hasDied: 0
   movement: {fileID: 0}
   cameraController: {fileID: 0}
@@ -8063,14 +8064,14 @@ MonoBehaviour:
   <rollRequeueTime>k__BackingField: 0.3
   <fallRollEngageDistance>k__BackingField: 5
   <fallCrouchEngageDistance>k__BackingField: 3
-  <climbDistance>k__BackingField: 0
-  <climbForce>k__BackingField: 0
-  <climbEnableTime>k__BackingField: 0
-  <climbDisableTime>k__BackingField: 0
-  <ledgeClimbTime>k__BackingField: 0
-  <ledgeClimbHeight>k__BackingField: 0
-  <surfaceAngleThreshold>k__BackingField: 0
-  <forwardAngleThreshold>k__BackingField: 0
+  <climbDistance>k__BackingField: 0.6
+  <climbForce>k__BackingField: 10
+  <climbEnableTime>k__BackingField: 0.2
+  <climbDisableTime>k__BackingField: 2
+  <ledgeClimbTime>k__BackingField: 1
+  <ledgeClimbHeight>k__BackingField: 1
+  <surfaceAngleThreshold>k__BackingField: 45
+  <forwardAngleThreshold>k__BackingField: 160
   <maxHealth>k__BackingField: 100
   <healthRecoverDelay>k__BackingField: 3
   <healthPerSecond>k__BackingField: 25

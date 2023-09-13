@@ -309,7 +309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b12c97551941647aceb68a375a6aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minTimescale: 0.25
   minPitch: 0.7
 --- !u!114 &3942680109836616962
 MonoBehaviour:
@@ -593,7 +592,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6593462731512842086}
   - component: {fileID: 9081367657466641870}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alpha_Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +634,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e83ce33a8976f5d4eb80de33bcd82a3c, type: 2}
+  - {fileID: 2100000, guid: ad2fac5596420214789f9593a12d983c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -848,7 +847,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -840037777384891287, guid: da7de4a8338e26644ab1d95219d8ab21, type: 3}
+  - {fileID: 2100000, guid: ad2fac5596420214789f9593a12d983c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2518,6 +2517,7 @@ GameObject:
   - component: {fileID: 7608635035423009124}
   - component: {fileID: 659072747441035703}
   - component: {fileID: 6013336507753614194}
+  - component: {fileID: 2961583063290066192}
   m_Layer: 11
   m_Name: Sniper Enemy
   m_TagString: Untagged
@@ -2683,8 +2683,24 @@ MonoBehaviour:
   model: {fileID: 0}
   weapon: {fileID: 0}
   alertRadius: 0
+  defaultSpeed: 1
   rotationSpeed: 10
   <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
+--- !u!114 &2961583063290066192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6530407484226488053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 975db4ea1bdb0a648af640e7d6a7ad4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBeforePatrol: 5
 --- !u!1 &6610300959406729149
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,15 +3382,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.49
+      value: 0.047
       objectReference: {fileID: 0}
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.29
+      value: -0.071
       objectReference: {fileID: 0}
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.129
+      value: 0.31
       objectReference: {fileID: 0}
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalRotation.w

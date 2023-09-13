@@ -8,6 +8,6 @@ public class Shotgun : Gun
     {
         base.Shoot();//fire bullet directly ahead (if ammo has no base spread)
         for (int i = 1; i < shotgunPellets; i++)
-            Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (DirectionWithSpread(ammo.maxSpread) + RandomSpread(maxSpread)).normalized, wielder, ammo.color);
+            Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, (DirectionWithSpread(ammo.maxSpread) + RandomSpread(maxSpread)).normalized, wielder, ammo.color, false);
     }
 }
