@@ -391,7 +391,7 @@ Transform:
   m_GameObject: {fileID: 575953091305061169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024400654, y: 1.6402944, z: -0.015195342}
+  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1113,6 +1113,7 @@ GameObject:
   - component: {fileID: 5691796134246212546}
   - component: {fileID: 8242363659964251624}
   - component: {fileID: 7636265394865903104}
+  - component: {fileID: 4614286681062185909}
   m_Layer: 3
   m_Name: UI
   m_TagString: Untagged
@@ -1214,6 +1215,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4614286681062185909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140479940410986797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0abed7263814e6f4faf311571653efca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1295462064530306262
 GameObject:
   m_ObjectHideFlags: 0
@@ -4291,7 +4304,7 @@ Transform:
   m_GameObject: {fileID: 4360871117464955069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.7133318, y: 1.4406136, z: -0.05548489}
+  m_LocalPosition: {x: 0.7133317, y: 1.4406136, z: -0.05548489}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6569,7 +6582,7 @@ Transform:
   m_GameObject: {fileID: 7210201921843458528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024400654, y: 1.6402944, z: -0.015195342}
+  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7183,7 +7196,7 @@ Transform:
   m_GameObject: {fileID: 8405350625105107529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000024400654, y: 1.5992944, z: -0.015195342}
+  m_LocalPosition: {x: -0.00000024443796, y: 1.5992944, z: -0.015195336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8403,7 +8416,6 @@ GameObject:
   - component: {fileID: 8026113608518101870}
   - component: {fileID: 8241659830797280817}
   - component: {fileID: 5910847136744566802}
-  - component: {fileID: 431404935461874852}
   m_Layer: 3
   m_Name: BtnExit
   m_TagString: Untagged
@@ -8513,30 +8525,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 431404935461874852}
-        m_TargetAssemblyTypeName: SceneLoadTools, Assembly-CSharp
+      - m_Target: {fileID: 4614286681062185909}
+        m_TargetAssemblyTypeName: UnityEventHelper, Assembly-CSharp
         m_MethodName: LoadScene
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Level Select
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &431404935461874852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8801947784628337899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c63bfe24b090d240b4f577bb52c5624, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9002824480709006172
 GameObject:
   m_ObjectHideFlags: 0

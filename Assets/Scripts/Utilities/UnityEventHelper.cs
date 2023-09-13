@@ -23,11 +23,6 @@ public class UnityEventHelper : MonoBehaviourPlus
         Debug.Log(message, this);
     }
 
-    public void LoadScene(string scene)
-    {
-        SceneManager.LoadScene(scene, LoadSceneMode.Single);
-    }
-
 	public void RemoveParent(Transform transform)
 	{
 		transform.SetParent(null);
@@ -36,5 +31,20 @@ public class UnityEventHelper : MonoBehaviourPlus
 	public void SetTimeScale(float time)
 	{
 		Time.timeScale = time;
+	}
+
+	public void LoadScene(string scene)
+	{
+		SceneManager.LoadScene(scene, LoadSceneMode.Single);
+	}
+
+	public void ReloadCurrentScene()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
+
+	public void ExitGame()
+	{
+		Application.Quit();
 	}
 }
