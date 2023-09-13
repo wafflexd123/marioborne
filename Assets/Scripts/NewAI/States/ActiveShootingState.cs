@@ -28,6 +28,7 @@ public class ActiveShootingState : AIState
 	{
 		StopCoroutine(ref crtInvestigate);
 		StopCoroutine(ref crtRelocate);
+		controller.coverPointsManager.MarkAsAvailable(controller.currentCoverPoint);
 	}
 
 	public override void Tick()

@@ -7,18 +7,18 @@ public enum CoverPriority { IgnoreCover, IfNear, RequireCover }
 public class NavigateFiringPosState : AIState
 {
 	//Inspector
-	public Transform coverPointsTransform;
 	public CoverPriority coverPriority = CoverPriority.IfNear;
 	public float runToCoverSpeed, nearCoverDistance = 5f, relocateDistance = 0.5f, timeBeforeReturningToPatrol = 10f;
 	[Tooltip("Will start to rotate to look at last known player position when this close to firing position")] public float lookingDistance = 3f;
 
 	//Script
-	private int coverIndex, sightCoverIndex;
+	private Vector3 cover, sightCover;
 	protected Vector3 targetLocation;
-	protected List<Vector3> coverPoints;
+	protected Dictionary<Vector3, bool> coverPoints;
 	protected ExternalControlTransition returnToPatrolTransition;
 	protected StartShootingTransition startShootingTransition;
 	Coroutine crtReturnToPatrolTimer;
+	protected CoverPoints coverPointsManager;
 
 	public override AIState Setup(params Transition[] transitions)
 	{
@@ -37,6 +37,9 @@ public class NavigateFiringPosState : AIState
 
 	protected override void OnEntry()
 	{
+		coverPointsManager = controller.coverPointsManager;
+		coverPoints = coverPointsManager.coverPoints;
+
 		if (coverPriority == CoverPriority.IgnoreCover)
 		{
 			targetLocation = controller.transform.position;
@@ -44,53 +47,74 @@ public class NavigateFiringPosState : AIState
 		}
 
 		controller.AgentSpeed = runToCoverSpeed;
-		coverPoints = new List<Vector3>();
-		for (int i = 0; i < coverPointsTransform.childCount - 1; i++)
-		{
-			if (Vector3.Distance(coverPointsTransform.GetChild(i).position, controller.transform.position) > relocateDistance)
-				coverPoints.Add(coverPointsTransform.GetChild(i).position);
-		}
+
 		// find closest cover point to go to
 		float closestDistance = float.MaxValue;
 		float closestSightDistance = float.MaxValue;
-		for (int i = 0; i < coverPoints.Count; i++)
+		foreach (KeyValuePair<Vector3, bool> coverPoint in coverPoints)
 		{
-			if (Vector3.Distance(controller.transform.position, coverPoints[i]) < closestSightDistance)
-			{
-				Physics.Raycast(new Vector3(coverPoints[i].x, coverPoints[i].y + 1.6f, coverPoints[i].z), controller.player.transform.position - coverPoints[i], out RaycastHit player, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
-				if (player.collider != null && player.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
-				{ //tries to find cover where the enemy can also see the player (enemy height taken into account)
-					Physics.Raycast(coverPoints[i], controller.player.camera.transform.position - coverPoints[i], out RaycastHit cover, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
-					if (cover.collider != null && !cover.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
-					{
-						sightCoverIndex = i;
-						closestSightDistance = Vector3.Distance(controller.transform.position, coverPoints[i]);
+			Vector3 coverPointPosition = coverPoint.Key;
+			bool isAvailable = coverPoint.Value;
+
+            if (coverPointsManager.isCoverPointAvailable(coverPointPosition) && Vector3.Distance(controller.transform.position, coverPointPosition) > relocateDistance)
+            {
+				if (Vector3.Distance(controller.transform.position, coverPointPosition) < closestSightDistance)
+				{
+					Physics.Raycast(new Vector3(coverPointPosition.x, coverPointPosition.y + 1.6f, coverPointPosition.z), controller.player.transform.position - coverPointPosition, out RaycastHit player, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
+					if (player.collider != null && player.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
+					{ //tries to find cover where the enemy can also see the player (enemy height taken into account)
+						Physics.Raycast(coverPointPosition, controller.player.camera.transform.position - coverPointPosition, out RaycastHit coverHit, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
+						if (coverHit.collider != null && !coverHit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
+						{
+							sightCover = coverPointPosition;
+							closestSightDistance = Vector3.Distance(controller.transform.position, coverPointPosition);
+						}
+					}
+				}
+				if (Vector3.Distance(controller.transform.position, coverPointPosition) < closestDistance)
+				{
+					Physics.Raycast(coverPointPosition, controller.player.camera.transform.position - coverPointPosition, out RaycastHit coverHit, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
+					if (coverHit.collider != null && !coverHit.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
+					{ //raycast to find out whether cover is valid (cover cannot see player)
+
+						cover = coverPointPosition;
+						closestDistance = Vector3.Distance(controller.transform.position, coverPointPosition);
 					}
 				}
 			}
-			if (Vector3.Distance(controller.transform.position, coverPoints[i]) < closestDistance)
-			{
-				Physics.Raycast(coverPoints[i], controller.player.camera.transform.position - coverPoints[i], out RaycastHit cover, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
-				if (cover.collider != null && !cover.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player")))
-				{ //raycast to find out whether cover is valid (cover cannot see player)
-
-					coverIndex = i;
-					closestDistance = Vector3.Distance(controller.transform.position, coverPoints[i]);
-				}
-			}
-
 		}
+		
 
 		if (coverPriority == CoverPriority.RequireCover)
 		{
-			if (closestSightDistance < float.MaxValue) targetLocation = coverPoints[sightCoverIndex];
-			else if (closestDistance < float.MaxValue) targetLocation = coverPoints[coverIndex];
+			if (closestSightDistance < float.MaxValue)
+			{
+				targetLocation = sightCover;
+				coverPointsManager.MarkAsTaken(sightCover);
+				controller.currentCoverPoint = sightCover;
+			}
+			else if (closestDistance < float.MaxValue)
+			{
+				targetLocation = cover;
+				coverPointsManager.MarkAsTaken(cover);
+				controller.currentCoverPoint = cover;
+			}
 			else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
 		}
 		else // CoverPrioirty.IfNear
 		{
-			if (closestSightDistance <= nearCoverDistance) targetLocation = coverPoints[sightCoverIndex];
-			else if (closestDistance <= nearCoverDistance) targetLocation = coverPoints[coverIndex];
+			if (closestSightDistance <= nearCoverDistance)
+			{
+				targetLocation = sightCover;
+				coverPointsManager.MarkAsTaken(sightCover);
+				controller.currentCoverPoint = sightCover;
+			}
+			else if (closestDistance <= nearCoverDistance)
+			{
+				targetLocation = cover;
+				coverPointsManager.MarkAsTaken(cover);
+				controller.currentCoverPoint = cover;
+			}
 			else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
 		}
 	}
@@ -114,7 +138,6 @@ public class NavigateFiringPosState : AIState
 			controller.RotateTowards(controller.LastKnownPlayerPosition);
 		}
 
-		//needs work i think
 		if (!controller.fieldOfView.canSeePlayer)
 			ResetRoutine(StandardTimer(timeBeforeReturningToPatrol, returnToPatrolTransition), ref crtReturnToPatrolTimer);
 		else
