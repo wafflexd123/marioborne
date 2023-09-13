@@ -17,10 +17,11 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 
 	IEnumerator TimeRoutine()
 	{
+		float rewind = 1;
 		Time.StartRewind();
 		do
 		{
-			Time.Rewind(Time.deltaTime * rewindSpeed);
+			Time.Rewind(Time.deltaTime * (rewind += rewindSpeed * Time.deltaTime));
 			yield return null;
 		} while (Input.GetButton("Ability"));
 		Time.StopRewind();

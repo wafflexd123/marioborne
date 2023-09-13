@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Rotater : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Rotater : MonoBehaviour
     [field: SerializeField] public bool Loop { get; set; }
     [field: SerializeField] public bool RotateToSpecificRotation { get; set; } = false; // New field
     [field: SerializeField] public Vector3 SpecificRotation { get; set; } // New field
+    public UnityEvent onEnd;
 
     public void StartRotation()
     {
@@ -30,6 +32,7 @@ public class Rotater : MonoBehaviour
                     yield return new WaitForFixedUpdate();
                 } while (percent < 1);
             } while (Loop);
+            onEnd.Invoke();
         }
     }
 
