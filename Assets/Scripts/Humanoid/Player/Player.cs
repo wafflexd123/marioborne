@@ -9,6 +9,7 @@ public class Player : Humanoid
     public bool invincibility;
     public float maxInteractDistance;
     [SerializeField] LayerMask raycastIgnore;
+    [SerializeField] public ReflectWindow reflectWindowPrefab;
 
     //Public
     public RaycastHit raycast;
@@ -45,6 +46,7 @@ public class Player : Humanoid
         //wickUI = ui.Find("Wick Text").GetComponent<WickUI>();
         messageManager = ui.Find("Death Message").GetComponent<MessageManager>();
         raycastIgnore = ~raycastIgnore;//invert layermask
+        reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(this);
     }
 
     //private void Start()

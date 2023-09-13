@@ -6,17 +6,17 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
 {
     public float timeScaleSpeed, scaleDuration, recoveryTime;
     [SerializeField] ReflectWindow reflectWindowPrefab;
-    Coroutine crtDeflect;
+    Coroutine crtSlow;
     Image imgTimeleft;
     Player player;
 
-    public bool CanDisable => crtDeflect == null;
+    public bool CanDisable => crtSlow == null;
 
     private void Awake()
     {
         player = GetComponentInParent<Player>();
         imgTimeleft = player.transform.Find("UI").Find("Deflect Time").GetComponent<Image>();
-        reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(player);
+        //reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(player);
     }
 
     private void Update()
@@ -26,15 +26,17 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
 
     void Slow()
     {
-        if (crtDeflect == null) crtDeflect = StartCoroutine(E());//if not already slowing
+        if (crtSlow == null) crtSlow = StartCoroutine(E());//if not already slowing
         IEnumerator E()
         {
             float timer = 0;
+            recoveryTime = 3f;
             imgTimeleft.gameObject.SetActive(true);
-            player.model.deflect = true;
-            reflectWindowPrefab.enabled = true;
+            //player.model.deflect = true;
+            //reflectWindowPrefab.enabled = true;
             while (Input.GetButton("Ability") && timer < scaleDuration)//slow time until timer has elapsed or button is released
             {
+                recoveryTime += Time.unscaledDeltaTime;
                 if (Time.timeScale > Time.minTimeScale)
                 {
                     Time.timeScale -= timeScaleSpeed * Time.deltaTime;
@@ -46,7 +48,7 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
                 yield return null;
             }
 
-            reflectWindowPrefab.enabled = false;
+            //reflectWindowPrefab.enabled = false;
             timer = 0;
             while (Time.timeScale < 1)//unslow time
             {
@@ -67,7 +69,7 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
             }
 
             imgTimeleft.gameObject.SetActive(false);
-            crtDeflect = null;
+            crtSlow = null;
         }
     }
 

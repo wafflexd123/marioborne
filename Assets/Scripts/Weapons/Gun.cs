@@ -89,7 +89,7 @@ public class Gun : WeaponBase
 
 	protected virtual void Shoot()
 	{
-		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color);
+		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, false);
 	}
 
 	protected Vector3 DirectionWithSpread(float maxSpread)

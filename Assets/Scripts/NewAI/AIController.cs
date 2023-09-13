@@ -8,6 +8,7 @@ public class AIController : Humanoid, ITimeScaleListener
 {
 	//Inspector
 	public float alertRadius;
+	public float defaultSpeed = 1f;
 	public float rotationSpeed = 10f;
 
 	//Properties
@@ -23,10 +24,14 @@ public class AIController : Humanoid, ITimeScaleListener
 	public override Vector3 LookDirection => fieldOfView.eyes.forward;
 	public override Vector3 LookingAt => lookingAt;
 
+	[SerializeField, Tooltip("Only needs assigning to enemies who use cover. It's now done in the controller script because it needs access in more than one state.")] public CoverPoints coverPointsManager;
+
 	//Script
 	protected Vector3 velocity;
 	float agentSpeed;
 	bool isStopped;
+	bool isDead;
+	[HideInInspector] public Vector3 currentCoverPoint;
 	Vector3 lookingAt;
 
 	protected override void Awake()
@@ -88,12 +93,13 @@ public class AIController : Humanoid, ITimeScaleListener
 
 	public void OnTimeSlow()
 	{
-		agent.speed = AgentSpeed * Time.timeScale;
+		if(!isDead) agent.speed = AgentSpeed * Time.timeScale;
 	}
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		if (weapon) input.Press("Drop");//drop weapon if holding one
+		isDead = true;
 		Destroy(gameObject);
 	}
 

@@ -10,6 +10,8 @@ public class MeleeAI : AIController
     protected AttackingState attackingState;
     protected WaitState waitState;
 
+    public ReflectWindow reflectWindow;
+
     protected override void Awake()
     {
         base.Awake();
@@ -25,6 +27,9 @@ public class MeleeAI : AIController
         investigatePlayerState.Setup(new FoundPlayerTransition(attackingState, this), new ReachedLastKnownPlayerPosTransition(waitState, this), new ExternalControlTransition(patrolState));
         attackingState.Setup(new ExternalControlTransition(investigatePlayerState));
         waitState.Setup(new ExternalControlTransition(patrolState));
+
+        reflectWindow = Instantiate(reflectWindow).Initialise(this);
+        attackingState.reflectWindow = reflectWindow;
 
         CurrentState = patrolState.BeginState();
 

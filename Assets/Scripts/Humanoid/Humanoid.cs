@@ -20,7 +20,7 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
         if (GetType() != bullet.shooter.GetType())//if shooter and target are not, for example, both an AI (no friendly fire)
         {
             Kill(DeathType.Bullet);
-            Destroy(bullet.gameObject);
+            if(!bullet.penetrates) Destroy(bullet.gameObject);
         }
     }
 
