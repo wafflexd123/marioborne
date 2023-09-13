@@ -8,6 +8,7 @@ public class AIController : Humanoid, ITimeScaleListener
 {
 	//Inspector
 	public float alertRadius;
+	public float defaultSpeed = 1f;
 	public float rotationSpeed = 10f;
 
 	//Properties

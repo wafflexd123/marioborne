@@ -19,7 +19,6 @@ public class NavigateFiringPosState : AIState
 	protected ExternalControlTransition returnToPatrolTransition;
 	protected StartShootingTransition startShootingTransition;
 	Coroutine crtReturnToPatrolTimer;
-	float defaultSpeed;
 
 	public override AIState Setup(params Transition[] transitions)
 	{
@@ -38,7 +37,6 @@ public class NavigateFiringPosState : AIState
 
 	protected override void OnEntry()
 	{
-		defaultSpeed = controller.AgentSpeed;
 		if (coverPriority == CoverPriority.IgnoreCover)
 		{
 			targetLocation = controller.transform.position;
@@ -99,7 +97,7 @@ public class NavigateFiringPosState : AIState
 
 	protected override void OnExit()
 	{
-		controller.AgentSpeed = defaultSpeed;
+		controller.AgentSpeed = controller.defaultSpeed;
 		startShootingTransition.destination = Vector3.zero;
 		startShootingTransition.position = Vector3.one; //resets requirements, otherwise the guy goes a bit wonky
 		if (crtReturnToPatrolTimer != null) StopCoroutine(crtReturnToPatrolTimer);
