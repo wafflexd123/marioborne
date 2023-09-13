@@ -51,7 +51,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	}
 
 	//Other
-	public bool dying { set => animator.SetTrigger("die"); }
+	public bool dying { set => animator.SetBool("dying", value); }
 	public bool grounded { set => falling = false; }
 	public bool wallRunning { set => falling = false; }
 	public Vector3 velocity

@@ -17,6 +17,7 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 
 	IEnumerator TimeRoutine()
 	{
+		Time.timeScale = 1;
 		float rewind = 1;
 		Time.StartRewind();
 		do

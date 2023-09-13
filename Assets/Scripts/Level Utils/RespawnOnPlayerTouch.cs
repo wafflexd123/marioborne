@@ -7,6 +7,7 @@ public class RespawnOnPlayerTouch : MonoBehaviourPlus
 
 	private void OnCollisionEnter(Collision collision)
 	{
+		if (Time.isRewinding) return;
 		if (FindComponent(collision.transform, out Player p))
 		{
 			if (overrideInvincibility) p.ForceKill(deathType);
@@ -16,6 +17,7 @@ public class RespawnOnPlayerTouch : MonoBehaviourPlus
 
 	private void OnTriggerEnter(Collider collision)
 	{
+		if (Time.isRewinding) return;
 		if (FindComponent(collision.transform, out Player p))
 		{
 			if (overrideInvincibility) p.ForceKill(deathType);

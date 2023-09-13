@@ -66,7 +66,11 @@ public class Player : Humanoid
             if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
         }
 
-        if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (escMenu.activeSelf)
@@ -137,7 +141,7 @@ public class Player : Humanoid
         messageManager.Hide();
         model.dying = false;
         cameraController.enabled = true;
-        enableInput = false;
+        enableInput = true;
     }
 
     public void TeleportToEnemy(Humanoid enemy, float teleportSpeed)

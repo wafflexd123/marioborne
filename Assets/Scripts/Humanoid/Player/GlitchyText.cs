@@ -55,7 +55,7 @@ public class GlitchyText : MonoBehaviour
             {
                 char randomChar = (char)Random.Range(33, 127);
                 textMesh.text = textMesh.text.Substring(0, i) + randomChar;
-                yield return new WaitForSeconds(glitchDuration);
+                yield return new WaitForSecondsRealtime(glitchDuration);
             }
 
             textMesh.text = textMesh.text.Substring(0, i) + message[i];
@@ -82,7 +82,7 @@ public class GlitchyText : MonoBehaviour
             }
 
             textMesh.text += message[i];
-            yield return new WaitForSeconds(fastRevealTime / message.Length);
+            yield return new WaitForSecondsRealtime(fastRevealTime / message.Length);
         }
     }
 
