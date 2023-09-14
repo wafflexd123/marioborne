@@ -93,7 +93,7 @@ public class AIController : Humanoid, ITimeScaleListener
 
 	public void OnTimeSlow()
 	{
-		if(!isDead) agent.speed = AgentSpeed * Time.timeScale;
+		if(!isDead && agent != null) agent.speed = AgentSpeed * Time.timeScale;
 	}
 
 	public override void Kill(DeathType deathType = DeathType.General)
@@ -113,5 +113,14 @@ public class AIController : Humanoid, ITimeScaleListener
 		}
 		onDrop = null;
 		return false;
+	}
+
+	public override void OnBulletHit(Collision collision, Bullet bullet)
+	{
+		if (!typeof(AIController).IsAssignableFrom(bullet.shooter.GetType()))//if not shot by an AI (no friendly fire)
+		{
+			Kill(DeathType.Bullet);
+			if (!bullet.penetrates) Destroy(bullet.gameObject);
+		}
 	}
 }

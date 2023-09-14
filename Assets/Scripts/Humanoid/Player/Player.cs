@@ -139,6 +139,7 @@ public class Player : Humanoid
 	{
         hasDied = false;
         messageManager.Hide();
+        movement.Health(1, DeathType.General);//temp, have to record this with the rewind later
         model.dying = false;
         cameraController.enabled = true;
         enableInput = true;
@@ -162,7 +163,16 @@ public class Player : Humanoid
                 movement.enabled = true;
                 crtMoveToEnemy = null;
                 Destroy(enemy.gameObject);
-            }, EasingFunction.EaseInSine));
+            }, EasingFunction.EaseInOutSine));
+        }
+    }
+
+    public override void OnBulletHit(Collision collision, Bullet bullet)
+    {
+        if (bullet.shooter != this)
+        {
+            Kill(DeathType.Bullet);
+            if (!bullet.penetrates) Destroy(bullet.gameObject);
         }
     }
 }

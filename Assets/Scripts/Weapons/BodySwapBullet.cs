@@ -6,9 +6,9 @@ public class BodySwapBullet : Bullet
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        if (FindComponent(collision.transform, out Humanoid enemy) && enemy is not Player && shooter is Player player)
+        if (FindComponent(collision.transform, out AIController enemy))
         {
-            player.TeleportToEnemy(enemy, teleportSpeed);
+            ((Player)shooter).TeleportToEnemy(enemy, teleportSpeed);
         }
         Destroy(gameObject);
     }

@@ -325,4 +325,9 @@ public class Enemy : Humanoid, ITimeScaleListener
         onDrop = null;
         return false;
     }
+
+	public override void OnBulletHit(Collision collision, Bullet bullet)
+	{
+		throw new NotImplementedException();
+	}
 }

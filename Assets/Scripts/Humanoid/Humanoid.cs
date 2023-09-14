@@ -15,14 +15,7 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
     public abstract void Kill(DeathType deathType = DeathType.General);
     public abstract bool PickupObject(WeaponBase weapon, out Action onDrop);
 
-    public virtual void OnBulletHit(Collision collision, Bullet bullet)
-    {
-        if (GetType() != bullet.shooter.GetType())//if shooter and target are not, for example, both an AI (no friendly fire)
-        {
-            Kill(DeathType.Bullet);
-            if(!bullet.penetrates) Destroy(bullet.gameObject);
-        }
-    }
+    public abstract void OnBulletHit(Collision collision, Bullet bullet);
 
     protected virtual void Awake()
     {

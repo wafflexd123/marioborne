@@ -187,7 +187,7 @@ public class PlayerMovement : MonoBehaviourPlus
 					if (damageMagnitude > 0)
 					{
 						xzVelocity.vector *= 1 - damageMagnitude;//reduce lateral velocity according to percent of health decreased
-						Health(Mathf.Lerp(0, maxHealth, damageMagnitude), DeathType.Fall);
+						Health(Mathf.Lerp(0, -maxHealth, damageMagnitude), DeathType.Fall);
 					}
 				}
 				yVelocity.vector.y = 0;//set y velocity to 0 if we ground this frame
@@ -583,11 +583,11 @@ public class PlayerMovement : MonoBehaviourPlus
 		camera.fieldOfView = TweenFloat(camera.fieldOfView, fovCurve.Evaluate(xzVelocity.magnitude), fovPerSecond);
 	}
 
-	void Health(float amount, DeathType deathType)
+	public void Health(float amount, DeathType deathType)
 	{
-		if (amount > 0)
+		if (amount != 0)
 		{
-			health -= amount;
+			health += amount;
 			healthVignette.SetVignetteAlpha(health, maxHealth);
 			if (health <= 0) player.Kill(deathType);
 			else ResetRoutine(Recover(), ref crtHealth);
