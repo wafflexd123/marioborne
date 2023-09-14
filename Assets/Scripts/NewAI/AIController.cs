@@ -100,6 +100,8 @@ public class AIController : Humanoid, ITimeScaleListener
 	{
 		if (weapon) input.Press("Drop");//drop weapon if holding one
 		isDead = true;
+		if (DeathParticlesManager.Current != null)
+            DeathParticlesManager.Current.PlayAtLocation(transform.position);
 		Destroy(gameObject);
 	}
 
