@@ -8,6 +8,7 @@ public class Knife : WeaponBase
 	public Collider[] bladeColliders, hiltColliders;
 	Coroutine crtDelay;
 	bool _isFiring;
+	private Animator animator;
 
 	public override bool IsFiring => _isFiring;
 
@@ -19,7 +20,12 @@ public class Knife : WeaponBase
 			wielder.model.holdingMelee = true;
 			reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
 		}
-		if (wielder is Player) reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
+		if (wielder is Player)
+		{
+			reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
+			animator.enabled = true;
+			animator.Play("idle");
+		}
 		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = false;
 		for (int i = 0; i < bladeColliders.Length; i++)
 		{
@@ -36,7 +42,14 @@ public class Knife : WeaponBase
 			bladeColliders[i].enabled = true;
 			bladeColliders[i].isTrigger = false;
 		}
-	}
+
+        if (wielder is Player)
+        {
+            animator.Play("unequipped");
+            animator.enabled = false;
+        }
+
+    }
 
 	protected override void OnWielderChange()
 	{
@@ -55,6 +68,8 @@ public class Knife : WeaponBase
 		if (wielder is Player) reflectWindow.PlayerReflect(hitDelay);
 		if (crtDelay == null)
 		{
+            if (wielder is Player) 
+				animator.Play("swing1");
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
@@ -83,9 +98,18 @@ public class Knife : WeaponBase
 
 	public void Trigger(TriggerCollider triggerCollider)
 	{
+		if (wielder != null)
+			print($"Sword on: {wielder.name} is attacking: {triggerCollider.name}");
+		if (wielder != null && wielder.gameObject == triggerCollider.gameObject) return;
 		if (FindComponent(triggerCollider.other.transform, out Humanoid enemy))
 		{
 			enemy.Kill(DeathType.Melee);
 		}
+	}
+
+    protected override void Start() 
+	{
+		base.Start();
+		animator = GetComponent<Animator>();
 	}
 }
