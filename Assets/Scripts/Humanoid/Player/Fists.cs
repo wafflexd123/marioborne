@@ -35,7 +35,7 @@ public class Fists : MonoBehaviourPlus
 
     void OnTriggerEnter(Collider collider)
     {
-        if (FindComponent(collider.transform, out Enemy enemy))
+        if (FindComponent(collider.transform, out AIController enemy))
         {
             enemy.Kill(DeathType.Melee);
         }

@@ -3761,11 +3761,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 808979411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &466736663 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 9098452204572359371, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
-  m_PrefabInstance: {fileID: 8466667909708767439}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &484107383
 GameObject:
   m_ObjectHideFlags: 0
@@ -3828,11 +3823,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 728962180}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &492400006 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 4004880806788761372, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
-  m_PrefabInstance: {fileID: 8466667909708767439}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &495325883
 GameObject:
   m_ObjectHideFlags: 0
@@ -4322,11 +4312,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!65 &529756478 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 8929755083621894888, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
-  m_PrefabInstance: {fileID: 8466667909708767439}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &557179086
 GameObject:
   m_ObjectHideFlags: 0
@@ -11048,9 +11033,9 @@ MonoBehaviour:
   soundRadius: 10
   disablePickupAfterDropSeconds: 2
   colliders:
-  - {fileID: 492400006}
-  - {fileID: 529756478}
-  - {fileID: 466736663}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   fireDelay: 3
   bulletSpeed: 40
   playerAmmo:
