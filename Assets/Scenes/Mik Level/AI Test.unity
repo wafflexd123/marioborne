@@ -1776,52 +1776,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 808979411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &214159133
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 214159135}
-  - component: {fileID: 214159134}
-  m_Layer: 0
-  m_Name: Death Particles Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &214159134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214159133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e5ad992e50b6a44f9a201b715819ef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deathParticles: {fileID: 2835771430368338717, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-  initPoolSize: 3
---- !u!4 &214159135
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214159133}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &263985385
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -11505,6 +11459,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fad3ca18e30cc054ea639e925c7617e5, type: 3}
+--- !u!1001 &5504839692688022162
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1922436691844952945, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7572956501021040113, guid: 5410a3368bd294b448a42ca842574599, type: 3}
+      propertyPath: m_Name
+      value: Death Particles Manager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5410a3368bd294b448a42ca842574599, type: 3}
 --- !u!1001 &7459900929094558510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11590,63 +11601,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 538da1d738cb9bc45aad4d210da43c64, type: 3}
---- !u!1001 &7799766110750741509
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942319776007155391, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7522469053082321129, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
-      propertyPath: m_Name
-      value: Enemy Death Particles
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3071226d88a0994429d456cd95dc5aa4, type: 3}
 --- !u!1001 &8466667909708767439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11749,5 +11703,4 @@ SceneRoots:
   - {fileID: 665155205}
   - {fileID: 2049526051}
   - {fileID: 4886688184869140227}
-  - {fileID: 7799766110750741509}
-  - {fileID: 214159135}
+  - {fileID: 5504839692688022162}
