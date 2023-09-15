@@ -111,5 +111,13 @@ public class Knife : WeaponBase
 	{
 		base.Start();
 		animator = GetComponent<Animator>();
-	}
+    }
+
+    public void DisableHitbox()
+    {
+        foreach (var col in bladeColliders)
+        {
+            col.enabled = false;
+        }
+    }
 }
