@@ -109,7 +109,7 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
         // animation
         if (owner is Player)
         {
-            print("Reflect window tells action to trigger");
+            //print("Reflect window tells action to trigger");
             JMEvents.Instance.PlayerDeflect();
         }
     }

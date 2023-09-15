@@ -112,13 +112,23 @@ public class Knife : WeaponBase
 		JMEvents.Instance.OnPlayerDeflect += PlayerDeflect;
     }
 
-	private void PlayerDeflect()
+    private void OnDisable()
+    {
+        JMEvents.Instance.OnPlayerDeflect -= PlayerDeflect;
+    }
+
+    private void PlayerDeflect()
 	{
-		print("I hear that player deflect is triggered");
+		//print("I hear that player deflect is triggered");
 		DisableHitbox();
 		animator.Play("deflect");
-		// TODO reset cooldown or something
-	}
+        // TODO reset cooldown or something
+        if (crtDelay != null)
+		{
+            StopCoroutine(crtDelay);
+			crtDelay = null;
+        }
+    }
 
     public void DisableHitbox()
     {
