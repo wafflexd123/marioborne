@@ -98,8 +98,6 @@ public class Knife : WeaponBase
 
 	public void Trigger(TriggerCollider triggerCollider)
 	{
-		if (wielder != null)
-			print($"Sword on: {wielder.name} is attacking: {triggerCollider.name}");
 		if (wielder != null && wielder.gameObject == triggerCollider.gameObject) return;
 		if (FindComponent(triggerCollider.other.transform, out Humanoid enemy))
 		{
@@ -111,7 +109,16 @@ public class Knife : WeaponBase
 	{
 		base.Start();
 		animator = GetComponent<Animator>();
+		JMEvents.Instance.OnPlayerDeflect += PlayerDeflect;
     }
+
+	private void PlayerDeflect()
+	{
+		print("I hear that player deflect is triggered");
+		DisableHitbox();
+		animator.Play("deflect");
+		// TODO reset cooldown or something
+	}
 
     public void DisableHitbox()
     {

@@ -16,7 +16,6 @@ public class DeathParticlesManager : MonoBehaviour
         particlePool = new List<ParticleSystem>();
         for (int i = 0; i < initPoolSize; i++)
         {
-            print(i);
             ParticleSystem newSystem = Instantiate(deathParticles, Vector3.zero, Quaternion.identity);
             particlePool.Add(newSystem);
         }

@@ -13,11 +13,13 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
     Humanoid ai;
     Coroutine crtDelay;
     readonly List<Bullet> bullets = new List<Bullet>();
+    Humanoid owner;
 
     public ReflectWindow Initialise(Player player)
     {
         this.player = player;
-        name = "Player Reflect Window";
+        owner = player;
+        name = "Reflect Window - Player";
         ConstraintSource constraintSource = new ConstraintSource();//why the heck is there no constructor for this
         constraintSource.sourceTransform = player.transform;
         constraintSource.weight = 1;
@@ -32,7 +34,8 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
     public ReflectWindow Initialise(MeleeAI ai)
     {
         this.ai = ai;
-        name = "Player Reflect Window";
+        owner = ai;
+        name = "Reflect Window - Enemy";
         ConstraintSource constraintSource = new ConstraintSource();
         constraintSource.sourceTransform = ai.transform;
         constraintSource.weight = 1;
@@ -102,6 +105,13 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
         bullet.color = bulletColor;
         bullets.Add(bullet);
         */
+
+        // animation
+        if (owner is Player)
+        {
+            print("Reflect window tells action to trigger");
+            JMEvents.Instance.PlayerDeflect();
+        }
     }
 
     public void PlayerReflect(float waitTime)
