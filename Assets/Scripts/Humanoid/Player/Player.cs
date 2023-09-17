@@ -29,6 +29,34 @@ public class Player : Humanoid
     Coroutine crtMoveToEnemy;
     Transform leftHand;
 
+    [Header("IK")]
+    [SerializeField] private GameObject armObject;
+    [SerializeField] private Transform handTarget_L;
+    [SerializeField] private Transform handTarget_R;
+    private Transform standardHandTargetParent;
+    private Position standardHandTargetPosition;
+
+    public void IKEquip(bool leftHand, Transform newParent)
+    {
+        Transform hand = leftHand ? handTarget_L : handTarget_R;
+        hand.parent = newParent;
+        print("Set hand" + (leftHand ? "_L" : "_R") + " target to: " + newParent.name);
+    }
+
+    public void IKUnequip(bool leftHand)
+    {
+        Transform hand = leftHand ? handTarget_L : handTarget_R;
+        hand.parent = standardHandTargetParent;
+        Position newPos = standardHandTargetPosition;
+        if (leftHand)
+        {
+            newPos.coords.x *= -1f;
+            newPos.eulers.z *= -1f;
+        }
+        hand.localPosition = newPos.coords;
+        hand.localRotation = Quaternion.Euler(newPos.eulers);
+    }
+
     public override Vector3 LookDirection => camera.transform.forward;
     public override Vector3 LookingAt => raycast.point;
 
@@ -49,6 +77,9 @@ public class Player : Humanoid
         messageManager = ui.Find("Death Message").GetComponent<MessageManager>();
         raycastIgnore = ~raycastIgnore;//invert layermask
         reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(this);
+
+        standardHandTargetParent = handTarget_L.parent;
+        standardHandTargetPosition = new Position(handTarget_R.localPosition, handTarget_R.localRotation.eulerAngles);
     }
 
     //private void Start()
@@ -101,10 +132,12 @@ public class Player : Humanoid
     /// <returns>True if object is picked up, sets parent of weapon</returns>
     public override bool PickupObject(WeaponBase weapon, out Action onDrop)
     {
+        print("Player PickupObject");
         if (!this.weapon)//if nothing in hand
         {
             this.weapon = weapon;
             weapon.transform.SetParent(leftHand);
+            IKEquip(false, weapon.IKHandTarget);
             onDrop = () => this.weapon = null;
             return true;
         }

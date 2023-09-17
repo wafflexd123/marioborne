@@ -11,6 +11,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	public float throwFallDelay = 1f; // Delay before object starts falling
 
 	public Position handPosition, thirdPersonPosition;
+	public Transform IKHandTarget;
 	public float pickupSpeed, dropForce, soundRadius, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
 	protected Humanoid wielder;
@@ -46,6 +47,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 				{
 					transform.localPosition = handPosition;
 					transform.localEulerAngles = handPosition.eulers;
+					//Player.singlePlayer.IKEquip(false, IKHandTarget);
 				}
 				else
 				{
@@ -70,6 +72,8 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	{
 		OnWielderChange();
 		OnDrop();
+		if (wielder is Player)
+			Player.singlePlayer.IKUnequip(false);
 		wielder = null;
 		transform.parent = null;
 		ResetRoutine(DropTimer(), ref crtDropTimer);
