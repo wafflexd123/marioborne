@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PatrolState), typeof(InvestigatePlayerState)), RequireComponent(typeof(AttackingState), typeof(WaitState))]
+[RequireComponent(typeof(PatrolState), typeof(InvestigatePlayerState)), RequireComponent(typeof(ShieldApproachState), typeof(WaitState))]
 public class ShieldAI : AIController
 {
     // AI States
     protected PatrolState patrolState;
     //protected NavigateFiringPosState navigateFiringPosState;
     protected InvestigatePlayerState investigatePlayerState;
-    protected AttackingState attackingState;
+    protected ShieldApproachState shieldApproachState;
     protected WaitState waitState;
 
     protected override void Awake()
@@ -17,13 +17,13 @@ public class ShieldAI : AIController
         patrolState = GetComponent<PatrolState>();
         //navigateFiringPosState = GetComponent<NavigateFiringPosState>();
         investigatePlayerState = GetComponent<InvestigatePlayerState>();
-        attackingState = GetComponent<AttackingState>();
+        shieldApproachState = GetComponent<ShieldApproachState>();
         waitState = GetComponent<WaitState>();
 
-        patrolState.Setup(new CanSeePlayerTransition(attackingState, this), new CanHearPlayerTransition(investigatePlayerState, this));
+        patrolState.Setup(new CanSeePlayerTransition(shieldApproachState, this), new CanHearPlayerTransition(investigatePlayerState, this));
         //navigateFiringPosState.Setup(new ExternalControlTransition(patrolState), new StartShootingTransition(activeShootingState));
-        investigatePlayerState.Setup(new FoundPlayerTransition(attackingState, this), new ReachedLastKnownPlayerPosTransition(waitState, this), new ExternalControlTransition(patrolState));
-        attackingState.Setup(new ExternalControlTransition(investigatePlayerState));
+        investigatePlayerState.Setup(new FoundPlayerTransition(shieldApproachState, this), new ReachedLastKnownPlayerPosTransition(waitState, this), new ExternalControlTransition(patrolState));
+        shieldApproachState.Setup(new ExternalControlTransition(investigatePlayerState));
         waitState.Setup(new ExternalControlTransition(patrolState));
 
         CurrentState = patrolState.BeginState();

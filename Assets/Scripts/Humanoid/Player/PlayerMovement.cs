@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	[HideInInspector] public new Rigidbody rigidbody;
 	[HideInInspector] public LeapObject closestLeapObject;
 	[HideInInspector] public PlayerCamera playerCamera;
+	[HideInInspector] public ConveyorBelt onConveyorBelt;
 	public Vector xzVelocity, yVelocity;
 
 	#endregion
@@ -305,7 +306,8 @@ public class PlayerMovement : MonoBehaviourPlus
 			},
 			jump: () =>
 			{
-				State.DefaultJump(this, ground, Vector3.zero);
+                if (onConveyorBelt) State.ConveyorJump(this, ground, Vector3.zero, onConveyorBelt);
+				else State.DefaultJump(this, ground, Vector3.zero);
 				WallClimbDelay();
 			},
 			enterState: () =>
@@ -747,6 +749,15 @@ public class PlayerMovement : MonoBehaviourPlus
 			{
 				p.yVelocity.vector.y = 0f;
 				p.yVelocity.AddForce((p.transform.up + angle).normalized * s.jumpForce, ForceMode.VelocityChange);
+			}
+		}
+
+		public static void ConveyorJump(PlayerMovement p, MovementValues s, Vector3 angle, ConveyorBelt conveyorBelt)
+        {
+			if (p.enableInput)
+			{
+				p.yVelocity.vector.y = 0f;
+				p.yVelocity.AddForce((p.transform.up + angle).normalized * s.jumpForce + (conveyorBelt.direction*conveyorBelt.speed), ForceMode.VelocityChange);
 			}
 		}
 	}
