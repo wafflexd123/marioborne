@@ -33,28 +33,22 @@ public class Player : Humanoid
     [SerializeField] private GameObject armObject;
     [SerializeField] private Transform handTarget_L;
     [SerializeField] private Transform handTarget_R;
-    private Transform standardHandTargetParent;
-    private Position standardHandTargetPosition;
+    private HandFollowObject handFollower_L;
+    private HandFollowObject handFollower_R;
+    private Animator handAnimator;
 
-    public void IKEquip(bool leftHand, Transform newParent)
+    public void IKEquip(bool leftHand, Transform newParent, string animName = "")
     {
-        Transform hand = leftHand ? handTarget_L : handTarget_R;
-        hand.parent = newParent;
+        HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
+        handFollower.AddIKTarget(newParent);
         print("Set hand" + (leftHand ? "_L" : "_R") + " target to: " + newParent.name);
     }
 
     public void IKUnequip(bool leftHand)
     {
-        Transform hand = leftHand ? handTarget_L : handTarget_R;
-        hand.parent = standardHandTargetParent;
-        Position newPos = standardHandTargetPosition;
-        if (leftHand)
-        {
-            newPos.coords.x *= -1f;
-            newPos.eulers.z *= -1f;
-        }
-        hand.localPosition = newPos.coords;
-        hand.localRotation = Quaternion.Euler(newPos.eulers);
+        HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
+        handFollower.RemoveIKTarget();
+        handAnimator.Play("empty");
     }
 
     public override Vector3 LookDirection => camera.transform.forward;
@@ -78,8 +72,9 @@ public class Player : Humanoid
         raycastIgnore = ~raycastIgnore;//invert layermask
         reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(this);
 
-        standardHandTargetParent = handTarget_L.parent;
-        standardHandTargetPosition = new Position(handTarget_R.localPosition, handTarget_R.localRotation.eulerAngles);
+        handFollower_L = handTarget_L.GetComponent<HandFollowObject>();
+        handFollower_R = handTarget_R.GetComponent<HandFollowObject>();
+        handAnimator = armObject.GetComponent<Animator>();
     }
 
     //private void Start()
