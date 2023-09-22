@@ -17,16 +17,17 @@ public class Sword : WeaponBase
 	{
 		base.OnPickup();
 
-		if (wielder.GetComponent<MeleeAI>().reflectWindow) reflectEnabled = true;
-		else reflectEnabled = false;
-
 		if (wielder is AIController)
 		{
+			if (wielder.GetComponent<MeleeAI>().reflectWindow) reflectEnabled = true;
+			else reflectEnabled = false;
 			wielder.model.holdingMelee = true;
 			if (reflectEnabled) reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
 		}
 		if (wielder is Player)
 		{
+			if (wielder.GetComponent<Player>().reflectWindowPrefab) reflectEnabled = true;
+			else reflectEnabled = false;
 			if (reflectEnabled) reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
 			animator.enabled = true;
 			animator.Play("idle");
