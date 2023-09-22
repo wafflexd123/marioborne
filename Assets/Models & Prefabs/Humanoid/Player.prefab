@@ -7763,6 +7763,39 @@ MonoBehaviour:
       maxX: 10
     <jumpForce>k__BackingField: 12.5
     <gravity>k__BackingField: {x: 0, y: 0, z: 0}
+  climb:
+    <YforceXvelocity>k__BackingField:
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minY: 0
+      maxY: 0
+      maxX: 0
+    <YdragXvelocity>k__BackingField:
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minY: 0
+      maxY: 0
+      maxX: 0
+    <noInputYdragXvelocity>k__BackingField:
+      curve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minY: 0
+      maxY: 0
+      maxX: 0
+    <jumpForce>k__BackingField: 0
+    <gravity>k__BackingField: {x: 0, y: 0, z: 0}
   air:
     <YforceXvelocity>k__BackingField:
       curve:
@@ -7850,46 +7883,19 @@ MonoBehaviour:
       maxX: 10
     <jumpForce>k__BackingField: 12.5
     <gravity>k__BackingField: {x: 0, y: -30, z: 0}
-  climb:
-    <YforceXvelocity>k__BackingField:
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      minY: 0
-      maxY: 0
-      maxX: 0
-    <YdragXvelocity>k__BackingField:
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      minY: 0
-      maxY: 0
-      maxX: 0
-    <noInputYdragXvelocity>k__BackingField:
-      curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      minY: 0
-      maxY: 0
-      maxX: 0
-    <jumpForce>k__BackingField: 0
-    <gravity>k__BackingField: {x: 0, y: 0, z: 0}
   <wallTilt>k__BackingField: 10
   <tiltPerSecond>k__BackingField: 90
   <maxWallUpwardsVelocity>k__BackingField: 5
   <wallCatchHeight>k__BackingField: 1
   <wallCatchDistance>k__BackingField: 0.15
   <maxWallYNormal>k__BackingField: 0.1
+  <wallLookAngle>k__BackingField: 0
   <slopeDragMultiplier>k__BackingField: 0.8
+  <climbDistance>k__BackingField: 0.6
+  <ledgeClimbTime>k__BackingField: 1
+  <minLedgeClimbHeight>k__BackingField: 1.5
+  <maxLedgeClimbHeight>k__BackingField: 2
+  <surfaceAngleThreshold>k__BackingField: 45
   <maxAirJumps>k__BackingField: 1
   <maxAirDashes>k__BackingField: 1
   <dashForce>k__BackingField: 12.5
@@ -7897,14 +7903,6 @@ MonoBehaviour:
   <rollRequeueTime>k__BackingField: 0.3
   <fallRollEngageDistance>k__BackingField: 5
   <fallCrouchEngageDistance>k__BackingField: 3
-  <climbDistance>k__BackingField: 0.6
-  <climbForce>k__BackingField: 10
-  <climbEnableTime>k__BackingField: 0.2
-  <climbDisableTime>k__BackingField: 2
-  <ledgeClimbTime>k__BackingField: 1
-  <ledgeClimbHeight>k__BackingField: 1
-  <surfaceAngleThreshold>k__BackingField: 45
-  <forwardAngleThreshold>k__BackingField: 160
   <maxHealth>k__BackingField: 100
   <healthRecoverDelay>k__BackingField: 3
   <healthPerSecond>k__BackingField: 25
@@ -7946,6 +7944,7 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   closestLeapObject: {fileID: 0}
   playerCamera: {fileID: 0}
+  onConveyorBelt: {fileID: 0}
 --- !u!54 &8405350626398470926
 Rigidbody:
   m_ObjectHideFlags: 0
