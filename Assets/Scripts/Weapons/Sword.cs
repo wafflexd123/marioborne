@@ -1,9 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class Knife : WeaponBase
+public class Sword : WeaponBase
 {
 	public ReflectWindow reflectWindow;
+	public bool reflectEnabled;
 	public float hitDelay;
 	public Collider[] bladeColliders, hiltColliders;
 	Coroutine crtDelay;
@@ -15,14 +16,18 @@ public class Knife : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
+
+		if (wielder.GetComponent<MeleeAI>().reflectWindow) reflectEnabled = true;
+		else reflectEnabled = false;
+
 		if (wielder is AIController)
 		{
 			wielder.model.holdingMelee = true;
-			reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
+			if (reflectEnabled) reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
 		}
 		if (wielder is Player)
 		{
-			reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
+			if (reflectEnabled) reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
 			animator.enabled = true;
 			animator.Play("idle");
 		}
@@ -64,12 +69,14 @@ public class Knife : WeaponBase
 
 	protected override void Attack()
 	{
-		if (wielder is AIController) reflectWindow.EnemyReflect(hitDelay);
-		if (wielder is Player) reflectWindow.PlayerReflect(hitDelay);
+        if (reflectEnabled)
+        {
+			if (wielder is AIController) reflectWindow.EnemyReflect(hitDelay);
+			if (wielder is Player) reflectWindow.PlayerReflect(hitDelay);
+		}
 		if (crtDelay == null)
 		{
-            if (wielder is Player) 
-				animator.Play("swing1");
+            if (wielder is Player) animator.Play("swing1");
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
@@ -119,15 +126,18 @@ public class Knife : WeaponBase
 
     private void PlayerDeflect()
 	{
-		//print("I hear that player deflect is triggered");
-		DisableHitbox();
-		animator.Play("deflect");
-        // TODO reset cooldown or something
-        if (crtDelay != null)
-		{
-            StopCoroutine(crtDelay);
-			crtDelay = null;
-        }
+        if (reflectEnabled)
+        {
+			//print("I hear that player deflect is triggered");
+			DisableHitbox();
+			animator.Play("deflect");
+			// TODO reset cooldown or something
+			if (crtDelay != null)
+			{
+				StopCoroutine(crtDelay);
+				crtDelay = null;
+			}
+		}
     }
 
     public void DisableHitbox()

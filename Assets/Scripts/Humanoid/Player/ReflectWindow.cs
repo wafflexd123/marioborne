@@ -75,7 +75,6 @@ public class ReflectWindow : MonoBehaviourPlus, IBulletReceiver
         //bullet.color = bulletColor;
 
         // OR
-
         if (player || (ai && bullet.shooter is not AIController))
         {
             if (!hit)

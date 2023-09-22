@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AttackingState : AIState
+public class MeleeAttackState : AIState
 {
 	public float timeBeforePursuingPlayer = 5f, chaseSpeed, meleeDistance;
 
@@ -21,14 +21,14 @@ public class AttackingState : AIState
 		defaultSpeed = controller.AgentSpeed;
 		controller.AgentSpeed = chaseSpeed;
 		controller.transform.LookAt(controller.player.transform.position);
-		reflectWindow.enabled = true;
+		if(reflectWindow) reflectWindow.enabled = true;
 	}
 
 	protected override void OnExit()
 	{
 		StopCoroutine(ref crtInvestigate);
 		controller.AgentSpeed = defaultSpeed;
-		reflectWindow.enabled = false;
+		if (reflectWindow) reflectWindow.enabled = false;
 	}
 
 	public override void Tick()
@@ -39,10 +39,17 @@ public class AttackingState : AIState
 			controller.LastKnownPlayerPosition = controller.player.transform.position;
 			controller.AlertOthers();
 			StopCoroutine(ref crtInvestigate);
-			if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < meleeDistance || reflectWindow.hit)
+			if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < meleeDistance)
 			{
 				controller.Fire();
 			}
+            if (reflectWindow)
+            {
+                if (reflectWindow.hit)
+                {
+					controller.Fire();
+				}
+            }
 		}
 		else if (crtInvestigate == null)
 		{
