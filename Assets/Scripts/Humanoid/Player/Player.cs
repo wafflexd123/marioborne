@@ -39,16 +39,17 @@ public class Player : Humanoid
 
     public void IKEquip(bool leftHand, Transform newParent, string animName = "")
     {
+        if (newParent == null) { Debug.LogWarning("Player has picked up a weapon with no IK target, please set one for this prefab. "); return; }
         HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
         handFollower.AddIKTarget(newParent);
         print("Set hand" + (leftHand ? "_L" : "_R") + " target to: " + newParent.name);
     }
 
-    public void IKUnequip(bool leftHand)
+    public void IKUnequip(bool leftHand, bool resetHandAnimation = true)
     {
         HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
         handFollower.RemoveIKTarget();
-        handAnimator.Play("empty");
+        handAnimator.Play("empty", 2);
     }
 
     public override Vector3 LookDirection => camera.transform.forward;
@@ -133,6 +134,12 @@ public class Player : Humanoid
             this.weapon = weapon;
             weapon.transform.SetParent(leftHand);
             IKEquip(false, weapon.IKHandTarget);
+            weapon.SetRenderMode(true);
+            if (weapon.animationName != "")
+            {
+                handAnimator.Play(weapon.animationName, 2);
+                print("playing animation: " + weapon.animationName + ", on layer: 2");
+            }
             onDrop = () => this.weapon = null;
             return true;
         }
