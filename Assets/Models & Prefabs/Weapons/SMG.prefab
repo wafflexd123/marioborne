@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 5191006522598981905}
   - component: {fileID: 627419579642220764}
   m_Layer: 12
-  m_Name: SMG-mac10-silenced
+  m_Name: SMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -429,6 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd21d103dab8e14b9cf8e8a59355c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  automatic: 1
   throwForce: 10
   throwSpeed: 1
   throwFallDelay: 1
@@ -446,6 +447,7 @@ MonoBehaviour:
   - {fileID: 5987780457641917542}
   fireDelay: 0.18
   bulletSpeed: 18
+  reloadDelay: 0
   playerAmmo:
     isInfinite: 0
     startAmount: 30
@@ -458,10 +460,16 @@ MonoBehaviour:
     color: {r: 1, g: 0, b: 0, a: 0}
     maxSpread: 0.05
     amount: 0
-  bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
+  bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 8955094706218905194}
   audioPickup: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
   audioFire: {fileID: 8300000, guid: f17dffc17bfe6a34d92deeea817b6d65, type: 3}
+  ammo:
+    isInfinite: 0
+    startAmount: 0
+    color: {r: 0, g: 0, b: 0, a: 0}
+    maxSpread: 0
+    amount: 0
 --- !u!114 &3474387772792173566
 MonoBehaviour:
   m_ObjectHideFlags: 0

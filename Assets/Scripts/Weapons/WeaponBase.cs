@@ -6,6 +6,7 @@ using UnityEngine;
 [SelectionBase]
 public abstract class WeaponBase : MonoBehaviourPlus
 {
+	public bool automatic;
 	public float throwForce = 10f; // Initial force of the throw
 	public float throwSpeed = 1f; // How fast the object will go after being thrown
 	public float throwFallDelay = 1f; // Delay before object starts falling
@@ -140,6 +141,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	protected virtual void OnPickup()
 	{
 		inputActions.Add(wielder.input.AddListener("Attack", InputType.OnPress, (_) => Attack()));
+		if(automatic) inputActions.Add(wielder.input.AddListener("Attack", InputType.OnHold, (_) => Attack()));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
 		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
 	}
