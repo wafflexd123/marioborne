@@ -100,6 +100,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         }
 
         UpdateChargeUI();
+        HandLeftManager.Instance.SetEnergy(chargeTime / maxChargeTime);
     }
 
     void GrabObject(GameObject targetObject)
