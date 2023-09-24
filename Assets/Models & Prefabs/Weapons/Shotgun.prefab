@@ -30,7 +30,39 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 769355195511450333}
+  - {fileID: 8705605391344740266}
   m_Father: {fileID: 402733414334647112}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4334843604998157962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8705605391344740266}
+  m_Layer: 12
+  m_Name: IK Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8705605391344740266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4334843604998157962}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.71442264, y: 0.036394358, z: -0.01097241, w: 0.6986811}
+  m_LocalPosition: {x: 0.0608, y: -0.0175, z: -0.1419}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3794737623104217429}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6381300668111710574
 GameObject:
@@ -111,10 +143,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 832843216365915950, guid: 11c77bc46653a0e46b75afeea3e6eda3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8ea7b6e44512c8a4f90a84de64145e65, type: 2}
     - target: {fileID: 919132149155446097, guid: 11c77bc46653a0e46b75afeea3e6eda3, type: 3}
       propertyPath: m_Name
       value: Shotgun7
       objectReference: {fileID: 0}
+    - target: {fileID: 5696494855991954268, guid: 11c77bc46653a0e46b75afeea3e6eda3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f287cf88fe51e3e43a2f6076776b31d3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -237,15 +277,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 7.783767
       objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.146
       objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -15.954992
       objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_LocalRotation.w
@@ -334,6 +374,9 @@ MonoBehaviour:
   colliders:
   - {fileID: 7608568963429935383}
   - {fileID: 1315440156669874220}
+  IKHandTarget: {fileID: 8705605391344740266}
+  modelRoot: {fileID: 3794737623104217429}
+  animationName: hold_shotgun
   fireDelay: 0.5
   bulletSpeed: 15
   playerAmmo:

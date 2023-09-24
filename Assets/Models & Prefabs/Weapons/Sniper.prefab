@@ -383,7 +383,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2001561854974429128}
-  - component: {fileID: 8830052544087844042}
+  - component: {fileID: 4352474633722081976}
   - component: {fileID: 6859929981820962448}
   - component: {fileID: 8325861513688989760}
   - component: {fileID: 8150969678058835465}
@@ -413,7 +413,7 @@ Transform:
   - {fileID: 4384183660584093479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8830052544087844042
+--- !u!114 &4352474633722081976
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -429,7 +429,7 @@ MonoBehaviour:
   throwSpeed: 1
   throwFallDelay: 1
   handPosition:
-    coords: {x: -0.135, y: -0.175, z: 0.6}
+    coords: {x: 0.23, y: -0.19, z: 0.781505}
     eulers: {x: 0, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
@@ -442,7 +442,10 @@ MonoBehaviour:
   - {fileID: 9065933078033995514}
   - {fileID: 4883643525526498020}
   - {fileID: 5839925845333659699}
-  fireDelay: 3
+  IKHandTarget: {fileID: 1289862788891083049}
+  modelRoot: {fileID: 2437910022093311891}
+  animationName: hold_awp
+  fireDelay: 2
   bulletSpeed: 40
   playerAmmo:
     isInfinite: 0
@@ -652,6 +655,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7069372558340284155}
+  - {fileID: 1289862788891083049}
   m_Father: {fileID: 2001561854974429128}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4089754564365800382
@@ -969,6 +973,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &8637255644375796353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289862788891083049}
+  m_Layer: 12
+  m_Name: IK Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1289862788891083049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8637255644375796353}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.70217544, y: -0.34751877, z: -0.19249195, w: 0.59086996}
+  m_LocalPosition: {x: 0.0456, y: -0.0831, z: -0.4122}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2437910022093311891}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7318856954426243344
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1017,10 +1052,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6652725513331149018, guid: 890f0c34856add843a4cc9d1f68db1f5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e1daa112c206e949869210bf36f98b3, type: 2}
+    - target: {fileID: -5215299815803115452, guid: 890f0c34856add843a4cc9d1f68db1f5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 036390653caaef644b548c6875a44591, type: 2}
     - target: {fileID: 919132149155446097, guid: 890f0c34856add843a4cc9d1f68db1f5, type: 3}
       propertyPath: m_Name
       value: AWP(2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7202271454713460447, guid: 890f0c34856add843a4cc9d1f68db1f5, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 036390653caaef644b548c6875a44591, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

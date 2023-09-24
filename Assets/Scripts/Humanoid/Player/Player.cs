@@ -128,7 +128,7 @@ public class Player : Humanoid
     /// <returns>True if object is picked up, sets parent of weapon</returns>
     public override bool PickupObject(WeaponBase weapon, out Action onDrop)
     {
-        print("Player PickupObject");
+        //print("Player PickupObject");
         if (!this.weapon)//if nothing in hand
         {
             this.weapon = weapon;

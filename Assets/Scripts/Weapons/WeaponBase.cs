@@ -160,6 +160,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	public void SetRenderMode(bool playerHeld)
 	{
+		if (modelRoot == null) { Debug.LogWarning(name + " has not had its model root set, cannot update render mode, please set in inspector."); return; }
 		for (int i = 0; i < modelRoot.childCount; i++)
 		{
             SetRenderModeRecursive(modelRoot.GetChild(i), playerHeld);

@@ -1118,11 +1118,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!4 &129023774 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3689162234156928206, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
-  m_PrefabInstance: {fileID: 8466667909708767439}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &142764434
 Mesh:
   m_ObjectHideFlags: 0
@@ -8116,6 +8111,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5273718578198553861, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8405350626398470913, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: m_Name
       value: Player
@@ -14163,61 +14162,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2062643864 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2090318026600465762, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
-  m_PrefabInstance: {fileID: 8466667909708767439}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2062643871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062643864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d29d302d4a9a2649a0b100531937099, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  throwForce: 10
-  throwSpeed: 1
-  throwFallDelay: 1
-  handPosition:
-    coords: {x: -0.135, y: -0.175, z: 0.6}
-    eulers: {x: 0, y: 0, z: 0}
-  thirdPersonPosition:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  pickupSpeed: 5
-  dropForce: 2
-  soundRadius: 10
-  disablePickupAfterDropSeconds: 2
-  colliders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  IKHandTarget: {fileID: 0}
-  modelRoot: {fileID: 0}
-  animationName: 
-  fireDelay: 3
-  bulletSpeed: 40
-  playerAmmo:
-    isInfinite: 0
-    startAmount: 5
-    color: {r: 1, g: 1, b: 1, a: 0}
-    maxSpread: 0
-    amount: 0
-  aiAmmo:
-    isInfinite: 1
-    startAmount: 10
-    color: {r: 1, g: 0, b: 0, a: 0}
-    maxSpread: 0.01
-    amount: 0
-  bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
-  firePosition: {fileID: 129023774}
-  audioPickup: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
-  audioFire: {fileID: 8300000, guid: f17dffc17bfe6a34d92deeea817b6d65, type: 3}
 --- !u!43 &2085500278
 Mesh:
   m_ObjectHideFlags: 0
@@ -15735,15 +15679,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.49
+      value: 9.62
       objectReference: {fileID: 0}
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.29
+      value: 0.454
       objectReference: {fileID: 0}
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.129
+      value: -16.21
       objectReference: {fileID: 0}
     - target: {fileID: 2001561854974429128, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15777,14 +15721,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sniper
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1035117363279072189, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2090318026600465762, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 2062643871}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c52d177d38077e4a98a3b405efc5d42, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
