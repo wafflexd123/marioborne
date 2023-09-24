@@ -27,7 +27,7 @@ public class Player : Humanoid
     GameObject escMenu;
     bool enableInput = true;
     Coroutine crtMoveToEnemy;
-    Transform leftHand;
+    Transform weaponHand;
 
     [Header("IK")]
     [SerializeField] private GameObject armObject;
@@ -58,8 +58,8 @@ public class Player : Humanoid
     protected override void Awake()
     {
         base.Awake();
-        powers = transform.Find("Right Hand").GetComponent<PowerManager>();
-        leftHand = transform.Find("Left Hand");
+        powers = transform.Find("Left Hand").GetComponent<PowerManager>();
+        weaponHand = transform.Find("Right Hand");
         cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
         camera = cameraController.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
         fists = transform.Find("Body").Find("Hand").GetComponent<Fists>();
@@ -132,7 +132,7 @@ public class Player : Humanoid
         if (!this.weapon)//if nothing in hand
         {
             this.weapon = weapon;
-            weapon.transform.SetParent(leftHand);
+            weapon.transform.SetParent(weaponHand);
             IKEquip(false, weapon.IKHandTarget);
             weapon.SetRenderMode(true);
             if (weapon.animationName != "")
