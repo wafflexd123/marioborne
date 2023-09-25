@@ -1,23 +1,32 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Lerper : UnityEventHelper, IRewindListener
 {
-	public EasingFunction.Enum easingFunction;
 	[field: SerializeField] public float TimeToLerp { get; set; }
-	[field: SerializeField] public Transform LerpTo { get; set; }
 	[field: SerializeField] public bool LerpOnEnable { get; set; }
-	[field: SerializeField] public bool Loop { get; set; }
-	public UnityEvent onFinish;
 
-	Position startPos;
+	//These are handled by the custom inspector
+	[HideInInspector] public Transform lerpToTransform;
+	[HideInInspector] public Vector3 lerpPos, lerpRot, lerpSca;
+	[HideInInspector] public EasingFunction.Enum easingFunction;
+	[HideInInspector] public AnimationCurve easingCurve;
+	[HideInInspector] public bool loop, useTransform = true, useLocal = true;
+	[HideInInspector] public UnityEvent onFinish, onUndoFinish;
+
+	//Private
+	PositionAndScale startPos;
 	float rewindSeconds = 0;
+	Coroutine routine;
 
 	void Awake()
 	{
+		if (TryGetComponent(out BasicRewindable b))
+		{
+			Destroy(b);
+			Debug.Log("Lerper does not need BasicRewindable script, deleting...", this);
+		}
 		Time.rewindListeners.Add(this);
 	}
 
@@ -28,19 +37,33 @@ public class Lerper : UnityEventHelper, IRewindListener
 
 	public void StartLerp()
 	{
-		if (Loop)
+		if (routine == null)
 		{
-			startPos = transform;
-			StartCoroutine(LerpToPos(LerpTo, TimeToLerp, transform, () => DirectionChange(true), EasingFunction.Get(easingFunction)));//loops dont rewind rn, probs dont need it yet
+			PositionAndScale p;
+			if (useTransform) p = lerpToTransform;
+			else
+			{
+				p = new PositionAndScale(lerpPos, lerpRot, lerpSca);
+				if (useLocal) p += new PositionAndScale(transform);
+			}
+			if (loop)
+			{
+				startPos = transform;
+				routine = StartCoroutine(LerpToPos(p, TimeToLerp, transform, () => DirectionChange(true), GetEasingFunction()));//loops dont rewind rn, probs dont need it yet
+			}
+			else routine = StartCoroutine(LerpToPosRewindable(p, TimeToLerp, () => rewindSeconds, transform, () => onFinish.Invoke(), () => onUndoFinish.Invoke(), () => routine = null, GetEasingFunction()));
 		}
-		//else StartCoroutine(LerpToPosRewindable(LerpTo, TimeToLerp, () => rewindSeconds, transform, () => onFinish.Invoke(), EasingFunction.Get(easingFunction)));
-		else StartCoroutine(LerpToPos(LerpTo, TimeToLerp, transform, () => onFinish.Invoke(), EasingFunction.Get(easingFunction)));
 	}
 
 	void DirectionChange(bool lerpBack)
 	{
-		if (lerpBack) StartCoroutine(LerpToPos(startPos, TimeToLerp, transform, () => DirectionChange(false), EasingFunction.Get(easingFunction)));
-		else StartCoroutine(LerpToPos(LerpTo, TimeToLerp, transform, () => DirectionChange(true), EasingFunction.Get(easingFunction)));
+		if (lerpBack) routine = StartCoroutine(LerpToPos(startPos, TimeToLerp, transform, () => DirectionChange(false), GetEasingFunction()));
+		else routine = StartCoroutine(LerpToPos(useTransform ? lerpToTransform : new PositionAndScale(lerpPos, lerpRot, lerpSca), TimeToLerp, transform, () => DirectionChange(true), GetEasingFunction()));
+	}
+
+	public Func<float, float> GetEasingFunction()
+	{
+		return easingFunction == EasingFunction.Enum.AnimationCurve ? (float x) => easingCurve.Evaluate(x) : EasingFunction.Get(easingFunction);
 	}
 
 	private void OnEnable()
@@ -67,3 +90,4 @@ public class Lerper : UnityEventHelper, IRewindListener
 		rewindSeconds = 0;
 	}
 }
+

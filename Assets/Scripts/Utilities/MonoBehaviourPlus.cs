@@ -94,39 +94,58 @@ public class MonoBehaviourPlus : MonoBehaviour
 		onEnd?.Invoke();
 	}
 
-	public IEnumerator LerpToPosRewindable(PositionAndScale worldPosition, float time, Func<float> rewindSeconds, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
+	public IEnumerator LerpToPosRewindable(PositionAndScale worldPosition, float time, Func<float> rewindSeconds, Transform transform = null, Action onEnd = null, Action undoOnEnd = null, Action onCoroutineExit = null, Func<float, float> easingFunction = null)
 	{
 		if (transform == null) transform = this.transform;
 		if (easingFunction == null) easingFunction = EasingFunction.Linear;
 		PositionAndScale startPosition = transform;
-		float currentRewind, ease, timer = 0, lastPercent = -1, overTime = Time.maxRewindTime + time;
+		float percent, currentRewind, ease, timer = 0, lastPercent = 0, overTime = Time.maxRewindTime + time;
 		bool ended = false;
 		do
 		{
+			//timer:
 			if ((currentRewind = rewindSeconds()) != 0)//if we are in a rewind
 			{
 				timer -= currentRewind;
 				if (timer < 0) timer = 0;
 			}
-			else timer += Time.deltaTime;
-			float percent = timer / time;
-			if (percent > 1) percent = 1;
+			else timer += Time.deltaTime;//not in rewind
+
+			//eased movement
+			percent = Mathf.Clamp01(timer / time);
 			if (percent != lastPercent)//dont keep trying to lerp in overtime
 			{
 				lastPercent = percent;
-				ease = easingFunction(timer / time);
+				ease = easingFunction(percent);
 				transform.eulerAngles = Vector3.LerpUnclamped(startPosition.eulers, worldPosition.eulers, ease);
 				transform.position = Vector3.LerpUnclamped(startPosition.coords, worldPosition.coords, ease);
 				transform.localScale = Vector3.LerpUnclamped(startPosition.scale, worldPosition.scale, ease);
+			}
+
+			//end handling
+			if (timer >= time)//if finished lerping
+			{
+				if (!ended)
+				{
+					onEnd?.Invoke();
+					ended = true;
+				}
+			}
+			else //if still lerping (timer < time)
+			{
+				if (ended)
+				{
+					undoOnEnd?.Invoke();
+					ended = false;
+				}
+
 				if (timer == 0) break;//if rewound to beginning of lerp
 			}
-			if (timer >= time && !ended)//if re-lerping after rewind, dont call event again
-			{
-				onEnd?.Invoke();
-				ended = true;
-			}
+
 			yield return null;
+
 		} while (timer < overTime);//go ~20 seconds over, so we can catch a rewind
+		onCoroutineExit?.Invoke();
 	}
 
 	public IEnumerator LerpToPos(PositionAndScale worldPosition, float time, Transform transform = null, Action onEnd = null, Func<float, float> easingFunction = null)
@@ -246,6 +265,7 @@ public class MonoBehaviourPlus : MonoBehaviour
 		public static Position operator -(Position a, Position b) => new Position(a.coords - b.coords, a.eulers - b.eulers);
 	}
 
+	[Serializable]
 	public struct PositionAndScale
 	{
 		public Vector3 coords, eulers, scale;
