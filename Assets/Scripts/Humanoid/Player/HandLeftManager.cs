@@ -13,7 +13,7 @@ public class HandLeftManager : MonoBehaviour
     [SerializeField] private float minAmplitude;
     [SerializeField] private float maxAmplitude;
     [SerializeField, Range(0.0f, 1.0f)] private float minAnimationInfluence;
-    public float energy = 0;
+    private float energy = 0;
 
     private Vector3 baseLocalPos;
     private Vector3 offset = Vector3.zero;
