@@ -21,11 +21,10 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 		Time.timeScale = 1;
 		float rewind = 1;
 		Time.StartRewind();
-		HandLeftManager.Instance.AddEnergy(handShakeLevel);
 		do
 		{
 			Time.Rewind(Time.deltaTime * (rewind += rewindSpeed * Time.deltaTime));
-			HandLeftManager.Instance.AddEnergy();
+            HandLeftManager.Instance.AddEnergy(handShakeLevel);
             yield return null;
 		} while (Input.GetButton("Ability"));
 		Time.StopRewind();

@@ -21,6 +21,11 @@ public class NoiseHelper : MonoBehaviour
         Vector2 samplePos = noiseDirection * ((UnityEngine.Time.unscaledTime * speedFactor) + offset);
         return Mathf.Clamp((2f * Mathf.PerlinNoise(samplePos.x, samplePos.y)) - 1f, -1f, 1f);
     }
+    public static float GetPerlin(float time)
+    {
+        Vector2 samplePos = Vector2.one * time;
+        return Mathf.Clamp((2f * Mathf.PerlinNoise(samplePos.x, samplePos.y)) - 1f, -1f, 1f);
+    }
 
     void Start()
     {

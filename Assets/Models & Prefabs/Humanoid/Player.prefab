@@ -310,9 +310,9 @@ Transform:
   m_GameObject: {fileID: 457786336356665093}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
+  m_LocalScale: {x: 0.085, y: 0.085, z: 0.085}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4992016744355524864}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4357,9 +4357,9 @@ Transform:
   m_GameObject: {fileID: 4334983834686486803}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
+  m_LocalScale: {x: 0.085, y: 0.085, z: 0.085}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4546123013209218997}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5085,9 +5085,9 @@ Transform:
   m_GameObject: {fileID: 5273718578198553861}
   serializedVersion: 2
   m_LocalRotation: {x: -9.313226e-10, y: 0.000000007450581, z: -3.4924597e-10, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.100000024, y: 0.10000001, z: 0.1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
+  m_LocalScale: {x: 0.085, y: 0.085, z: 0.085}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1152462029552496157}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6611,9 +6611,9 @@ Transform:
   m_GameObject: {fileID: 7088150043457398166}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
+  m_LocalScale: {x: 0.085, y: 0.085, z: 0.085}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5555625979324461228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6878,9 +6878,10 @@ MonoBehaviour:
   IKTarget: {fileID: 7454200381360054986}
   handAnimator: {fileID: 3648064254426442302}
   energyDissipationRate: 0.32
-  noiseSpeed: 0.4
+  minNoiseSpeed: 0.4
+  maxNoiseSpeed: 3.6
   minAmplitude: 0.009
-  maxAmplitude: 0.11
+  maxAmplitude: 0.02
   minAnimationInfluence: 0.3
   offscreenPos: {x: -0, y: -1, z: -0}
   activationTime: 0.67

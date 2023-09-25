@@ -9,7 +9,8 @@ public class HandLeftManager : MonoBehaviour
     [SerializeField] private Transform IKTarget;
     [SerializeField] private Animator handAnimator;
     [SerializeField] private float energyDissipationRate = 0.32f;
-    [SerializeField] private float noiseSpeed = 1f;
+    [SerializeField] private float minNoiseSpeed = 0.4f;
+    [SerializeField] private float maxNoiseSpeed = 0.9f;
     [SerializeField] private float minAmplitude;
     [SerializeField] private float maxAmplitude;
     [SerializeField, Range(0.0f, 1.0f)] private float minAnimationInfluence;
@@ -22,6 +23,7 @@ public class HandLeftManager : MonoBehaviour
 
     const float c1 = 1.70158f;
     const float c3 = c1 + 1f;
+    float noiseTime = 0f;
     void Start()
     {
         baseLocalPos = IKTarget.localPosition;
@@ -36,9 +38,11 @@ public class HandLeftManager : MonoBehaviour
         handAnimator.SetLayerWeight(1, minAnimationInfluence + energy * (1f - minAnimationInfluence));
 
         float amp = Mathf.Lerp(minAmplitude, maxAmplitude, energy);
-        offset.x = amp * NoiseHelper.GetPerlin(0f, noiseSpeed);
-        offset.y = amp * NoiseHelper.GetPerlin(1f, noiseSpeed);
-        offset.z = amp * NoiseHelper.GetPerlin(2f, noiseSpeed);
+        float noiseSpeed = Mathf.Lerp(minNoiseSpeed, maxNoiseSpeed, energy);
+        noiseTime += UnityEngine.Time.unscaledDeltaTime * noiseSpeed;
+        offset.x = amp * NoiseHelper.GetPerlin(noiseTime);
+        offset.y = amp * NoiseHelper.GetPerlin(noiseTime + 1f);
+        offset.z = amp * NoiseHelper.GetPerlin(noiseTime + 2f);
         IKTarget.localPosition = baseLocalPos + offset;
         print($"Energy: {energy},\t amp: {amp},\toffset: {offset}");
     }
