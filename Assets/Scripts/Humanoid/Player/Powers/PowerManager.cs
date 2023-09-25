@@ -102,4 +102,5 @@ public interface IPlayerPower
 {
 	public GameObject gameObject { get; }
 	public bool CanDisable { get; }
+	//public void HandleHand();
 }

@@ -6,6 +6,7 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
 {
     public float timeScaleSpeed, scaleDuration, recoveryTime;
     [SerializeField] ReflectWindow reflectWindowPrefab;
+    //[SerializeField] private float handShakeBuildup = 0.5f;
     Coroutine crtDeflect;
     Image imgTimeleft;
     Player player;
@@ -42,7 +43,9 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
                 }
                 timer += Time.unscaledDeltaTime;
                 if (timer > scaleDuration) timer = scaleDuration;
-                imgTimeleft.fillAmount = timer / scaleDuration;
+                float t = timer / scaleDuration;
+                imgTimeleft.fillAmount = t;
+                HandLeftManager.Instance.SetEnergy(t);
                 yield return null;
             }
 
@@ -54,7 +57,9 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
                 if (Time.timeScale > 1) Time.timeScale = 1;
                 timer += Time.unscaledDeltaTime;//increment recovery timer
                 if (timer > recoveryTime) timer = recoveryTime;
-                imgTimeleft.fillAmount = 1 - timer / recoveryTime;
+                float t = 1 - timer / recoveryTime;
+                imgTimeleft.fillAmount = t;
+                HandLeftManager.Instance.SetEnergy(t);
                 yield return null;
             }
 

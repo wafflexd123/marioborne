@@ -4,6 +4,7 @@ using UnityEngine;
 public class Rewinder : MonoBehaviour, IPlayerPower
 {
 	public float rewindSpeed;
+	[SerializeField] private float handShakeLevel = 0.5f;
 
 	public bool CanDisable => !Input.GetButton("Ability");
 
@@ -23,8 +24,11 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 		do
 		{
 			Time.Rewind(Time.deltaTime * (rewind += rewindSpeed * Time.deltaTime));
-			yield return null;
+            HandLeftManager.Instance.AddEnergy(handShakeLevel);
+            yield return null;
 		} while (Input.GetButton("Ability"));
 		Time.StopRewind();
 	}
+
+    //public void HandleHand() { }
 }
