@@ -434,7 +434,7 @@ MonoBehaviour:
   throwSpeed: 1
   throwFallDelay: 1
   handPosition:
-    coords: {x: -0.135, y: -0.175, z: 0.25}
+    coords: {x: 0.135, y: -0.175, z: 0.25}
     eulers: {x: 0, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
@@ -445,6 +445,9 @@ MonoBehaviour:
   disablePickupAfterDropSeconds: 2
   colliders:
   - {fileID: 5987780457641917542}
+  IKHandTarget: {fileID: 0}
+  modelRoot: {fileID: 0}
+  animationName: 
   fireDelay: 0.18
   bulletSpeed: 18
   reloadDelay: 0
@@ -464,12 +467,6 @@ MonoBehaviour:
   firePosition: {fileID: 8955094706218905194}
   audioPickup: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
   audioFire: {fileID: 8300000, guid: f17dffc17bfe6a34d92deeea817b6d65, type: 3}
-  ammo:
-    isInfinite: 0
-    startAmount: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-    maxSpread: 0
-    amount: 0
 --- !u!114 &3474387772792173566
 MonoBehaviour:
   m_ObjectHideFlags: 0
