@@ -44,7 +44,7 @@ public class HandLeftManager : MonoBehaviour
         offset.y = amp * NoiseHelper.GetPerlin(noiseTime + 1f);
         offset.z = amp * NoiseHelper.GetPerlin(noiseTime + 2f);
         IKTarget.localPosition = baseLocalPos + offset;
-        print($"Energy: {energy},\t amp: {amp},\toffset: {offset}");
+        //print($"Energy: {energy},\t amp: {amp},\toffset: {offset}");
     }
 
     /// <summary>
