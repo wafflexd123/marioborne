@@ -49,7 +49,7 @@ public class LerperEditor : Editor
 		}
 		else
 		{
-			EditorGUILayout.PropertyField(useLocal);
+			EditorGUILayout.PropertyField(useLocal, new GUIContent("Local Position"));
 			EditorGUILayout.PropertyField(lerpPos, new GUIContent("Lerp To Position"));
 			EditorGUILayout.PropertyField(lerpRot, new GUIContent("Lerp To Rotation"));
 			EditorGUILayout.PropertyField(lerpSca, new GUIContent("Lerp To Scale"));
