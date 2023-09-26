@@ -3185,8 +3185,8 @@ GameObject:
   - component: {fileID: 2624730065967003818}
   - component: {fileID: 7666798524423364540}
   - component: {fileID: 8629248076322233437}
-  - component: {fileID: 2219658253460582577}
   - component: {fileID: 2741591391130565744}
+  - component: {fileID: 2219658253460582577}
   - component: {fileID: 5430526411721500317}
   m_Layer: 11
   m_Name: SMG Enemy
@@ -3317,20 +3317,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
---- !u!114 &2219658253460582577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9183633511223782773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minInvestigateTime: 3
-  maxInvestigateTime: 7
 --- !u!114 &2741591391130565744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3346,6 +3332,20 @@ MonoBehaviour:
   timeBeforePursuingPlayer: 5
   chaseSpeed: 2
   maxShootingDistance: 5
+--- !u!114 &2219658253460582577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9183633511223782773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInvestigateTime: 10
+  maxInvestigateTime: 15
 --- !u!114 &5430526411721500317
 MonoBehaviour:
   m_ObjectHideFlags: 0

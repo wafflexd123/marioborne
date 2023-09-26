@@ -8,8 +8,12 @@ public class Sword : WeaponBase
 	public float hitDelay;
 	public Collider[] bladeColliders, hiltColliders;
 	Coroutine crtDelay;
-	bool _isFiring;
 	private Animator animator;
+
+	[field: Header("Enemy Variables")]
+	public float recoveryTime;
+	private float defaultAngularSpeed;
+	bool _isFiring;
 
 	public override bool IsFiring => _isFiring;
 
@@ -17,12 +21,13 @@ public class Sword : WeaponBase
 	{
 		base.OnPickup();
 
-		if (wielder is AIController)
+		if (wielder is AIController ai)
 		{
 			if (wielder.GetComponent<MeleeAI>().reflectWindow) reflectEnabled = true;
 			else reflectEnabled = false;
 			wielder.model.holdingMelee = true;
 			if (reflectEnabled) reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
+			defaultAngularSpeed = ai.agent.angularSpeed;
 		}
 		if (wielder is Player)
 		{
@@ -86,6 +91,7 @@ public class Sword : WeaponBase
 				{
 					wielder.model.slash = true;
 					ai.IsStopped = true;
+					ai.rotationSpeed = 0f;
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
@@ -124,6 +130,35 @@ public class Sword : WeaponBase
     {
         JMEvents.Instance.OnPlayerDeflect -= PlayerDeflect;
     }
+
+	public void JumpAttack()
+    {
+        if (reflectEnabled)
+        {
+			if(crtDelay == null) crtDelay = StartCoroutine(Delay());
+			IEnumerator Delay()
+			{
+				//THIS NEEDS REWRITING, TOO BUSY RN
+				if (wielder is AIController ai)
+				{
+					reflectWindow.enabled = false;
+					wielder.model.jumpAttack = true;
+					ai.agent.angularSpeed = 0f; //jumps in straight line, avoiding tracking the player
+					for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
+					_isFiring = true;
+					yield return new WaitForSeconds(1f); //roughly the air time
+					_isFiring = false;
+					for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
+					ai.IsStopped = true;
+					yield return new WaitForSeconds(recoveryTime); //time to get free shot in
+					ai.IsStopped = false;
+					ai.agent.angularSpeed = defaultAngularSpeed;
+					reflectWindow.enabled = true;
+					crtDelay = null;
+				}
+			}
+		}
+	}
 
     private void PlayerDeflect()
 	{

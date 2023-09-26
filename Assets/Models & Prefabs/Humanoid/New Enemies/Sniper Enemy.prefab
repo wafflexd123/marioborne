@@ -2509,15 +2509,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1129257010724630348}
+  - component: {fileID: 6013336507753614194}
   - component: {fileID: 8645541180625795329}
   - component: {fileID: 191174074381768409}
   - component: {fileID: 7426701921111319006}
   - component: {fileID: 4607103110719607332}
-  - component: {fileID: 5109919246448877225}
-  - component: {fileID: 7608635035423009124}
-  - component: {fileID: 659072747441035703}
-  - component: {fileID: 6013336507753614194}
   - component: {fileID: 2961583063290066192}
+  - component: {fileID: 5109919246448877225}
+  - component: {fileID: 659072747441035703}
   m_Layer: 11
   m_Name: Sniper Enemy
   m_TagString: Untagged
@@ -2541,6 +2540,26 @@ Transform:
   - {fileID: 2268733090851496319}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &6013336507753614194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6530407484226488053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57358cf93938c72458a0f7f5a2fb12ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 0}
+  weapon: {fileID: 0}
+  alertRadius: 0
+  defaultSpeed: 1
+  rotationSpeed: 10
+  <CurrentState>k__BackingField: {fileID: 0}
+  coverPointsManager: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &8645541180625795329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2627,67 +2646,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
---- !u!114 &5109919246448877225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6530407484226488053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minInvestigateTime: 3
-  maxInvestigateTime: 7
---- !u!114 &7608635035423009124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6530407484226488053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26546b57fa06e03478cec2e1cd5db016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeBeforeRelocating: 10
-  timeBeforePursuingPlayer: 5
---- !u!114 &659072747441035703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6530407484226488053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c7a95720b236af4b96680d7bd87716e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waitBeforePatrollingDuration: 5
---- !u!114 &6013336507753614194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6530407484226488053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57358cf93938c72458a0f7f5a2fb12ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 0}
-  weapon: {fileID: 0}
-  alertRadius: 0
-  defaultSpeed: 1
-  rotationSpeed: 10
-  <CurrentState>k__BackingField: {fileID: 0}
-  coverPointsManager: {fileID: 0}
-  currentCoverPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2961583063290066192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2701,6 +2659,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBeforePatrol: 5
+--- !u!114 &5109919246448877225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6530407484226488053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInvestigateTime: 10
+  maxInvestigateTime: 15
+--- !u!114 &659072747441035703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6530407484226488053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7a95720b236af4b96680d7bd87716e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitBeforePatrollingDuration: 5
 --- !u!1 &6610300959406729149
 GameObject:
   m_ObjectHideFlags: 0

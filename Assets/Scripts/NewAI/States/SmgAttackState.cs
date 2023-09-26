@@ -31,7 +31,6 @@ public class SmgAttackState : AIState
 
 	public override void Tick()
 	{
-		Debug.Log(Vector3.Distance(controller.player.transform.position, controller.transform.position));
 		if(Vector3.Distance(controller.player.transform.position, controller.transform.position) > maxShootingDistance)
         {
 			controller.MoveTowards(controller.player.transform.position);

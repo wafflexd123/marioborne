@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PatrolState), typeof(InvestigatePlayerState)), RequireComponent(typeof(SnipingState), typeof(WaitState))]
+[RequireComponent(typeof(SniperSweepState), typeof(InvestigatePlayerState)), RequireComponent(typeof(SnipingState), typeof(WaitState))]
 public class SniperAI : AIController
 {
 	// AI States
-	protected PatrolState patrolState;
+	protected SniperSweepState sniperSweepState;
 	//protected NavigateFiringPosState navigateFiringPosState;
 	protected InvestigatePlayerState investigatePlayerState;
 	protected SnipingState snipingState;
@@ -14,19 +14,19 @@ public class SniperAI : AIController
 	{
 		base.Awake();
 
-		patrolState = GetComponent<PatrolState>();
+		sniperSweepState = GetComponent<SniperSweepState>();
 		//navigateFiringPosState = GetComponent<NavigateFiringPosState>();
 		//investigatePlayerState = GetComponent<InvestigatePlayerState>();
 		snipingState = GetComponent<SnipingState>();
 		waitState = GetComponent<WaitState>();
 
-		patrolState.Setup(new CanSeePlayerTransition(snipingState, this));
+		sniperSweepState.Setup(new CanSeePlayerTransition(snipingState, this));
 		//navigateFiringPosState.Setup(new ExternalControlTransition(patrolState), new StartShootingTransition(activeShootingState));
 		//investigatePlayerState.Setup(new ReachedLastKnownPlayerPosTransition(waitState, this), new ExternalControlTransition(patrolState));
-		snipingState.Setup(new ExternalControlTransition(patrolState));
+		snipingState.Setup(new ExternalControlTransition(sniperSweepState));
 		//waitState.Setup(new ExternalControlTransition(patrolState));
 
-		CurrentState = patrolState.BeginState();
+		CurrentState = sniperSweepState.BeginState();
 
 		// reach destination -> active shooting
 		// 10s pass -> patrol

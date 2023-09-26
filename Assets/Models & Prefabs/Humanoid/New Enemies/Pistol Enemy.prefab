@@ -1178,8 +1178,8 @@ GameObject:
   - component: {fileID: 6587345493690171063}
   - component: {fileID: 5351555704058958410}
   - component: {fileID: 8172099334322591058}
-  - component: {fileID: 2047158557921830701}
   - component: {fileID: 2470523035568848538}
+  - component: {fileID: 2047158557921830701}
   - component: {fileID: 1913682849143197198}
   - component: {fileID: 8370709848382519432}
   - component: {fileID: 6506784361473440158}
@@ -1281,20 +1281,6 @@ MonoBehaviour:
   relocateDistance: 0.5
   timeBeforeReturningToPatrol: 10
   lookingDistance: 3
---- !u!114 &2047158557921830701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3608175937353701527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minInvestigateTime: 3
-  maxInvestigateTime: 7
 --- !u!114 &2470523035568848538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1309,6 +1295,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBeforeRelocating: 10
   timeBeforePursuingPlayer: 5
+--- !u!114 &2047158557921830701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3608175937353701527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInvestigateTime: 10
+  maxInvestigateTime: 15
 --- !u!114 &1913682849143197198
 MonoBehaviour:
   m_ObjectHideFlags: 0

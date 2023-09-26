@@ -13,10 +13,10 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	//Script
 	private AudioSource audioSource;
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
-	private bool _punching, _deflect, _slashing;
+	private bool _punching, _deflect, _slashing, _jumpAttack, _backflip;
 	private Vector3 colliderCentre;
 	private Animator animator;
-	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash;
+	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash, crtJumpAttack, crtBackflip;
 	new private CapsuleCollider collider;
 	private Vector3 _velocity;
 	Humanoid humanoid;
@@ -48,6 +48,16 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	{
 		set { if (value) { _deflect = true; SetTrigger("deflect", ref crtDeflect, () => _deflect = false); } }
 		get => _deflect;
+	}
+	public bool jumpAttack
+    {
+		set { if (value) { _jumpAttack = true; SetTrigger("jumpAttack", ref crtJumpAttack, () => _jumpAttack = false); } }
+		get => _jumpAttack;
+    }
+	public bool backflip
+    {
+		set { if (value) { _backflip = true; SetTrigger("backflip", ref crtBackflip, () => _backflip = false); } }
+		get => _backflip;
 	}
 
 	//Other

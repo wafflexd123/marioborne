@@ -2682,11 +2682,11 @@ GameObject:
   - component: {fileID: 6596702289937269916}
   - component: {fileID: 103477158835779529}
   - component: {fileID: 4971283120863737039}
-  - component: {fileID: 3285105218470922254}
   - component: {fileID: 6103975063334872751}
   - component: {fileID: 4802663224510591267}
   - component: {fileID: 2982092946464952737}
-  - component: {fileID: 6344692487958135352}
+  - component: {fileID: 8154556760763476664}
+  - component: {fileID: 3285105218470922254}
   - component: {fileID: 8946313642581743143}
   m_Layer: 11
   m_Name: Shield Enemy
@@ -2754,20 +2754,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16577
   canSeePlayer: 0
---- !u!114 &3285105218470922254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6920114014361750820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minInvestigateTime: 3
-  maxInvestigateTime: 7
 --- !u!54 &6103975063334872751
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2831,7 +2817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
---- !u!114 &6344692487958135352
+--- !u!114 &8154556760763476664
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2840,13 +2826,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 6920114014361750820}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee92c5fa11b1ac459b22eabec7ac0ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f74aaa280dc2664f96ca14361c694b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeBeforePursuingPlayer: 5
-  chaseSpeed: 1.5
+  approachSpeed: 1
+  rotationSpeed: 1
   meleeDistance: 1
-  reflectWindow: {fileID: 0}
+--- !u!114 &3285105218470922254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6920114014361750820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInvestigateTime: 10
+  maxInvestigateTime: 15
 --- !u!114 &8946313642581743143
 MonoBehaviour:
   m_ObjectHideFlags: 0

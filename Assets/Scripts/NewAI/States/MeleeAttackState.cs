@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class MeleeAttackState : AIState
 {
-	public float timeBeforePursuingPlayer = 5f, chaseSpeed, meleeDistance;
+	public float timeBeforePursuingPlayer = 5f, chaseSpeed, meleeDistance, minJumpDistance, maxJumpDistance;
 
 	//Script
-	protected Coroutine crtInvestigate;
+	protected Coroutine crtInvestigate, crtJumpCooldown;
 	float defaultSpeed;
 	ExternalControlTransition leaveTransition;
 	public ReflectWindow reflectWindow;
@@ -21,7 +21,7 @@ public class MeleeAttackState : AIState
 		defaultSpeed = controller.AgentSpeed;
 		controller.AgentSpeed = chaseSpeed;
 		controller.transform.LookAt(controller.player.transform.position);
-		if(reflectWindow) reflectWindow.enabled = true;
+		if (reflectWindow) reflectWindow.enabled = true;
 	}
 
 	protected override void OnExit()
@@ -33,27 +33,36 @@ public class MeleeAttackState : AIState
 
 	public override void Tick()
 	{
-		controller.MoveTowards(controller.player.transform.position);
-		if (controller.fieldOfView.canSeePlayer)
+		float distance = Vector3.Distance(controller.transform.position, controller.player.transform.position);
+		if (reflectWindow && distance > minJumpDistance && distance < maxJumpDistance)
 		{
-			controller.LastKnownPlayerPosition = controller.player.transform.position;
-			controller.AlertOthers();
-			StopCoroutine(ref crtInvestigate);
-			if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < meleeDistance)
+			controller.MoveTowards(controller.LastKnownPlayerPosition);
+			controller.GetComponentInChildren<Sword>().JumpAttack();
+		}
+        else
+        {
+			controller.MoveTowards(controller.player.transform.position);
+			if (controller.fieldOfView.canSeePlayer)
 			{
-				controller.Fire();
-			}
-            if (reflectWindow)
-            {
-                if (reflectWindow.hit)
-                {
+				controller.LastKnownPlayerPosition = controller.player.transform.position;
+				controller.AlertOthers();
+				StopCoroutine(ref crtInvestigate);
+				if (Vector3.Distance(controller.transform.position, controller.player.transform.position) < meleeDistance)
+				{
 					controller.Fire();
 				}
-            }
-		}
-		else if (crtInvestigate == null)
-		{
-			crtInvestigate = StartCoroutine(StandardTimer(timeBeforePursuingPlayer, leaveTransition));
+				if (reflectWindow)
+				{
+					if (reflectWindow.hit)
+					{
+						controller.Fire();
+					}
+				}
+			}
+			else if (crtInvestigate == null)
+			{
+				crtInvestigate = StartCoroutine(StandardTimer(timeBeforePursuingPlayer, leaveTransition));
+			}
 		}
 	}
 }
