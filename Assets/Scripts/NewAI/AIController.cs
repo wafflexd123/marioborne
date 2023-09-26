@@ -16,7 +16,7 @@ public class AIController : Humanoid, ITimeScaleListener
 	public Vector3 LastKnownPlayerPosition { get; set; }
 	public Vector3? SoundLocation { get; set; }
 	public FieldOfView fieldOfView { get; protected set; }
-	protected NavMeshAgent agent { get; set; }
+	[HideInInspector] public NavMeshAgent agent { get; set; }
 	public new Rigidbody rigidbody { get; protected set; }
 	public Player player { get; protected set; }
 	public float AgentSpeed { get => agentSpeed; set { agentSpeed = value; agent.speed = value * Time.timeScale; } }

@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PatrolState), typeof(InvestigatePlayerState)), RequireComponent(typeof(AttackingState), typeof(WaitState))]
+[RequireComponent(typeof(PatrolState), typeof(InvestigatePlayerState)), RequireComponent(typeof(MeleeAttackState), typeof(WaitState))]
 public class MeleeAI : AIController
 {
     // AI States
     protected PatrolState patrolState;
     //protected NavigateFiringPosState navigateFiringPosState;
     protected InvestigatePlayerState investigatePlayerState;
-    protected AttackingState attackingState;
+    protected MeleeAttackState attackingState;
     protected WaitState waitState;
 
     public ReflectWindow reflectWindow;
@@ -19,7 +19,7 @@ public class MeleeAI : AIController
         patrolState = GetComponent<PatrolState>();
         //navigateFiringPosState = GetComponent<NavigateFiringPosState>();
         investigatePlayerState = GetComponent<InvestigatePlayerState>();
-        attackingState = GetComponent<AttackingState>();
+        attackingState = GetComponent<MeleeAttackState>();
         waitState = GetComponent<WaitState>();
 
         patrolState.Setup(new CanSeePlayerTransition(attackingState, this), new CanHearPlayerTransition(investigatePlayerState, this));
@@ -28,7 +28,7 @@ public class MeleeAI : AIController
         attackingState.Setup(new ExternalControlTransition(investigatePlayerState));
         waitState.Setup(new ExternalControlTransition(patrolState));
 
-        reflectWindow = Instantiate(reflectWindow).Initialise(this);
+        if(reflectWindow != null) reflectWindow = Instantiate(reflectWindow).Initialise(this);
         attackingState.reflectWindow = reflectWindow;
 
         CurrentState = patrolState.BeginState();

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SwordSwingExit : StateMachineBehaviour
 {
-    private Knife knife;
+    private Sword sword;
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        knife = knife == null ? animator.transform.GetComponent<Knife>() : knife;
-        knife.DisableHitbox();
+        sword = sword == null ? animator.transform.GetComponent<Sword>() : sword;
+        sword.DisableHitbox();
     }
 }

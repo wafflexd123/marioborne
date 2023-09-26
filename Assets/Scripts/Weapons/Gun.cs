@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GunAnimator))]
 public class Gun : WeaponBase
 {
-	public float fireDelay, bulletSpeed;
+	public float fireDelay, bulletSpeed, reloadDelay;
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
@@ -14,7 +14,7 @@ public class Gun : WeaponBase
 
 	protected Ammo ammo;
 	new AudioSource audio;
-	Coroutine crtDelay;
+	Coroutine crtDelay, crtReload;
 	GameObject ui, qToDrop;
 	Image imgReloadPercent;
 	TMP_Text txtAmmo;
@@ -79,15 +79,19 @@ public class Gun : WeaponBase
 			}
 			else
 			{
-				wielder.model.shoot = true;
-				crtDelay = StartCoroutine(Delay());
+				if (aiAmmo.amount <= 0) crtReload = StartCoroutine(Reload());
+				else
+				{
+					wielder.model.shoot = true;
+					crtDelay = StartCoroutine(Delay());
+				}
 			}
 			Sound.MakeSound(transform.position, soundRadius, audioFire, audio, 1, wielder);
 			Shoot();
 		}
 	}
 
-	protected virtual void Shoot()
+    protected virtual void Shoot()
 	{
 		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, false);
 	}
@@ -127,6 +131,13 @@ public class Gun : WeaponBase
 	{
 		yield return new WaitForSeconds(fireDelay);
 		crtDelay = null;
+	}
+
+	IEnumerator Reload()
+	{
+		yield return new WaitForSeconds(reloadDelay);
+		aiAmmo.amount = aiAmmo.startAmount;
+		crtReload = null;
 	}
 
 	[System.Serializable]

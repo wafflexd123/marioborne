@@ -6,6 +6,7 @@ using UnityEngine;
 [SelectionBase]
 public abstract class WeaponBase : MonoBehaviourPlus
 {
+	public bool automatic;
 	public float throwForce = 10f; // Initial force of the throw
 	public float throwSpeed = 1f; // How fast the object will go after being thrown
 	public float throwFallDelay = 1f; // Delay before object starts falling
@@ -19,6 +20,11 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 	Action onWielderChange;//registered by wielder when picked up, to be called just before the weapon is dropped
 	Coroutine crtDropTimer;
+
+	[Header("Graphics")]
+    public Transform IKHandTarget;
+	[SerializeField] protected Transform modelRoot;
+	public string animationName = "";
 
 	bool IsMoving { get => rigidbody != null && rigidbody.velocity != Vector3.zero; }
 	public abstract bool IsFiring { get; }
@@ -46,6 +52,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 				{
 					transform.localPosition = handPosition;
 					transform.localEulerAngles = handPosition.eulers;
+					//Player.singlePlayer.IKEquip(false, IKHandTarget);
 				}
 				else
 				{
@@ -70,6 +77,11 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	{
 		OnWielderChange();
 		OnDrop();
+		if (wielder is Player)
+		{
+			Player.singlePlayer.IKUnequip(false);
+			SetRenderMode(false);
+		}
 		wielder = null;
 		transform.parent = null;
 		ResetRoutine(DropTimer(), ref crtDropTimer);
@@ -140,11 +152,39 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	protected virtual void OnPickup()
 	{
 		inputActions.Add(wielder.input.AddListener("Attack", InputType.OnPress, (_) => Attack()));
+		if(automatic) inputActions.Add(wielder.input.AddListener("Attack", InputType.OnHold, (_) => Attack()));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
 		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
 	}
 
-	protected virtual void Attack() { }
+	/// <summary>
+	/// Changes the layer and shadow casting mode on an object when picked up or dropped by the player. 
+	/// </summary>
+	public void SetRenderMode(bool playerHeld)
+	{
+		if (modelRoot == null) { Debug.LogWarning(name + " has not had its model root set, cannot update render mode, please set in inspector."); return; }
+		for (int i = 0; i < modelRoot.childCount; i++)
+		{
+            SetRenderModeRecursive(modelRoot.GetChild(i), playerHeld);
+        }
+	}
+
+	protected virtual void SetRenderModeRecursive(Transform obj, bool playerHeld)
+    {
+        obj.gameObject.layer = playerHeld ? 16 : 0; // set to first person draw mode, or default
+        try
+		{
+			MeshRenderer mr = obj.GetComponent<MeshRenderer>();
+			mr.shadowCastingMode = playerHeld ? UnityEngine.Rendering.ShadowCastingMode.Off : UnityEngine.Rendering.ShadowCastingMode.On;
+		}
+		catch { }
+
+		for (int child = 0; child < obj.childCount; child++)
+			SetRenderModeRecursive(obj.GetChild(child), playerHeld);
+	}
+
+
+    protected virtual void Attack() { }
 
 	/// <summary>
 	/// When an object with a rigidbody is set as a child of another object with a rigidbody, it gets buggy. This destroys the rigidbody and saves its data for later use.

@@ -27,7 +27,30 @@ public class Player : Humanoid
     GameObject escMenu;
     bool enableInput = true;
     Coroutine crtMoveToEnemy;
-    Transform leftHand;
+    Transform weaponHand;
+
+    [Header("IK")]
+    [SerializeField] private GameObject armObject;
+    [SerializeField] private Transform handTarget_L;
+    [SerializeField] private Transform handTarget_R;
+    private HandFollowObject handFollower_L;
+    private HandFollowObject handFollower_R;
+    private Animator handAnimator;
+
+    public void IKEquip(bool leftHand, Transform newParent, string animName = "")
+    {
+        if (newParent == null) { Debug.LogWarning("Player has picked up a weapon with no IK target, please set one for this prefab. "); return; }
+        HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
+        handFollower.AddIKTarget(newParent);
+        print("Set hand" + (leftHand ? "_L" : "_R") + " target to: " + newParent.name);
+    }
+
+    public void IKUnequip(bool leftHand, bool resetHandAnimation = true)
+    {
+        HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
+        handFollower.RemoveIKTarget();
+        handAnimator.Play("empty", 2);
+    }
 
     public override Vector3 LookDirection => camera.transform.forward;
     public override Vector3 LookingAt => raycast.point;
@@ -35,8 +58,8 @@ public class Player : Humanoid
     protected override void Awake()
     {
         base.Awake();
-        powers = transform.Find("Right Hand").GetComponent<PowerManager>();
-        leftHand = transform.Find("Left Hand");
+        powers = transform.Find("Left Hand").GetComponent<PowerManager>();
+        weaponHand = transform.Find("Right Hand");
         cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
         camera = cameraController.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
         fists = transform.Find("Body").Find("Hand").GetComponent<Fists>();
@@ -49,6 +72,10 @@ public class Player : Humanoid
         messageManager = ui.Find("Death Message").GetComponent<MessageManager>();
         raycastIgnore = ~raycastIgnore;//invert layermask
         reflectWindowPrefab = Instantiate(reflectWindowPrefab).Initialise(this);
+
+        handFollower_L = handTarget_L.GetComponent<HandFollowObject>();
+        handFollower_R = handTarget_R.GetComponent<HandFollowObject>();
+        handAnimator = armObject.GetComponent<Animator>();
     }
 
     //private void Start()
@@ -101,10 +128,18 @@ public class Player : Humanoid
     /// <returns>True if object is picked up, sets parent of weapon</returns>
     public override bool PickupObject(WeaponBase weapon, out Action onDrop)
     {
+        //print("Player PickupObject");
         if (!this.weapon)//if nothing in hand
         {
             this.weapon = weapon;
-            weapon.transform.SetParent(leftHand);
+            weapon.transform.SetParent(weaponHand);
+            IKEquip(false, weapon.IKHandTarget);
+            weapon.SetRenderMode(true);
+            if (weapon.animationName != "")
+            {
+                handAnimator.Play(weapon.animationName, 2);
+                print("playing animation: " + weapon.animationName + ", on layer: 2");
+            }
             onDrop = () => this.weapon = null;
             return true;
         }
