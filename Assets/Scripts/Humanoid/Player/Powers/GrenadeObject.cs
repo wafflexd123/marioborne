@@ -11,7 +11,7 @@ public class GrenadeObject : MonoBehaviour
     private Quaternion frameRotation;
     [SerializeField] private float amplitude;
     [SerializeField] private float period;
-    private Vector3 standardOffset = Vector3.zero;
+    [SerializeField] private Vector3 standardOffset = Vector3.zero;
     //public static bool IsInHand = true;
 
     [Header("Shader")]
@@ -21,11 +21,11 @@ public class GrenadeObject : MonoBehaviour
 
     private Rigidbody rb;
 
-    private void Awake()
-    {
-        localRot = transform.localRotation;
-        standardOffset = transform.position - transform.parent.position;
-    }
+    //private void Awake()
+    //{
+    //    localRot = transform.localRotation;
+    //    standardOffset = transform.position - transform.parent.position;
+    //}
     void Start()
     {
         mat = GetComponent<MeshRenderer>().material;
@@ -41,10 +41,12 @@ public class GrenadeObject : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Reappear(float startTime)
+    public void Reappear(float startTime, float chargeTime)
     {
         mat.SetFloat("_GridSize", handGridSize);
-        mat.SetFloat("_Completness", 0.5f); // temporary debug
+        mat.SetFloat("_StartTime", startTime);
+        mat.SetFloat("_ChargeTime", chargeTime);
+        //mat.SetFloat("_Completness", 0.5f); // temporary debug
         // settings for regenerating
     }
 
@@ -55,11 +57,18 @@ public class GrenadeObject : MonoBehaviour
 
     void Update()
     {
-        frameRotation = Quaternion.Euler(0f, rotationSpeed * Time.deltaTime, 0f);
-        localRot *= frameRotation;
-        transform.localRotation = localRot;
+        //frameRotation = Quaternion.Euler(0f, rotationSpeed * Time.deltaTime, 0f);
+        //localRot *= frameRotation;
+        //transform.localRotation = localRot;
+        transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
 
         transform.localPosition = standardOffset + FrameOffset();
+    }
+
+    private void OnApplicationQuit()
+    {
+        mat.SetFloat("_GridSize", handGridSize);
+        mat.SetFloat("_StartTime", -10f);
     }
 
     //private void OnEnable() { if (lazyFollower != null) lazyFollower.enabled = true; }

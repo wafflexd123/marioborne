@@ -8,6 +8,8 @@ Shader "Custom/Grenade_Surface"
         _Completeness("Completeness [0,1]", float) = 1
         _GridSize("Grid size (integer)", float) = 16
         _MinLighting("Minimum lighting [0,1]", float) = 0.3
+        _StartTime("Start charging time", float) = 0
+        _ChargeTime("Charge duration", float) = 10
     }
     SubShader
     {
@@ -26,6 +28,8 @@ Shader "Custom/Grenade_Surface"
         float _Completeness;
         float _GridSize;
         half _MinLighting;
+        half _StartTime;
+        half _ChargeTime;
 		CBUFFER_END
 
         struct AttributesSchnoz {
@@ -74,6 +78,7 @@ Shader "Custom/Grenade_Surface"
             VaryingsSchnoz vert(AttributesSchnoz IN){
                 VaryingsSchnoz OUT;
 
+                _Completeness = saturate( (_Time.y - _StartTime ) / _ChargeTime);
                 //_Completeness = _CosTime.y * 0.5 + 0.5; // demo test the transformation. remove later
                 if (IN.positionOS.y > _Completeness) {
                     float difference = abs(IN.positionOS.y - _Completeness);

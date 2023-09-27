@@ -25,7 +25,6 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     private void Start()
     {
         grenadeObject = GetComponentInChildren<GrenadeObject>();
-        print("grenade object is null: " + (grenadeObject == null));
     }
 
     private void Update()
@@ -36,14 +35,14 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
 
     private void ThrowGrenade()
     {
-        if (UnityEngine.Time.time - thrownTime >= chargeTime)
+        if (UnityEngine.Time.timeSinceLevelLoad - thrownTime >= chargeTime)
         {
             GameObject grenadeObj = Instantiate(grenadePrefab, transform.position + throwOffset, Quaternion.identity);
             Rigidbody rb = grenadeObj.GetComponent<Rigidbody>();
             rb.AddForce(throwForce * player.LookDirection);
             grenadeObject.Thrown();
             inhand = false;
-            thrownTime = UnityEngine.Time.time;
+            thrownTime = UnityEngine.Time.timeSinceLevelLoad;
         }
     }
 
@@ -56,7 +55,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     {
         if (inhand) return;
 
-        if (UnityEngine.Time.time - thrownTime >= GrenadeLive.maxLifetime)
+        if (UnityEngine.Time.timeSinceLevelLoad - thrownTime >= GrenadeLive.maxLifetime)
         {
             ReturnToHand(thrownTime + GrenadeLive.maxLifetime);
         }
@@ -65,7 +64,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     public void ReturnToHand(float startTime)
     {
         grenadeObject.gameObject.SetActive(true);
-        grenadeObject.Reappear(startTime);
+        grenadeObject.Reappear(startTime, chargeTime);
         inhand = true;
     }
 }
