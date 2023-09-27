@@ -6,9 +6,15 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
 {
     private Player player;
     [SerializeField] private GameObject grenadePrefab;
+    [SerializeField] private float chargeTime = 10f;
+    //private float chargeTimeRemaining = 0f;
+    private float thrownTime = -100f;
     [Header("Throw Stats")]
     [SerializeField] private float throwForce = 30f;
     [SerializeField] private Vector3 throwOffset;
+    private bool inhand = true;
+
+    private GrenadeObject grenadeObject;
 
     public bool CanDisable => true; // TODO
 
@@ -16,17 +22,50 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     {
         player = GetComponentInParent<Player>();
     }
+    private void Start()
+    {
+        grenadeObject = GetComponentInChildren<GrenadeObject>();
+        print("grenade object is null: " + (grenadeObject == null));
+    }
 
     private void Update()
     {
+        CheckInHand();
         if (Input.GetButtonDown("Ability")) ThrowGrenade();
     }
 
     private void ThrowGrenade()
     {
-        GameObject grenadeObj = Instantiate(grenadePrefab, transform.position + throwOffset, Quaternion.identity);
-        GrenadeObject grenadeObject = grenadeObj.GetComponent<GrenadeObject>();
-        Rigidbody rb = grenadeObj.GetComponent<Rigidbody>();
-        rb.AddForce(throwForce * player.LookDirection);
+        if (UnityEngine.Time.time - thrownTime >= chargeTime)
+        {
+            GameObject grenadeObj = Instantiate(grenadePrefab, transform.position + throwOffset, Quaternion.identity);
+            Rigidbody rb = grenadeObj.GetComponent<Rigidbody>();
+            rb.AddForce(throwForce * player.LookDirection);
+            grenadeObject.Thrown();
+            inhand = false;
+            thrownTime = UnityEngine.Time.time;
+        }
+    }
+
+    private void OnEnable()
+    {
+        CheckInHand();
+    }
+
+    private void CheckInHand()
+    {
+        if (inhand) return;
+
+        if (UnityEngine.Time.time - thrownTime >= GrenadeLive.maxLifetime)
+        {
+            ReturnToHand(thrownTime + GrenadeLive.maxLifetime);
+        }
+    }
+
+    public void ReturnToHand(float startTime)
+    {
+        grenadeObject.gameObject.SetActive(true);
+        grenadeObject.Reappear(startTime);
+        inhand = true;
     }
 }

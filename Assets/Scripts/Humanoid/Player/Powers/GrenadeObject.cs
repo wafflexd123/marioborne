@@ -1,36 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class GrenadeObject : MonoBehaviour
 {
-    [Header("Explosion")]
-    [SerializeField] private float lifeTimeAfterGround = 1.3f;
-    [SerializeField] private float explosionRadius = 5f;
-    [SerializeField] private List<Color> Colors = new List<Color>();
-    [SerializeField] private ParticleSystem smokeParticles;
-    private bool hasHitGround = false;
-    private bool exploding = false;
-    private Material mat;
-    private List<GameObject> hitObjects = new List<GameObject>();
-
     [Header("In Hand")]
     [SerializeField] private float rotationSpeed;
     private Quaternion localRot;
     private Quaternion frameRotation;
     [SerializeField] private float amplitude;
     [SerializeField] private float period;
-    private LazyFollower lazyFollower;
+    private Vector3 standardOffset = Vector3.zero;
+    //public static bool IsInHand = true;
 
+    [Header("Shader")]
+    [SerializeField] private float handGridSize = 64f;
+    [SerializeField] private float airGridSize  = 32f;
+    private Material mat;
+
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        localRot = transform.localRotation;
+        standardOffset = transform.position - transform.parent.position;
+    }
     void Start()
     {
-        mat = GetComponent<Material>();
-        lazyFollower = GetComponent<LazyFollower>();
-        if (lazyFollower != null)
-            lazyFollower.offsetFunc = new LazyFollower.offsetDelegate(FrameOffset);
-        else Debug.LogWarning("Grenade could not find lazy follower, please be upset");
+        mat = GetComponent<MeshRenderer>().material;
+        //lazyFollower = GetComponent<LazyFollower>();
+        //if (lazyFollower != null)
+        //    lazyFollower.offsetFunc = new LazyFollower.offsetDelegate(FrameOffset);
+        //else Debug.LogWarning("Grenade could not find lazy follower, please be upset");
+    }
 
-        localRot = transform.localRotation;
+    public void Thrown()
+    {
+        mat.SetFloat("_GridSize", airGridSize);
+        gameObject.SetActive(false);
+    }
+
+    public void Reappear(float startTime)
+    {
+        mat.SetFloat("_GridSize", handGridSize);
+        mat.SetFloat("_Completness", 0.5f); // temporary debug
+        // settings for regenerating
     }
 
     private Vector3 FrameOffset()
@@ -43,35 +58,10 @@ public class GrenadeObject : MonoBehaviour
         frameRotation = Quaternion.Euler(0f, rotationSpeed * Time.deltaTime, 0f);
         localRot *= frameRotation;
         transform.localRotation = localRot;
+
+        transform.localPosition = standardOffset + FrameOffset();
     }
 
-    private IEnumerator Explode()
-    {
-        for (int frame = 0; frame < Colors.Count; frame++)
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
-            // set material color
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-    private IEnumerator WaitToExplode()
-    {
-        yield return new WaitForSeconds(lifeTimeAfterGround);
-        exploding = true;
-        StartCoroutine(Explode());
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (!hasHitGround)
-        {
-            hasHitGround = true;
-            StartCoroutine(WaitToExplode());
-        }
-    }
-
-    private void OnEnable() { if (lazyFollower != null) lazyFollower.enabled = true; }
-    private void OnDisable() { if (lazyFollower != null) lazyFollower.enabled = false; }
+    //private void OnEnable() { if (lazyFollower != null) lazyFollower.enabled = true; }
+    //private void OnDisable() { if (lazyFollower != null) lazyFollower.enabled = false; }
 }
