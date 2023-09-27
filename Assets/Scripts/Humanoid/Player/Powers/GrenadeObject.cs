@@ -41,11 +41,11 @@ public class GrenadeObject : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Reappear(float startTime, float chargeTime)
+    public void Reappear(float startTime, float doneTime)
     {
         mat.SetFloat("_GridSize", handGridSize);
         mat.SetFloat("_StartTime", startTime);
-        mat.SetFloat("_ChargeTime", chargeTime);
+        mat.SetFloat("_ChargeTime", doneTime - startTime);
         //mat.SetFloat("_Completness", 0.5f); // temporary debug
         // settings for regenerating
     }

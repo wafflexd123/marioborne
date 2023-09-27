@@ -37,6 +37,7 @@ public class GrenadeLive : MonoBehaviour
         GameObject explosionObj = Instantiate(sphere, transform.position, Quaternion.identity);
         mat = explosionObj.GetComponent<MeshRenderer>().material;
         explosionObj.transform.localScale = Vector3.one * explosionRadius;
+        GetComponent<MeshRenderer>().enabled = false;
 
         // collision and physics
         int layermaska = ~0 & ~(1 << 3);
