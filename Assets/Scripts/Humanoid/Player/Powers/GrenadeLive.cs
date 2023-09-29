@@ -48,7 +48,7 @@ public class GrenadeLive : MonoBehaviour
             print("Explosion collided with: " + hitColliders[i].name + ", on layer: " + hitObj.layer);
             try
             {
-                Humanoid humanoid = hitObj.GetComponent<Humanoid>();
+                Humanoid humanoid = hitObj.GetComponentInParent<Humanoid>();
                 humanoid.Kill();
                 print("Grenade Killing humanoid: " + hitObj.name);
             }
@@ -57,6 +57,11 @@ public class GrenadeLive : MonoBehaviour
                 /// *** THIS IS NOT WORKING ***
                 Rigidbody hitrb;
                 if (hitObj.TryGetComponent<Rigidbody>(out hitrb))
+                {
+                    print("found rb on same object as collider");
+                }
+                hitrb = hitrb == null ? hitObj.GetComponentInParent<Rigidbody>() : hitrb;
+                if (hitrb != null)
                 {
                     hitrb.AddExplosionForce(explosionForce, transform.position, explosionRadius, explosionUpwardsMod, ForceMode.Impulse);
                     print("Grenade Applying explosive force to: " + hitObj.name);
