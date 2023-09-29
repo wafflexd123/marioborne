@@ -114,7 +114,6 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         if (ragdollManager != null)
         {
             ragdollManager.ToggleRagdoll(true);
-            Debug.Log("Ragdoll Toggled On");
         }
 
         isGrabbing = true;
@@ -124,11 +123,18 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     {
         if (grabbedObject != null)
         {
+            // Enable gravity for the ragdoll Rigidbodies
             RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
             if (ragdollManager != null)
             {
-                ragdollManager.ToggleRagdoll(false);
-                Debug.Log("Ragdoll Toggled Off");
+                foreach (Rigidbody rb in ragdollManager.ragdollRigidbodies)
+                {
+                    rb.useGravity = true;
+                }
+                if (!ragdollManager.isCheckingGround)
+                {
+                    ragdollManager.StartCoroutine(ragdollManager.GroundCheck());
+                }
             }
 
             grabbedObject = null;
@@ -136,6 +142,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
         isGrabbing = false;
     }
+
 
     void ControlObject(GameObject controlledObject)
     {
