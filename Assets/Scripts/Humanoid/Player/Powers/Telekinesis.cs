@@ -110,10 +110,11 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
         offset = grabbedObject.transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance));
 
-        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
-        if (rb != null)
+        RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
+        if (ragdollManager != null)
         {
-            rb.useGravity = false;
+            ragdollManager.ToggleRagdoll(true);
+            Debug.Log("Ragdoll Toggled On");
         }
 
         isGrabbing = true;
@@ -123,10 +124,11 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     {
         if (grabbedObject != null)
         {
-            Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
-            if (rb != null)
+            RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
+            if (ragdollManager != null)
             {
-                rb.useGravity = true;
+                ragdollManager.ToggleRagdoll(false);
+                Debug.Log("Ragdoll Toggled Off");
             }
 
             grabbedObject = null;
