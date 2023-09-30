@@ -11,6 +11,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     private float thrownTime = -100f;
     [Header("Throw Stats")]
     [SerializeField] private float throwForce = 30f;
+    [SerializeField] private float throwUpForce = 15f;
     [SerializeField] private Vector3 throwOffset;
     private bool inhand = true;
 
@@ -39,7 +40,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
         {
             GameObject grenadeObj = Instantiate(grenadePrefab, transform.GetChild(0).position, Quaternion.identity);
             Rigidbody rb = grenadeObj.GetComponent<Rigidbody>();
-            rb.AddForce(throwForce * player.LookDirection, ForceMode.Impulse);
+            rb.AddForce(throwForce * player.LookDirection + throwUpForce * Vector3.up, ForceMode.Impulse);
             grenadeObject.Thrown();
             inhand = false;
             thrownTime = UnityEngine.Time.timeSinceLevelLoad;

@@ -13,17 +13,19 @@ public class GrenadeLive : MonoBehaviour
     [SerializeField] private List<Color> Colors = new List<Color>();
     [SerializeField] private float emissivePower = 5f;
     [SerializeField] private float frameDuration = 2f / 60f;
-    [SerializeField] private ParticleSystem smokeParticlesPrefab;
-    private static ParticleSystem smokeParticles;
+    [SerializeField] private ParticleSystem[] particlesPrefabs;
+    private static ParticleSystem[] particleInstances = null;
     [SerializeField] private GameObject sphere;
     private bool hasHitGround = false;
     private bool exploding = false;
     private Material mat;
     private List<GameObject> hitObjects = new List<GameObject>();
+    private AudioSource aus;
 
     void Start()
     {
         StartCoroutine(DetonateAfterTime());
+        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -38,6 +40,7 @@ public class GrenadeLive : MonoBehaviour
         mat = explosionObj.GetComponent<MeshRenderer>().material;
         explosionObj.transform.localScale = Vector3.one * explosionRadius;
         GetComponent<MeshRenderer>().enabled = false;
+        aus.Play();
 
         // collision and physics
         int layermaska = ~0 & ~(1 << 3);
@@ -70,9 +73,7 @@ public class GrenadeLive : MonoBehaviour
         }
 
         // particles
-        ParticleSystem particles = GetSmokeParticles();
-        particles.transform.position = transform.position;
-        particles.Play();
+        PlaceAndPlayParticles(transform.position);
 
         // animation
         for (int frame = 0; frame < Colors.Count; frame++)
@@ -86,12 +87,22 @@ public class GrenadeLive : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private ParticleSystem GetSmokeParticles()
+    private void PlaceAndPlayParticles(Vector3 pos)
     {
-        if (smokeParticles != null)
-            return smokeParticles;
-        smokeParticles = Instantiate(smokeParticlesPrefab, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        return smokeParticles;
+        if (particleInstances == null)
+            GenerateStaticParticles();
+        for (int i = 0; i < particleInstances.Length; i++)
+        {
+            particleInstances[i].transform.position = pos;
+            particleInstances[i].Play();
+        }
+    }
+
+    private void GenerateStaticParticles()
+    {
+        particleInstances = new ParticleSystem[particlesPrefabs.Length];
+        for (int i = 0; i < particleInstances.Length;i++)
+            particleInstances[i] = Instantiate(particlesPrefabs[i], Vector3.zero, Quaternion.identity).GetComponent<ParticleSystem>();
     }
 
     private IEnumerator WaitToExplode()
