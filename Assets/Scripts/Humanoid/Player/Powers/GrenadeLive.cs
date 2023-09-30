@@ -20,12 +20,11 @@ public class GrenadeLive : MonoBehaviour
     private bool exploding = false;
     private Material mat;
     private List<GameObject> hitObjects = new List<GameObject>();
-    private AudioSource aus;
+    [SerializeField] private AudioClip sfx;
 
     void Start()
     {
         StartCoroutine(DetonateAfterTime());
-        aus = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -40,7 +39,7 @@ public class GrenadeLive : MonoBehaviour
         mat = explosionObj.GetComponent<MeshRenderer>().material;
         explosionObj.transform.localScale = Vector3.one * explosionRadius;
         GetComponent<MeshRenderer>().enabled = false;
-        aus.Play();
+        if (SoundAtLocation.Instance != null) SoundAtLocation.Instance.PlayAtLocation(transform.position, sfx); 
 
         // collision and physics
         int layermaska = ~0 & ~(1 << 3);
