@@ -6,14 +6,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GunAnimator))]
 public class Gun : WeaponBase
 {
-	public float fireDelay, bulletSpeed, reloadDelay;
+	public float bulletSpeed, reloadDelay;
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
-	public AudioClip audioPickup, audioFire;
 
 	protected Ammo ammo;
-	new AudioSource audio;
 	Coroutine crtDelay, crtReload;
 	GameObject ui, qToDrop;
 	Image imgReloadPercent;
@@ -33,7 +31,6 @@ public class Gun : WeaponBase
 		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
 		txtAmmo.text = $"{playerAmmo.amount}";
-		audio = GetComponent<AudioSource>();
 	}
 
 	protected override void OnPickup()
@@ -45,7 +42,6 @@ public class Gun : WeaponBase
 		{
 			ammo = playerAmmo;
 			ui.SetActive(true);
-			audio.PlayOneShot(audioPickup);
 		}
 		else
 		{
@@ -79,19 +75,20 @@ public class Gun : WeaponBase
 			}
 			else
 			{
-				if (aiAmmo.amount <= 0) crtReload = StartCoroutine(Reload());
+				if (aiAmmo.amount <= 0 && crtReload == null) crtReload = StartCoroutine(Reload());
 				else
 				{
 					wielder.model.shoot = true;
 					crtDelay = StartCoroutine(Delay());
 				}
 			}
-			Sound.MakeSound(transform.position, soundRadius, audioFire, audio, 1, wielder);
+			fireClips.PlayRandom(audioPool);
+			Sound.MakeSound(transform.position, soundRadius, wielder);
 			Shoot();
 		}
 	}
 
-    protected virtual void Shoot()
+	protected virtual void Shoot()
 	{
 		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, false);
 	}

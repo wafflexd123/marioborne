@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 340686779977544838}
   - component: {fileID: 5191006522598981905}
   - component: {fileID: 627419579642220764}
+  - component: {fileID: 4579788268350510173}
   m_Layer: 12
   m_Name: SMG
   m_TagString: Untagged
@@ -429,26 +430,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd21d103dab8e14b9cf8e8a59355c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IKHandTarget: {fileID: 0}
+  modelRoot: {fileID: 0}
+  animationName: 
   automatic: 1
   throwForce: 10
   throwSpeed: 1
   throwFallDelay: 1
+  fireDelay: 0.18
+  pickupSpeed: 5
+  dropForce: 2
+  soundRadius: 10
+  disablePickupAfterDropSeconds: 2
   handPosition:
     coords: {x: 0.135, y: -0.175, z: 0.25}
     eulers: {x: 0, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  pickupSpeed: 5
-  dropForce: 2
-  soundRadius: 10
-  disablePickupAfterDropSeconds: 2
   colliders:
   - {fileID: 5987780457641917542}
-  IKHandTarget: {fileID: 0}
-  modelRoot: {fileID: 0}
-  animationName: 
-  fireDelay: 0.18
+  fireClips:
+    clips:
+    - audio: {fileID: 8300000, guid: b81dac3fe37ddbb478bb60a4a558efa9, type: 3}
+      volume: 1
+      pitch: 1.2
+  equipClip:
+    audio: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
+    volume: 1
+    pitch: 1
   bulletSpeed: 18
   reloadDelay: 0
   playerAmmo:
@@ -465,8 +475,6 @@ MonoBehaviour:
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 8955094706218905194}
-  audioPickup: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
-  audioFire: {fileID: 8300000, guid: f17dffc17bfe6a34d92deeea817b6d65, type: 3}
 --- !u!114 &3474387772792173566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629,6 +637,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minPitch: 0.7
+--- !u!114 &4579788268350510173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5446071140947425566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5704004630725446649
 GameObject:
   m_ObjectHideFlags: 0
