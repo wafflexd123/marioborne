@@ -42,7 +42,7 @@ public class Player : Humanoid
         if (newParent == null) { Debug.LogWarning("Player has picked up a weapon with no IK target, please set one for this prefab. "); return; }
         HandFollowObject handFollower = leftHand ? handFollower_L : handFollower_R;
         handFollower.AddIKTarget(newParent);
-        print("Set hand" + (leftHand ? "_L" : "_R") + " target to: " + newParent.name);
+        //print("Set hand" + (leftHand ? "_L" : "_R") + " target to: " + newParent.name);
     }
 
     public void IKUnequip(bool leftHand, bool resetHandAnimation = true)
@@ -138,7 +138,7 @@ public class Player : Humanoid
             if (weapon.animationName != "")
             {
                 handAnimator.Play(weapon.animationName, 2);
-                print("playing animation: " + weapon.animationName + ", on layer: 2");
+                //print("playing animation: " + weapon.animationName + ", on layer: 2");
             }
             onDrop = () => this.weapon = null;
             return true;
