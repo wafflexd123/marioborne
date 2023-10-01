@@ -40,7 +40,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	protected virtual void Start()
 	{
 		rigidbody = GetComponent<Rigidbody>();
-		audioPool = GetComponent<AudioPool>().Initialise(fireDelay, fireClips.MaxShotLength(), transform);
+		audioPool = GetComponent<AudioPool>().Initialise(fireDelay, fireClips.MaxShotLength());
 		if (FindComponent(transform, out Humanoid wielder))
 		{
 			Pickup(wielder);//set wielder if placed in hand on startup
@@ -162,8 +162,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		inputActions.Add(wielder.input.AddListener("Attack", InputType.OnPress, (_) => Attack()));
-		if (automatic) inputActions.Add(wielder.input.AddListener("Attack", InputType.OnHold, (_) => Attack()));
+		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
 		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
 	}

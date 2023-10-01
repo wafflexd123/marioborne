@@ -20,6 +20,11 @@ public class TimeslowAudio : MonoBehaviour, ITimeScaleListener, IRewindListener
         audioSource.pitch = Mathf.Lerp(minPitch, startPitch, Mathf.InverseLerp(Time.minTimeScale, 1, Time.timeScale)) * pitchDirection;
     }
 
+	private void OnEnable()
+	{
+        OnTimeSlow();//change pitch if gameobject awoke during rewind/slow
+    }
+
     private void OnDestroy()
     {
         Time.timeScaleListeners.Remove(this);

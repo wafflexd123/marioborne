@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player : Humanoid
+public class Player : Humanoid, IRewindListener
 {
     //Inspector
     public static Player singlePlayer;
@@ -25,7 +25,6 @@ public class Player : Humanoid
     Console.Line cnsRaycast;
     MessageManager messageManager;
     GameObject escMenu;
-    bool enableInput = true;
     Coroutine crtMoveToEnemy;
     Transform weaponHand;
 
@@ -58,6 +57,7 @@ public class Player : Humanoid
     protected override void Awake()
     {
         base.Awake();
+        Time.rewindListeners.Add(this);
         powers = transform.Find("Left Hand").GetComponent<PowerManager>();
         weaponHand = transform.Find("Right Hand");
         cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
@@ -85,7 +85,7 @@ public class Player : Humanoid
 
     void Update()
     {
-        if (enableInput)
+        if (input.enableInput)
         {
             HandleInput();
             Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, raycastIgnore, QueryTriggerInteraction.Ignore);
@@ -167,7 +167,7 @@ public class Player : Humanoid
         model.dying = true;
         movement.enabled = false;
         cameraController.enabled = false;
-        enableInput = false;
+        input.enableInput = false;
     }
 
     public void ResetDeath()
@@ -177,7 +177,7 @@ public class Player : Humanoid
         movement.Health(1, DeathType.General);//temp, have to record this with the rewind later
         model.dying = false;
         cameraController.enabled = true;
-        enableInput = true;
+        input.enableInput = true;
     }
 
     public void TeleportToEnemy(Humanoid enemy, float teleportSpeed)
@@ -209,5 +209,24 @@ public class Player : Humanoid
             Kill(DeathType.Bullet);
             if (!bullet.penetrates) Destroy(bullet.gameObject);
         }
+    }
+
+	public void Rewind(float seconds)
+	{
+	}
+
+	public void StartRewind()
+	{
+        input.enableInput = false;
+    }
+
+    public void StopRewind()
+	{
+        input.enableInput = true;
+    }
+
+    private void OnDestroy()
+	{
+        Time.rewindListeners.Remove(this);
     }
 }

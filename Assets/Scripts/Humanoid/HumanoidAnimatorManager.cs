@@ -85,7 +85,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		temp = landingSounds.MaxShotLength();
 		if (temp > maxTime) maxTime = temp;
 
-		audioPool = GetComponent<AudioPool>().Initialise(1f, maxTime, transform);//assuming sounds wont overlap after 1 second
+		audioPool = GetComponent<AudioPool>().Initialise(1f, maxTime);//assuming sounds wont overlap after 1 second
 		animator = GetComponent<Animator>();
 		collider = transform.parent.GetComponent<CapsuleCollider>();
 		colliderHeight = collider.height;
