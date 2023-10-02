@@ -41,6 +41,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     private Vector3 offset;
     private float objectDistance;
     private float chargeTime;
+    private int grabbedPrevLayer = -1;
    
     public bool CanDisable => true;
 
@@ -106,6 +107,8 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     void GrabObject(GameObject targetObject)
     {
         grabbedObject = targetObject;
+        grabbedPrevLayer = grabbedObject.layer;
+        grabbedObject.layer = 17; // TK_Outline layer, for the shader
 
         objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
         offset = grabbedObject.transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance));
@@ -123,6 +126,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     {
         if (grabbedObject != null)
         {
+            grabbedObject.layer = grabbedPrevLayer;
             Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -169,6 +173,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
     void PushObjects(float strength)
     {
+        grabbedObject.layer = grabbedPrevLayer;
         Vector3 pushDirection = mainCamera.transform.forward;
         Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
 
@@ -190,6 +195,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     void PushGrabbedObject(float strength)
     {
         Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        grabbedObject.layer = grabbedPrevLayer;
         if (rb != null)
         {
             Vector3 pushDirection = mainCamera.transform.forward;
