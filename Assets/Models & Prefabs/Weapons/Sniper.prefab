@@ -438,7 +438,7 @@ MonoBehaviour:
   soundRadius: 10
   disablePickupAfterDropSeconds: 2
   handPosition:
-    coords: {x: 0.23, y: -0.19, z: 0.781505}
+    coords: {x: 0.23, y: -0.19, z: 0.78}
     eulers: {x: 0, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
@@ -473,7 +473,7 @@ MonoBehaviour:
     color: {r: 1, g: 0, b: 0, a: 0}
     maxSpread: 0.01
     amount: 0
-  bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
+  bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 3689162234156928206}
 --- !u!114 &6859929981820962448
 MonoBehaviour:
@@ -536,7 +536,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090318026600465762}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -549,7 +549,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 5e2687a4639c36948b6d517483213bb3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -644,6 +644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeSlowPitchReduction: 0.3
 --- !u!1 &3193251215281253258
 GameObject:
   m_ObjectHideFlags: 0

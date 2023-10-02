@@ -32,7 +32,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 	bool isStopped;
 	bool isDead;
 	[HideInInspector] public Vector3 currentCoverPoint;
-	Vector3 lookingAt;
+	[HideInInspector] public Vector3 lookingAt;
 
 	protected override void Awake()
 	{
@@ -72,9 +72,9 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 
 	public void Fire()
 	{
-		lookingAt = Player.singlePlayer.camera.transform.position;
-		if (weapon)
-		{
+        if (weapon)
+        {
+			lookingAt = Player.singlePlayer.camera.transform.position;
 			weapon.transform.LookAt(lookingAt);
 			input.Press("Attack", () => -1, () => false);
 		}

@@ -12,7 +12,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	//Script
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
-	private bool _punching, _deflect, _slashing, _jumpAttack, _backflip;
+	private bool _punching, _deflect, _slashing, _jumpAttack, _backflip, _shieldLayer, _sniperLayer;
 	private Vector3 colliderCentre;
 	private Animator animator;
 	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash, crtJumpAttack, crtBackflip;
@@ -31,8 +31,10 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public bool falling { set => animator.SetBool("falling", value); }
 
 	//Attacks
-	public bool holdingMelee { set; get; }
+	public bool holdingMelee { set => animator.SetFloat("holdingMelee", value ? 1 : 0); }
 	public bool holdingPistol { set => animator.SetFloat("holdingPistol", value ? 1 : 0); }
+	public bool holdingShield { set => animator.SetFloat("holdingShield", value ? 1 : 0); }
+	public bool holdingSniper { set => animator.SetFloat("holdingSniper", value ? 1 : 0); }
 	public bool shoot { set { if (value) animator.SetTrigger("shoot"); } }
 	public bool slash
 	{
@@ -58,6 +60,16 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	{
 		set { if (value) { _backflip = true; SetTrigger("backflip", ref crtBackflip, () => _backflip = false); } }
 		get => _backflip;
+	}
+	public bool shieldLayer
+    {
+		set { if (value) { animator.SetLayerWeight(2, 1); } }
+		get => _shieldLayer;
+	}
+	public bool sniperLayer
+	{
+		set { if (value) { animator.SetLayerWeight(1, 1); } }
+		get => _sniperLayer;
 	}
 
 	//Other

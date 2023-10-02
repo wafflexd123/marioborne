@@ -34,7 +34,7 @@ public class MeleeAttackState : AIState
 	public override void Tick()
 	{
 		float distance = Vector3.Distance(controller.transform.position, controller.player.transform.position);
-		if (reflectWindow && distance > minJumpDistance && distance < maxJumpDistance)
+		if (reflectWindow && distance > minJumpDistance && distance < maxJumpDistance) //does a jump attack depending on jump distance
 		{
 			controller.MoveTowards(controller.LastKnownPlayerPosition);
 			controller.GetComponentInChildren<Sword>().JumpAttack();

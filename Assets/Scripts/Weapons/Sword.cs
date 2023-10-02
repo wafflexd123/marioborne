@@ -4,7 +4,7 @@ using UnityEngine;
 public class Sword : WeaponBase
 {
 	public ReflectWindow reflectWindow;
-	public bool reflectEnabled;
+	private bool reflectEnabled;
 	public Collider[] bladeColliders, hiltColliders;
 	Coroutine crtDelay;
 	private Animator animator;
@@ -73,15 +73,15 @@ public class Sword : WeaponBase
 	}
 
 	protected override void Attack()
-	{
-        if (reflectEnabled)
-        {
+    {
+		if (reflectEnabled)
+		{
 			if (wielder is AIController) reflectWindow.EnemyReflect(fireDelay);
 			if (wielder is Player) reflectWindow.PlayerReflect(fireDelay);
 		}
 		if (crtDelay == null)
 		{
-            if (wielder is Player) animator.Play("swing1");
+			if (wielder is Player) animator.Play("swing1");
 			fireClips.PlayRandom(audioPool);
 			Sound.MakeSound(transform.position, soundRadius, wielder);
 			crtDelay = StartCoroutine(Delay());
@@ -96,19 +96,13 @@ public class Sword : WeaponBase
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
-				//if (wielder is AIController ai2)
-				//{
-				//	yield return new WaitUntil(() => !wielder.model.slash);
-				//}
-				//else yield return new WaitForSeconds(0.5f); //placeholder
+				yield return new WaitForSeconds(fireDelay);
 				_isFiring = false;
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
-				yield return new WaitForSeconds(fireDelay);
-				if (wielder is AIController ai2) ai2.IsStopped = false;
+				if (wielder is AIController ai3) ai3.IsStopped = false;
 				crtDelay = null;
 			}
 		}
-		
 	}
 
 	public void Trigger(TriggerCollider triggerCollider)
@@ -136,7 +130,7 @@ public class Sword : WeaponBase
     {
         if (reflectEnabled)
         {
-			if(crtDelay == null) crtDelay = StartCoroutine(Delay());
+            if (crtDelay == null) crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
 				//THIS NEEDS REWRITING, TOO BUSY RN

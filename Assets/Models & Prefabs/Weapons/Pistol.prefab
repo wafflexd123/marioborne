@@ -590,7 +590,7 @@ MonoBehaviour:
   bulletSpeed: 15
   reloadDelay: 0
   playerAmmo:
-    isInfinite: 0
+    isInfinite: 1
     startAmount: 10
     color: {r: 1, g: 1, b: 1, a: 0}
     maxSpread: 0
@@ -668,6 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeSlowPitchReduction: 0.3
 --- !u!1 &6459212968234832312
 GameObject:
   m_ObjectHideFlags: 0

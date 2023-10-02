@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnipingState : AIState
+public class SniperAttackState : AIState
 {
 	//Inspector
 	public float timeBeforePatrol = 5f;
@@ -40,9 +40,13 @@ public class SnipingState : AIState
 			//if (crtRelocate == null) crtRelocate = StartCoroutine(StandardTimer(timeBeforeRelocating, relocate));
 			StopCoroutine(ref crtPatrol);
 		}
-		else if (crtPatrol == null)
-		{
-			crtPatrol = StartCoroutine(StandardTimer(timeBeforePatrol, patrol));
+        else
+        {
+			controller.RotateTowards(controller.player.transform.position);
+			if (crtPatrol == null)
+			{
+				crtPatrol = StartCoroutine(StandardTimer(timeBeforePatrol, patrol));
+			}
 		}
 	}
 }

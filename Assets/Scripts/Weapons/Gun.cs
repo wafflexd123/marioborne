@@ -37,9 +37,10 @@ public class Gun : WeaponBase
 	{
 		base.OnPickup();
 		if (wielder is AIController) wielder.model.holdingPistol = true;
-		animator.StartAnimations();
+
 		if (wielder is Player)
 		{
+			animator.StartAnimations();
 			ammo = playerAmmo;
 			ui.SetActive(true);
 		}
@@ -53,7 +54,7 @@ public class Gun : WeaponBase
 	{
 		base.OnWielderChange();
 		if (wielder is AIController) wielder.model.holdingPistol = false;
-		animator.StopAnimations();
+		if(wielder is Player) animator.StopAnimations();
 		ui.SetActive(false);
 		if (crtDelay != null)
 		{
@@ -78,7 +79,7 @@ public class Gun : WeaponBase
 				if (aiAmmo.amount <= 0 && crtReload == null) crtReload = StartCoroutine(Reload());
 				else
 				{
-					wielder.model.shoot = true;
+					//wielder.model.shoot = true;
 					crtDelay = StartCoroutine(Delay());
 				}
 			}

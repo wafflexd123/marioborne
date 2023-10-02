@@ -3,15 +3,12 @@ using UnityEngine;
 public class Sniper : Gun
 {
     protected LineRenderer line;
-    private Color color = Color.red;
 
     protected override void Start()
     {
         base.Start();
         line = GetComponent<LineRenderer>();
         line.widthMultiplier = 0.05f;
-        line.startColor = color;
-        line.endColor = color;
         line.enabled = false;
     }
 
@@ -20,6 +17,8 @@ public class Sniper : Gun
         base.OnPickup();
         if(wielder is AIController)
         {
+            wielder.model.sniperLayer = true;
+            wielder.model.holdingSniper = true;
             line.enabled = true;
         }
     }
@@ -36,6 +35,8 @@ public class Sniper : Gun
     protected override void OnDrop()
     {
         base.OnDrop();
+        wielder.model.holdingSniper = false;
+        wielder.model.sniperLayer = false;
         line.enabled = false;
     }
 

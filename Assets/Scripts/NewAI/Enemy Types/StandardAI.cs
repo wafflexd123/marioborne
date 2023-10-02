@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PatrolState), typeof(NavigateFiringPosState), typeof(InvestigatePlayerState)), RequireComponent(typeof(ActiveShootingState), typeof(WaitState))]
+[RequireComponent(typeof(PatrolState), typeof(NavigateFiringPosState), typeof(InvestigatePlayerState)), RequireComponent(typeof(PistolAttackState), typeof(WaitState))]
 public class StandardAI : AIController
 {
 	// AI States
 	protected PatrolState patrolState;
 	protected NavigateFiringPosState navigateFiringPosState;
 	protected InvestigatePlayerState investigatePlayerState;
-	protected ActiveShootingState activeShootingState;
+	protected PistolAttackState pistolAttackState;
 	protected WaitState waitState;
 
 	protected override void Awake()
@@ -17,13 +17,13 @@ public class StandardAI : AIController
 		patrolState = GetComponent<PatrolState>();
 		navigateFiringPosState = GetComponent<NavigateFiringPosState>();
 		investigatePlayerState = GetComponent<InvestigatePlayerState>();
-		activeShootingState = GetComponent<ActiveShootingState>();
+		pistolAttackState = GetComponent<PistolAttackState>();
 		waitState = GetComponent<WaitState>();
 
 		patrolState.Setup(new CanSeePlayerTransition(navigateFiringPosState, this), new CanHearPlayerTransition(investigatePlayerState, this));
-		navigateFiringPosState.Setup(new ExternalControlTransition(patrolState), new StartShootingTransition(activeShootingState));
+		navigateFiringPosState.Setup(new ExternalControlTransition(patrolState), new StartShootingTransition(pistolAttackState));
 		investigatePlayerState.Setup(new FoundPlayerTransition(navigateFiringPosState, this), new ReachedLastKnownPlayerPosTransition(waitState, this), new ExternalControlTransition(patrolState));
-		activeShootingState.Setup(new ExternalControlTransition(investigatePlayerState), new ExternalControlTransition(navigateFiringPosState));
+		pistolAttackState.Setup(new ExternalControlTransition(investigatePlayerState), new ExternalControlTransition(navigateFiringPosState));
 		waitState.Setup(new FoundPlayerTransition(navigateFiringPosState, this), new ExternalControlTransition(patrolState));
 
 		CurrentState = patrolState.BeginState();
