@@ -2,9 +2,8 @@ using UnityEngine;
 
 public static class Sound
 {
-	public static void MakeSound(Vector3 position, float radius, AudioClip audio, AudioSource audioSource, float volume, Humanoid humanoid)
+	public static void MakeSound(Vector3 position, float radius, Humanoid humanoid)
 	{
-		audioSource.PlayOneShot(audio);
 		if (humanoid is Player)
 		{
 			Collider[] enemiesHeard = Physics.OverlapSphere(position, radius, 1 << 11);

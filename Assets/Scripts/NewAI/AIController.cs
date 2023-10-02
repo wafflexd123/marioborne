@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(FieldOfView), typeof(Rigidbody), typeof(NavMeshAgent))]
-public class AIController : Humanoid, ITimeScaleListener
+public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 {
 	//Inspector
 	public float alertRadius;
@@ -42,6 +42,7 @@ public class AIController : Humanoid, ITimeScaleListener
 		rigidbody = GetComponent<Rigidbody>();
 		player = Player.singlePlayer;
 		Time.timeScaleListeners.Add(this);
+		Time.rewindListeners.Add(this);
 	}
 
 	void FixedUpdate()
@@ -94,6 +95,26 @@ public class AIController : Humanoid, ITimeScaleListener
 	public void OnTimeSlow()
 	{
 		if(!isDead && agent != null) agent.speed = AgentSpeed * Time.timeScale;
+	}
+
+	public void Rewind(float seconds)
+	{
+	}
+
+	public void StartRewind()
+	{
+		input.enableInput = false;
+	}
+
+	public void StopRewind()
+	{
+		input.enableInput = true;
+	}
+
+	protected virtual void OnDestroy()
+	{
+		Time.timeScaleListeners.Add(this);
+		Time.rewindListeners.Add(this);
 	}
 
 	public override void Kill(DeathType deathType = DeathType.General)

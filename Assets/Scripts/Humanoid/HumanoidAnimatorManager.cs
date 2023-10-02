@@ -2,16 +2,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(AudioPool))]
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
 	//Inspector
-	public AudioClip[] footstepSounds, jumpingSounds, landingSounds;
-	public float footStepSoundRadius, walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, minStepVolume, maxStepVolume, velocityAtMaxStepVolume;
+	public AudioPool.Clips footstepSounds, jumpingSounds, landingSounds;
+	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, footStepSoundRadius, maxAdditionalStepVolume, velocityAtMaxStepVolume;
 	public GameObject deathPosePrefab;
 
 	//Script
-	private AudioSource audioSource;
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
 	private bool _punching, _deflect, _slashing, _jumpAttack, _backflip;
 	private Vector3 colliderCentre;
@@ -20,6 +19,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	new private CapsuleCollider collider;
 	private Vector3 _velocity;
 	Humanoid humanoid;
+	AudioPool audioPool;
 
 	//PROPERTIES
 
@@ -50,12 +50,12 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		get => _deflect;
 	}
 	public bool jumpAttack
-    {
+	{
 		set { if (value) { _jumpAttack = true; SetTrigger("jumpAttack", ref crtJumpAttack, () => _jumpAttack = false); } }
 		get => _jumpAttack;
-    }
+	}
 	public bool backflip
-    {
+	{
 		set { if (value) { _backflip = true; SetTrigger("backflip", ref crtBackflip, () => _backflip = false); } }
 		get => _backflip;
 	}
@@ -79,7 +79,13 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	private void Awake()
 	{
-		audioSource = GetComponent<AudioSource>();
+		float maxTime = footstepSounds.MaxShotLength();
+		float temp = jumpingSounds.MaxShotLength();
+		if (temp > maxTime) maxTime = temp;
+		temp = landingSounds.MaxShotLength();
+		if (temp > maxTime) maxTime = temp;
+
+		audioPool = GetComponent<AudioPool>().Initialise(1f, maxTime);//assuming sounds wont overlap after 1 second
 		animator = GetComponent<Animator>();
 		collider = transform.parent.GetComponent<CapsuleCollider>();
 		colliderHeight = collider.height;
@@ -140,29 +146,18 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	public void PlayFootstepSound()
 	{
-		if (footstepSounds.Length == 0) return;
-		// Pick random sound from array
-		AudioClip footstepSound = footstepSounds[UnityEngine.Random.Range(0, footstepSounds.Length)];
-
-		// Change the volume based on the player's velocity
-		float velocityMagnitude = Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z));//should fix so this works on ramps
-		float volume = Mathf.Lerp(minStepVolume, maxStepVolume, velocityMagnitude / velocityAtMaxStepVolume);
-		Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, footstepSound, audioSource, volume, humanoid);
+		float velocityMagnitude = Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z));//need to fix so this works on ramps
+		footstepSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
+		Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
 	}
 
 	public void PlayJumpSound()
 	{
-		if (jumpingSounds.Length == 0) return;
-		AudioClip jumpSound = jumpingSounds[UnityEngine.Random.Range(0, jumpingSounds.Length)];
-
-		audioSource.PlayOneShot(jumpSound);
+		jumpingSounds.PlayRandom(audioPool);
 	}
 
 	public void PlayLandingSound()
 	{
-		if (landingSounds.Length == 0) return;
-		AudioClip landingSound = landingSounds[UnityEngine.Random.Range(0, landingSounds.Length)];
-
-		audioSource.PlayOneShot(landingSound);
+		landingSounds.PlayRandom(audioPool);
 	}
 }

@@ -390,27 +390,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb49a01a3ab2ac543b40ce0a94395067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IKHandTarget: {fileID: 8705605391344740266}
+  modelRoot: {fileID: 3794737623104217429}
+  animationName: hold_shotgun
+  automatic: 0
   throwForce: 10
   throwSpeed: 1
   throwFallDelay: 1
+  fireDelay: 0.5
+  pickupSpeed: 5
+  dropForce: 2
+  soundRadius: 10
+  disablePickupAfterDropSeconds: 2
   handPosition:
     coords: {x: 0.135, y: -0.175, z: 0.25}
     eulers: {x: 0, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  pickupSpeed: 5
-  dropForce: 2
-  soundRadius: 10
-  disablePickupAfterDropSeconds: 2
   colliders:
   - {fileID: 7608568963429935383}
   - {fileID: 1315440156669874220}
-  IKHandTarget: {fileID: 8705605391344740266}
-  modelRoot: {fileID: 3794737623104217429}
-  animationName: hold_shotgun
-  fireDelay: 0.5
+  fireClips:
+    clips:
+    - audio: {fileID: 8300000, guid: 3aea5886042637346ac63c7cb922d95c, type: 3}
+      volume: 1
+      pitch: 1
+    - audio: {fileID: 8300000, guid: 238b82c3cb7a58f4e8e823eb57ce86ba, type: 3}
+      volume: 1
+      pitch: 1
+  equipClip:
+    audio: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
+    volume: 1
+    pitch: 1
   bulletSpeed: 15
+  reloadDelay: 0
   playerAmmo:
     isInfinite: 0
     startAmount: 10
@@ -425,7 +439,5 @@ MonoBehaviour:
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
   firePosition: {fileID: 5672108846803261268}
-  audioPickup: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
-  audioFire: {fileID: 8300000, guid: f17dffc17bfe6a34d92deeea817b6d65, type: 3}
   shotgunPellets: 10
   maxSpread: 0.25

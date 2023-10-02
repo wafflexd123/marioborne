@@ -3,17 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[SelectionBase]
+[SelectionBase, RequireComponent(typeof(AudioPool))]
 public abstract class WeaponBase : MonoBehaviourPlus
 {
+	//Inspector
+	[Header("Graphics")]
+	public Transform IKHandTarget;
+	[SerializeField] protected Transform modelRoot;
+	public string animationName = "";
+
+	[Header("")]
 	public bool automatic;
 	public float throwForce = 10f; // Initial force of the throw
 	public float throwSpeed = 1f; // How fast the object will go after being thrown
 	public float throwFallDelay = 1f; // Delay before object starts falling
-
+	public float fireDelay, pickupSpeed, dropForce, soundRadius, disablePickupAfterDropSeconds;
 	public Position handPosition, thirdPersonPosition;
-	public float pickupSpeed, dropForce, soundRadius, disablePickupAfterDropSeconds;
 	public Collider[] colliders;
+	public AudioPool.Clips fireClips;
+	public AudioPool.Clip equipClip;
+
+	//Script
+	protected AudioPool audioPool;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
@@ -21,17 +32,15 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	Action onWielderChange;//registered by wielder when picked up, to be called just before the weapon is dropped
 	Coroutine crtDropTimer;
 
-	[Header("Graphics")]
-    public Transform IKHandTarget;
-	[SerializeField] protected Transform modelRoot;
-	public string animationName = "";
-
+	//Properties
 	bool IsMoving { get => rigidbody != null && rigidbody.velocity != Vector3.zero; }
 	public abstract bool IsFiring { get; }
+
 
 	protected virtual void Start()
 	{
 		rigidbody = GetComponent<Rigidbody>();
+		audioPool = GetComponent<AudioPool>().Initialise(fireDelay, fireClips.MaxShotLength());
 		if (FindComponent(transform, out Humanoid wielder))
 		{
 			Pickup(wielder);//set wielder if placed in hand on startup
@@ -59,6 +68,8 @@ public abstract class WeaponBase : MonoBehaviourPlus
 					transform.localPosition = thirdPersonPosition;
 					transform.localEulerAngles = thirdPersonPosition.eulers;
 				}
+				equipClip.Play(audioPool);
+				Sound.MakeSound(transform.position, soundRadius, wielder);
 				OnPickup();
 				return true;
 			}
@@ -151,8 +162,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		inputActions.Add(wielder.input.AddListener("Attack", InputType.OnPress, (_) => Attack()));
-		if(automatic) inputActions.Add(wielder.input.AddListener("Attack", InputType.OnHold, (_) => Attack()));
+		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
 		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
 	}
@@ -165,14 +175,14 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		if (modelRoot == null) { Debug.LogWarning(name + " has not had its model root set, cannot update render mode, please set in inspector."); return; }
 		for (int i = 0; i < modelRoot.childCount; i++)
 		{
-            SetRenderModeRecursive(modelRoot.GetChild(i), playerHeld);
-        }
+			SetRenderModeRecursive(modelRoot.GetChild(i), playerHeld);
+		}
 	}
 
 	protected virtual void SetRenderModeRecursive(Transform obj, bool playerHeld)
-    {
-        obj.gameObject.layer = playerHeld ? 16 : 0; // set to first person draw mode, or default
-        try
+	{
+		obj.gameObject.layer = playerHeld ? 16 : 0; // set to first person draw mode, or default
+		try
 		{
 			MeshRenderer mr = obj.GetComponent<MeshRenderer>();
 			mr.shadowCastingMode = playerHeld ? UnityEngine.Rendering.ShadowCastingMode.Off : UnityEngine.Rendering.ShadowCastingMode.On;
@@ -184,7 +194,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	}
 
 
-    protected virtual void Attack() { }
+	protected virtual void Attack() { }
 
 	/// <summary>
 	/// When an object with a rigidbody is set as a child of another object with a rigidbody, it gets buggy. This destroys the rigidbody and saves its data for later use.

@@ -5,7 +5,6 @@ public class Sword : WeaponBase
 {
 	public ReflectWindow reflectWindow;
 	public bool reflectEnabled;
-	public float hitDelay;
 	public Collider[] bladeColliders, hiltColliders;
 	Coroutine crtDelay;
 	private Animator animator;
@@ -77,12 +76,14 @@ public class Sword : WeaponBase
 	{
         if (reflectEnabled)
         {
-			if (wielder is AIController) reflectWindow.EnemyReflect(hitDelay);
-			if (wielder is Player) reflectWindow.PlayerReflect(hitDelay);
+			if (wielder is AIController) reflectWindow.EnemyReflect(fireDelay);
+			if (wielder is Player) reflectWindow.PlayerReflect(fireDelay);
 		}
 		if (crtDelay == null)
 		{
             if (wielder is Player) animator.Play("swing1");
+			fireClips.PlayRandom(audioPool);
+			Sound.MakeSound(transform.position, soundRadius, wielder);
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
@@ -102,7 +103,7 @@ public class Sword : WeaponBase
 				//else yield return new WaitForSeconds(0.5f); //placeholder
 				_isFiring = false;
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
-				yield return new WaitForSeconds(hitDelay);
+				yield return new WaitForSeconds(fireDelay);
 				if (wielder is AIController ai2) ai2.IsStopped = false;
 				crtDelay = null;
 			}
