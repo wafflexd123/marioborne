@@ -86,9 +86,10 @@ GameObject:
   - component: {fileID: 5044320275483770594}
   - component: {fileID: 7354719415509492162}
   - component: {fileID: -7971240911961255196}
+  - component: {fileID: 6273352576743934896}
   m_Layer: 0
   m_Name: Knife
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,26 +123,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081258793bf398a44864fad001ca554e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IKHandTarget: {fileID: 0}
+  modelRoot: {fileID: 0}
+  animationName: 
+  automatic: 0
   throwForce: 10
   throwSpeed: 1
   throwFallDelay: 1
+  fireDelay: 0
+  pickupSpeed: 10
+  dropForce: 2
+  soundRadius: 0
+  disablePickupAfterDropSeconds: 0
   handPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: -30, y: 0, z: 0}
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  pickupSpeed: 10
-  dropForce: 2
-  disablePickupAfterDropSeconds: 0
   colliders:
   - {fileID: 2005789802155032435}
   - {fileID: 5282745568268000132}
-  hitDelay: 0
+  fireClips:
+    clips: []
+  equipClip:
+    audio: {fileID: 0}
+    volume: 0
+    pitch: 0
+  reflectWindow: {fileID: 0}
   bladeColliders:
   - {fileID: 2005789802155032435}
   hiltColliders:
   - {fileID: 5282745568268000132}
+  recoveryTime: 0
 --- !u!54 &-7971240911961255196
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -169,6 +183,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6273352576743934896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5044320275483770596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeSlowPitchReduction: 0.3
 --- !u!1 &5044320275980088376
 GameObject:
   m_ObjectHideFlags: 0
