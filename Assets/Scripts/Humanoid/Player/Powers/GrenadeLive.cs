@@ -56,7 +56,6 @@ public class GrenadeLive : MonoBehaviour
             }
             catch
             {
-                /// *** THIS IS NOT WORKING ***
                 Rigidbody hitrb;
                 if (hitObj.TryGetComponent<Rigidbody>(out hitrb))
                 {

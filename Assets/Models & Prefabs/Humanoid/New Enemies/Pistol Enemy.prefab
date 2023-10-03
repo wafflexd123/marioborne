@@ -1226,6 +1226,7 @@ MonoBehaviour:
   <CurrentState>k__BackingField: {fileID: 0}
   coverPointsManager: {fileID: 0}
   currentCoverPoint: {x: 0, y: 0, z: 0}
+  lookingAt: {x: 0, y: 0, z: 0}
 --- !u!114 &6587345493690171063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1341,7 +1342,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 12548
+    m_Bits: 4356
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2072,6 +2073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeSlowPitchReduction: 0.3
 --- !u!1 &5507415990461403095
 GameObject:
   m_ObjectHideFlags: 0

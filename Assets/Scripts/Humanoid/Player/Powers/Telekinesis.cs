@@ -22,6 +22,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     [SerializeField] private float pushWidth = 14f;
     [SerializeField] private float pushLength = 14f;
     [SerializeField] private float upwardsPushForce = 0.2f;
+    [SerializeField] public static float KillingSpeedThreshold = 15f;
 
     [Header("Telekinetic Push Charge Variables")]
     [SerializeField] private float maxChargeTime = 2.0f;
@@ -173,7 +174,8 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
     void PushObjects(float strength)
     {
-        grabbedObject.layer = grabbedPrevLayer;
+        if (grabbedObject != null)
+            grabbedObject.layer = grabbedPrevLayer;
         Vector3 pushDirection = mainCamera.transform.forward;
         Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
 
@@ -196,6 +198,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     {
         Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
         grabbedObject.layer = grabbedPrevLayer;
+        grabbedObject.AddComponent<TelekineticObjectDamage>();
         if (rb != null)
         {
             Vector3 pushDirection = mainCamera.transform.forward;
