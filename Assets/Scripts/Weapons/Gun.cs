@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(GunAnimator))]
@@ -10,6 +11,7 @@ public class Gun : WeaponBase
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
+	public UnityEvent OnFireEvent;
 
 	protected Ammo ammo;
 	Coroutine crtDelay, crtReload;
@@ -85,7 +87,9 @@ public class Gun : WeaponBase
 			}
 			fireClips.PlayRandom(audioPool);
 			Sound.MakeSound(transform.position, soundRadius, wielder);
-			Shoot();
+			if (OnFireEvent != null)
+				OnFireEvent.Invoke();
+            Shoot();
 		}
 	}
 

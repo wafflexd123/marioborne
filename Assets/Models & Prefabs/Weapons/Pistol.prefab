@@ -521,6 +521,7 @@ GameObject:
   - component: {fileID: 3902441386623006281}
   - component: {fileID: 852913784273586255}
   - component: {fileID: 3212784723838133956}
+  - component: {fileID: 7964307453458620899}
   m_Layer: 12
   m_Name: Pistol
   m_TagString: Untagged
@@ -603,6 +604,21 @@ MonoBehaviour:
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 1628130774508101737}
+  OnFireEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7964307453458620899}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: glock_shoot
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3902441386623006281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,6 +685,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeSlowPitchReduction: 0.3
+--- !u!95 &7964307453458620899
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459212967476039815}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bfca93b7d64a718409772f44dae3a3ff, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6459212968234832312
 GameObject:
   m_ObjectHideFlags: 0
