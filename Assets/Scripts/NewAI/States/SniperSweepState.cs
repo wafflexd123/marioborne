@@ -5,11 +5,11 @@ public class SniperSweepState : AIState
 {
 	public float rotationSpeed;
 	public float sweepLimit = 65f;
+	public float sweepDirection = 1f;
 
 	private float currentAngle;
 	private float startAngle;
 	private bool angleSet = false;
-	private float sweepDirection = 1f;
 
 	protected override void OnEntry()
 	{
