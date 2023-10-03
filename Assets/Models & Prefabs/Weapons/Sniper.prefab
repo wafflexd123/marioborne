@@ -459,7 +459,7 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
     volume: 1
     pitch: 1
-  bulletSpeed: 40
+  bulletSpeed: 120
   reloadDelay: 0
   playerAmmo:
     isInfinite: 0
@@ -475,6 +475,9 @@ MonoBehaviour:
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 3689162234156928206}
+  OnFireEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6859929981820962448
 MonoBehaviour:
   m_ObjectHideFlags: 0
