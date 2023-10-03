@@ -40,9 +40,10 @@ public class TelekineticObjectDamage : MonoBehaviour
             print("Collided with enemy layer");
             Humanoid humanoid = collision.gameObject.GetComponentInParent<Humanoid>();
             if (humanoid != null)
+            {
                 humanoid.Kill();
+                Destroy(this);
+            }
         }
-
-        Destroy(this);
     }
 }
