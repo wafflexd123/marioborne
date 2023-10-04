@@ -7,7 +7,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GunAnimator))]
 public class Gun : WeaponBase
 {
+	public AudioPool.Clips bulletCasingClips;
+	[Range(0f, 1f)] public float bulletCasingSoundChance;
 	public float bulletSpeed, reloadDelay;
+	public bool penetrates;
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
 	public Transform firePosition;
@@ -56,7 +59,7 @@ public class Gun : WeaponBase
 	{
 		base.OnWielderChange();
 		if (wielder is AIController) wielder.model.holdingPistol = false;
-		if(wielder is Player) animator.StopAnimations();
+		if (wielder is Player) animator.StopAnimations();
 		ui.SetActive(false);
 		if (crtDelay != null)
 		{
@@ -89,13 +92,14 @@ public class Gun : WeaponBase
 			Sound.MakeSound(transform.position, soundRadius, wielder);
 			if (OnFireEvent != null)
 				OnFireEvent.Invoke();
-            Shoot();
+			Shoot();
 		}
 	}
 
 	protected virtual void Shoot()
 	{
-		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, false);
+		if (Random.Range(0f, 1f) <= bulletCasingSoundChance) bulletCasingClips.PlayRandom(audioPool);
+		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, penetrates);
 	}
 
 	protected Vector3 DirectionWithSpread(float maxSpread)

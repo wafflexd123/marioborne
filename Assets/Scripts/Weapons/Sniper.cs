@@ -39,9 +39,4 @@ public class Sniper : Gun
         wielder.model.sniperLayer = false;
         line.enabled = false;
     }
-
-    protected override void Shoot()
-    {
-        Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, true);
-    }
 }

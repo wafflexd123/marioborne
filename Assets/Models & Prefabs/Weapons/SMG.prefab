@@ -456,11 +456,27 @@ MonoBehaviour:
       volume: 1
       pitch: 1.2
   equipClip:
-    audio: {fileID: 8300000, guid: 5f92b755bc421fd44accdeeaffbeffcd, type: 3}
+    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
     volume: 1
     pitch: 1
+  bulletCasingClips:
+    clips:
+    - audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
+      volume: 1
+      pitch: 1
+    - audio: {fileID: 8300000, guid: 357b74282c0aab8498012bdd3624100e, type: 3}
+      volume: 1
+      pitch: 1
+    - audio: {fileID: 8300000, guid: a24cb8b6107232b49adb8393d99651af, type: 3}
+      volume: 1
+      pitch: 1
+    - audio: {fileID: 8300000, guid: 71e73cc34ab51504599cac6c7b811a8b, type: 3}
+      volume: 1
+      pitch: 1
+  bulletCasingSoundChance: 0.2
   bulletSpeed: 40
   reloadDelay: 0
+  penetrates: 0
   playerAmmo:
     isInfinite: 0
     startAmount: 30

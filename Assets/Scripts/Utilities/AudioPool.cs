@@ -116,7 +116,7 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 	public class Clip
 	{
 		public AudioClip audio;
-		public float volume, pitch;
+		public float volume = 1, pitch = 1;
 
 		public void Play(AudioPool audioPool, float additionalVolume = 0, float additionalPitch = 0)
 		{
