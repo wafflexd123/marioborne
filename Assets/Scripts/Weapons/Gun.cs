@@ -9,7 +9,7 @@ public class Gun : WeaponBase
 {
 	public AudioPool.Clips bulletCasingClips;
 	[Range(0f, 1f)] public float bulletCasingSoundChance;
-	public float bulletSpeed, reloadDelay;
+	public float bulletCasingSoundDelay = 1f, bulletSpeed, reloadDelay;
 	public bool penetrates;
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
@@ -88,18 +88,27 @@ public class Gun : WeaponBase
 					crtDelay = StartCoroutine(Delay());
 				}
 			}
+			if (OnFireEvent != null) OnFireEvent.Invoke();
 			fireClips.PlayRandom(audioPool);
+			BulletCasingSound();
 			Sound.MakeSound(transform.position, soundRadius, wielder);
-			if (OnFireEvent != null)
-				OnFireEvent.Invoke();
 			Shoot();
 		}
 	}
 
 	protected virtual void Shoot()
 	{
-		if (Random.Range(0f, 1f) <= bulletCasingSoundChance) bulletCasingClips.PlayRandom(audioPool);
 		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, penetrates);
+	}
+
+	protected virtual void BulletCasingSound()
+	{
+		if (Random.Range(0f, 1f) <= bulletCasingSoundChance) StartCoroutine(E());
+		IEnumerator E()
+		{
+			yield return new WaitForSeconds(bulletCasingSoundDelay);
+			bulletCasingClips.PlayRandom(audioPool);
+		}
 	}
 
 	protected Vector3 DirectionWithSpread(float maxSpread)
