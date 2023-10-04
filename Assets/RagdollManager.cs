@@ -13,6 +13,7 @@ public class RagdollManager : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     public bool isCheckingGround = false;
     [SerializeField] private MonoBehaviour[] componentsToDisable;
+    private Transform ragdollHips;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class RagdollManager : MonoBehaviour
         ragdollColliders = GetComponentsInChildren<Collider>();
         enemyAnimator = GetComponent<Animator>();
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
+        ragdollHips = enemyAnimator.GetBoneTransform(HumanBodyBones.Hips);
         ToggleRagdoll(false);
     }
 
@@ -59,6 +61,19 @@ public class RagdollManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    public void AlignPositionToHips()
+    {
+        Vector3 originalHipsPosition = ragdollHips.position;
+        transform.position = ragdollHips.position;
+
+        if(Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit))
+        {
+            transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+        }
+
+        ragdollHips.position = originalHipsPosition;
     }
 }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,8 +6,10 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 {
     private Camera mainCamera;
     private RaycastHit raycast;
+
     [Header("Telekinetic Lift Variables")]
     [SerializeField] private LayerMask objectLayer;
+
     [SerializeField] private float grabDistance = 100f;
     [SerializeField] private float followSpeed = 3.0f;
     [SerializeField] private float rotationSpeed = 30.0f;
@@ -18,6 +21,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
     [Header("Telekinetic Push Variables")]
     [SerializeField] private float pushStrength = 30.0f;
+
     [SerializeField] private float pushHeight = 5f;
     [SerializeField] private float pushWidth = 14f;
     [SerializeField] private float pushLength = 14f;
@@ -25,15 +29,16 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
     [Header("Telekinetic Push Charge Variables")]
     [SerializeField] private float maxChargeTime = 2.0f;
+
     [SerializeField] private float minPushStrength = 10.0f;
 
     [Header("UI Elements")]
     public GameObject sliderObject;
+
     public Slider chargeSlider;
     public Image chargeSliderFill;
     public Color maxChargeColor = Color.red;
-    public Color minChargeColor = Color.blue; 
-
+    public Color minChargeColor = Color.blue;
 
     private GameObject grabbedObject;
     private bool isGrabbing;
@@ -41,17 +46,19 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     private Vector3 offset;
     private float objectDistance;
     private float chargeTime;
-   
+    [SerializeField] private Player player;
+
+
     public bool CanDisable => true;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         mainCamera = Player.singlePlayer.camera;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetButtonDown("Ability"))
         {
@@ -69,7 +76,9 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
                 }
                 else if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out raycast, grabDistance, objectLayer))
                 {
-                    GrabObject(raycast.collider.gameObject);
+                    GameObject rootObject = GetRootWeaponObject(raycast.collider.gameObject);
+                    Debug.Log("Ray hit " + rootObject.name);
+                    GrabObject(rootObject);
                 }
             }
             else
@@ -103,48 +112,92 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         HandLeftManager.Instance.SetEnergy(chargeTime / maxChargeTime);
     }
 
-    void GrabObject(GameObject targetObject)
+    private void GrabObject(GameObject targetObject)
     {
         grabbedObject = targetObject;
+
+        if (grabbedObject.CompareTag("Weapon"))
+        {
+            Debug.Log("Moving weapon");
+            StartCoroutine(MoveWeaponToPlayer(grabbedObject));
+            return;
+        }
 
         objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
         offset = grabbedObject.transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance));
 
-        RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
-        if (ragdollManager != null)
+        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            ragdollManager.ToggleRagdoll(true);
+            rb.useGravity = false;
+        }
+
+        // If the grabbed object is an enemy, enable its ragdoll
+        if (grabbedObject.CompareTag("Enemy"))
+        {
+            RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
+            if (ragdollManager != null)
+            {
+                ragdollManager.ToggleRagdoll(true);
+            }
         }
 
         isGrabbing = true;
     }
 
-    void ReleaseObject()
+    private void ReleaseObject()
     {
         if (grabbedObject != null)
         {
-            // Enable gravity for the ragdoll Rigidbodies
-            RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
-            if (ragdollManager != null)
+            Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                foreach (Rigidbody rb in ragdollManager.ragdollRigidbodies)
-                {
-                    rb.useGravity = true;
-                }
-                if (!ragdollManager.isCheckingGround)
-                {
-                    ragdollManager.StartCoroutine(ragdollManager.GroundCheck());
-                }
+                rb.useGravity = true;
             }
 
+            // If the grabbed object is an enemy, disable its ragdoll
+            if (grabbedObject.CompareTag("Enemy"))
+            {
+                RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
+                if (ragdollManager != null)
+                {
+                    ragdollManager.ToggleRagdoll(false);
+                    ragdollManager.AlignPositionToHips();
+                }
+            }
             grabbedObject = null;
         }
+        isGrabbing = false;
+    }
 
+    private IEnumerator MoveWeaponToPlayer(GameObject weapon)
+    {
+        Vector3 initialPosition = weapon.transform.position;
+        Vector3 finalPosition = transform.position;
+        Quaternion initialRotation = weapon.transform.rotation;
+        Quaternion randomRotation = Quaternion.Euler(Random.Range(-90, 90), Random.Range(-90, 90), Random.Range(-90, 90));
+        float elapsedDuration = 0.0f;
+        float totalDuration = 0.5f;
+
+        while (elapsedDuration < totalDuration)
+        {
+            elapsedDuration += Time.deltaTime;
+            float fractionOfJourney = elapsedDuration / totalDuration;
+
+            weapon.transform.position = Vector3.Slerp(initialPosition, finalPosition, fractionOfJourney);
+
+            weapon.transform.rotation = Quaternion.Slerp(initialRotation, randomRotation, fractionOfJourney);
+
+            yield return null;
+        }
+
+        weapon.transform.position = finalPosition;
+        weapon.transform.rotation = randomRotation;
         isGrabbing = false;
     }
 
 
-    void ControlObject(GameObject controlledObject)
+    private void ControlObject(GameObject controlledObject)
     {
         // Changing distance based on scroll wheel
         objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
@@ -173,10 +226,9 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         // Apply rotation effect based on mouse movement
         Vector3 rotationDirection = (targetPosition - controlledObject.transform.position).normalized;
         controlledObject.transform.Rotate(rotationDirection, currentRotationSpeed * UnityEngine.Time.deltaTime);
-
     }
 
-    void PushObjects(float strength)
+    private void PushObjects(float strength)
     {
         Vector3 pushDirection = mainCamera.transform.forward;
         Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
@@ -196,7 +248,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         }
     }
 
-    void PushGrabbedObject(float strength)
+    private void PushGrabbedObject(float strength)
     {
         Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
         if (rb != null)
@@ -207,7 +259,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         ReleaseObject();
     }
 
-    void UpdateChargeUI()
+    private void UpdateChargeUI()
     {
         if (isCharging)
         {
@@ -239,8 +291,22 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         }
     }
 
+    private GameObject GetRootWeaponObject(GameObject childObject)
+    {
+        Transform currentTransform = childObject.transform;
+
+        while (currentTransform.parent != null && !currentTransform.CompareTag("Weapon"))
+        {
+            currentTransform = currentTransform.parent;
+        }
+
+        return currentTransform.gameObject;
+    }
+
+
     #region Debugging
-    void OnDrawGizmos()
+
+    private void OnDrawGizmos()
     {
         if (mainCamera != null)
         {
@@ -252,5 +318,6 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
             Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
         }
     }
-    #endregion
+
+    #endregion Debugging
 }
