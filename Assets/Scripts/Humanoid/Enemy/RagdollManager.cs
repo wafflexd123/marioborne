@@ -31,15 +31,6 @@ public class RagdollManager : MonoBehaviour
         DeactivateRagdoll();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            if (isRagdollActive == false) ActivateRagdoll();
-            else DeactivateRagdoll();
-        }
-    }
-
     // Call this method to enable the ragdoll
     public void ActivateRagdoll()
     {
