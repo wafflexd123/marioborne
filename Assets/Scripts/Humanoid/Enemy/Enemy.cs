@@ -23,6 +23,7 @@ public class Enemy : Humanoid, ITimeScaleListener
     EnemyType typeOfWeapon;
     Player player;
     Coroutine crtRotate;
+    RagdollManager ragdollManager;
 
     [Header("Debug (Don't change values)")]
     [SerializeField] EnemyState _state;
@@ -71,6 +72,8 @@ public class Enemy : Humanoid, ITimeScaleListener
     void Start()
     {
         player = Player.singlePlayer;
+        ragdollManager = GetComponentInChildren<RagdollManager>();
+        //Kill(DeathType.General);
     }
 
     void Update()
@@ -300,6 +303,7 @@ public class Enemy : Humanoid, ITimeScaleListener
                 model.transform.SetParent(null);//if enemy is always enabled
             }
             Destroy(gameObject);//delete everything but the model; saves memory & cpu usage
+            ragdollManager.ToggleRagdoll(true);
         }
     }
 
