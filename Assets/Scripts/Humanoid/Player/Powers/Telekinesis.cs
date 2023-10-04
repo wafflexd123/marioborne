@@ -107,9 +107,22 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
     void GrabObject(GameObject targetObject)
     {
-        grabbedObject = targetObject;
+        // Access the root of the hit object
+        GameObject rootObject = targetObject.transform.root.gameObject;
+
+        grabbedObject = rootObject; // now you're working with the parent/root object
         grabbedPrevLayer = grabbedObject.layer;
         grabbedObject.layer = 17; // TK_Outline layer, for the shader
+
+        if (grabbedObject.CompareTag("Enemy"))
+        {
+            RagdollManager ragdollManager = grabbedObject.GetComponent<RagdollManager>();
+            if (ragdollManager)
+            {
+                ragdollManager.ActivateRagdoll();
+                ragdollManager.SetRagdollGravity(false);
+            }
+        }
 
         objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
         offset = grabbedObject.transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance));
@@ -123,11 +136,20 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         isGrabbing = true;
     }
 
+
     void ReleaseObject()
     {
         if (grabbedObject != null)
         {
             grabbedObject.layer = grabbedPrevLayer;
+            if (grabbedObject.CompareTag("Enemy"))
+            {
+                RagdollManager ragdollManager = grabbedObject.GetComponent<RagdollManager>();
+                if (ragdollManager)
+                {
+                    ragdollManager.SetRagdollGravity(true);
+                }
+            }
             Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -146,8 +168,9 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
         objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
 
-        // Calculating target position based on mouse input
-        Vector3 targetPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance)) + offset;
+        // Calculate target position based on ray from camera through mouse pointer
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Vector3 targetPosition = ray.GetPoint(objectDistance);
 
         // Adding wobble
         targetPosition += mainCamera.transform.up * Mathf.Sin(UnityEngine.Time.time * wobbleFrequency) * wobbleAmplitude;
@@ -169,8 +192,8 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
         // Apply rotation effect based on mouse movement
         Vector3 rotationDirection = (targetPosition - controlledObject.transform.position).normalized;
         controlledObject.transform.Rotate(rotationDirection, currentRotationSpeed * UnityEngine.Time.deltaTime);
-
     }
+
 
     void PushObjects(float strength)
     {

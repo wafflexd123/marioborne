@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 public class RagdollManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class RagdollManager : MonoBehaviour
     private Animator animator;
     private Rigidbody mainRigidbody;
     private Collider mainCollider;
+    private NavMeshAgent navMeshAgent;
     private Rigidbody[] ragdollRigidbodies;
     private Collider[] ragdollColliders;
     [SerializeField] private MonoBehaviour[] scriptsToDisable;
@@ -20,6 +22,7 @@ public class RagdollManager : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         mainRigidbody = GetComponent<Rigidbody>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         mainCollider = GetComponentsInChildren<Collider>(true).FirstOrDefault(col => col.gameObject.tag == "MainCollider");
 
         ragdollRigidbodies = GetComponentsInChildren<Rigidbody>(true).Where(rb => rb.gameObject.tag == "RagdollPart" && rb != mainRigidbody).ToArray();
@@ -43,6 +46,7 @@ public class RagdollManager : MonoBehaviour
         animator.enabled = false;
         mainRigidbody.isKinematic = true;
         mainCollider.enabled = false;
+        navMeshAgent.enabled = false;
 
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
@@ -76,6 +80,7 @@ public class RagdollManager : MonoBehaviour
         animator.enabled = true;
         mainRigidbody.isKinematic = false;
         mainCollider.enabled = true;
+        navMeshAgent.enabled = true;
 
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
@@ -120,11 +125,22 @@ public class RagdollManager : MonoBehaviour
     // Check if the enemy is grounded using a Raycast from the main collider
     private bool IsGrounded()
     {
-        float distanceToGround = mainCollider.bounds.extents.y;
-        Vector3 start = mainCollider.bounds.center;
+        if (hipsLocation == null) return false;
+
+        float distanceToGround = hipsLocation.localScale.y / 2;
+        Vector3 start = hipsLocation.position;
         Vector3 direction = -Vector3.up;
+
+        Debug.DrawRay(start, direction * (distanceToGround + 0.1f), Color.red, 1f);
 
         return Physics.Raycast(start, direction, distanceToGround + 0.1f);
     }
 
+    public void SetRagdollGravity(bool state)
+    {
+        foreach (Rigidbody rb in ragdollRigidbodies)
+        {
+            rb.useGravity = state;
+        }
+    }
 }
