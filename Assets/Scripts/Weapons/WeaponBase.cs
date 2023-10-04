@@ -220,6 +220,11 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		if (FindComponent(other.transform, out Player player)) Pickup(player);
 	}
 
+	private void OnTriggerEnter(Collider other)
+	{
+		if (FindComponent(other.transform, out Player player)) Pickup(player);
+	}
+
 	//private void OnCollisionEnter(Collision collision)
 	//{
 	//	if (rigidbody != null && IsMoving)//needs to kill at fast enough speeds, otherwise it kills even if it's barely moving. Also need animations for knockback..
