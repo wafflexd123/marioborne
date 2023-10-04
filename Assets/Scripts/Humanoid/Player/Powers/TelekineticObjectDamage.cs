@@ -26,8 +26,7 @@ public class TelekineticObjectDamage : MonoBehaviour
         float curSpeed = rb.velocity.magnitude;
         if (curSpeed < Telekinesis.KillingSpeedThreshold)
         {
-            print("went to slow");
-            Debug.Break();
+            //print("went to slow");
             Destroy(this);
         }
     }

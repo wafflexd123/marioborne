@@ -22,6 +22,7 @@ public class SoundAtLocation : MonoBehaviour
             GameObject guy = new GameObject("Sound guy " + i);
             guy.transform.parent = transform;
             AudioSource a = guy.AddComponent<AudioSource>();
+            //a.spatialBlend = 1f;
             objs[i] = guy;
             aus[i] = a;
         }
