@@ -22,6 +22,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     [SerializeField] private float pushWidth = 14f;
     [SerializeField] private float pushLength = 14f;
     [SerializeField] private float upwardsPushForce = 0.2f;
+    [SerializeField] public static float KillingSpeedThreshold = 15f;
 
     [Header("Telekinetic Push Charge Variables")]
     [SerializeField] private float maxChargeTime = 2.0f;
@@ -41,6 +42,7 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     private Vector3 offset;
     private float objectDistance;
     private float chargeTime;
+    private int grabbedPrevLayer = -1;
    
     public bool CanDisable => true;
 
@@ -106,14 +108,16 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     void GrabObject(GameObject targetObject)
     {
         grabbedObject = targetObject;
+        grabbedPrevLayer = grabbedObject.layer;
+        grabbedObject.layer = 17; // TK_Outline layer, for the shader
 
         objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
         offset = grabbedObject.transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance));
 
-        RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
-        if (ragdollManager != null)
+        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            ragdollManager.ToggleRagdoll(true);
+            rb.useGravity = false;
         }
 
         isGrabbing = true;
@@ -123,18 +127,11 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     {
         if (grabbedObject != null)
         {
-            // Enable gravity for the ragdoll Rigidbodies
-            RagdollManager ragdollManager = grabbedObject.GetComponentInChildren<RagdollManager>();
-            if (ragdollManager != null)
+            grabbedObject.layer = grabbedPrevLayer;
+            Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                foreach (Rigidbody rb in ragdollManager.ragdollRigidbodies)
-                {
-                    rb.useGravity = true;
-                }
-                if (!ragdollManager.isCheckingGround)
-                {
-                    ragdollManager.StartCoroutine(ragdollManager.GroundCheck());
-                }
+                rb.useGravity = true;
             }
 
             grabbedObject = null;
@@ -142,7 +139,6 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
         isGrabbing = false;
     }
-
 
     void ControlObject(GameObject controlledObject)
     {
@@ -178,6 +174,8 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
 
     void PushObjects(float strength)
     {
+        if (grabbedObject != null)
+            grabbedObject.layer = grabbedPrevLayer;
         Vector3 pushDirection = mainCamera.transform.forward;
         Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
 
@@ -199,6 +197,8 @@ public class Telekinesis : MonoBehaviour, IPlayerPower
     void PushGrabbedObject(float strength)
     {
         Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        grabbedObject.layer = grabbedPrevLayer;
+        grabbedObject.AddComponent<TelekineticObjectDamage>();
         if (rb != null)
         {
             Vector3 pushDirection = mainCamera.transform.forward;
