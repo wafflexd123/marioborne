@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 public class RagdollManager : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class RagdollManager : MonoBehaviour
     private Collider[] ragdollColliders;
     [SerializeField] private MonoBehaviour[] scriptsToDisable;
 
-    private bool isRagdolling;
+    private bool isRagdollActive;
+    private float timeWithZeroVelocity = 0f;
+    [SerializeField] private float delayBeforeDeactivation = 5f;
 
     private void Awake()
     {
@@ -29,7 +32,7 @@ public class RagdollManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            if (isRagdolling == false) ActivateRagdoll();
+            if (isRagdollActive == false) ActivateRagdoll();
             else DeactivateRagdoll();
         }
     }
@@ -56,7 +59,9 @@ public class RagdollManager : MonoBehaviour
             mb.enabled = false;
         }
 
-        isRagdolling = true;
+        isRagdollActive = true;
+
+        StartCoroutine(CheckVelocityAndGrounded());
     }
 
     // Call this method to disable the ragdoll
@@ -87,6 +92,39 @@ public class RagdollManager : MonoBehaviour
             mb.enabled = true;
         }
 
-        isRagdolling = false;
+        isRagdollActive = false;
     }
+
+    private IEnumerator CheckVelocityAndGrounded()
+    {
+        while (isRagdollActive)
+        {
+            if (IsGrounded() && mainRigidbody.velocity == Vector3.zero)
+            {
+                timeWithZeroVelocity += Time.deltaTime;
+                if (timeWithZeroVelocity >= delayBeforeDeactivation)
+                {
+                    DeactivateRagdoll();
+                    timeWithZeroVelocity = 0f;
+                    yield break;
+                }
+            }
+            else
+            {
+                timeWithZeroVelocity = 0f;
+            }
+            yield return null;
+        }
+    }
+
+    // Check if the enemy is grounded using a Raycast from the main collider
+    private bool IsGrounded()
+    {
+        float distanceToGround = mainCollider.bounds.extents.y;
+        Vector3 start = mainCollider.bounds.center;
+        Vector3 direction = -Vector3.up;
+
+        return Physics.Raycast(start, direction, distanceToGround + 0.1f);
+    }
+
 }
