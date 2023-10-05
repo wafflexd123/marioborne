@@ -19,7 +19,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 	[HideInInspector] public NavMeshAgent agent { get; set; }
 	public new Rigidbody rigidbody { get; protected set; }
 	public Player player { get; protected set; }
-	public float AgentSpeed { get => agentSpeed; set { agentSpeed = value; agent.speed = value * Time.timeScale; } }
+	public float AgentSpeed { get => defaultSpeed; set { defaultSpeed = value; agent.speed = value * Time.timeScale; } }
 	public bool IsStopped { get => isStopped; set { isStopped = value; agent.isStopped = value; } }
 	public override Vector3 LookDirection => fieldOfView.eyes.forward;
 	public override Vector3 LookingAt => lookingAt;
@@ -53,6 +53,8 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 			CurrentState.Tick();
 
 		model.velocity = agent.velocity;
+
+        Debug.Log($"agentSpeed: {agentSpeed}, Time: {Time.timeScale}, agent.speed: {agent.speed}, speed: {AgentSpeed}");
 	}
 
 	public void MoveTowards(Vector3 targetPosition)
