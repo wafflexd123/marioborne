@@ -18,9 +18,9 @@ public class Gun : WeaponBase
 
 	protected Ammo ammo;
 	Coroutine crtDelay, crtReload;
-	GameObject ui, qToDrop;
+	GameObject ammoCounter;
+	AmmoCounter ac;
 	Image imgReloadPercent;
-	TMP_Text txtAmmo;
 	GunAnimator animator;
 
 	public override bool IsFiring => false;
@@ -29,13 +29,10 @@ public class Gun : WeaponBase
 	{
 		base.Start();
 		animator = GetComponent<GunAnimator>();
-		ui = transform.Find("UI").gameObject;
-		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
-		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
-		qToDrop = ui.transform.Find("Q To Drop").gameObject;
+		ammoCounter = transform.Find("Ammo Counter").gameObject;
+		ac = ammoCounter.GetComponent<AmmoCounter>();
 		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
-		txtAmmo.text = $"{playerAmmo.amount}";
 	}
 
 	protected override void OnPickup()
@@ -45,9 +42,10 @@ public class Gun : WeaponBase
 
 		if (wielder is Player)
 		{
-			animator.StartAnimations();
+            ac.SetAmmo(playerAmmo.amount);
+            animator.StartAnimations();
 			ammo = playerAmmo;
-			ui.SetActive(true);
+			ammoCounter.SetActive(true);
 		}
 		else
 		{
@@ -60,7 +58,7 @@ public class Gun : WeaponBase
 		base.OnWielderChange();
 		if (wielder is AIController) wielder.model.holdingPistol = false;
 		if (wielder is Player) animator.StopAnimations();
-		ui.SetActive(false);
+		ammoCounter.SetActive(false);
 		if (crtDelay != null)
 		{
 			StopCoroutine(crtDelay); //if dropped while attacking
@@ -74,9 +72,7 @@ public class Gun : WeaponBase
 		{
 			if (wielder is Player)
 			{
-				txtAmmo.text = $"{playerAmmo.amount}";
-				if (playerAmmo.amount <= 0) qToDrop.SetActive(true);
-				crtDelay = StartCoroutine(DelayWithUI());
+				ac.SetAmmo(playerAmmo.amount);
 				animator.Shoot();
 			}
 			else
