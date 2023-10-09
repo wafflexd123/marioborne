@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Sword : WeaponBase
 {
+	[Header("Sword Specific")]
 	public ReflectWindow reflectWindow;
 	private bool reflectEnabled;
 	public Collider[] bladeColliders, hiltColliders;
@@ -83,7 +84,7 @@ public class Sword : WeaponBase
 		{
 			if (wielder is Player) animator.Play("swing1");
 			fireClips.PlayRandom(audioPool);
-			Sound.MakeSound(transform.position, soundRadius, wielder);
+			Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
@@ -92,7 +93,8 @@ public class Sword : WeaponBase
 				{
 					wielder.model.slash = true;
 					ai.IsStopped = true;
-					ai.rotationSpeed = 0f;
+					ai.RotationSpeed = 0f;
+					yield return new WaitForSeconds(0.5f);
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;

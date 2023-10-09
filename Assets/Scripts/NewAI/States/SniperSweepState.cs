@@ -36,14 +36,14 @@ public class SniperSweepState : AIState
 
 	protected void Sweep() //does a sweeping motion across a specified angle (sweepLimit)
 	{
-		currentAngle += controller.rotationSpeed * sweepDirection * Time.deltaTime;
+		currentAngle += controller.RotationSpeed * sweepDirection * Time.deltaTime;
 		if (currentAngle < startAngle - sweepLimit || currentAngle > startAngle + sweepLimit) sweepDirection *= -1f;
 		controller.transform.rotation = Quaternion.Euler(0f, currentAngle, 0f);
 	}
 
 	protected void ReOrient(float direction) //rotates backward depending on direction
     {
-		currentAngle += controller.rotationSpeed * direction * Time.deltaTime;
+		currentAngle += controller.RotationSpeed * direction * Time.deltaTime;
 		controller.transform.rotation = Quaternion.Euler(0f, currentAngle, 0f);
     }
 }

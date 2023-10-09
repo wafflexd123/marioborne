@@ -14,7 +14,6 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
     public abstract Vector3 LookingAt { get; }
     public abstract void Kill(DeathType deathType = DeathType.General);
     public abstract bool PickupObject(WeaponBase weapon, out Action onDrop);
-
     public abstract void OnBulletHit(Collision collision, Bullet bullet);
 
     protected virtual void Awake()

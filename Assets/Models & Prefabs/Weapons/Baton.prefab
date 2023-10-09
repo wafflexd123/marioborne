@@ -52,14 +52,28 @@ MonoBehaviour:
   IKHandTarget: {fileID: 0}
   modelRoot: {fileID: 3324473732510384776}
   animationName: hold_sword
-  automatic: 0
+  equipClip:
+    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 10
+  fireClips:
+    clips:
+    - audio: {fileID: 8300000, guid: 6cdae7ab499144e4c989745b1355245b, type: 3}
+      volume: 0
+      pitch: 0
+      maxDistance: 40
   throwForce: 10
   throwSpeed: 1
   throwFallDelay: 1
+  automatic: 0
   fireDelay: 1
+  soundRadius: 0
+  colliders:
+  - {fileID: 9209792048004995976}
+  - {fileID: 9184598180054694575}
   pickupSpeed: 10
   dropForce: 2
-  soundRadius: 0
   disablePickupAfterDropSeconds: 2
   handPosition:
     coords: {x: 0.3, y: -0.4, z: 0}
@@ -67,18 +81,6 @@ MonoBehaviour:
   thirdPersonPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  colliders:
-  - {fileID: 9209792048004995976}
-  - {fileID: 9184598180054694575}
-  fireClips:
-    clips:
-    - audio: {fileID: 8300000, guid: 6cdae7ab499144e4c989745b1355245b, type: 3}
-      volume: 0
-      pitch: 0
-  equipClip:
-    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
-    volume: 1
-    pitch: 1
   reflectWindow: {fileID: 0}
   bladeColliders:
   - {fileID: 9209792048004995976}
@@ -109,7 +111,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!95 &598308417147974527
@@ -145,7 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeSlowPitchReduction: 0.3
 --- !u!1 &555598210478939951
 GameObject:
   m_ObjectHideFlags: 0

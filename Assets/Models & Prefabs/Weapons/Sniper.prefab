@@ -428,51 +428,55 @@ MonoBehaviour:
   IKHandTarget: {fileID: 1289862788891083049}
   modelRoot: {fileID: 2437910022093311891}
   animationName: hold_awp
-  automatic: 0
-  throwForce: 10
-  throwSpeed: 1
-  throwFallDelay: 1
-  fireDelay: 2
-  pickupSpeed: 5
-  dropForce: 2
-  soundRadius: 70
-  disablePickupAfterDropSeconds: 2
-  handPosition:
-    coords: {x: 0.23, y: -0.19, z: 0.78}
-    eulers: {x: 0, y: 0, z: 0}
-  thirdPersonPosition:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  colliders:
-  - {fileID: 9065933078033995514}
-  - {fileID: 4883643525526498020}
-  - {fileID: 5839925845333659699}
+  equipClip:
+    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 10
   fireClips:
     clips:
     - audio: {fileID: 8300000, guid: 0999b4b63bcd9f14699b8208408a7ee7, type: 3}
       volume: 1
       pitch: 1
-  equipClip:
-    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
-    volume: 1
-    pitch: 1
+      maxDistance: 40
+  throwForce: 10
+  throwSpeed: 1
+  throwFallDelay: 1
+  automatic: 0
+  fireDelay: 2
+  colliders:
+  - {fileID: 9065933078033995514}
+  - {fileID: 4883643525526498020}
+  - {fileID: 5839925845333659699}
+  pickupSpeed: 5
+  dropForce: 2
+  disablePickupAfterDropSeconds: 2
+  playerHandPosition:
+    coords: {x: 0.23, y: -0.19, z: 0.78}
+    eulers: {x: 0, y: 0, z: 0}
+  enemyHandPosition:
+    coords: {x: 0.15, y: -0.15, z: 0.4}
+    eulers: {x: 20, y: 15, z: 0}
   bulletCasingClips:
     clips:
     - audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
       volume: 1
       pitch: 1
+      maxDistance: 10
     - audio: {fileID: 8300000, guid: 357b74282c0aab8498012bdd3624100e, type: 3}
       volume: 1
       pitch: 1
+      maxDistance: 10
     - audio: {fileID: 8300000, guid: a24cb8b6107232b49adb8393d99651af, type: 3}
       volume: 1
       pitch: 1
+      maxDistance: 10
     - audio: {fileID: 8300000, guid: 71e73cc34ab51504599cac6c7b811a8b, type: 3}
       volume: 1
       pitch: 1
+      maxDistance: 10
   bulletCasingSoundChance: 1
   bulletCasingSoundDelay: 0.5
-  bulletSpeed: 70
   reloadDelay: 0
   penetrates: 1
   playerAmmo:
@@ -480,12 +484,14 @@ MonoBehaviour:
     startAmount: 5
     color: {r: 1, g: 1, b: 1, a: 0}
     maxSpread: 0
+    bulletSpeed: 0
     amount: 0
   aiAmmo:
     isInfinite: 1
     startAmount: 10
     color: {r: 1, g: 0, b: 0, a: 0}
     maxSpread: 0.01
+    bulletSpeed: 0
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 3689162234156928206}
@@ -661,7 +667,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeSlowPitchReduction: 0.3
 --- !u!1 &3193251215281253258
 GameObject:
   m_ObjectHideFlags: 0

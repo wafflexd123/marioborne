@@ -68,4 +68,8 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
         grenadeObject.Reappear(startTime, chargeTime + thrownTime);
         inhand = true;
     }
+
+	public void OnWeaponPickup()
+	{
+	}
 }
