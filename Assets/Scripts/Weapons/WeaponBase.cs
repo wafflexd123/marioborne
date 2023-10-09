@@ -78,7 +78,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		return false;
 	}
 
-	public virtual void Drop(float dropForce)
+	public virtual void Drop(float dropForce, bool useDropTimer = true)
 	{
 		OnWielderChange();
 		OnDrop();
@@ -89,7 +89,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		}
 		wielder = null;
 		transform.parent = null;
-		ResetRoutine(DropTimer(), ref crtDropTimer);
+		if (useDropTimer) ResetRoutine(DropTimer(), ref crtDropTimer);
 		EnableRigidbody(true);
 		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
 
@@ -228,6 +228,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		if (rigidbody != null) rigidbody.useGravity = false;
 		gameObject.layer = 17;
 		telekinesis = t;
+		if (wielder) Drop(0, false);
 	}
 
 	public void TelekineticRelease()
