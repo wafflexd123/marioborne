@@ -84,7 +84,7 @@ public class Sword : WeaponBase
 		{
 			if (wielder is Player) animator.Play("swing1");
 			fireClips.PlayRandom(audioPool);
-			Sound.MakeSound(transform.position, soundRadius, wielder);
+			Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
 			crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{

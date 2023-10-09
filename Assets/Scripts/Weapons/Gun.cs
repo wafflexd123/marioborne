@@ -86,7 +86,7 @@ public class Gun : WeaponBase
 			if (OnFireEvent != null) OnFireEvent.Invoke();
 			fireClips.PlayRandom(audioPool);
 			BulletCasingSound();
-			Sound.MakeSound(transform.position, soundRadius, wielder);
+			Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
 			Shoot();
 		}
 	}

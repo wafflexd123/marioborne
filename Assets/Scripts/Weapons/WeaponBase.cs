@@ -20,7 +20,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	public float throwFallDelay = 1f; // Delay before object starts falling
 	[Header("Fire")]
 	public bool automatic;
-	public float fireDelay, soundRadius;
+	public float fireDelay;
 	[Header("Equip/Drop")]
 	public Collider[] colliders;
 	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
@@ -70,7 +70,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 			wielder = humanoid;
 			if (telekinesis != null) telekinesis.ReleaseObject();
 			EnableRigidbody(false);
-			if(wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
+			if (wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
 			else StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform, () => OnPickup()));
 			return true;
 		}
@@ -158,7 +158,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		if (wielder is Player p) playerHandPosition.ApplyToTransform(transform, true);
 		else enemyHandPosition.ApplyToTransform(transform, transform);
 		equipClip.Play(audioPool);
-		Sound.MakeSound(transform.position, soundRadius, wielder);
+		Sound.MakeSound(transform.position, equipClip.maxDistance, wielder);
 		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
 		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
