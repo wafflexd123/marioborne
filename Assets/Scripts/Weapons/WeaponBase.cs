@@ -47,10 +47,8 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		layer = gameObject.layer;
 		rigidbody = GetComponent<Rigidbody>();
 		audioPool = GetComponent<AudioPool>().Initialise(fireDelay, fireClips.MaxShotLength());
-		if (FindComponent(transform, out Humanoid wielder))
-		{
-			Pickup(wielder);//set wielder if placed in hand on startup
-		}
+		if (FindComponent(transform, out Humanoid wielder)) Pickup(wielder);//set wielder if placed in hand on startup
+		else EnableRigidbody(true);
 	}
 
 	public bool SwapWielder(Humanoid humanoid)
@@ -204,11 +202,13 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 			if ((rigidbody = GetComponent<Rigidbody>()) == null) rigidbody = gameObject.AddComponent<Rigidbody>();//if no rigidbody exists yet
 			if (rigidbodyStore != null) rigidbodyStore.Apply(rigidbody);//if a rigidbody has been stored previously
 			for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = false;
+			gameObject.AddComponent<BasicRewindable>();
 		}
 		else if (rigidbody != null)
 		{
 			rigidbodyStore = new RigidbodyStore(rigidbody);//store rigidbody data
 			Destroy(rigidbody);
+			Destroy(gameObject.GetComponent<BasicRewindable>());
 			for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = true;
 		}
 	}

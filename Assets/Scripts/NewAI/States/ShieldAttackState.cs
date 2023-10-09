@@ -21,11 +21,11 @@ public class ShieldAttackState : AIState
 	protected override void OnEntry()
 	{
 		defaultSpeed = controller.AgentSpeed;
-		defaultRotSpeed = controller.rotationSpeed;
+		defaultRotSpeed = controller.RotationSpeed;
 		targetMask = 1 << 3;
 		obstacleMask = 1 << 0 | 1 << 14;
 		controller.AgentSpeed = approachSpeed;
-		controller.rotationSpeed = rotationSpeed;
+		controller.RotationSpeed = rotationSpeed;
 		controller.transform.LookAt(controller.player.transform.position);
 	}
 
@@ -33,13 +33,13 @@ public class ShieldAttackState : AIState
 	{
 		StopCoroutine(ref crtInvestigate);
 		controller.AgentSpeed = defaultSpeed;
-		controller.rotationSpeed = defaultRotSpeed;
+		controller.RotationSpeed = defaultRotSpeed;
 		//controller.fieldOfView.viewAngle = defaultViewAngle;
 	}
 
 	public override void Tick()
 	{
-		controller.rotationSpeed = rotationSpeed;
+		controller.RotationSpeed = rotationSpeed;
 		Collider[] rangeChecks = Physics.OverlapSphere(controller.fieldOfView.eyes.position, viewRadius, targetMask, QueryTriggerInteraction.Ignore);
 		if (rangeChecks.Length > 0)
 		{ //uses fov code to check whether enemy is roughly facing the player

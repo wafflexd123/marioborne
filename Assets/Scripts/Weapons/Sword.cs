@@ -93,7 +93,7 @@ public class Sword : WeaponBase
 				{
 					wielder.model.slash = true;
 					ai.IsStopped = true;
-					ai.rotationSpeed = 0f;
+					ai.RotationSpeed = 0f;
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
