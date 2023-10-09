@@ -562,32 +562,32 @@ MonoBehaviour:
   IKHandTarget: {fileID: 2731609474143621697}
   modelRoot: {fileID: 6459212968234832315}
   animationName: hold_glock
-  automatic: 0
-  throwForce: 10
-  throwSpeed: 1
-  throwFallDelay: 1
-  fireDelay: 0.5
-  pickupSpeed: 5
-  dropForce: 2
-  soundRadius: 50
-  disablePickupAfterDropSeconds: 5
-  handPosition:
-    coords: {x: 0.19, y: -0.23, z: 0.43}
-    eulers: {x: 0, y: 0, z: 0}
-  thirdPersonPosition:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  colliders:
-  - {fileID: 8869820690184937078}
+  equipClip:
+    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
+    volume: 1
+    pitch: 1
   fireClips:
     clips:
     - audio: {fileID: 8300000, guid: b81dac3fe37ddbb478bb60a4a558efa9, type: 3}
       volume: 1
       pitch: 1
-  equipClip:
-    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
-    volume: 1
-    pitch: 1
+  throwForce: 10
+  throwSpeed: 1
+  throwFallDelay: 1
+  automatic: 0
+  fireDelay: 0.5
+  soundRadius: 50
+  colliders:
+  - {fileID: 8869820690184937078}
+  pickupSpeed: 5
+  dropForce: 2
+  disablePickupAfterDropSeconds: 5
+  playerHandPosition:
+    coords: {x: 0.19, y: -0.23, z: 0.43}
+    eulers: {x: 0, y: 0, z: 0}
+  enemyHandPosition:
+    coords: {x: 0, y: -0.1, z: 0}
+    eulers: {x: 0, y: 0, z: 0}
   bulletCasingClips:
     clips:
     - audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
@@ -604,7 +604,6 @@ MonoBehaviour:
       pitch: 1
   bulletCasingSoundChance: 1
   bulletCasingSoundDelay: 0.5
-  bulletSpeed: 50
   reloadDelay: 0
   penetrates: 0
   playerAmmo:
@@ -612,12 +611,14 @@ MonoBehaviour:
     startAmount: 10
     color: {r: 1, g: 1, b: 1, a: 0}
     maxSpread: 0
+    bulletSpeed: 0
     amount: 0
   aiAmmo:
     isInfinite: 1
     startAmount: 10
     color: {r: 1, g: 0, b: 0, a: 0}
     maxSpread: 0.01
+    bulletSpeed: 0
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 1628130774508101737}

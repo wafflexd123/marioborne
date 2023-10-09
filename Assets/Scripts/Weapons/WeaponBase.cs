@@ -24,7 +24,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	[Header("Equip/Drop")]
 	public Collider[] colliders;
 	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
-	public Position handPosition, thirdPersonPosition;
+	public Position playerHandPosition, enemyHandPosition;
 
 	//Script
 	protected AudioPool audioPool;
@@ -70,7 +70,8 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 			wielder = humanoid;
 			if (telekinesis != null) telekinesis.ReleaseObject();
 			EnableRigidbody(false);
-			StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
+			if(wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
+			else StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform, () => OnPickup()));
 			return true;
 		}
 		return false;
@@ -154,8 +155,8 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		if (wielder is Player p) handPosition.ApplyToTransform(transform, true);
-		else thirdPersonPosition.ApplyToTransform(transform, transform);
+		if (wielder is Player p) playerHandPosition.ApplyToTransform(transform, true);
+		else enemyHandPosition.ApplyToTransform(transform, transform);
 		equipClip.Play(audioPool);
 		Sound.MakeSound(transform.position, soundRadius, wielder);
 		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));
