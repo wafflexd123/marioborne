@@ -4,30 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [SelectionBase, RequireComponent(typeof(AudioPool))]
-public abstract class WeaponBase : MonoBehaviourPlus
+public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 {
 	//Inspector
 	[Header("Graphics")]
 	public Transform IKHandTarget;
 	[SerializeField] protected Transform modelRoot;
 	public string animationName = "";
-
-	[Header("")]
-	public bool automatic;
+	[Header("Sound")]
+	public AudioPool.Clip equipClip;
+	public AudioPool.Clips fireClips;
+	[Header("Throw")]
 	public float throwForce = 10f; // Initial force of the throw
 	public float throwSpeed = 1f; // How fast the object will go after being thrown
 	public float throwFallDelay = 1f; // Delay before object starts falling
-	public float fireDelay, pickupSpeed, dropForce, soundRadius, disablePickupAfterDropSeconds;
-	public Position handPosition, thirdPersonPosition;
+	[Header("Fire")]
+	public bool automatic;
+	public float fireDelay, soundRadius;
+	[Header("Equip/Drop")]
 	public Collider[] colliders;
-	public AudioPool.Clips fireClips;
-	public AudioPool.Clip equipClip;
+	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
+	public Position handPosition, thirdPersonPosition;
 
 	//Script
 	protected AudioPool audioPool;
 	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
+	int layer;
+	Telekinesis telekinesis;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 	Action onWielderChange;//registered by wielder when picked up, to be called just before the weapon is dropped
 	Coroutine crtDropTimer;
@@ -39,6 +44,7 @@ public abstract class WeaponBase : MonoBehaviourPlus
 
 	protected virtual void Start()
 	{
+		layer = gameObject.layer;
 		rigidbody = GetComponent<Rigidbody>();
 		audioPool = GetComponent<AudioPool>().Initialise(fireDelay, fireClips.MaxShotLength());
 		if (FindComponent(transform, out Humanoid wielder))
@@ -47,36 +53,24 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		}
 	}
 
-	public virtual bool Pickup(Humanoid humanoid, bool forcePickup = false)
+	public bool SwapWielder(Humanoid humanoid)
 	{
-		if (forcePickup && wielder)//forced pickups only need to occur if the weapon is being wielded already
+		if (wielder && humanoid.PickupObject(this, out onWielderChange))
 		{
-			if (humanoid.PickupObject(this, out Action onWielderChange))
-			{
-				StopCoroutine(ref crtDropTimer);//just in case
-				OnWielderChange();
-				this.onWielderChange = onWielderChange;
-				wielder = humanoid;
-				if (wielder is Player)
-				{
-					transform.localPosition = handPosition;
-					transform.localEulerAngles = handPosition.eulers;
-					//Player.singlePlayer.IKEquip(false, IKHandTarget);
-				}
-				else
-				{
-					transform.localPosition = thirdPersonPosition;
-					transform.localEulerAngles = thirdPersonPosition.eulers;
-				}
-				equipClip.Play(audioPool);
-				Sound.MakeSound(transform.position, soundRadius, wielder);
-				OnPickup();
-				return true;
-			}
+			OnWielderChange();
+			wielder = humanoid;
+			OnPickup();
+			return true;
 		}
-		else if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+		return false;
+	}
+
+	public virtual bool Pickup(Humanoid humanoid)
+	{
+		if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			wielder = humanoid;
+			if (telekinesis != null) telekinesis.ReleaseObject();
 			EnableRigidbody(false);
 			StartCoroutine(MoveToPosLocal(handPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
 			return true;
@@ -162,6 +156,10 @@ public abstract class WeaponBase : MonoBehaviourPlus
 	/// </summary>
 	protected virtual void OnPickup()
 	{
+		if (wielder is Player p) handPosition.ApplyToTransform(transform, true);
+		else thirdPersonPosition.ApplyToTransform(transform, transform);
+		equipClip.Play(audioPool);
+		Sound.MakeSound(transform.position, soundRadius, wielder);
 		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));
 		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
 		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
@@ -225,15 +223,17 @@ public abstract class WeaponBase : MonoBehaviourPlus
 		if (FindComponent(other.transform, out Player player)) Pickup(player);
 	}
 
-	//private void OnCollisionEnter(Collision collision)
-	//{
-	//	if (rigidbody != null && IsMoving)//needs to kill at fast enough speeds, otherwise it kills even if it's barely moving. Also need animations for knockback..
-	//	{
-	//		if (FindComponent(collision.collider.transform, out Enemy enemy))
-	//		{
-	//			enemy.Kill();
-	//			Destroy(gameObject);
-	//		}
-	//	}
-	//}
+	public void TelekineticGrab(Telekinesis t)
+	{
+		if (rigidbody != null) rigidbody.useGravity = false;
+		gameObject.layer = 17;
+		telekinesis = t;
+	}
+
+	public void TelekineticRelease()
+	{
+		if (rigidbody != null) rigidbody.useGravity = true;
+		gameObject.layer = layer;
+		telekinesis = null;
+	}
 }

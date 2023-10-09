@@ -76,25 +76,29 @@ public class TimeslowDeflect : MonoBehaviour, IPlayerPower
         }
     }
 
-    //public void Deflect()
-    //{
-    //	if (crtDeflect == null) crtDeflect = StartCoroutine(E());
-    //	IEnumerator E()
-    //	{
-    //		player.model.deflect = true;
-    //		reflectWindowPrefab.enabled = true;
-    //		yield return new WaitForSeconds(deflectTime);
-    //		reflectWindowPrefab.enabled = false;
+	public void OnWeaponPickup()
+	{
+	}
 
-    //		deflectPercent.gameObject.SetActive(true);
-    //		for (float timer = 0; timer < deflectDelay; timer += Time.fixedDeltaTime)
-    //		{
-    //			deflectPercent.fillAmount = timer / deflectDelay;
-    //			yield return new WaitForFixedUpdate();
-    //		}
-    //		deflectPercent.gameObject.SetActive(false);
+	//public void Deflect()
+	//{
+	//	if (crtDeflect == null) crtDeflect = StartCoroutine(E());
+	//	IEnumerator E()
+	//	{
+	//		player.model.deflect = true;
+	//		reflectWindowPrefab.enabled = true;
+	//		yield return new WaitForSeconds(deflectTime);
+	//		reflectWindowPrefab.enabled = false;
 
-    //		crtDeflect = null;
-    //	}
-    //}
+	//		deflectPercent.gameObject.SetActive(true);
+	//		for (float timer = 0; timer < deflectDelay; timer += Time.fixedDeltaTime)
+	//		{
+	//			deflectPercent.fillAmount = timer / deflectDelay;
+	//			yield return new WaitForFixedUpdate();
+	//		}
+	//		deflectPercent.gameObject.SetActive(false);
+
+	//		crtDeflect = null;
+	//	}
+	//}
 }

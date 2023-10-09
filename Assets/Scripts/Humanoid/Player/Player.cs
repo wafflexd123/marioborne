@@ -192,7 +192,7 @@ public class Player : Humanoid, IRewindListener
             if (weapon) weapon.Drop(0);
             crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
             {
-                if (enemy.weapon) enemy.weapon.Pickup(this, true);
+                if (enemy.weapon) enemy.weapon.SwapWielder(this);
                 cameraController.enabled = true;
                 movement.EnableCollider(true);
                 movement.enabled = true;

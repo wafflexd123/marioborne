@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(FieldOfView), typeof(Rigidbody), typeof(NavMeshAgent))]
-public class AIController : Humanoid, ITimeScaleListener, IRewindListener
+[RequireComponent(typeof(FieldOfView), typeof(Rigidbody), typeof(NavMeshAgent)), RequireComponent(typeof(RagdollManager))]
+public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITelekinetic
 {
 	//Inspector
 	public float alertRadius;
@@ -28,9 +28,11 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 
 	//Script
 	protected Vector3 velocity;
+	protected RagdollManager ragdoll;
 	float agentSpeed;
 	bool isStopped;
 	bool isDead;
+	int layer;
 	[HideInInspector] public Vector3 currentCoverPoint;
 	[HideInInspector] public Vector3 lookingAt;
 
@@ -41,6 +43,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 		agent = GetComponent<NavMeshAgent>();
 		rigidbody = GetComponent<Rigidbody>();
 		player = Player.singlePlayer;
+		layer = gameObject.layer;
 		Time.timeScaleListeners.Add(this);
 		Time.rewindListeners.Add(this);
 	}
@@ -54,7 +57,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 
 		model.velocity = agent.velocity;
 
-        Debug.Log($"agentSpeed: {agentSpeed}, Time: {Time.timeScale}, agent.speed: {agent.speed}, speed: {AgentSpeed}");
+		// Debug.Log($"agentSpeed: {agentSpeed}, Time: {Time.timeScale}, agent.speed: {agent.speed}, speed: {AgentSpeed}");
 	}
 
 	public void MoveTowards(Vector3 targetPosition)
@@ -74,8 +77,8 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 
 	public void Fire()
 	{
-        if (weapon)
-        {
+		if (weapon)
+		{
 			lookingAt = Player.singlePlayer.camera.transform.position;
 			weapon.transform.LookAt(lookingAt);
 			input.Press("Attack", () => -1, () => false);
@@ -96,7 +99,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 
 	public void OnTimeSlow()
 	{
-		if(!isDead && agent != null) agent.speed = AgentSpeed * Time.timeScale;
+		if (!isDead && agent != null) agent.speed = AgentSpeed * Time.timeScale;
 	}
 
 	public void Rewind(float seconds)
@@ -124,7 +127,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 		if (weapon) input.Press("Drop");//drop weapon if holding one
 		isDead = true;
 		if (DeathParticlesManager.Current != null)
-            DeathParticlesManager.Current.PlayAtLocation(transform.position);
+			DeathParticlesManager.Current.PlayAtLocation(transform.position);
 		Destroy(gameObject);
 	}
 
@@ -147,5 +150,20 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 			Kill(DeathType.Bullet);
 			if (!bullet.penetrates) Destroy(bullet.gameObject);
 		}
+	}
+
+	public void TelekineticGrab(Telekinesis t)
+	{
+		ragdoll.ActivateRagdoll();
+		ragdoll.SetRagdollGravity(false);
+		rigidbody.useGravity = false;
+		gameObject.layer = 17;
+	}
+
+	public void TelekineticRelease()
+	{
+		ragdoll.SetRagdollGravity(true);
+		rigidbody.useGravity = true;
+		gameObject.layer = layer;
 	}
 }

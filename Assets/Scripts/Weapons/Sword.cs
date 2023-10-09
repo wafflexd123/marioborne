@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Sword : WeaponBase
 {
+	[Header("Sword Specific")]
 	public ReflectWindow reflectWindow;
 	private bool reflectEnabled;
 	public Collider[] bladeColliders, hiltColliders;

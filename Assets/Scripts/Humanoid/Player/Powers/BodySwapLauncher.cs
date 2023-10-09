@@ -45,4 +45,8 @@ public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 		}
 		bullets.Clear();
 	}
+
+	public void OnWeaponPickup()
+	{
+	}
 }

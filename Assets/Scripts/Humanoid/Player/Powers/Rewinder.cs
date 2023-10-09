@@ -30,5 +30,9 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 		Time.StopRewind();
 	}
 
-    //public void HandleHand() { }
+	public void OnWeaponPickup()
+	{
+	}
+
+	//public void HandleHand() { }
 }
