@@ -134,8 +134,13 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (enableInput)//used specifically for queueing input from GetButtonDown, because GetButtonDown must be called in Update, not FixedUpdate
 		{
 			if (Input.GetButtonDown("Jump")) queueJump = true;
-			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
+			else if (Input.GetButtonUp("Jump")) queueJump = false;
+
 			if (Input.GetButtonDown("Dash")) queueDash = true;
+			else if (Input.GetButtonUp("Dash")) queueDash = false;
+
+			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
+
 		}
 	}
 
