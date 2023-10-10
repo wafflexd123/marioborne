@@ -612,18 +612,18 @@ MonoBehaviour:
   reloadDelay: 0
   penetrates: 0
   playerAmmo:
-    isInfinite: 1
+    isInfinite: 0
     startAmount: 10
     color: {r: 1, g: 1, b: 1, a: 0}
     maxSpread: 0
-    bulletSpeed: 0
+    bulletSpeed: 30
     amount: 0
   aiAmmo:
     isInfinite: 1
     startAmount: 10
     color: {r: 1, g: 0, b: 0, a: 0}
     maxSpread: 0.01
-    bulletSpeed: 0
+    bulletSpeed: 30
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 1628130774508101737}
@@ -658,7 +658,7 @@ MonoBehaviour:
     position:
       coords: {x: 0, y: 0, z: -0.025}
       eulers: {x: -10, y: -3, z: -5}
-    animateTime: 0.25
+    animateTime: 0.1875
     maxPositionVarianceMultipler: 0.1
     maxRotationVarianceMultipler: 0.1
   idleAnim:
