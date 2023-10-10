@@ -484,14 +484,14 @@ MonoBehaviour:
     startAmount: 5
     color: {r: 1, g: 1, b: 1, a: 0}
     maxSpread: 0
-    bulletSpeed: 0
+    bulletSpeed: 60
     amount: 0
   aiAmmo:
     isInfinite: 1
     startAmount: 10
     color: {r: 1, g: 0, b: 0, a: 0}
     maxSpread: 0.01
-    bulletSpeed: 0
+    bulletSpeed: 40
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: b60b72f0d6b43694c88138447253e30b, type: 3}
   firePosition: {fileID: 3689162234156928206}
@@ -512,8 +512,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recoilAnim:
     position:
-      coords: {x: 0, y: 0, z: -0.025}
-      eulers: {x: -10, y: -3, z: -5}
+      coords: {x: 0, y: 0, z: -0.075}
+      eulers: {x: -2, y: 0, z: 0}
     animateTime: 0.25
     maxPositionVarianceMultipler: 0.1
     maxRotationVarianceMultipler: 0.1
