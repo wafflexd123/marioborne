@@ -12,6 +12,7 @@ public class Sword : WeaponBase
 
 	[field: Header("Enemy Variables")]
 	public float recoveryTime;
+	public float windUpTime = 0.4f;
 	private float defaultAngularSpeed;
 	bool _isFiring;
 
@@ -94,7 +95,7 @@ public class Sword : WeaponBase
 					wielder.model.slash = true;
 					ai.IsStopped = true;
 					ai.RotationSpeed = 0f;
-					yield return new WaitForSeconds(0.5f);
+					yield return new WaitForSeconds(windUpTime);
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
