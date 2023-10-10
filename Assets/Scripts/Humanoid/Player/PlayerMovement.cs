@@ -134,11 +134,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (enableInput)//used specifically for queueing input from GetButtonDown, because GetButtonDown must be called in Update, not FixedUpdate
 		{
 			if (Input.GetButtonDown("Jump")) queueJump = true;
-			else if (Input.GetButtonUp("Jump")) queueJump = false;
-
 			if (Input.GetButtonDown("Dash")) queueDash = true;
-			else if (Input.GetButtonUp("Dash")) queueDash = false;
-
 			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
 
 		}
@@ -156,6 +152,10 @@ public class PlayerMovement : MonoBehaviourPlus
 		ControlRigidbody();
 		ControlFOV();
 		ControlText();
+
+		//Finalise input queues
+		queueJump = false;
+		queueDash = false;
 	}
 
 	private void OnCollisionEnter(Collision collision)

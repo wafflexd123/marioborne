@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 {
-	public readonly List<Action> actionsThisFrame = new List<Action>();
 	float targetSeconds, maxPositions, rewindTimer = 0, windTimer = 0;
 	readonly List<PositionAndVelocity> positions = new List<PositionAndVelocity>();
-	PositionAndVelocity lastPos;
 	new Rigidbody rigidbody;
+	PositionAndVelocity lastPos;
 
 	protected virtual void Awake()
 	{
@@ -26,14 +25,18 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 		{
 			if (positions.Count > maxPositions) positions.RemoveAt(0);
 			positions.Add(GetPosition());
-			actionsThisFrame.Clear();
 			windTimer = 0;
 		}
 	}
 
 	protected virtual PositionAndVelocity GetPosition()
 	{
-		return new PositionAndVelocity(transform, rigidbody != null ? rigidbody.velocity : Vector3.zero, actionsThisFrame);
+		return new PositionAndVelocity(transform, rigidbody != null ? rigidbody.velocity : Vector3.zero);
+	}
+
+	public void AddFrameAction(Action action)
+	{
+		positions[^1].actions.Add(action);
 	}
 
 	public virtual void StartRewind()
@@ -78,14 +81,13 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 	{
 		protected readonly PositionAndScale position;
 		protected readonly Vector3 velocity;
-		protected readonly List<Action> actions;
+		public readonly List<Action> actions;
 
-		public PositionAndVelocity(PositionAndScale position, Vector3 velocity, List<Action> actions)
+		public PositionAndVelocity(PositionAndScale position, Vector3 velocity)
 		{
 			this.position = position;
 			this.velocity = velocity;
 			this.actions = new List<Action>();
-			this.actions.AddRange(actions);
 		}
 
 		public virtual void ApplyPosition(Transform t)

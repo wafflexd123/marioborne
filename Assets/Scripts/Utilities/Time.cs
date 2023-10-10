@@ -24,7 +24,7 @@ public class Time
 	public static float fixedUnscaledDeltaTime => Clamp(UnityEngine.Time.fixedUnscaledDeltaTime, UnityEngine.Time.maximumDeltaTime);
 	public static float targetFrameRate = 60;
 	public static float maxRewindTime = 20;
-	public static float minTimeScale = .25f;
+	public static float minTimeScale = .33f;
 	public static bool isRewinding { get; private set; }
 
 	public static readonly List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();

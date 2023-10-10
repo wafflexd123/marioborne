@@ -30,7 +30,7 @@ public class PlayerRewinder : BasicRewindable
 
 	protected override BasicRewindable.PositionAndVelocity GetPosition()
 	{
-		return new PositionAndVelocity(player.movement, transform, player.movement.xzVelocity.vector, player.movement.yVelocity.vector, actionsThisFrame);
+		return new PositionAndVelocity(player.movement, transform, player.movement.xzVelocity.vector, player.movement.yVelocity.vector);
 	}
 
 	protected new class PositionAndVelocity : BasicRewindable.PositionAndVelocity
@@ -38,7 +38,7 @@ public class PlayerRewinder : BasicRewindable
 		readonly Vector3 yVelocity;
 		readonly PlayerMovement p;
 
-		public PositionAndVelocity(PlayerMovement p, PositionAndScale position, Vector3 xzVelocity, Vector3 yVelocity, List<Action> actions) : base(position, xzVelocity, actions)
+		public PositionAndVelocity(PlayerMovement p, PositionAndScale position, Vector3 xzVelocity, Vector3 yVelocity) : base(position, xzVelocity)
 		{
 			this.yVelocity = yVelocity;
 			this.p = p;

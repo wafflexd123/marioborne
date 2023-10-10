@@ -134,7 +134,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
 		enabled = false;
 		model.dying = true;
-		rewind.actionsThisFrame.Add(() => ResetDeath());
+		rewind.AddFrameAction(() => ResetDeath());
 	}
 	
 	public void ResetDeath()

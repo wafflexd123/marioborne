@@ -27,6 +27,7 @@ public class Player : Humanoid
 	GameObject escMenu;
 	Coroutine crtMoveToEnemy;
 	Transform weaponHand;
+	PlayerRewinder rewinder;
 
 	[Header("IK")]
 	[SerializeField] private GameObject armObject;
@@ -57,6 +58,7 @@ public class Player : Humanoid
 	protected override void Awake()
 	{
 		base.Awake();
+		rewinder = GetComponent<PlayerRewinder>();
 		powers = transform.Find("Left Hand").GetComponent<PowerManager>();
 		weaponHand = transform.Find("Right Hand");
 		cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
@@ -167,6 +169,7 @@ public class Player : Humanoid
 		movement.enabled = false;
 		cameraController.enabled = false;
 		input.enableInput = false;
+		rewinder.AddFrameAction(() => ResetDeath());
 	}
 
 	public void ResetDeath()
