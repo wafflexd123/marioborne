@@ -54,7 +54,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener
 
 		model.velocity = agent.velocity;
 
-        Debug.Log($"agentSpeed: {agentSpeed}, Time: {Time.timeScale}, agent.speed: {agent.speed}, speed: {AgentSpeed}");
+        //Debug.Log($"agentSpeed: {agentSpeed}, Time: {Time.timeScale}, agent.speed: {agent.speed}, speed: {AgentSpeed}");
 	}
 
 	public void MoveTowards(Vector3 targetPosition)
