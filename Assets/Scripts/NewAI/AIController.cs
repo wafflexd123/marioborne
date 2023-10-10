@@ -35,6 +35,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	[HideInInspector] public Vector3 currentCoverPoint;
 	[HideInInspector] public Vector3 lookingAt;
 	[HideInInspector] public float defaultSpeed;
+	[HideInInspector] public WeaponBase heldWeapon;
 
 	protected override void Awake()
 	{
@@ -60,8 +61,6 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 			CurrentState.Tick();
 
 		model.velocity = agent.velocity;
-
-		// Debug.Log($"agentSpeed: {agentSpeed}, Time: {Time.timeScale}, agent.speed: {agent.speed}, speed: {AgentSpeed}");
 	}
 
 	public void MoveTowards(Vector3 targetPosition)
@@ -110,16 +109,19 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	{
 	}
 
-	public void StartRewind()
+	public virtual void StartRewind()
 	{
 		//input.enableInput = false;
+		//agent.ResetPath(); //guys how do we track patrol paths
+		agent.enabled = false;
 		enabled = false;
 	}
 
-	public void StopRewind()
+	public virtual void StopRewind()
 	{
 		//input.enableInput = true;
 		enabled = true;
+		agent.enabled = true;
 	}
 
 	protected virtual void OnDestroy()
@@ -130,7 +132,11 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		if (weapon) input.Press("Drop");//drop weapon if holding one
+		if (weapon)
+		{
+			heldWeapon = weapon;
+			input.Press("Drop");//drop weapon if holding one
+		}
 		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
 		enabled = false;
 		model.dying = true;
@@ -141,6 +147,10 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	{
 		enabled = true;
 		model.dying = false;
+		if (heldWeapon)
+		{
+			heldWeapon.Pickup(this);
+		}
 	}
 
 	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
