@@ -30,7 +30,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	protected RagdollManager ragdoll;
 	BasicRewindable rewind;
 	float agentSpeed, rotationSpeed;
-	bool isStopped;
+	bool isStopped, isDead;
 	int layer;
 	[HideInInspector] public Vector3 currentCoverPoint;
 	[HideInInspector] public Vector3 lookingAt;
@@ -49,6 +49,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		agentSpeed = agent.speed;
 		defaultSpeed = agentSpeed;
 		RotationSpeed = agent.angularSpeed;
+		rigidbody.isKinematic = true;
 		Time.timeScaleListeners.Add(this);
 		Time.rewindListeners.Add(this);
 	}
@@ -111,17 +112,23 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public virtual void StartRewind()
 	{
-		//input.enableInput = false;
-		//agent.ResetPath(); //guys how do we track patrol paths
-		agent.enabled = false;
-		enabled = false;
+        //input.enableInput = false;
+        //agent.ResetPath(); //guys how do we track patrol paths
+        if (!isDead)
+        {
+			agent.enabled = false;
+			enabled = false;
+		}
 	}
 
 	public virtual void StopRewind()
 	{
-		//input.enableInput = true;
-		enabled = true;
-		agent.enabled = true;
+        //input.enableInput = true;
+        if (!isDead)
+        {
+			enabled = true;
+			agent.enabled = true;
+		}
 	}
 
 	protected virtual void OnDestroy()
@@ -132,12 +139,14 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
+		isDead = true;
 		if (weapon)
 		{
 			heldWeapon = weapon;
 			input.Press("Drop");//drop weapon if holding one
 		}
 		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
+		agent.enabled = false;
 		enabled = false;
 		model.dying = true;
 		rewind.AddFrameAction(() => ResetDeath());
@@ -145,7 +154,9 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	
 	public void ResetDeath()
 	{
+		isDead = false;
 		enabled = true;
+		agent.enabled = true;
 		model.dying = false;
 		if (heldWeapon)
 		{
