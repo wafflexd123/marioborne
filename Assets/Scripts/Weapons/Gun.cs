@@ -19,10 +19,9 @@ public class Gun : WeaponBase
 
 	protected Ammo ammo;
 	Coroutine crtDelay, crtReload;
-	GameObject ui, qToDrop;
-	Image imgReloadPercent;
-	TMP_Text txtAmmo;
-	GunAnimator animator;
+    AmmoCounter ac;
+    GameObject ammoCounter;
+    GunAnimator animator;
 
 	public override bool IsFiring => false;
 
@@ -30,13 +29,10 @@ public class Gun : WeaponBase
 	{
 		base.Start();
 		animator = GetComponent<GunAnimator>();
-		ui = transform.Find("UI").gameObject;
-		imgReloadPercent = ui.transform.Find("Reload").GetComponent<Image>();
-		txtAmmo = ui.transform.Find("Ammo").GetComponent<TMP_Text>();
-		qToDrop = ui.transform.Find("Q To Drop").gameObject;
-		playerAmmo.amount = playerAmmo.startAmount;
+        ammoCounter = transform.Find("Ammo Counter").gameObject;
+        ac = ammoCounter.GetComponent<AmmoCounter>();
+        playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
-		txtAmmo.text = $"{playerAmmo.amount}";
 	}
 
 	protected override void OnPickup()
@@ -50,9 +46,11 @@ public class Gun : WeaponBase
 		else if (wielder is Player)
 		{
 			animator.StartAnimations();
-			ammo = playerAmmo;
-			ui.SetActive(true);
-		}
+            ammoCounter.SetActive(true);
+            ac.SetAmmo(playerAmmo.amount);
+            ammo = playerAmmo;
+            animator.StartAnimations();
+        }
 	}
 
 	protected override void OnWielderChange()
@@ -62,7 +60,6 @@ public class Gun : WeaponBase
 		else if (wielder is Player)
 		{
 			animator.StopAnimations();
-			ui.SetActive(false);
 		}
 		StopCoroutine(ref crtDelay);//if dropped while attacking
 	}
@@ -73,10 +70,8 @@ public class Gun : WeaponBase
 		{
 			if (wielder is Player)
 			{
-				txtAmmo.text = $"{playerAmmo.amount}";
-				if (playerAmmo.amount <= 0) qToDrop.SetActive(true);
-				crtDelay = StartCoroutine(DelayWithUI());
-				animator.Shoot();
+                ac.SetAmmo(playerAmmo.amount);
+                animator.Shoot();
 			}
 			else
 			{
@@ -115,21 +110,6 @@ public class Gun : WeaponBase
 	protected Vector3 RandomSpread(float maxSpread)
 	{
 		return maxSpread == 0 ? Vector3.zero : new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread));
-	}
-
-	IEnumerator DelayWithUI()
-	{
-		float timer = 0;
-		imgReloadPercent.gameObject.SetActive(true);
-		while (timer < fireDelay)
-		{
-			timer += Time.fixedDeltaTime;
-			imgReloadPercent.fillAmount = timer / fireDelay;
-			yield return new WaitForFixedUpdate();
-		}
-		imgReloadPercent.gameObject.SetActive(false);
-		if (wielder is AIController) wielder.model.shoot = false;
-		crtDelay = null;
 	}
 
 	IEnumerator Delay()
