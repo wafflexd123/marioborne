@@ -190,6 +190,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	{
 		ragdoll.ActivateRagdoll();
 		ragdoll.SetRagdollGravity(false);
+		ragdoll.ToggleHipFollow();
 		rigidbody.useGravity = false;
 		gameObject.layer = 17;
 	}
@@ -197,6 +198,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	public void TelekineticRelease()
 	{
 		ragdoll.SetRagdollGravity(true);
+		ragdoll.ToggleHipFollow();
 		rigidbody.useGravity = true;
 		gameObject.layer = layer;
 	}

@@ -95,30 +95,49 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 		UpdateChargeUI();
 	}
 
-	void ControlObject()
-	{
-		// Changing distance based on scroll wheel
-		objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
-		objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
+    void ControlObject()
+    {
+        // Changing distance based on scroll wheel
+        objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
+        objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
 
-		// Calculate target position based on ray from camera through mouse pointer
-		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-		Vector3 targetPosition = ray.GetPoint(objectDistance);
+        // Calculate target position based on ray from camera through mouse pointer
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Vector3 targetPosition = ray.GetPoint(objectDistance);
 
-		// Adding wobble
-		targetPosition += Mathf.Sin(UnityEngine.Time.time * wobbleFrequency) * wobbleAmplitude * mainCamera.transform.up;
+        // Adding wobble
+        targetPosition += Mathf.Sin(UnityEngine.Time.time * wobbleFrequency) * wobbleAmplitude * mainCamera.transform.up;
 
-		// Move object towards target position
-		grabbedObject.transform.position = Vector3.Lerp(grabbedObject.transform.position, targetPosition, Time.deltaTime * followSpeed);
+        float offset = 0f;
 
-		// Apply rotation effect based on mouse movement
-		float currentRotationSpeed = Mathf.Lerp(rotationSpeed, rotationSpeed * 100f, chargeTime / maxChargeTime);
-		Vector3 rotationDirection = (targetPosition - grabbedObject.transform.position).normalized;
-		grabbedObject.transform.Rotate(rotationDirection, currentRotationSpeed * Time.deltaTime);
-	}
+        MeshRenderer meshRenderer = grabbedObject.transform.GetComponent<MeshRenderer>();
+        CapsuleCollider capsuleCollider = grabbedObject.transform.GetComponent<CapsuleCollider>();
 
+        if (meshRenderer != null)
+        {
+            offset = meshRenderer.bounds.extents.magnitude;
+        }
+        else if (capsuleCollider != null)
+        {
+            offset = capsuleCollider.radius;
+        }
 
-	void PushObjects(float strength)
+        if (Physics.Linecast(grabbedObject.transform.position, targetPosition, out RaycastHit hit))
+        {
+            if (hit.collider.gameObject != grabbedObject.gameObject)
+            {
+                targetPosition = hit.point + hit.normal * offset;
+            }
+        }
+
+        if (grabbedObject.gameObject.TryGetComponent(out Rigidbody rb))
+        {
+            Vector3 newPosition = Vector3.Lerp(rb.position, targetPosition, Time.deltaTime * followSpeed);
+            rb.MovePosition(newPosition);
+        }
+    }
+
+    void PushObjects(float strength)
 	{
 		Vector3 pushDirection = mainCamera.transform.forward;
 		Vector3 boxCenter = mainCamera.transform.position + pushDirection * (pushLength / 2) + mainCamera.transform.up * (pushHeight / 6);
