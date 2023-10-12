@@ -48,6 +48,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		agentSpeed = agent.speed;
 		defaultSpeed = agentSpeed;
 		RotationSpeed = agent.angularSpeed;
+		ragdoll = GetComponent<RagdollManager>();
 		Time.timeScaleListeners.Add(this);
 		Time.rewindListeners.Add(this);
 	}
