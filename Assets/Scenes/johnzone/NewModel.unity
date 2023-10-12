@@ -18954,6 +18954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 593780651}
   pingPong: 0
+  reachedPointThreshold: 0.8
 --- !u!114 &642572302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19035,7 +19036,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 642572295}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
@@ -27535,6 +27536,10 @@ PrefabInstance:
       propertyPath: patrolPoints
       value: 
       objectReference: {fileID: 593780651}
+    - target: {fileID: 5351555704058958410, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: reachedPointThreshold
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 7020093058031366038, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.6433282
