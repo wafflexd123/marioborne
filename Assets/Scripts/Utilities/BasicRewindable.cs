@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,10 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 {
 	float targetSeconds, maxPositions, rewindTimer = 0, windTimer = 0;
 	readonly List<PositionAndVelocity> positions = new List<PositionAndVelocity>();
-	PositionAndVelocity lastPos;
 	new Rigidbody rigidbody;
+	PositionAndVelocity lastPos;
 
-	void Awake()
+	protected virtual void Awake()
 	{
 		targetSeconds = 1f / Time.targetFrameRate;
 		maxPositions = Time.targetFrameRate * Time.maxRewindTime;
@@ -17,18 +18,28 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 		Time.rewindListeners.Add(this);
 	}
 
-	void Update()
+	void LateUpdate()
 	{
 		windTimer += Time.deltaTime;
 		if (windTimer >= targetSeconds)
 		{
 			if (positions.Count > maxPositions) positions.RemoveAt(0);
-			positions.Add(new PositionAndVelocity(transform, rigidbody != null ? rigidbody.velocity : Vector3.zero));
+			positions.Add(GetPosition());
 			windTimer = 0;
 		}
 	}
 
-	public void StartRewind()
+	protected virtual PositionAndVelocity GetPosition()
+	{
+		return new PositionAndVelocity(transform, rigidbody != null ? rigidbody.velocity : Vector3.zero);
+	}
+
+	public void AddFrameAction(Action action)
+	{
+		positions[^1].actions.Add(action);
+	}
+
+	public virtual void StartRewind()
 	{
 		rewindTimer = 0;
 		enabled = false;
@@ -44,19 +55,20 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 			{
 				lastPos = positions[^1];
 				positions.RemoveAt(positions.Count - 1);
-				lastPos.position.ApplyToTransform(transform);
+				lastPos.ApplyPosition(transform);
+				lastPos.CallActions();
 				rewindTimer = 0;
 			}
 		}
 	}
 
-	public void StopRewind()
+	public virtual void StopRewind()
 	{
 		enabled = true;
 		if (rigidbody != null)
 		{
 			rigidbody.isKinematic = false;
-			rigidbody.velocity = lastPos.velocity;
+			lastPos.ApplyVelocity(rigidbody);
 		}
 	}
 
@@ -65,15 +77,32 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 		Time.rewindListeners.Remove(this);
 	}
 
-	struct PositionAndVelocity
+	protected class PositionAndVelocity
 	{
-		public PositionAndScale position;
-		public Vector3 velocity;
+		protected readonly PositionAndScale position;
+		protected readonly Vector3 velocity;
+		public readonly List<Action> actions;
 
 		public PositionAndVelocity(PositionAndScale position, Vector3 velocity)
 		{
 			this.position = position;
 			this.velocity = velocity;
+			this.actions = new List<Action>();
+		}
+
+		public virtual void ApplyPosition(Transform t)
+		{
+			position.ApplyToTransform(t);
+		}
+
+		public virtual void ApplyVelocity(Rigidbody r)
+		{
+			r.velocity = velocity;
+		}
+
+		public virtual void CallActions()
+		{
+			foreach (Action item in actions) item();
 		}
 	}
 }

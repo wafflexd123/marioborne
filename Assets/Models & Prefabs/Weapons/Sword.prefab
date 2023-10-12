@@ -205,33 +205,34 @@ MonoBehaviour:
   IKHandTarget: {fileID: 2961415648509816620}
   modelRoot: {fileID: 1879311152797145875}
   animationName: hold_sword
-  automatic: 0
-  throwForce: 10
-  throwSpeed: 1
-  throwFallDelay: 1
-  fireDelay: 1
-  pickupSpeed: 10
-  dropForce: 2
-  soundRadius: 0
-  disablePickupAfterDropSeconds: 2
-  handPosition:
-    coords: {x: 0.3, y: -0.4, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  thirdPersonPosition:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  colliders:
-  - {fileID: 7693526375381108158}
-  - {fileID: 2569268097860949265}
+  equipClip:
+    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 10
   fireClips:
     clips:
     - audio: {fileID: 8300000, guid: 6cdae7ab499144e4c989745b1355245b, type: 3}
       volume: 0
       pitch: 0
-  equipClip:
-    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
-    volume: 1
-    pitch: 1
+      maxDistance: 40
+  throwForce: 10
+  throwSpeed: 1
+  throwFallDelay: 1
+  automatic: 0
+  fireDelay: 1
+  colliders:
+  - {fileID: 7693526375381108158}
+  - {fileID: 2569268097860949265}
+  pickupSpeed: 10
+  dropForce: 2
+  disablePickupAfterDropSeconds: 2
+  playerHandPosition:
+    coords: {x: 0.3, y: -0.4, z: 0}
+    eulers: {x: 0, y: 0, z: 0}
+  enemyHandPosition:
+    coords: {x: 0, y: 0.1, z: 0}
+    eulers: {x: 0, y: 0, z: 0}
   reflectWindow: {fileID: 0}
   bladeColliders:
   - {fileID: 7693526375381108158}
@@ -298,7 +299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ba1be0a1157424ebacf6d635c39849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeSlowPitchReduction: 0.3
 --- !u!1 &2433343702200809511
 GameObject:
   m_ObjectHideFlags: 0

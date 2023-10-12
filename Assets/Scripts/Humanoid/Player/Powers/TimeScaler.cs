@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 public class TimeScaler : MonoBehaviourPlus
 {
-    public float timeScaleSpeed, minTimeScale, scaleDuration, recoveryDelay;
+    public string inputButton;
+    public float timeScaleSpeed, scaleDuration, recoveryDelay;
     public Image imgTimeleft;
     float currentScaleDuration, recoveryTimer;
     //Console.Line cnsTime;
@@ -21,12 +22,12 @@ public class TimeScaler : MonoBehaviourPlus
     //3.reset duration only if time has been scaling up for resetdelay & button is not held
     void Update()
     {
-        if (Input.GetButton("Ability") && currentScaleDuration < scaleDuration)//1.scale time down, increment scale duration, reset recovery timer
+        if (Input.GetButton(inputButton) && currentScaleDuration < scaleDuration)//1.scale time down, increment scale duration, reset recovery timer
         {
-            if (Time.timeScale > minTimeScale)
+            if (Time.timeScale > Time.minTimeScale)
             {
                 Time.timeScale -= timeScaleSpeed * Time.deltaTime;
-                if (Time.timeScale < minTimeScale) Time.timeScale = minTimeScale;
+                if (Time.timeScale < Time.minTimeScale) Time.timeScale = Time.minTimeScale;
                 //imgTimescale.fillAmount = Mathf.InverseLerp(minTimeScale, 1, Time.timeScale);
             }
             currentScaleDuration += Time.unscaledDeltaTime;
@@ -35,7 +36,7 @@ public class TimeScaler : MonoBehaviourPlus
             imgTimeleft.gameObject.SetActive(true);
             imgTimeleft.fillAmount = 1 - currentScaleDuration / scaleDuration;
         }
-        else if (!Input.GetButton("Ability") || currentScaleDuration >= scaleDuration)//2.scale time up, increment resetdelay timer
+        else if (!Input.GetButton(inputButton) || currentScaleDuration >= scaleDuration)//2.scale time up, increment resetdelay timer
         {
             if (Time.timeScale < 1)
             {
@@ -44,7 +45,7 @@ public class TimeScaler : MonoBehaviourPlus
                 //imgTimescale.fillAmount = Mathf.InverseLerp(minTimeScale, 1, Time.timeScale);
 
             }
-            if (!Input.GetButton("Ability"))//3.decrement scale duration
+            if (!Input.GetButton(inputButton))//3.decrement scale duration
             {
                 recoveryTimer += Time.unscaledDeltaTime;
                 if (recoveryTimer >= recoveryDelay)

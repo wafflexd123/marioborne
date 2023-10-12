@@ -123,6 +123,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &1894996
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 192871376507949015, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_Name
+      value: Shotgun
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.912001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.598756
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1290905719661930292, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5270aad7fb0ba6d4caa33638e39308a3, type: 3}
 --- !u!1001 &69020113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -174,6 +231,10 @@ PrefabInstance:
     - target: {fileID: 6920114014361750820, guid: 7b6fdd4bff78cb4489e7a4c242291b93, type: 3}
       propertyPath: m_Name
       value: Shield Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6920114014361750820, guid: 7b6fdd4bff78cb4489e7a4c242291b93, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -364,6 +425,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1791597407}
     - target: {fileID: 6550731305498205631, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: minDistance
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6550731305498205631, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: chargeSlider
       value: 
       objectReference: {fileID: 1772466572}
@@ -481,6 +546,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8405350626398470925, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811409186036200727, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904658460603343089, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 257087
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904658460603343089, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4096
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904658460603343089, guid: 70e9cc521f74bb54bb2e9b10331746d9, type: 3}
+      propertyPath: m_LayerOverridePriority
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -697,6 +778,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deflect Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3771824679759711126, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5114831308696380425, guid: 5f08bc53da7a5774a8cfc07d40571c47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.2733784
@@ -766,6 +851,10 @@ PrefabInstance:
       propertyPath: throwFallDelay
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1647530806514761000, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 6459212967476039814, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.724
@@ -809,6 +898,26 @@ PrefabInstance:
     - target: {fileID: 6459212967476039815, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
       propertyPath: m_Name
       value: Pistol
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927126309659352539, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8752264747397153975, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869820690184937078, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869820690184937078, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4096
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869820690184937078, guid: e465e63c97851444ea19fa796d7fff94, type: 3}
+      propertyPath: m_LayerOverridePriority
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -866,6 +975,10 @@ PrefabInstance:
     - target: {fileID: 9183633511223782773, guid: f8365cc373a17a648874b6ba3f7dfe7c, type: 3}
       propertyPath: m_Name
       value: SMG Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183633511223782773, guid: f8365cc373a17a648874b6ba3f7dfe7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1817,6 +1930,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3608175937353701527, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5351555704058958410, guid: e46af7fa14b82c549b7d838eade7613c, type: 3}
       propertyPath: patrolPoints
       value: 
@@ -1917,6 +2034,10 @@ PrefabInstance:
     - target: {fileID: 6530407484226488053, guid: 538da1d738cb9bc45aad4d210da43c64, type: 3}
       propertyPath: m_Name
       value: Sniper Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530407484226488053, guid: 538da1d738cb9bc45aad4d210da43c64, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2033,6 +2154,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Melee Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5752013614297962458, guid: 342299392fc344d4192c29ab94b0cfa9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2056,3 +2181,4 @@ SceneRoots:
   - {fileID: 69020113}
   - {fileID: 985502178}
   - {fileID: 1983355009}
+  - {fileID: 1894996}

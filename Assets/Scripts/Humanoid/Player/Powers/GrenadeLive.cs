@@ -17,7 +17,6 @@ public class GrenadeLive : MonoBehaviour
     private static ParticleSystem[] particleInstances = null;
     [SerializeField] private GameObject sphere;
     private bool hasHitGround = false;
-    private bool exploding = false;
     private Material mat;
     private List<GameObject> hitObjects = new List<GameObject>();
     [SerializeField] private AudioClip sfx;
@@ -79,7 +78,7 @@ public class GrenadeLive : MonoBehaviour
             mat.SetColor("_EmissionColor", Colors[frame] * Mathf.LinearToGammaSpace(emissivePower));
             // set material color
             //Mathf.LinearToGammaSpace(2f)
-            yield return new WaitForSecondsRealtime(frameDuration);
+            yield return new WaitForSeconds(frameDuration);
         }
         Destroy(explosionObj);
         Destroy(gameObject);
@@ -87,7 +86,7 @@ public class GrenadeLive : MonoBehaviour
 
     private void PlaceAndPlayParticles(Vector3 pos)
     {
-        if (particleInstances == null)
+        if (particleInstances == null || particleInstances.Length == 0)
             GenerateStaticParticles();
         for (int i = 0; i < particleInstances.Length; i++)
         {
@@ -106,7 +105,6 @@ public class GrenadeLive : MonoBehaviour
     private IEnumerator WaitToExplode()
     {
         yield return new WaitForSeconds(lifeTimeAfterGround);
-        exploding = true;
         StartCoroutine(Explode());
     }
 
@@ -128,5 +126,10 @@ public class GrenadeLive : MonoBehaviour
             hasHitGround = true;
             StartCoroutine(Explode());
         }
+    }
+
+    private void OnEnable()
+    {
+        GenerateStaticParticles();
     }
 }

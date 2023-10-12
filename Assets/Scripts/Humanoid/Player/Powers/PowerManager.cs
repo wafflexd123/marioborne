@@ -42,6 +42,11 @@ public class PowerManager : MonoBehaviourPlus
 		}
 	}
 
+	public IPlayerPower GetCurrentPower()
+	{
+		return activePowerIndex >= 0 && activePowerIndex < powers.Length ? powers[activePowerIndex] : null;
+	}
+
 	public void RestrictPower(int powerIndex)
 	{
 		if (powerIndex >= 0 && powerIndex < powers.Length)
@@ -102,5 +107,4 @@ public interface IPlayerPower
 {
 	public GameObject gameObject { get; }
 	public bool CanDisable { get; }
-	//public void HandleHand();
 }

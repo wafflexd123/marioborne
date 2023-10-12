@@ -7,9 +7,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GunAnimator))]
 public class Gun : WeaponBase
 {
+	[Header("Gun Specific")]
 	public AudioPool.Clips bulletCasingClips;
 	[Range(0f, 1f)] public float bulletCasingSoundChance;
-	public float bulletCasingSoundDelay = 1f, bulletSpeed, reloadDelay;
+	public float bulletCasingSoundDelay = 1f, reloadDelay;
 	public bool penetrates;
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
@@ -41,17 +42,16 @@ public class Gun : WeaponBase
 	protected override void OnPickup()
 	{
 		base.OnPickup();
-		if (wielder is AIController) wielder.model.holdingPistol = true;
-
-		if (wielder is Player)
+		if (wielder is AIController)
+		{
+			ammo = aiAmmo;
+			wielder.model.holdingPistol = true;
+		}
+		else if (wielder is Player)
 		{
 			animator.StartAnimations();
 			ammo = playerAmmo;
 			ui.SetActive(true);
-		}
-		else
-		{
-			ammo = aiAmmo;
 		}
 	}
 
@@ -59,13 +59,12 @@ public class Gun : WeaponBase
 	{
 		base.OnWielderChange();
 		if (wielder is AIController) wielder.model.holdingPistol = false;
-		if (wielder is Player) animator.StopAnimations();
-		ui.SetActive(false);
-		if (crtDelay != null)
+		else if (wielder is Player)
 		{
-			StopCoroutine(crtDelay); //if dropped while attacking
-			crtDelay = null;
+			animator.StopAnimations();
+			ui.SetActive(false);
 		}
+		StopCoroutine(ref crtDelay);//if dropped while attacking
 	}
 
 	protected override void Attack()
@@ -82,23 +81,19 @@ public class Gun : WeaponBase
 			else
 			{
 				if (aiAmmo.amount <= 0 && crtReload == null) crtReload = StartCoroutine(Reload());
-				else
-				{
-					//wielder.model.shoot = true;
-					crtDelay = StartCoroutine(Delay());
-				}
+				else crtDelay = StartCoroutine(Delay());
 			}
 			if (OnFireEvent != null) OnFireEvent.Invoke();
 			fireClips.PlayRandom(audioPool);
 			BulletCasingSound();
-			Sound.MakeSound(transform.position, soundRadius, wielder);
+			Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
 			Shoot();
 		}
 	}
 
 	protected virtual void Shoot()
 	{
-		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, penetrates);
+		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(ammo.bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, penetrates);
 	}
 
 	protected virtual void BulletCasingSound()
@@ -120,11 +115,6 @@ public class Gun : WeaponBase
 	protected Vector3 RandomSpread(float maxSpread)
 	{
 		return maxSpread == 0 ? Vector3.zero : new Vector3(Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread), Random.Range(-maxSpread, maxSpread));
-	}
-
-	public override void Drop(float dropForce)
-	{
-		base.Drop(dropForce);
 	}
 
 	IEnumerator DelayWithUI()
@@ -161,7 +151,7 @@ public class Gun : WeaponBase
 		public bool isInfinite;
 		public int startAmount;
 		public Color color;
-		public float maxSpread;
+		public float maxSpread, bulletSpeed;
 		[HideInInspector] public int amount;
 
 		public bool TryFire()

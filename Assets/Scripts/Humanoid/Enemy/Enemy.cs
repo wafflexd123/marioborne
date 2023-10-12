@@ -136,7 +136,7 @@ public class Enemy : Humanoid, ITimeScaleListener
                 case EnemyType.Ranged:
                     if (player.movement.rigidbody.velocity.magnitude > player.movement.currentState.values.YforceXvelocity.maxX * aimAdjustVelocityMagnitude)
                     {
-                        lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, ((Gun)weapon).bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
+                        lookingAt = FirstOrderIntercept(transform.position, Vector3.zero, ((Gun)weapon).aiAmmo.bulletSpeed, player.camera.transform.position, player.movement.rigidbody.velocity);
                     }
                     else
                     {

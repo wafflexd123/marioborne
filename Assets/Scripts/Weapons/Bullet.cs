@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Bullet : MonoBehaviourPlus
+[RequireComponent(typeof(Rigidbody), typeof(BasicRewindable))]
+public class Bullet : MonoBehaviourPlus, IRewindListener
 {
     //Inspector
     public float maxLifetime;
@@ -85,6 +85,21 @@ public class Bullet : MonoBehaviourPlus
         rigidbody.isKinematic = true;
         collider.enabled = false;
         //particleSystem.Stop();
+    }
+
+    public void Rewind(float seconds)
+    {
+        
+    }
+
+    public void StartRewind()
+    {
+        direction *= -1;
+    }
+
+    public void StopRewind()
+    {
+        direction *= -1;
     }
 }
 
