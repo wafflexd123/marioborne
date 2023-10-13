@@ -25,25 +25,26 @@ public class Time
 	public static float targetFrameRate = 60;
 	public static float maxRewindTime = 20;
 	public static float minTimeScale = .33f;
-	public static bool isRewinding { get; private set; }
+	public static float currentRewind { get; private set; }
+	public static bool isRewinding => currentRewind != 0;
 
 	public static readonly List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();
 	public static readonly List<IRewindListener> rewindListeners = new List<IRewindListener>();
 
 	public static void StartRewind()
 	{
-		isRewinding = true;
 		foreach (IRewindListener item in rewindListeners) item.StartRewind();
 	}
 
 	public static void Rewind(float seconds)
 	{
+		currentRewind = seconds;
 		foreach (IRewindListener item in rewindListeners) item.Rewind(seconds);
 	}
 
 	public static void StopRewind()
 	{
-		isRewinding = false;
+		currentRewind = 0;
 		foreach (IRewindListener item in rewindListeners) item.StopRewind();
 	}
 

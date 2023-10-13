@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 {
+	public UnityEvent onFullyRewound;
+	bool hasFullyRewound;
 	float targetSeconds, maxPositions, rewindTimer = 0, windTimer = 0;
 	readonly List<PositionAndVelocity> positions = new List<PositionAndVelocity>();
 	new Rigidbody rigidbody;
@@ -44,6 +47,7 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 		rewindTimer = 0;
 		enabled = false;
 		if (rigidbody != null) rigidbody.isKinematic = true;
+		rewindTimer = targetSeconds;//force at least 1 frame to rewind
 	}
 
 	public void Rewind(float seconds)
@@ -60,6 +64,11 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 				rewindTimer = 0;
 			}
 		}
+		else if (!hasFullyRewound)
+		{
+			hasFullyRewound = true;
+			onFullyRewound?.Invoke();
+		}
 	}
 
 	public virtual void StopRewind()
@@ -68,8 +77,12 @@ public class BasicRewindable : MonoBehaviourPlus, IRewindListener
 		if (rigidbody != null)
 		{
 			rigidbody.isKinematic = false;
-			lastPos.ApplyVelocity(rigidbody);
+			if (lastPos != null)
+			{
+				lastPos.ApplyVelocity(rigidbody);
+			}
 		}
+		lastPos = null;
 	}
 
 	private void OnDestroy()
