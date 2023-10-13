@@ -5,8 +5,6 @@ public class PatrolState : AIState
 	//Inspector
 	public Transform patrolPoints;
 	[Tooltip("Whether the patrol path should be run in reverse when completed, or looping from the 0th patrol point")] public bool pingPong = true;
-	[SerializeField, Tooltip("Agent must reach within this distance to progress to the next patrol point")] 
-	private float reachedPointThreshold = 0.1f;
 
 	//Script
 	int patrolIndex = 0;
@@ -14,7 +12,7 @@ public class PatrolState : AIState
 
 	public override void Tick()
 	{
-		if (Vector3.Distance(controller.transform.position, patrolPoints.GetChild(patrolIndex).position) < reachedPointThreshold)
+		if (Vector3.Distance(controller.transform.position, patrolPoints.GetChild(patrolIndex).position) < 0.05f)
 			IncrementPatrolIndex();
 		controller.MoveTowards(patrolPoints.GetChild(patrolIndex).position);
 	}
