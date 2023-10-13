@@ -108,7 +108,7 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 
 		public void PlayRandom(AudioPool audioSource, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxVolume = 0)
 		{
-			clips[UnityEngine.Random.Range(0, clips.Length)].Play(audioSource, additionalVolume, additionalPitch, additionalMaxVolume);
+			if(clips.Length > 0) clips[UnityEngine.Random.Range(0, clips.Length)].Play(audioSource, additionalVolume, additionalPitch, additionalMaxVolume);
 		}
 
 		public float MaxShotLength()
