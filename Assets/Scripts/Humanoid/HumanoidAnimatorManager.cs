@@ -16,7 +16,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	private Vector3 colliderCentre;
 	private Animator animator;
 	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash, crtJumpAttack, crtBackflip;
-	new private CapsuleCollider collider;
+	[SerializeField] new private CapsuleCollider collider;
 	private Vector3 _velocity;
 	Humanoid humanoid;
 	AudioPool audioPool;
@@ -99,7 +99,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 		audioPool = GetComponent<AudioPool>().Initialise(1f, maxTime);//assuming sounds wont overlap after 1 second
 		animator = GetComponent<Animator>();
-		collider = transform.parent.GetComponent<CapsuleCollider>();
+		collider = collider == null ? transform.parent.GetComponent<CapsuleCollider>() : collider;
 		colliderHeight = collider.height;
 		colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
 		colliderCentre = collider.center;
