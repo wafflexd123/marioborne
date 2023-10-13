@@ -94,7 +94,7 @@ public class Player : Humanoid
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
 		}
 
-		if (Input.GetKeyDown(KeyCode.R))
+		if (Input.GetButtonDown("Reset"))
 		{
 			Time.timeScale = 1;
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

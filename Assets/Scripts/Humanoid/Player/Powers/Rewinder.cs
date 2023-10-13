@@ -4,16 +4,27 @@ using UnityEngine;
 public class Rewinder : MonoBehaviour, IPlayerPower
 {
 	public float rewindSpeed;
+	public string inputAxis;
+	public KeyCode singleFrameDebugInputAxis;
 	[SerializeField] private float handShakeLevel = 0.5f;
 
-	public bool CanDisable => !Input.GetButton("Ability");
+	public bool CanDisable => !Input.GetButton(inputAxis);
+
+	IEnumerator Start()
+	{
+		if (Application.isEditor)
+		{
+			while (true)
+			{
+				if (Input.GetKeyDown(singleFrameDebugInputAxis)) StartCoroutine(TimeRoutine());
+				yield return null;
+			}
+		}
+	}
 
 	void Update()
 	{
-		if (Input.GetButtonDown("Ability"))
-		{
-			StartCoroutine(TimeRoutine());
-		}
+		if (Input.GetButtonDown(inputAxis)) StartCoroutine(TimeRoutine());
 	}
 
 	IEnumerator TimeRoutine()
@@ -24,15 +35,9 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 		do
 		{
 			Time.Rewind(Time.deltaTime * (rewind += rewindSpeed * Time.deltaTime));
-            HandLeftManager.Instance.AddEnergy(handShakeLevel);
-            yield return null;
-		} while (Input.GetButton("Ability"));
+			HandLeftManager.Instance.AddEnergy(handShakeLevel * rewind);
+			yield return null;
+		} while (Input.GetButton(inputAxis));
 		Time.StopRewind();
 	}
-
-	public void OnWeaponPickup()
-	{
-	}
-
-	//public void HandleHand() { }
 }
