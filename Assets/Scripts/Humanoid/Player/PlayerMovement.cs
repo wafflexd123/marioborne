@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
 	RaycastHit groundHit, wallHit;
 	Player player;
-	Coroutine crtTilt, crtQueueRoll, crtHealth, crtDoublePressDash;
+	Coroutine crtTilt, crtQueueRoll, crtHealth;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
 	TMP_Text txtWhereAmI;
@@ -134,25 +134,25 @@ public class PlayerMovement : MonoBehaviourPlus
 		if (enableInput)//used specifically for queueing input from GetButtonDown, because GetButtonDown must be called in Update, not FixedUpdate
 		{
 			if (Input.GetButtonDown("Jump")) queueJump = true;
-			if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") > 0 && crtDoublePressDash == null) crtDoublePressDash = StartCoroutine(WaitForKeyPress());
+			if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") > 0) queueDash = true;
 			if (Input.GetButtonDown("Crouch") && !isGrounded && !isSliding) QueueRoll();
 		}
 
-		IEnumerator WaitForKeyPress()
-		{
-			float timer = 0;
-			do
-			{
-				yield return null;
-				timer += Time.deltaTime;
-				if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") > 0)
-				{
-					queueDash = true;
-					break;
-				}
-			} while (timer < doubleKeyPressTime);
-			crtDoublePressDash = null;
-		}
+		//IEnumerator WaitForKeyPress()
+		//{
+		//	float timer = 0;
+		//	do
+		//	{
+		//		yield return null;
+		//		timer += Time.deltaTime;
+		//		if (Input.GetButtonDown("Vertical") && Input.GetAxisRaw("Vertical") > 0)
+		//		{
+		//			queueDash = true;
+		//			break;
+		//		}
+		//	} while (timer < doubleKeyPressTime);
+		//	crtDoublePressDash = null;
+		//}
 	}
 
 	void FixedUpdate()

@@ -1114,7 +1114,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ceb1ba4fc182c85458b4bb452e51c43f, type: 2}
+  - {fileID: 2100000, guid: 7086ee7c89a63a04da34222a4ce2b1ec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1295,7 +1295,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ceb1ba4fc182c85458b4bb452e51c43f, type: 2}
+  - {fileID: 2100000, guid: 7086ee7c89a63a04da34222a4ce2b1ec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1393,13 +1393,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7633161819860594785, guid: 2e03c1f5ddcf52f4ea40356aef9a32a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1376064855674805817}
   m_SourcePrefab: {fileID: 100100000, guid: 2e03c1f5ddcf52f4ea40356aef9a32a1, type: 3}
 --- !u!4 &1363630525352020521 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3134865068516218295, guid: 2e03c1f5ddcf52f4ea40356aef9a32a1, type: 3}
   m_PrefabInstance: {fileID: 4138194080298180510}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5801658508949680127 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7633161819860594785, guid: 2e03c1f5ddcf52f4ea40356aef9a32a1, type: 3}
+  m_PrefabInstance: {fileID: 4138194080298180510}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1376064855674805817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801658508949680127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &5763799941095577018
 PrefabInstance:
   m_ObjectHideFlags: 0
