@@ -111,10 +111,18 @@ public class Sword : WeaponBase
 	public void Trigger(TriggerCollider triggerCollider)
 	{
 		if (wielder != null && wielder.gameObject == triggerCollider.gameObject) return;
-		if (FindComponent(triggerCollider.other.transform, out Humanoid enemy))
-		{
-			enemy.Kill(DeathType.Melee);
+		if (wielder is AIController)
+        {
+			if (FindComponent(triggerCollider.other.transform, out Player player))
+				player.Kill(DeathType.Melee);
 		}
+		else if (wielder is Player)
+        {
+			if (FindComponent(triggerCollider.other.transform, out AIController enemy))
+				enemy.Kill(DeathType.Melee);
+
+		}
+
 	}
 
     protected override void Start() 

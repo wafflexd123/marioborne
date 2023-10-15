@@ -68,17 +68,17 @@ MonoBehaviour:
   throwFallDelay: 1
   automatic: 0
   fireDelay: 1
-  soundRadius: 0
+  canPickup: 0
   colliders:
   - {fileID: 9209792048004995976}
   - {fileID: 9184598180054694575}
   pickupSpeed: 10
   dropForce: 2
   disablePickupAfterDropSeconds: 2
-  handPosition:
-    coords: {x: 0.3, y: -0.4, z: 0}
+  playerHandPosition:
+    coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  thirdPersonPosition:
+  enemyHandPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
   reflectWindow: {fileID: 0}
@@ -87,6 +87,7 @@ MonoBehaviour:
   hiltColliders:
   - {fileID: 9184598180054694575}
   recoveryTime: 0
+  windUpTime: 0.4
 --- !u!54 &688164216268494363
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -112,7 +113,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 2
 --- !u!95 &598308417147974527
 Animator:

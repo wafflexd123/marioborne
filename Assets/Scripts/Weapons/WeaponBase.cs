@@ -22,6 +22,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	public bool automatic;
 	public float fireDelay;
 	[Header("Equip/Drop")]
+	public bool canPickup;
 	public Collider[] colliders;
 	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
 	public Position playerHandPosition, enemyHandPosition;
@@ -65,14 +66,21 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 
 	public virtual bool Pickup(Humanoid humanoid)
 	{
-		if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
-		{
-			wielder = humanoid;
-			if (telekinesis != null) telekinesis.ReleaseObject();
-			EnableRigidbody(false);
-			if (wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
-			else StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform, () => OnPickup()));
-			return true;
+		if(humanoid is Player && !canPickup)
+        {
+			return false;
+        }
+        else
+        {
+			if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+			{
+				wielder = humanoid;
+				if (telekinesis != null) telekinesis.ReleaseObject();
+				EnableRigidbody(false);
+				if (wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
+				else StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform, () => OnPickup()));
+				return true;
+			}
 		}
 		return false;
 	}
