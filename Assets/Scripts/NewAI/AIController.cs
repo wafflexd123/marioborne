@@ -113,10 +113,10 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public virtual void StartRewind()
 	{
-        //input.enableInput = false;
-        //agent.ResetPath(); //guys how do we track patrol paths
-        if (!isDead)
-        {
+		//input.enableInput = false;
+		//agent.ResetPath(); //guys how do we track patrol paths
+		if (!isDead)
+		{
 			agent.enabled = false;
 			enabled = false;
 		}
@@ -124,9 +124,9 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public virtual void StopRewind()
 	{
-        //input.enableInput = true;
-        if (!isDead)
-        {
+		//input.enableInput = true;
+		if (!isDead)
+		{
 			enabled = true;
 			agent.enabled = true;
 		}
@@ -150,11 +150,13 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		agent.enabled = false;
 		enabled = false;
 		model.dying = true;
+		if (transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
 		rewind.AddFrameAction(() => ResetDeath());
 	}
-	
+
 	public void ResetDeath()
 	{
+		if (transform.parent.TryGetComponent(out EnemyManager e)) e.DeregisterDeath();
 		isDead = false;
 		enabled = true;
 		agent.enabled = true;
