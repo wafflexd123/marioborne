@@ -27,13 +27,18 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 
 	[Header("UI Elements")]
 	public GameObject sliderObject;
+	public GameObject rangeIndicatorObject;
 	public Slider chargeSlider;
 	public Image chargeSliderFill;
-	public Color maxChargeColor = Color.red;
+    public Image rangeIndicator;
+    public Color maxChargeColor = Color.red;
 	public Color minChargeColor = Color.blue;
+	public Color inRangeColor = Color.green;
+	private bool inRange = false;
 
 	//Script
 	private ITelekinetic grabbedObject;
+	private ITelekinetic hoveredObject;
 	private float objectDistance;
 	private float chargeTime;
 	private Camera mainCamera;
@@ -48,6 +53,15 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 
 	void Update()
 	{
+		if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out raycast, grabDistance) && FindComponent(raycast.transform, out hoveredObject))
+		{
+			inRange = true;
+		}
+		else
+		{
+			inRange = false;
+		}
+		UpdateRangeUI();
 		if (Input.GetButton("Ability"))
 		{
 			chargeTime += Time.deltaTime;
@@ -76,7 +90,6 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 				else PushObjects(chargedPushStrength);
 			}
 		}
-
 		if (grabbedObject != null) ControlObject();
 	}
 
@@ -179,15 +192,23 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 		chargeSliderFill.color = Color.Lerp(minChargeColor, maxChargeColor, chargeRatio);
 	}
 
+	void UpdateRangeUI()
+	{
+		if (inRange || grabbedObject != null) rangeIndicator.color = inRangeColor;
+		else rangeIndicator.color = maxChargeColor;
+	}
+
 	private void OnEnable()
 	{
 		if (sliderObject != null) sliderObject.SetActive(true);
+		if (rangeIndicatorObject != null) rangeIndicatorObject.SetActive(true);
 	}
 
 	private void OnDisable()
 	{
 		if (sliderObject != null) sliderObject.SetActive(false);
-		if (grabbedObject != null) ReleaseObject();
+        if (rangeIndicatorObject != null) rangeIndicatorObject.SetActive(false);
+        if (grabbedObject != null) ReleaseObject();
 		else StopCharge();
 	}
 
