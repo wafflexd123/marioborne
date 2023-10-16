@@ -180,6 +180,7 @@ MonoBehaviour:
   currentCoverPoint: {x: 0, y: 0, z: 0}
   lookingAt: {x: 0, y: 0, z: 0}
   defaultSpeed: 1
+  heldWeapon: {fileID: 0}
   reflectWindow: {fileID: 4862965222740863655, guid: 6cb7d01168cff574faa67af9bbb72494, type: 3}
 --- !u!114 &6856182187344883230
 MonoBehaviour:
@@ -194,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 40
-  viewAngle: 170
+  viewAngle: 181
   eyes: {fileID: 2283311920504033051}
   playerLocation: {x: 0, y: 0, z: 0}
   targetMask:
@@ -267,6 +268,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
+  startAt: 0
+  patrolIndex: 0
 --- !u!114 &2141748133728268990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,6 +331,8 @@ MonoBehaviour:
   scriptsToDisable:
   - {fileID: 4430802973714058838}
   delayBeforeDeactivation: 5
+  struggleIntensity: 5
+  struggleFrequency: 0.5
 --- !u!114 &7891005809044786071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +345,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08e1dc7f06c6d044931109ea3cbe48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFullyRewound:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7586206080720727492
 GameObject:
   m_ObjectHideFlags: 0

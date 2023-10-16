@@ -29,7 +29,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	protected Vector3 velocity;
 	protected RagdollManager ragdoll;
 	BasicRewindable rewind;
-	float agentSpeed, rotationSpeed;
+	float agentSpeed, rotationSpeed, defaultRotSpeed;
 	bool isStopped, isDead;
 	int layer;
 	[HideInInspector] public Vector3 currentCoverPoint;
@@ -49,6 +49,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		agentSpeed = agent.speed;
 		defaultSpeed = agentSpeed;
 		RotationSpeed = agent.angularSpeed;
+		defaultRotSpeed = RotationSpeed;
 		ragdoll = GetComponent<RagdollManager>();
 		rigidbody.isKinematic = true;
 		Time.timeScaleListeners.Add(this);
@@ -129,6 +130,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		{
 			enabled = true;
 			agent.enabled = true;
+			agent.angularSpeed = defaultRotSpeed;
 		}
 	}
 

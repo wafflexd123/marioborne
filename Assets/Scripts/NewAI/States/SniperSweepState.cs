@@ -15,9 +15,13 @@ public class SniperSweepState : AIState
 	{
 		if(!angleSet) //sets the starting angle to refer back to
         {
-			startAngle = controller.transform.eulerAngles.y;
-			currentAngle = startAngle;
-			angleSet = true;
+            if (controller) 
+			{
+				startAngle = controller.transform.eulerAngles.y;
+				currentAngle = startAngle;
+				angleSet = true;
+			}
+
 		}
         else currentAngle = controller.transform.eulerAngles.y;
 	}

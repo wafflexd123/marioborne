@@ -53,12 +53,15 @@ public class PatrolState : AIState
 
 	protected void IncrementPatrolIndex()
 	{
-		if (pingPong)
-		{
-			if (patrolIndex + pingpongDirection == -1 || patrolIndex + pingpongDirection == patrolPoints.childCount)
-				pingpongDirection *= -1;
-			patrolIndex += pingpongDirection;
+		if(patrolPoints.childCount > 1)
+        {
+			if (pingPong)
+			{
+				if (patrolIndex + pingpongDirection == -1 || patrolIndex + pingpongDirection == patrolPoints.childCount)
+					pingpongDirection *= -1;
+				patrolIndex += pingpongDirection;
+			}
+			else patrolIndex = (patrolIndex + 1) % patrolPoints.childCount;
 		}
-		else patrolIndex = (patrolIndex + 1) % patrolPoints.childCount;
 	}
 }

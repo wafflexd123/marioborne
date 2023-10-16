@@ -102,7 +102,11 @@ public class Sword : WeaponBase
 				yield return new WaitForSeconds(fireDelay);
 				_isFiring = false;
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
-				if (wielder is AIController ai3) ai3.IsStopped = false;
+				if (wielder is AIController ai3)
+				{
+					ai3.IsStopped = false;
+					ai3.RotationSpeed = defaultAngularSpeed;
+				}
 				crtDelay = null;
 			}
 		}

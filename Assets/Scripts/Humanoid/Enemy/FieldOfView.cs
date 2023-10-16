@@ -19,6 +19,7 @@ public class FieldOfView : MonoBehaviour
 	void FieldOfViewCheck()
 	{
 		Collider[] rangeChecks = Physics.OverlapSphere(eyes.position, viewRadius, targetMask, QueryTriggerInteraction.Ignore);
+		
 		if (rangeChecks.Length > 0)
 		{
 			//If transform.position instead of eyes.position is used as the ray origin, it goes through the ground. If the eye height isn't added to the target position, the ray will angle too steeply towards the ground.

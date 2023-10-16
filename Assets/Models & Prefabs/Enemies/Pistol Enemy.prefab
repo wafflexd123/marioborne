@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 40
-  viewAngle: 170
+  viewAngle: 181
   eyes: {fileID: 6295176194900047686}
   playerLocation: {x: 0, y: 0, z: 0}
   targetMask:
@@ -192,6 +192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
+  startAt: 0
+  patrolIndex: 0
 --- !u!114 &8172099334322591058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coverPriority: 1
-  runToCoverSpeed: 1.5
+  runToCoverSpeed: 5
   nearCoverDistance: 5
   relocateDistance: 0.5
   timeBeforeReturningToPatrol: 10
@@ -330,6 +332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08e1dc7f06c6d044931109ea3cbe48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFullyRewound:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8822481903910525283
 GameObject:
   m_ObjectHideFlags: 0

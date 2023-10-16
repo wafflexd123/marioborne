@@ -37,14 +37,14 @@ public class NavigateFiringPosState : AIState
 
 	protected override void OnEntry()
 	{
-		coverPointsManager = controller.coverPointsManager;
-		coverPoints = coverPointsManager.coverPoints;
-
 		if (coverPriority == CoverPriority.IgnoreCover)
 		{
 			targetLocation = controller.transform.position;
 			return;
 		}
+
+		coverPointsManager = controller.coverPointsManager;
+		coverPoints = coverPointsManager.coverPoints;
 
 		controller.AgentSpeed = runToCoverSpeed;
 
@@ -56,8 +56,8 @@ public class NavigateFiringPosState : AIState
 			Vector3 coverPointPosition = coverPoint.Key;
 			bool isAvailable = coverPoint.Value;
 
-            if (coverPointsManager.isCoverPointAvailable(coverPointPosition) && Vector3.Distance(controller.transform.position, coverPointPosition) > relocateDistance)
-            {
+			if (coverPointsManager.isCoverPointAvailable(coverPointPosition) && Vector3.Distance(controller.transform.position, coverPointPosition) > relocateDistance)
+			{
 				if (Vector3.Distance(controller.transform.position, coverPointPosition) < closestSightDistance)
 				{
 					Physics.Raycast(new Vector3(coverPointPosition.x, coverPointPosition.y + 1.6f, coverPointPosition.z), controller.player.transform.position - coverPointPosition, out RaycastHit player, Mathf.Infinity, LayerMask.NameToLayer("Enemy"));
@@ -83,7 +83,7 @@ public class NavigateFiringPosState : AIState
 				}
 			}
 		}
-		
+
 
 		if (coverPriority == CoverPriority.RequireCover)
 		{
@@ -117,6 +117,7 @@ public class NavigateFiringPosState : AIState
 			}
 			else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
 		}
+		
 	}
 
 	protected override void OnExit()
