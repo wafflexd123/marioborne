@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,15 +32,18 @@ public class Time
 	public static readonly List<ITimeScaleListener> timeScaleListeners = new List<ITimeScaleListener>();
 	public static readonly List<IRewindListener> rewindListeners = new List<IRewindListener>();
 
-	public static void StartRewind()
+	public static bool StartRewind()
 	{
+		timeScale = 1;
 		foreach (IRewindListener item in rewindListeners) item.StartRewind();
+		return true;//temp
 	}
 
-	public static void Rewind(float seconds)
+	public static bool Rewind(float seconds)
 	{
 		currentRewind = seconds;
 		foreach (IRewindListener item in rewindListeners) item.Rewind(seconds);
+		return true;//temp
 	}
 
 	public static void StopRewind()

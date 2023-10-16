@@ -59,6 +59,8 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 			OnWielderChange();
 			wielder = humanoid;
 			OnPickup();
+			if (wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform));
+			else StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform));
 			return true;
 		}
 		return false;
@@ -66,12 +68,8 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 
 	public virtual bool Pickup(Humanoid humanoid)
 	{
-		if(humanoid is Player && !canPickup)
-        {
-			return false;
-        }
-        else
-        {
+		if (humanoid is not Player || canPickup)//why
+		{
 			if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 			{
 				wielder = humanoid;
@@ -163,8 +161,6 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	/// </summary>
 	protected virtual void OnPickup()
 	{
-		if (wielder is Player p) playerHandPosition.ApplyToTransform(transform, true);
-		else enemyHandPosition.ApplyToTransform(transform, transform);
 		equipClip.Play(audioPool);
 		Sound.MakeSound(transform.position, equipClip.maxDistance, wielder);
 		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));

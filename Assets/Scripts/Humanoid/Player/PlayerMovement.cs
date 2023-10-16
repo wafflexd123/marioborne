@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	//Private
 	int wallDirection, airJumpCount, airDashCount;
 	float mass, _tilt, currentDrag, health;
-	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f, doubleKeyPressTime = .2f;
+	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f /*doubleKeyPressTime = .2f*/;
 	bool queueJump, queueRoll, queueDash, _isGrounded;
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
 	RaycastHit groundHit, wallHit;

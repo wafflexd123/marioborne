@@ -151,7 +151,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		enabled = false;
 		model.dying = true;
 		if (transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
-		rewind.AddFrameAction(() => ResetDeath());
+		//rewind.AddFrameAction(() => ResetDeath());
 	}
 
 	public void ResetDeath()

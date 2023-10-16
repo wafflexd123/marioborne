@@ -58,6 +58,7 @@ public class Player : Humanoid
 	protected override void Awake()
 	{
 		base.Awake();
+		if (invincibility && !Application.isEditor) invincibility = false;
 		rewinder = GetComponent<PlayerRewinder>();
 		powers = transform.Find("Left Hand").GetComponent<PowerManager>();
 		weaponHand = transform.Find("Right Hand");

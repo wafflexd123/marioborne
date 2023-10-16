@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Rewinder : MonoBehaviour, IPlayerPower
 {
-	public float rewindSpeed;
+	public float rewindSpeed, minRewindTime;
 	public string inputAxis;
 	public KeyCode singleFrameDebugInputAxis;
 	[SerializeField] private float handShakeLevel = 0.5f;
@@ -24,20 +24,21 @@ public class Rewinder : MonoBehaviour, IPlayerPower
 
 	void Update()
 	{
-		if (Input.GetButtonDown(inputAxis)) StartCoroutine(TimeRoutine());
+		if (Input.GetButtonDown(inputAxis) && !Time.isRewinding) StartCoroutine(TimeRoutine());
 	}
 
 	IEnumerator TimeRoutine()
 	{
-		Time.timeScale = 1;
-		float rewind = 1;
-		Time.StartRewind();
-		do
+		if (Time.StartRewind())
 		{
-			Time.Rewind(Time.deltaTime * (rewind += rewindSpeed * Time.deltaTime));
-			HandLeftManager.Instance.AddEnergy(handShakeLevel * rewind);
-			yield return null;
-		} while (Input.GetButton(inputAxis));
-		Time.StopRewind();
+			float rewind = 1, timer = 0;
+			while (Time.Rewind(Time.deltaTime * (rewind += rewindSpeed * Time.deltaTime)) && (Input.GetButton(inputAxis) || timer < minRewindTime))
+			{
+				HandLeftManager.Instance.AddEnergy(handShakeLevel * rewind);
+				timer += Time.deltaTime;
+				yield return null;
+			}
+			Time.StopRewind();
+		}
 	}
 }

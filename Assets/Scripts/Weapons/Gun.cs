@@ -57,10 +57,7 @@ public class Gun : WeaponBase
 	{
 		base.OnWielderChange();
 		if (wielder is AIController) wielder.model.holdingPistol = false;
-		else if (wielder is Player)
-		{
-			animator.StopAnimations();
-		}
+		else if (wielder is Player) animator.StopAnimations();
 		StopCoroutine(ref crtDelay);//if dropped while attacking
 	}
 
@@ -72,6 +69,7 @@ public class Gun : WeaponBase
 			{
                 ac.SetAmmo(playerAmmo.amount);
                 animator.Shoot();
+				crtDelay = StartCoroutine(Delay());
 			}
 			else
 			{
