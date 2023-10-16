@@ -33,6 +33,8 @@ public class Gun : WeaponBase
         ac = ammoCounter.GetComponent<AmmoCounter>();
         playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
+
+		if (!Application.isEditor) playerAmmo.isInfinite = false;
 	}
 
 	protected override void OnPickup()
