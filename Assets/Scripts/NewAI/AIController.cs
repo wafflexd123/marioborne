@@ -142,18 +142,21 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		isDead = true;
-		if (weapon)
+		if (!isDead)
 		{
-			heldWeapon = weapon;
-			input.Press("Drop");//drop weapon if holding one
+			isDead = true;
+			if (weapon)
+			{
+				heldWeapon = weapon;
+				input.Press("Drop");//drop weapon if holding one
+			}
+			if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
+			agent.enabled = false;
+			enabled = false;
+			model.dying = true;
+			if (transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
+			//rewind.AddFrameAction(() => ResetDeath());
 		}
-		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
-		agent.enabled = false;
-		enabled = false;
-		model.dying = true;
-		if (transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
-		//rewind.AddFrameAction(() => ResetDeath());
 	}
 
 	public void ResetDeath()
