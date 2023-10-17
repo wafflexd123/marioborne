@@ -54,7 +54,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 
 	public bool SwapWielder(Humanoid humanoid)
 	{
-		if (wielder && humanoid.PickupObject(this, out onWielderChange))
+		if (wielder && humanoid.OnPickupWeapon(this, out onWielderChange))
 		{
 			OnWielderChange();
 			wielder = humanoid;
@@ -70,7 +70,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	{
 		if (humanoid is not Player || canPickup)//why
 		{
-			if (crtDropTimer == null && !wielder && humanoid.PickupObject(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+			if (crtDropTimer == null && !wielder && humanoid.OnPickupWeapon(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 			{
 				wielder = humanoid;
 				if (telekinesis != null) telekinesis.ReleaseObject();

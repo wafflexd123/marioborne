@@ -9,7 +9,12 @@ public class UniversalButton : Raycastable
     public UnityEvent action;
     Coroutine crtRaycast;
 
-    public override void OnRaycast(Player player)
+	private void Start()
+	{
+        if (ui != null) ui.SetActive(false);
+	}
+
+	public override void OnRaycast(Player player)
     {
         if (interactable)
         {

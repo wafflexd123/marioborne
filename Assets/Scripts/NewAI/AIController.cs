@@ -172,7 +172,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		}
 	}
 
-	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
+	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
 	{
 		if (!this.weapon)
 		{

@@ -113,6 +113,6 @@ public class MessageManager : MonoBehaviour
 
     private void ShowRestartKey()
     {
-        glitchyTextRestart.FastRevealText("Press R to Restart");
+        glitchyTextRestart.FastRevealText("Hold R to Rewind");
     }
 }

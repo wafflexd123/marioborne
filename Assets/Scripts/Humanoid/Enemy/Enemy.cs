@@ -313,7 +313,7 @@ public class Enemy : Humanoid, ITimeScaleListener
         Time.timeScaleListeners.Remove(this);
     }
 
-    public override bool PickupObject(WeaponBase weapon, out Action onDrop)
+    public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
     {
         if (!this.weapon)
         {

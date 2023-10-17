@@ -48,4 +48,9 @@ public class ImageColorLerper : UnityEventHelper
 	{
 		StopAllCoroutines();
 	}
+
+	public void SwapColours()
+	{
+		(StartColor, EndColor) = (EndColor, StartColor);
+	}
 }

@@ -8,6 +8,13 @@ public class UnityEventHelper : MonoBehaviourPlus
 		Object.Destroy(obj);
 	}
 
+	public void SetTransform(Transform t)
+	{
+		transform.position = t.position;
+		transform.rotation = t.rotation;
+		transform.localScale = t.localScale;
+	}
+
 	public void SetPosition(Transform t)
 	{
 		transform.position = t.position;
@@ -16,6 +23,11 @@ public class UnityEventHelper : MonoBehaviourPlus
 	public void SetRotation(Transform t)
 	{
 		transform.rotation = t.rotation;
+	}
+
+	public void SetScale(Transform t)
+	{
+		transform.localScale = t.localScale;
 	}
 
     public void DebugLog(string message)
@@ -35,11 +47,13 @@ public class UnityEventHelper : MonoBehaviourPlus
 
 	public void LoadScene(string scene)
 	{
+		Time.timeScale = 1;
 		SceneManager.LoadScene(scene, LoadSceneMode.Single);
 	}
 
 	public void ReloadCurrentScene()
 	{
+		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 

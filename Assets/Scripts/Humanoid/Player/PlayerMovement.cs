@@ -64,6 +64,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
 	RaycastHit groundHit, wallHit;
 	Player player;
+	PlayerRewinder rewinder;
 	Coroutine crtTilt, crtQueueRoll, crtHealth;
 	HumanoidAnimatorManager animator;
 	Console.Line cnsDebug;
@@ -100,6 +101,7 @@ public class PlayerMovement : MonoBehaviourPlus
 		animator = collider.transform.Find("Model").GetComponent<HumanoidAnimatorManager>();
 		playerCamera = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = playerCamera.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
+		rewinder = GetComponent<PlayerRewinder>();
 
 		//UI
 		Transform ui = transform.Find("UI");
@@ -410,6 +412,11 @@ public class PlayerMovement : MonoBehaviourPlus
 					{
 						yVelocity.AddForce(lookDirection * dashForce, ForceMode.VelocityChange);
 						airDashCount++;
+						rewinder.AddFrameAction(() =>
+						{
+							airDashCount--;
+							if (airDashCount < 0) airDashCount = 0;
+						});
 					}
 				}
 			},
@@ -419,6 +426,11 @@ public class PlayerMovement : MonoBehaviourPlus
 				{
 					State.DefaultJump(this, air, Vector3.zero);
 					airJumpCount++;
+					rewinder.AddFrameAction(() =>
+					{
+						airJumpCount--;
+						if (airJumpCount < 0) airJumpCount = 0;
+					});
 				}
 			},
 			enterState: () =>
@@ -534,6 +546,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				$"Intended velocity: {intendedVelocity.magnitude:#.00} {intendedVelocity}\n" +
 				$"Actual velocity: {lastActualVelocity.magnitude:#.00} {lastActualVelocity}\n" +
 				$"Drag: {currentDrag:#00.00}, state: {currentState.name}, last ground/wall: {currentGroundPosition}\n" +
+				$"Air jumps: {airJumpCount}/{maxAirJumps}, air dashes: {airDashCount}/{maxAirDashes}\n" +
 				$"Health: {health:#0.00}";
 		}
 	}

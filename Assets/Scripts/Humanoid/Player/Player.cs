@@ -80,10 +80,22 @@ public class Player : Humanoid
 		handAnimator = armObject.GetComponent<Animator>();
 	}
 
-	//private void Start()
-	//{
-	//	input.AddListener("Mouse", InputType.OnPress, (float direction) => PickupObject(direction));
-	//}
+	private IEnumerator Start()
+	{
+		if (Application.isEditor)
+		{
+			while (true)
+			{
+				if (Input.GetButtonDown("Reset"))
+				{
+					Time.timeScale = 1;
+					SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+					yield break;
+				}
+				yield return null;
+			}
+		}
+	}
 
 	void Update()
 	{
@@ -92,14 +104,10 @@ public class Player : Humanoid
 			HandleInput();
 			Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out raycast, Mathf.Infinity, raycastIgnore, QueryTriggerInteraction.Ignore);
 			if (FindComponent(raycast.transform, out Raycastable hit)) hit.OnRaycast(this);
+			if (Input.GetButtonDown("Interact") && FindComponent(raycast.transform, out WeaponBase weaponBase)) weaponBase.Pickup(this);
 			if (Console.Enabled) cnsRaycast.text = $"Looking at: {(raycast.transform != null ? raycast.transform.name : null)}";
 		}
 
-		if (Input.GetButtonDown("Reset"))
-		{
-			Time.timeScale = 1;
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		}
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			if (escMenu.activeSelf)
@@ -128,7 +136,7 @@ public class Player : Humanoid
 
 	/// <summary>Method called by a weapon when it detects the player walking over it (do not call otherwise)</summary>
 	/// <returns>True if object is picked up, sets parent of weapon</returns>
-	public override bool PickupObject(WeaponBase weapon, out Action onDrop)
+	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
 	{
 		//print("Player PickupObject");
 		if (!this.weapon)//if nothing in hand

@@ -25,10 +25,13 @@ public class PowerManager : MonoBehaviourPlus
 
 	void Update()
 	{
-		int scroll = (int)Input.GetAxisRaw("Mouse ScrollWheel");
+		int scroll = (int)Input.mouseScrollDelta.y;
 		if (scroll != 0)
 		{
-			SelectPower((activePowerIndex + scroll) % powers.Length);
+			int power = activePowerIndex + scroll;
+			if (power >= powers.Length) power = 0;
+			else if (power < 0) power = powers.Length - 1;
+			SelectPower(power);
 		}
 		else
 		{
