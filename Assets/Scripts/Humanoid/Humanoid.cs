@@ -20,7 +20,7 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
     {
         input = new UniInput(this);
         Transform t = transform.Find("Body");
-        print($"Awake, t is null: {t == null} \ton: {name}");
+        //print($"Awake, t is null: {t == null} \ton: {name}");
         model = t.Find("Model").GetComponent<HumanoidAnimatorManager>();
         if (model == null)
             model = t.GetChild(0).GetChild(0).GetComponent<HumanoidAnimatorManager>();
