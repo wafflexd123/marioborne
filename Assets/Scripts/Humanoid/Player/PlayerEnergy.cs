@@ -1,68 +1,80 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using UnityEngine.PlayerLoop;
 
 /// <summary>
 /// Manages the player's energy, allowing for increasing, decreasing, and setting energy values.
-/// Also handles passive energy regeneration and updates the UI accordingly.
+/// Handles passive energy regeneration and provides a uniform rate of change for the energy UI update.
 /// </summary>
 public class PlayerEnergy : MonoBehaviour
 {
     [Header("Energy Properties")]
-    [SerializeField] private int maxEnergy = 100; // The maximum energy the player can have
-    [SerializeField] private int passiveRegenRate = 1; // The amount of energy passively regenerated over regenInterval
-    [SerializeField] private float regenInterval = 1f; // Time in seconds for how often energy should regenerate
+    [Tooltip("The maximum energy the player can have.")]
+    [SerializeField] private int maxEnergy = 100;
+
+    [Tooltip("Amount of energy passively regenerated over the regen interval.")]
+    [SerializeField] private int passiveRegenRate = 1;
+
+    [Tooltip("Time in seconds for how often energy should regenerate.")]
+    [SerializeField] private float regenInterval = 1f;
 
     [Header("UI Properties")]
-    [SerializeField] private TextMeshProUGUI energyText; // Reference to the TextMesh Pro UI component displaying energy
+    [Tooltip("Reference to the TextMesh Pro UI component displaying energy.")]
+    [SerializeField] private TextMeshProUGUI energyText;
 
-    private int currentEnergy; // The player's current energy level
-    private float displayedEnergy; // Used to smoothly interpolate the energy value on the UI
+    [Tooltip("Time it takes for the displayed energy to lerp to the current energy value.")]
+    [SerializeField] private float lerpDuration = 1f;
+
+    private int currentEnergy;
+    private float displayedEnergy;
+    private float lerpStartTime;
+    private float initialDisplayedEnergy;
 
     private void Start()
     {
         currentEnergy = maxEnergy;
         displayedEnergy = maxEnergy;
         StartCoroutine(PassiveRegen());
-        UpdateEnergyUI();
     }
 
     /// <summary>
-    /// Increases the player's energy by a specified amount.
+    /// Increases the player's energy by the specified amount and starts the energy UI update.
     /// </summary>
-    /// <param name="amount">Amount of energy to increase.</param>
+    /// <param name="amount">Amount to increase energy by.</param>
     public void IncreaseEnergy(int amount)
     {
         currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
+        StartEnergyLerp();
     }
 
     /// <summary>
-    /// Decreases the player's energy by a specified amount.
+    /// Decreases the player's energy by the specified amount and starts the energy UI update.
     /// </summary>
-    /// <param name="amount">Amount of energy to decrease.</param>
+    /// <param name="amount">Amount to decrease energy by.</param>
     public void DecreaseEnergy(int amount)
     {
         currentEnergy = Mathf.Max(currentEnergy - amount, 0);
+        StartEnergyLerp();
     }
 
     /// <summary>
-    /// Directly sets the player's energy to a specified amount.
+    /// Sets the player's energy to the specified value.
     /// </summary>
-    /// <param name="amount">Target energy value. Clamped between 0 and maxEnergy.</param>
+    /// <param name="amount">Value to set the energy to, clamped between 0 and maxEnergy.</param>
     public void SetEnergy(int amount)
     {
         currentEnergy = Mathf.Clamp(amount, 0, maxEnergy);
+        StartEnergyLerp();
     }
 
     /// <summary>
-    /// Coroutine that handles the passive regeneration of energy.
+    /// Periodically regenerates energy over time.
     /// </summary>
-    /// <returns>Yields WaitForSeconds based on the regenInterval.</returns>
     private IEnumerator PassiveRegen()
     {
         while (true)
         {
+            yield return new WaitUntil(() => displayedEnergy == currentEnergy);
             IncreaseEnergy(passiveRegenRate);
             yield return new WaitForSeconds(regenInterval);
         }
@@ -70,8 +82,6 @@ public class PlayerEnergy : MonoBehaviour
 
     private void Update()
     {
-        UpdateEnergyUI();
-
         if (Input.GetKeyDown(KeyCode.B))
         {
             DecreaseEnergy(25);
@@ -79,11 +89,33 @@ public class PlayerEnergy : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the displayed energy on the UI by interpolating towards the current energy value.
+    /// Begins the process to smoothly update the displayed energy value.
     /// </summary>
-    private void UpdateEnergyUI()
+    private void StartEnergyLerp()
     {
-        displayedEnergy = Mathf.Lerp(displayedEnergy, currentEnergy, 0.05f);
+        StopCoroutine("EnergyLerp");
+        lerpStartTime = UnityEngine.Time.time;
+        initialDisplayedEnergy = displayedEnergy;
+        StartCoroutine("EnergyLerp");
+    }
+
+    /// <summary>
+    /// Coroutine that provides a uniform rate of change for updating the displayed energy value.
+    /// </summary>
+    private IEnumerator EnergyLerp()
+    {
+        while (Mathf.Abs(displayedEnergy - currentEnergy) > 0.01f)
+        {
+            float elapsed = UnityEngine.Time.time - lerpStartTime;
+            float percentage = elapsed / lerpDuration;
+
+            displayedEnergy = Mathf.Lerp(initialDisplayedEnergy, currentEnergy, percentage);
+            energyText.text = Mathf.RoundToInt(displayedEnergy).ToString();
+
+            yield return null;
+        }
+
+        displayedEnergy = currentEnergy;  // Ensure displayedEnergy is set to currentEnergy at the end
         energyText.text = Mathf.RoundToInt(displayedEnergy).ToString();
     }
 }

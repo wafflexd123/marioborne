@@ -6,8 +6,9 @@ public class PowerManager : MonoBehaviourPlus
 	IPlayerPower[] powers;
 	int activePowerIndex = -1;
 	TextMeshProUGUI powerNameText;
+    [SerializeField] private IconManager iconManager;
 
-	void Start()
+    void Start()
 	{
 		powers = new IPlayerPower[transform.childCount];
 		for (int i = 0; i < powers.Length; i++) powers[i] = transform.GetChild(i).GetComponent<IPlayerPower>();
@@ -92,7 +93,8 @@ public class PowerManager : MonoBehaviourPlus
 		powers[powerIndex].gameObject.SetActive(true);
 		activePowerIndex = powerIndex;
 		powerNameText.text = powers[powerIndex].gameObject.name;
-	}
+        iconManager.SetIconActive(powerIndex);
+    }
 
 	private bool TryDisableCurrentPower(bool forceDisable)//if no power is currently activated or the current power can be disabled
 	{
