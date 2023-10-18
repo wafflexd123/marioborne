@@ -9,7 +9,7 @@ public class IconManager : MonoBehaviour
     [SerializeField] private Color inactiveEmissionColor = Color.black;
 
     [Header("Animation Properties")]
-    [SerializeField] private Vector3 hiddenPositionOffset = new Vector3(-100, 0, 0);
+    [SerializeField] private Vector3 hiddenPositionOffset = new(-100, 0, 0);
     [SerializeField] private float slideDuration = 0.5f;
     [SerializeField] private float displayDuration = 2f;
 
@@ -96,9 +96,7 @@ public class IconManager : MonoBehaviour
     {
         if (index >= 0 && index < icons.Length)
         {
-            Material iconMaterial = icons[index].materialForRendering;
-            iconMaterial.SetColor("_EmissionColor", emissionColor);
-            icons[index].material = iconMaterial;
+            icons[index].materialForRendering.SetColor("_EmissionColor", emissionColor * 2f);
         }
     }
 }
