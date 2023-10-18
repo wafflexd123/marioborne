@@ -84,7 +84,6 @@ public class NavigateFiringPosState : AIState
 			}
 		}
 
-
 		if (coverPriority == CoverPriority.RequireCover)
 		{
 			if (closestSightDistance < float.MaxValue)
@@ -117,7 +116,6 @@ public class NavigateFiringPosState : AIState
 			}
 			else targetLocation = controller.transform.position; //if there is no cover, should they just stand in place?
 		}
-		
 	}
 
 	protected override void OnExit()

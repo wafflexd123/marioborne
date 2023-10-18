@@ -27,7 +27,7 @@ public class Sniper : Gun
     {
         if (wielder is AIController controller)
         {
-            Physics.Raycast(firePosition.position, controller.transform.forward, out RaycastHit hit);
+            Physics.Raycast(firePosition.position, firePosition.transform.forward, out RaycastHit hit);
             line.SetPositions(new Vector3[] { firePosition.position, hit.point });
         }
     }
@@ -37,6 +37,11 @@ public class Sniper : Gun
         base.OnDrop();
         wielder.model.holdingSniper = false;
         wielder.model.sniperLayer = false;
+        line.enabled = false;
+    }
+
+    protected override void OnWielderChange()
+    {
         line.enabled = false;
     }
 }

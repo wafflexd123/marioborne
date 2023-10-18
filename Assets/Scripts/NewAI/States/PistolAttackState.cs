@@ -28,7 +28,8 @@ public class PistolAttackState : AIState
 	{
 		StopCoroutine(ref crtInvestigate);
 		StopCoroutine(ref crtRelocate);
-		controller.coverPointsManager.MarkAsAvailable(controller.currentCoverPoint);
+		if(controller.currentCoverPoint != null)
+			controller.coverPointsManager.MarkAsAvailable(controller.currentCoverPoint);
 	}
 
 	public override void Tick()
