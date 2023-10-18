@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 300738103581787235}
   - component: {fileID: 7410910270901380142}
+  - component: {fileID: 1836429453354766152}
   m_Layer: 0
   m_Name: Hand
   m_TagString: Untagged
@@ -56,14 +57,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349350308862265461}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6150647, y: -0.072389804, z: 0.074768595, w: 0.7815785}
-  m_LocalPosition: {x: 0.32201496, y: 0.84367925, z: -0.07096972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7930040936527047586}
   m_Father: {fileID: 6756933001752450910}
-  m_LocalEulerAnglesHint: {x: 0.282, y: -4.637, z: 6.399}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1773428102 &7410910270901380142
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -74,12 +75,12 @@ ParentConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.3220148, y: 0.8436794, z: -0.07096863}
-  m_RotationAtRest: {x: 76.47488, y: -5.196617, z: 6.8330245}
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: 0.007347107, y: 0.048736572, z: 0.041192055}
+  - {x: 0.069480896, y: 0.8244791, z: 0.50475407}
   m_RotationOffsets:
-  - {x: -80.14563, y: 0.000069840025, z: 89.99979}
+  - {x: -15.342155, y: -99.68559, z: 171.25804}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -87,10 +88,24 @@ ParentConstraint:
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
   m_Active: 1
-  m_IsLocked: 1
+  m_IsLocked: 0
   m_Sources:
   - sourceTransform: {fileID: 2548589167663110894}
     weight: 1
+--- !u!114 &1836429453354766152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349350308862265461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c5dbd3cc99fe564e8ae0363f8dbf944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pos: {x: -0.1, y: 0.03, z: 0.03}
+  rot: {x: -90, y: -99.68559, z: 190}
 --- !u!1 &1461580753115565203
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,7 +128,7 @@ GameObject:
   - component: {fileID: 1454619843016555310}
   m_Layer: 11
   m_Name: Pistol person v15 ANIMATED 2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
