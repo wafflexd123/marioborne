@@ -15,6 +15,7 @@ public class SniperSweepState : AIState
 	{
 		if(!angleSet) //sets the starting angle to refer back to
         {
+			controller = controller == null ? gameObject.GetComponent<AIController>() : controller;
 			startAngle = controller.transform.eulerAngles.y;
 			currentAngle = startAngle;
 			angleSet = true;
