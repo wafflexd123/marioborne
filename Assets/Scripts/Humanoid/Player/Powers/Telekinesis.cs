@@ -24,6 +24,7 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 	[Header("Telekinetic Push Charge Variables")]
 	[SerializeField] private float maxChargeTime = 2.0f;
 	[SerializeField] private float minPushStrength = 10.0f;
+	private bool isCharging = false;
 
 	[Header("UI Elements")]
 	public GameObject sliderObject;
@@ -51,7 +52,7 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 		mainCamera = Player.singlePlayer.camera;
 	}
 
-	void Update()
+	private void Update()
 	{
 		if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out raycast, grabDistance) && FindComponent(raycast.transform, out hoveredObject))
 		{
@@ -103,52 +104,42 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
 
 	void StopCharge()
 	{
+		isCharging = false;
 		chargeTime = 0;
 		HandLeftManager.Instance.SetEnergy(0);
 		UpdateChargeUI();
 	}
 
-    void ControlObject()
-    {
-        // Changing distance based on scroll wheel
-        objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
-        objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
+	void ControlObject()
+	{
+		// Changing distance based on scroll wheel
+		objectDistance -= Input.mouseScrollDelta.y * -scrollSpeed;
+		objectDistance = Mathf.Clamp(objectDistance, minDistance, maxDistance);
 
-        // Calculate target position based on ray from camera through mouse pointer
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Vector3 targetPosition = ray.GetPoint(objectDistance);
+		// Calculating target position based on mouse input
+		Vector3 targetPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, objectDistance));
 
-        // Adding wobble
-        targetPosition += Mathf.Sin(UnityEngine.Time.time * wobbleFrequency) * wobbleAmplitude * mainCamera.transform.up;
+		// Adding wobble based on charge time
+		targetPosition += mainCamera.transform.up * Mathf.Sin(UnityEngine.Time.time * wobbleFrequency) * wobbleAmplitude * (chargeTime / maxChargeTime);
 
-        float offset = 0f;
+		if (grabbedObject.gameObject.TryGetComponent(out Rigidbody rb))
+		{
+			Vector3 newPosition = Vector3.Lerp(rb.position, targetPosition, UnityEngine.Time.deltaTime * followSpeed);
+			rb.MovePosition(newPosition);
+        
+			// Determine the rotation speed based on charge time
+			float currentRotationSpeed = rotationSpeed;
+			if (chargeTime > 0) // Check if charging
+			{
+				currentRotationSpeed = Mathf.Lerp(rotationSpeed, rotationSpeed * 100f, chargeTime / maxChargeTime);
+			}
 
-        MeshRenderer meshRenderer = grabbedObject.transform.GetComponent<MeshRenderer>();
-        CapsuleCollider capsuleCollider = grabbedObject.transform.GetComponent<CapsuleCollider>();
+			// Apply rotation effect based on mouse movement
+			Vector3 rotationDirection = (targetPosition - rb.position).normalized;
+			rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, rb.rotation * Quaternion.LookRotation(rotationDirection), currentRotationSpeed * UnityEngine.Time.deltaTime));
+		}
+	}
 
-        if (meshRenderer != null)
-        {
-            offset = meshRenderer.bounds.extents.magnitude;
-        }
-        else if (capsuleCollider != null)
-        {
-            offset = capsuleCollider.radius;
-        }
-
-        if (Physics.Linecast(grabbedObject.transform.position, targetPosition, out RaycastHit hit))
-        {
-            if (hit.collider.gameObject != grabbedObject.gameObject)
-            {
-                targetPosition = hit.point + hit.normal * offset;
-            }
-        }
-
-        if (grabbedObject.gameObject.TryGetComponent(out Rigidbody rb))
-        {
-            Vector3 newPosition = Vector3.Lerp(rb.position, targetPosition, Time.deltaTime * followSpeed);
-            rb.MovePosition(newPosition);
-        }
-    }
 
     void PushObjects(float strength)
 	{
