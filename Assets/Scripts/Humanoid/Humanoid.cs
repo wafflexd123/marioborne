@@ -23,7 +23,13 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
 		if (t != null)
 		{
 			t = t.Find("Model");
-			if (t != null) model = t.GetComponent<HumanoidAnimatorManager>();
-		}
+			if (t != null)
+			{
+                model = t.GetComponent<HumanoidAnimatorManager>();
+            }
+            if (model == null)
+                model = t.GetChild(0).GetComponent<HumanoidAnimatorManager>();
+            print($"{name},\tFound body, found model transform: {t.name == "Model"},\tmodel null: {model == null}");
+        }
 	}
 }
