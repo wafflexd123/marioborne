@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioPool))]
@@ -74,6 +75,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	//Other
 	public bool dying { set => animator.SetBool("dying", value); }
+	public void RandomiseAnim() { animator.SetFloat("random", UnityEngine.Random.Range(0f, 1f)); }
 	public bool grounded { set => falling = false; }
 	public bool wallRunning { set => falling = false; }
 	public Vector3 velocity

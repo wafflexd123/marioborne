@@ -29,7 +29,7 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
             }
             if (model == null)
                 model = t.GetChild(0).GetComponent<HumanoidAnimatorManager>();
-            print($"{name},\tFound body, found model transform: {t.name == "Model"},\tmodel null: {model == null}");
+            //print($"{name},\tFound body, found model transform: {t.name == "Model"},\tmodel null: {model == null}");
         }
 	}
 }

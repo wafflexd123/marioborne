@@ -154,7 +154,9 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 			agent.enabled = false;
 			enabled = false;
 			model.dying = true;
-			if (transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
+			model.RandomiseAnim();
+            if (transform.parent != null && transform.parent.TryGetComponent(out EnemyManager e)) 
+				e.RegisterDeath();
 			//rewind.AddFrameAction(() => ResetDeath());
 		}
 	}
