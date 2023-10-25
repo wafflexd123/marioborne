@@ -14,6 +14,7 @@ public class PlayerRewinder : BasicRewindable
 
 	public override void StartRewind()
 	{
+		player.invincibility = true;
 		player.movement.enabled = false;
 		base.StartRewind();
 		player.input.enableInput = false;
@@ -22,6 +23,7 @@ public class PlayerRewinder : BasicRewindable
 
 	public override void StopRewind()
 	{
+		player.invincibility = false;
 		base.StopRewind();
 		player.input.enableInput = true;
 		player.enabled = true;
