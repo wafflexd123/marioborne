@@ -27,7 +27,7 @@ public class Sniper : Gun
     {
         if (wielder is AIController controller)
         {
-            Physics.Raycast(firePosition.position, firePosition.transform.forward, out RaycastHit hit);
+            Physics.Raycast(firePosition.position, controller.lookingAt - firePosition.position, out RaycastHit hit);
             line.SetPositions(new Vector3[] { firePosition.position, hit.point });
         }
     }
