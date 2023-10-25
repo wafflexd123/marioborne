@@ -1664,6 +1664,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08e1dc7f06c6d044931109ea3cbe48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFullyRewound:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7169719568143746029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,6 +1683,8 @@ MonoBehaviour:
   scriptsToDisable:
   - {fileID: 8880546473196669444}
   delayBeforeDeactivation: 5
+  struggleIntensity: 5
+  struggleFrequency: 0.5
 --- !u!114 &6680163638334271033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1717,7 +1722,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
-  reachedPointThreshold: 0.1
+  startAt: 0
+  patrolIndex: 0
 --- !u!114 &2012663100174732239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2532,7 +2538,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 19649260bd37b284081981f379486877, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

@@ -550,6 +550,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08e1dc7f06c6d044931109ea3cbe48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFullyRewound:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2827234316023882292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,6 +569,8 @@ MonoBehaviour:
   scriptsToDisable:
   - {fileID: 560277391349561311}
   delayBeforeDeactivation: 5
+  struggleIntensity: 5
+  struggleFrequency: 0.5
 --- !u!114 &7085551106468225791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,7 +629,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 1
-  reachedPointThreshold: 0.1
+  startAt: 1
+  patrolIndex: 0
 --- !u!114 &4785938214377876143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1052,6 +1058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2096360614779972289}
   - component: {fileID: 1659319292359374739}
+  - component: {fileID: 7469833430271435546}
   m_Layer: 0
   m_Name: Hand
   m_TagString: Untagged
@@ -1068,7 +1075,7 @@ Transform:
   m_GameObject: {fileID: 3202012933037806940}
   serializedVersion: 2
   m_LocalRotation: {x: -0.054289613, y: -0.069940925, z: 0.047386587, w: 0.99494493}
-  m_LocalPosition: {x: 0.35551953, y: 0.8887316, z: -0.2247963}
+  m_LocalPosition: {x: 0.3555193, y: 0.8887316, z: -0.22479439}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1085,10 +1092,10 @@ ParentConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.3555193, y: 0.88873255, z: -0.22479248}
+  m_TranslationAtRest: {x: 0.3555193, y: 0.8887316, z: -0.22479439}
   m_RotationAtRest: {x: -5.819901, y: -8.341202, z: 5.8783183}
   m_TranslationOffsets:
-  - {x: 0.15001297, y: -0.02999401, z: 0.025001049}
+  - {x: 0.15001392, y: -0.029994369, z: 0.025001526}
   m_RotationOffsets:
   - {x: -8.200028, y: -92.3, z: 175.20003}
   m_AffectTranslationX: 1
@@ -1098,10 +1105,24 @@ ParentConstraint:
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
   m_Active: 1
-  m_IsLocked: 1
+  m_IsLocked: 0
   m_Sources:
   - sourceTransform: {fileID: 4083219175072305945}
     weight: 1
+--- !u!114 &7469833430271435546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3202012933037806940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c5dbd3cc99fe564e8ae0363f8dbf944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pos: {x: -0.195, y: -0.17, z: 0.16}
+  rot: {x: -90, y: 90, z: 0}
 --- !u!1 &3283395502095533258
 GameObject:
   m_ObjectHideFlags: 0
@@ -2360,7 +2381,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 19649260bd37b284081981f379486877, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
