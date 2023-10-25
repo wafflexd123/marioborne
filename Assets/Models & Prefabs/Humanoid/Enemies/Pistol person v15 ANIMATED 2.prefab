@@ -210,6 +210,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08e1dc7f06c6d044931109ea3cbe48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFullyRewound:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3725419495664144791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,6 +229,8 @@ MonoBehaviour:
   scriptsToDisable:
   - {fileID: 6128375889268589241}
   delayBeforeDeactivation: 5
+  struggleIntensity: 5
+  struggleFrequency: 0.5
 --- !u!114 &8995444663630183079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,7 +289,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoints: {fileID: 0}
   pingPong: 0
-  reachedPointThreshold: 0.8
+  startAt: 0
+  patrolIndex: 0
 --- !u!114 &4528733325109177887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1742,7 +1748,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 19649260bd37b284081981f379486877, type: 2}
     - target: {fileID: 5866666021909216657, guid: e1a86df042b77d042bc8433e425be802, type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6000407479487422213, guid: e1a86df042b77d042bc8433e425be802, type: 3}
       propertyPath: m_LocalPosition.x
