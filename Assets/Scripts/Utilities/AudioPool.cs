@@ -114,7 +114,7 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 		public float MaxShotLength()
 		{
 			float t = 0;
-			foreach (Clip item in clips) if (item.audio.length > t) t = item.audio.length;
+			foreach (Clip item in clips) if (item.audio != null && item.audio.length > t) t = item.audio.length;
 			return t;
 		}
 	}
