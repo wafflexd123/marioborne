@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioPool))]
@@ -16,7 +17,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	private Vector3 colliderCentre;
 	private Animator animator;
 	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash, crtJumpAttack, crtBackflip;
-	new private CapsuleCollider collider;
+	[SerializeField] new private CapsuleCollider collider;
 	private Vector3 _velocity;
 	Humanoid humanoid;
 	AudioPool audioPool;
@@ -74,6 +75,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	//Other
 	public bool dying { set => animator.SetBool("dying", value); }
+	public void RandomiseAnim() { animator.SetFloat("random", UnityEngine.Random.Range(0f, 1f)); }
 	public bool grounded { set => falling = false; }
 	public bool wallRunning { set => falling = false; }
 	public Vector3 velocity
@@ -99,8 +101,8 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 		audioPool = GetComponent<AudioPool>().Initialise(1f, maxTime);//assuming sounds wont overlap after 1 second
 		animator = GetComponent<Animator>();
-		collider = transform.parent.GetComponent<CapsuleCollider>();
-		colliderHeight = collider.height;
+        collider = collider == null ? transform.parent.GetComponent<CapsuleCollider>() : collider;
+        colliderHeight = collider.height;
 		colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
 		colliderCentre = collider.center;
 		colliderCentreCrouch = colliderCentre.y * crouchHeightMultiplier;
