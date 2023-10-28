@@ -1885,21 +1885,41 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3507129366005199128, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
+      propertyPath: maxJumpDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3507129366005199128, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
+      propertyPath: minJumpDistance
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3881917897906043359, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
       propertyPath: patrolPoints
       value: 
       objectReference: {fileID: 1890933590}
+    - target: {fileID: 4433365326519535295, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6347616612784683812, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
       propertyPath: windUpTime
       value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 6347616612784683812, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
+      propertyPath: cooldownTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6347616612784683812, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
       propertyPath: enemyAirTime
-      value: 0.45
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 6347616612784683812, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
       propertyPath: enemyFireDelay
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6347616612784683812, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
+      propertyPath: jumpWindUpTime
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 6347616612784683812, guid: 075c0e186d2528a4a89a1e1a7cd1e0b6, type: 3}
       propertyPath: enemyHitboxTime

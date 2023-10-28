@@ -7,16 +7,12 @@ public class Sword : WeaponBase
 	public ReflectWindow reflectWindow;
 	private bool reflectEnabled;
 	public Collider[] bladeColliders, hiltColliders;
-	Coroutine crtDelay, crtCooldown, crtRNG;
+	Coroutine crtDelay, crtCooldown;
 	private Animator animator;
 
 	[field: Header("Enemy Variables")]
-	public float enemyHitboxTime;
-	public float enemyAirTime;
-	public float recoveryTime;
-	public float windUpTime = 0.4f;
-	public float cooldownTime = 5f;
-	public float rngCooldown = 1f;
+	public float windUpTime;
+	public float enemyHitboxTime, jumpWindUpTime, enemyAirTime, cooldownTime;
 	private float defaultAngularSpeed;
 	bool _isFiring;
 

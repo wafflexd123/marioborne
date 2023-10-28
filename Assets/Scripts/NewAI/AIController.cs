@@ -86,7 +86,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		if (weapon)
 		{
 			lookingAt = Player.singlePlayer.camera.transform.position;
-			weapon.transform.LookAt(lookingAt);
+			if(weapon is not Sword) weapon.transform.LookAt(lookingAt);
 			input.Press("Attack", () => -1, () => false);
 		}
 	}
