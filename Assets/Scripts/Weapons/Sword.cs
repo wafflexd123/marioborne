@@ -7,12 +7,16 @@ public class Sword : WeaponBase
 	public ReflectWindow reflectWindow;
 	private bool reflectEnabled;
 	public Collider[] bladeColliders, hiltColliders;
-	Coroutine crtDelay;
+	Coroutine crtDelay, crtCooldown, crtRNG;
 	private Animator animator;
 
 	[field: Header("Enemy Variables")]
+	public float enemyHitboxTime;
+	public float enemyAirTime;
 	public float recoveryTime;
 	public float windUpTime = 0.4f;
+	public float cooldownTime = 5f;
+	public float rngCooldown = 1f;
 	private float defaultAngularSpeed;
 	bool _isFiring;
 
@@ -36,7 +40,6 @@ public class Sword : WeaponBase
 			else reflectEnabled = false;
 			if (reflectEnabled) reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
 			animator.enabled = true;
-			animator.Play("idle");
 		}
 		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = false;
 		for (int i = 0; i < bladeColliders.Length; i++)
@@ -78,7 +81,6 @@ public class Sword : WeaponBase
     {
 		if (reflectEnabled)
 		{
-			if (wielder is AIController) reflectWindow.EnemyReflect(fireDelay);
 			if (wielder is Player) reflectWindow.PlayerReflect(fireDelay);
 		}
 		if (crtDelay == null)
@@ -99,11 +101,13 @@ public class Sword : WeaponBase
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
-				yield return new WaitForSeconds(fireDelay);
+				if(wielder is AIController) yield return new WaitForSeconds(enemyHitboxTime);
+				else yield return new WaitForSeconds(fireDelay);
 				_isFiring = false;
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
 				if (wielder is AIController ai3)
 				{
+					yield return new WaitUntil(() => AnimStopped());
 					ai3.IsStopped = false;
 					ai3.RotationSpeed = defaultAngularSpeed;
 				}
@@ -145,7 +149,7 @@ public class Sword : WeaponBase
     {
         if (reflectEnabled)
         {
-            if (crtDelay == null) crtDelay = StartCoroutine(Delay());
+            if (crtDelay == null && crtCooldown == null) crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
 				//THIS NEEDS REWRITING, TOO BUSY RN
@@ -154,22 +158,31 @@ public class Sword : WeaponBase
 					reflectWindow.enabled = false;
 					wielder.model.jumpAttack = true;
 					ai.agent.angularSpeed = 0f; //jumps in straight line, avoiding tracking the player
+					yield return new WaitForSeconds(windUpTime);
+
 					for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 					_isFiring = true;
-					yield return new WaitForSeconds(1f); //roughly the air time
+					yield return new WaitForSeconds(enemyAirTime); //roughly the air time
 					_isFiring = false;
 					for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
 					ai.IsStopped = true;
-					yield return new WaitForSeconds(recoveryTime); //time to get free shot in
+					yield return new WaitUntil(() => AnimStopped()); //time to get free shot in
 					ai.IsStopped = false;
 					ai.agent.angularSpeed = defaultAngularSpeed;
 					reflectWindow.enabled = true;
+					if (crtCooldown == null) crtCooldown = StartCoroutine(Cooldown());
 					crtDelay = null;
 				}
 			}
+
+			IEnumerator Cooldown()
+            {
+				yield return new WaitForSeconds(cooldownTime);
+				crtCooldown = null;
+            }
 		}
 	}
-
+		
     private void PlayerDeflect()
 	{
         if (reflectEnabled)
@@ -186,11 +199,50 @@ public class Sword : WeaponBase
 		}
     }
 
-    public void DisableHitbox()
+	public void EnemyDeflect()
+	{
+		if (reflectEnabled)
+		{
+			if (wielder is AIController) reflectWindow.EnemyReflect(enemyHitboxTime);
+		}
+
+		if (crtDelay == null)
+		{
+			//deflection sound should go here
+			crtDelay = StartCoroutine(Delay());
+			IEnumerator Delay()
+			{
+				if (wielder is AIController ai)
+				{
+					Debug.Log("deflecting");
+					wielder.model.deflect = true;
+					ai.IsStopped = true;
+					ai.RotationSpeed = 0f;
+					yield return new WaitForSeconds(AnimLength());
+					Debug.Log("done deflecting");
+					ai.IsStopped = false;
+					ai.RotationSpeed = defaultAngularSpeed;
+					crtDelay = null;
+				}
+			}
+		}
+	}
+
+	public void DisableHitbox()
     {
         foreach (var col in bladeColliders)
         {
             col.enabled = false;
         }
     }
+
+	private float AnimLength()
+    {
+		return wielder.model.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+	}
+
+	private bool AnimStopped()
+    {
+		return wielder.model.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.99f;
+	}
 }
