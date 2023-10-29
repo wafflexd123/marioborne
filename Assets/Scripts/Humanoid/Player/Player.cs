@@ -136,24 +136,16 @@ public class Player : Humanoid
 
 	/// <summary>Method called by a weapon when it detects the player walking over it (do not call otherwise)</summary>
 	/// <returns>True if object is picked up, sets parent of weapon</returns>
-	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
+	public override bool OnPickupWeapon(WeaponBase weapon)
 	{
-		//print("Player PickupObject");
 		if (!this.weapon)//if nothing in hand
 		{
-			this.weapon = weapon;
 			weapon.transform.SetParent(weaponHand);
 			IKEquip(false, weapon.IKHandTarget);
 			weapon.SetRenderMode(true);
-			if (weapon.animationName != "")
-			{
-				handAnimator.Play(weapon.animationName, 2);
-				//print("playing animation: " + weapon.animationName + ", on layer: 2");
-			}
-			onDrop = () => this.weapon = null;
+			if (weapon.animationName != "") handAnimator.Play(weapon.animationName, 2);
 			return true;
 		}
-		onDrop = null;
 		return false;
 	}
 
@@ -191,7 +183,7 @@ public class Player : Humanoid
 		input.enableInput = true;
 	}
 
-	public void TeleportToEnemy(Humanoid enemy, float teleportSpeed)
+	public void TeleportToEnemy(Humanoid enemy, float teleportSpeed, float maxTime)
 	{
 		if (enemy.enabled && crtMoveToEnemy == null)//dont teleport to dead/disabled enemies; will cause issues otherwise
 		{
@@ -201,9 +193,9 @@ public class Player : Humanoid
 			movement.EnableCollider(false);
 			enemy.enabled = false;
 			if (weapon) weapon.Drop(0);
-			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed, transform, () =>
+			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Mathf.Clamp(0, maxTime, Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed), transform, () =>
 			{
-				if (enemy.weapon) enemy.weapon.SwapWielder(this);
+				if (enemy.weapon) enemy.weapon.Pickup(this, true);
 				cameraController.enabled = true;
 				movement.EnableCollider(true);
 				movement.enabled = true;
@@ -213,12 +205,8 @@ public class Player : Humanoid
 		}
 	}
 
-	public override void OnBulletHit(Collision collision, Bullet bullet)
+	public override void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision)
 	{
-		if (bullet.shooter != this)
-		{
-			Kill(DeathType.Bullet);
-			if (!bullet.penetrates) Destroy(bullet.gameObject);
-		}
+		if (attacker != this) Kill(deathType);
 	}
 }

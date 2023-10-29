@@ -7,6 +7,14 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 {
 	//Inspector
+	[Header("Fire")]
+	public bool automatic;
+	public float fireDelay;
+	[Header("Equip/Drop")]
+	public Collider[] colliders;
+	[Tooltip("Time until gravity reaches maxium after a throw")] public float throwFallDelay = 1f;
+	public float throwForce, pickupSpeed, disablePickupAfterDropSeconds;
+	public Position playerHandPosition, enemyHandPosition;
 	[Header("Graphics")]
 	public Transform IKHandTarget;
 	[SerializeField] protected Transform modelRoot;
@@ -14,32 +22,21 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	[Header("Sound")]
 	public AudioPool.Clip equipClip;
 	public AudioPool.Clips fireClips;
-	[Header("Throw")]
-	public float throwForce = 10f; // Initial force of the throw
-	public float throwSpeed = 1f; // How fast the object will go after being thrown
-	public float throwFallDelay = 1f; // Delay before object starts falling
-	[Header("Fire")]
-	public bool automatic;
-	public float fireDelay;
-	[Header("Equip/Drop")]
-	public Collider[] colliders;
-	public float pickupSpeed, dropForce, disablePickupAfterDropSeconds;
-	public Position playerHandPosition, enemyHandPosition;
 
 	//Script
 	protected AudioPool audioPool;
-	protected Humanoid wielder;
 	protected new Rigidbody rigidbody;
 	protected RigidbodyStore rigidbodyStore;
 	int layer;
 	Telekinesis telekinesis;
+	Humanoid _wielder;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
 	Action onWielderChange;//registered by wielder when picked up, to be called just before the weapon is dropped
 	Coroutine crtDropTimer;
 
 	//Properties
-	bool IsMoving { get => rigidbody != null && rigidbody.velocity != Vector3.zero; }
 	public abstract bool IsFiring { get; }
+	public Humanoid wielder { get => _wielder; protected set { OnWielderChange(); _wielder = value; } }
 
 
 	protected virtual void Start()
@@ -51,110 +48,60 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		else EnableRigidbody(true);
 	}
 
-	public bool SwapWielder(Humanoid humanoid)
+	public virtual bool Pickup(Humanoid humanoid, bool forceWielderChange = false)
 	{
-		if (wielder && humanoid.OnPickupWeapon(this, out onWielderChange))
-		{
-			OnWielderChange();
-			Pickup(humanoid);
-			if (wielder is Player)
-			{
-				StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform));
-				Debug.Log($"player pickup: {wielder}");
-			}
-			else
-			{
-				StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform));
-				Debug.Log($"enemy pickup: {wielder}");
-			}
-			return true;
-		}
-		return false;
-	}
-
-	public virtual bool Pickup(Humanoid humanoid)
-	{
-		if (crtDropTimer == null && !wielder && humanoid.OnPickupWeapon(this, out onWielderChange))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+		if (crtDropTimer == null && (!wielder || forceWielderChange) && humanoid.OnPickupWeapon(this))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			wielder = humanoid;
+			wielder.weapon = this;
 			if (telekinesis != null) telekinesis.ReleaseObject();
 			EnableRigidbody(false);
-			if (wielder is Player) StartCoroutine(MoveToPosLocal(playerHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.PickupObject()
-			else StartCoroutine(MoveToPosLocal(enemyHandPosition, pickupSpeed, transform, () => OnPickup()));
+			StartCoroutine(MoveToPosLocal(wielder is Player ? playerHandPosition : enemyHandPosition, pickupSpeed, transform, () => OnPickup()));//parent is set by humanoid.OnPickupWeapon()
 			return true;
 		}
 		return false;
 	}
 
-	public virtual void Drop(float dropForce, bool useDropTimer = true)
+	public virtual void Drop(float throwForceMultiplier = 1, bool useDropTimer = true)
 	{
-		OnWielderChange();
-		OnDrop();
 		if (wielder is Player)
 		{
 			Player.singlePlayer.IKUnequip(false);
 			SetRenderMode(false);
 		}
+		wielder.weapon = null;
 		wielder = null;
 		transform.parent = null;
 		if (useDropTimer) ResetRoutine(DropTimer(), ref crtDropTimer);
 		EnableRigidbody(true);
-		rigidbody.AddRelativeForce(Vector3.forward * dropForce, ForceMode.Impulse);
+		rigidbody.useGravity = false; // Disable gravity initially
+		rigidbody.velocity = throwForceMultiplier * throwForce * transform.forward;
+		StartCoroutine(ApplyGravityGradually()); // Start Coroutine to gradually apply gravity
 
 		IEnumerator DropTimer()
 		{
 			for (float i = 0; i < disablePickupAfterDropSeconds; i += Time.fixedDeltaTime) yield return null;
 			crtDropTimer = null;
 		}
-	}
 
-	public virtual void Throw()
-	{
-		OnWielderChange();
-		OnDrop();
-		if (wielder is Player)
+		IEnumerator ApplyGravityGradually()
 		{
-			Player.singlePlayer.IKUnequip(false);
-			SetRenderMode(false);
+			float gravityIncrement = Physics.gravity.y / throwFallDelay; // Divide gravity by delay to get increment
+			float currentGravity = 0;
+
+			while (currentGravity > Physics.gravity.y) // Continue until reaching default gravity
+			{
+				currentGravity += gravityIncrement * Time.deltaTime; // Increment gravity
+				rigidbody.AddForce(new Vector3(0, currentGravity, 0), ForceMode.Acceleration); // Apply incremental gravity
+				yield return null; // Wait for next frame
+			}
+
+			rigidbody.useGravity = true; // Enable default gravity
 		}
-		wielder = null;
-		transform.parent = null;
-		ResetRoutine(ThrowTimer(), ref crtDropTimer);
-		EnableRigidbody(true);
-		rigidbody.AddRelativeForce(Vector3.forward * throwForce, ForceMode.Impulse);
-		rigidbody.useGravity = false; // Disable gravity initially
-		rigidbody.velocity = transform.forward * throwSpeed;
-		StartCoroutine(ApplyGravityGradually()); // Start Coroutine to gradually apply gravity
-
-		IEnumerator ThrowTimer()
-		{
-			yield return new WaitForSeconds(throwFallDelay);
-			crtDropTimer = null;
-		}
-	}
-
-	IEnumerator ApplyGravityGradually()
-	{
-		float gravityIncrement = Physics.gravity.y / throwFallDelay; // Divide gravity by delay to get increment
-		float currentGravity = 0;
-
-		while (currentGravity > Physics.gravity.y) // Continue until reaching default gravity
-		{
-			currentGravity += gravityIncrement * Time.deltaTime; // Increment gravity
-			rigidbody.AddForce(new Vector3(0, currentGravity, 0), ForceMode.Acceleration); // Apply incremental gravity
-			yield return null; // Wait for next frame
-		}
-
-		rigidbody.useGravity = true; // Enable default gravity
 	}
 
 	/// <summary>
-	/// Called just after OnWielderChange() when dropped
-	/// </summary>
-	protected virtual void OnDrop() { }
-
-	/// <summary>
-	/// Called to prepare a weapon for being dropped OR swapping wielders without being dropped; always just before wielder is changed.
+	/// Called just before wielder is changed.
 	/// </summary>
 	protected virtual void OnWielderChange()
 	{
@@ -172,8 +119,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		equipClip.Play(audioPool);
 		Sound.MakeSound(transform.position, equipClip.maxDistance, wielder);
 		inputActions.Add(wielder.input.AddListener("Attack", automatic ? InputType.OnHold : InputType.OnPress, (_) => Attack()));
-		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop(dropForce)));
-		inputActions.Add(wielder.input.AddListener("Throw", InputType.OnPress, (_) => Throw()));
+		inputActions.Add(wielder.input.AddListener("Drop", InputType.OnPress, (_) => Drop()));
 	}
 
 	/// <summary>
@@ -228,14 +174,14 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 
 	private void OnCollisionEnter(Collision other)
 	{
-		if(crtDropTimer != null)
-        {
+		if (crtDropTimer != null)
+		{
 			if (FindComponent(other.transform, out AIController controller))
 			{
 				controller.Kill();
 				Destroy(gameObject);
 			}
-        }
+		}
 		if (FindComponent(other.transform, out Player player)) Pickup(player);
 	}
 

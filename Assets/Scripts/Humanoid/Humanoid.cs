@@ -4,7 +4,7 @@ using UnityEngine;
 public enum DeathType { General, Fall, Bullet, Melee }
 
 [SelectionBase]
-public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
+public abstract class Humanoid : MonoBehaviourPlus, IAttackReceiver
 {
 	[HideInInspector] public HumanoidAnimatorManager model;
 	[HideInInspector] public WeaponBase weapon;
@@ -13,8 +13,8 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
 	public abstract Vector3 LookDirection { get; }
 	public abstract Vector3 LookingAt { get; }
 	public abstract void Kill(DeathType deathType = DeathType.General);
-	public abstract bool OnPickupWeapon(WeaponBase weapon, out Action onDrop);
-	public abstract void OnBulletHit(Collision collision, Bullet bullet);
+	public abstract bool OnPickupWeapon(WeaponBase weapon);
+	public abstract void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision);
 
 	protected virtual void Awake()
 	{
@@ -32,4 +32,9 @@ public abstract class Humanoid : MonoBehaviourPlus, IBulletReceiver
             //print($"{name},\tFound body, found model transform: {t.name == "Model"},\tmodel null: {model == null}");
         }
 	}
+}
+
+public interface IAttackReceiver
+{
+	public void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision);
 }

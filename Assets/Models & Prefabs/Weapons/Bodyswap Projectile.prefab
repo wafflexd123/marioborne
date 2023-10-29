@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1470589054315451327}
   - component: {fileID: 1470589054315451326}
   - component: {fileID: 1033899671541312687}
+  - component: {fileID: 897545406482312421}
   m_Layer: 12
   m_Name: Bodyswap Projectile
   m_TagString: Bullet
@@ -79,6 +80,22 @@ MonoBehaviour:
   shooter: {fileID: 0}
   penetrates: 0
   teleportSpeed: 15
+  maxTeleportTime: 1
+--- !u!114 &897545406482312421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470589054315451320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08e1dc7f06c6d044931109ea3cbe48f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onFullyRewound:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5608947100010310870
 GameObject:
   m_ObjectHideFlags: 0

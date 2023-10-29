@@ -59,7 +59,15 @@ public class AudioPool : MonoBehaviourPlus, ITimeScaleListener, IRewindListener
 
 	public void OnTimeSlow()
 	{
-		foreach (AudioPlayer a in audioPlayers) if (a.source.isPlaying) a.TimePitch();
+		foreach (AudioPlayer a in audioPlayers)
+		{
+			if (a.source == null)//if another script destroys the audio players
+			{
+				Destroy(this);
+				return;
+			}
+			if (a.source.isPlaying) a.TimePitch();
+		}
 	}
 
 	public void Rewind(float seconds)

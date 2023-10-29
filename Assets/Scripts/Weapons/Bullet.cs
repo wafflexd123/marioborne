@@ -81,9 +81,10 @@ public class Bullet : MonoBehaviourPlus
 
 	protected virtual void OnCollisionEnter(Collision collision)
 	{
-		if (FindComponent(collision.transform, out IBulletReceiver bulletReceiver))
+		if (FindComponent(collision.transform, out IAttackReceiver bulletReceiver))
 		{
-			bulletReceiver.OnBulletHit(collision, this);
+			bulletReceiver.ReceiveAttack(shooter, this, DeathType.Bullet, collision);
+			if (!penetrates) Destroy(gameObject);
 		}
 		else Destroy(gameObject);
 	}
@@ -101,9 +102,4 @@ public class Bullet : MonoBehaviourPlus
 		collider.enabled = false;
 		//particleSystem.Stop();
 	}
-}
-
-public interface IBulletReceiver
-{
-	public void OnBulletHit(Collision collision, Bullet bullet);
 }
