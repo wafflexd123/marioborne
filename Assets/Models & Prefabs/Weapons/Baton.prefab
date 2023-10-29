@@ -85,8 +85,11 @@ MonoBehaviour:
   - {fileID: 9209792048004995976}
   hiltColliders:
   - {fileID: 9184598180054694575}
-  recoveryTime: 0
-  windUpTime: 0.4
+  windUpTime: 0.75
+  enemyHitboxTime: 0.15
+  jumpWindUpTime: 0
+  enemyAirTime: 0
+  cooldownTime: 0
 --- !u!54 &688164216268494363
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1265,7 +1268,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3021
+  m_VersionIndex: 3024
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

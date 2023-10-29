@@ -1,11 +1,10 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Lerper))]
-[CanEditMultipleObjects]
+[CustomEditor(typeof(Lerper)), CanEditMultipleObjects]
 public class LerperEditor : Editor
 {
-	SerializedProperty easingCurve, easingFunction, loop, onFinish, onUndoFinish, useTransform, lerpPos, lerpRot, lerpSca, lerpToTransform, useLocal;
+	SerializedProperty easingCurve, easingFunction, onFinish, onUndoFinish, loopType, useTransform, lerpPos, lerpRot, lerpSca, lerpToTransform, useLocal;
 	Lerper lerper;
 
 	void OnEnable()
@@ -13,7 +12,7 @@ public class LerperEditor : Editor
 		lerper = (Lerper)target;
 		easingCurve = serializedObject.FindProperty("easingCurve");
 		easingFunction = serializedObject.FindProperty("easingFunction");
-		loop = serializedObject.FindProperty("loop");
+		loopType = serializedObject.FindProperty("loopType");
 		onFinish = serializedObject.FindProperty("onFinish");
 		onUndoFinish = serializedObject.FindProperty("onUndoFinish");
 		useTransform = serializedObject.FindProperty("useTransform");
@@ -35,8 +34,8 @@ public class LerperEditor : Editor
 			EditorGUILayout.PropertyField(easingCurve);
 		}
 
-		EditorGUILayout.PropertyField(loop);
-		if (!lerper.loop)
+		EditorGUILayout.PropertyField(loopType);
+		if (lerper.loopType == Lerper.LoopType.None)
 		{
 			EditorGUILayout.PropertyField(onFinish);
 			EditorGUILayout.PropertyField(onUndoFinish);

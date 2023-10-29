@@ -8,7 +8,7 @@ public class MeleeAttackState : AIState
 	protected Coroutine crtInvestigate, crtJumpCooldown;
 	float defaultSpeed;
 	ExternalControlTransition leaveTransition;
-	public ReflectWindow reflectWindow;
+	[HideInInspector] public ReflectWindow reflectWindow;
 
 	public override AIState Setup(params Transition[] transitions)
 	{
@@ -55,7 +55,7 @@ public class MeleeAttackState : AIState
 				{
 					if (reflectWindow.hit)
 					{
-						controller.Fire();
+						controller.GetComponentInChildren<Sword>().EnemyDeflect();
 					}
 				}
 			}

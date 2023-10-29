@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(FieldOfView))]
+[CustomEditor(typeof(FieldOfView)), CanEditMultipleObjects]
 public class FieldOfViewEditor : Editor
 {
     private void OnSceneGUI()
