@@ -187,7 +187,7 @@ public class Player : Humanoid
 	{
 		if (enemy.enabled && crtMoveToEnemy == null)//dont teleport to dead/disabled enemies; will cause issues otherwise
 		{
-			Instantiate(model.deathPosePrefab, transform.position, transform.rotation);
+			//Instantiate(model.deathPosePrefab, transform.position, transform.rotation);
 			cameraController.enabled = false;
 			movement.enabled = false;
 			movement.EnableCollider(false);
@@ -201,7 +201,6 @@ public class Player : Humanoid
 				movement.EnableCollider(true);
 				movement.enabled = true;
 				crtMoveToEnemy = null;
-				Destroy(enemy.gameObject);
 			}, EasingFunction.EaseInOutSine));
 		}
 	}

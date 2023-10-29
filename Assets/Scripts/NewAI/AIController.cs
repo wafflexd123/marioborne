@@ -8,13 +8,14 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 {
 	//Inspector
 	public float alertRadius;
+	[Tooltip("Only needs assigning to enemies who use cover. It's now done in the controller script because it needs access in more than one state.")] public CoverPoints coverPointsManager;
 
 	//Properties
 	[field: SerializeField][field: ReadOnly] public AIState CurrentState { get; protected set; }
 	public Vector3 LastKnownPlayerPosition { get; set; }
 	public Vector3? SoundLocation { get; set; }
 	public FieldOfView fieldOfView { get; protected set; }
-	[HideInInspector] public NavMeshAgent agent { get; set; }
+	public NavMeshAgent agent { get; set; }
 	public new Rigidbody rigidbody { get; protected set; }
 	public Player player { get; protected set; }
 	public float AgentSpeed { get => agentSpeed; set { agentSpeed = value; agent.speed = value * Time.timeScale; } }
@@ -23,19 +24,14 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	public override Vector3 LookDirection => fieldOfView.eyes.forward;
 	public override Vector3 LookingAt => lookingAt;
 
-	[SerializeField, Tooltip("Only needs assigning to enemies who use cover. It's now done in the controller script because it needs access in more than one state.")] public CoverPoints coverPointsManager;
-
 	//Script
 	protected Vector3 velocity;
 	protected RagdollManager ragdoll;
-	BasicRewindable rewind;
 	float agentSpeed, rotationSpeed, defaultRotSpeed;
-	bool isStopped, isDead;
+	bool isStopped;
 	int layer;
-	[HideInInspector] public Vector3 currentCoverPoint;
-	[HideInInspector] public Vector3 lookingAt;
+	[HideInInspector] public Vector3 currentCoverPoint, lookingAt;
 	[HideInInspector] public float defaultSpeed;
-	[HideInInspector] public WeaponBase heldWeapon;
 
 	protected override void Awake()
 	{
@@ -43,7 +39,6 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		fieldOfView = GetComponent<FieldOfView>();
 		agent = GetComponent<NavMeshAgent>();
 		rigidbody = GetComponent<Rigidbody>();
-		rewind = GetComponent<BasicRewindable>();
 		player = Player.singlePlayer;
 		layer = gameObject.layer;
 		agentSpeed = agent.speed;
@@ -86,7 +81,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		if (weapon)
 		{
 			lookingAt = Player.singlePlayer.camera.transform.position;
-			if(weapon is not Sword) weapon.transform.LookAt(lookingAt);
+			if (weapon is not Sword) weapon.transform.LookAt(lookingAt);
 			input.Press("Attack", () => -1, () => false);
 		}
 	}
@@ -114,24 +109,16 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public virtual void StartRewind()
 	{
-		//input.enableInput = false;
 		//agent.ResetPath(); //guys how do we track patrol paths
-		if (!isDead)
-		{
-			agent.enabled = false;
-			enabled = false;
-		}
+		agent.enabled = false;
+		enabled = false;
 	}
 
 	public virtual void StopRewind()
 	{
-		//input.enableInput = true;
-		if (!isDead)
-		{
-			enabled = true;
-			agent.enabled = true;
-			agent.angularSpeed = defaultRotSpeed;
-		}
+		enabled = true;
+		agent.enabled = true;
+		agent.angularSpeed = defaultRotSpeed;
 	}
 
 	protected virtual void OnDestroy()
@@ -142,36 +129,13 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		if (!isDead)
-		{
-			isDead = true;
-			if (weapon)
-			{
-				heldWeapon = weapon;
-				input.Press("Drop");//drop weapon if holding one
-			}
-			if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
-			agent.enabled = false;
-			enabled = false;
-			model.dying = true;
-			model.RandomiseAnim();
-            if (transform.parent != null && transform.parent.TryGetComponent(out EnemyManager e)) 
-				e.RegisterDeath();
-			//rewind.AddFrameAction(() => ResetDeath());
-		}
-	}
-
-	public void ResetDeath()
-	{
-		if (transform.parent.TryGetComponent(out EnemyManager e)) e.DeregisterDeath();
-		isDead = false;
-		enabled = true;
-		agent.enabled = true;
-		model.dying = false;
-		if (heldWeapon)
-		{
-			heldWeapon.Pickup(this);
-		}
+		if (weapon) input.Press("Drop");//drop weapon if holding one
+		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
+		model.dying = true;
+		model.RandomiseAnim();
+		model.transform.SetParent(transform.parent);
+		if (transform.parent != null && transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
+		Destroy(gameObject);
 	}
 
 	public override bool OnPickupWeapon(WeaponBase weapon)

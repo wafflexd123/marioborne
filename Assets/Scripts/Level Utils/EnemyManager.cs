@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class EnemyManager : UnityEventHelper
 {
+	[Tooltip("Amount of enemies that can be alive when onAllEnemiesDead is called")] public int buffer;
 	public UnityEvent onAllEnemiesDead;
 	int deadEnemies;
 
 	public void RegisterDeath()
 	{
-		Debug.Log(deadEnemies + "   " + transform.childCount);
 		deadEnemies++;
-		if (deadEnemies >= transform.childCount)
+		if (deadEnemies == transform.childCount - 1 - buffer)
 		{
 			onAllEnemiesDead.Invoke();
-			if (deadEnemies > transform.childCount) Debug.LogWarning("More deaths have been recorded than there are enemies to die in the first place, fix this", this);
+			Destroy(this);
 		}
 	}
 

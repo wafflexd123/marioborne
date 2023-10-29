@@ -9,13 +9,15 @@ public class ElevatorDoor : UnityEventHelper
 	public Transform leftDoor, rightDoor;
 	public TriggerCollider triggerCollider;
 	public float moveTime, zMovement;
-	public bool isOpen, enableDoors = true;
+	public bool enableDoors = true;
 	public AudioPool.Clip audioDing, audioAmbient;
-	[Tooltip("When the doors are closed, if the player in inside, the elevator will 'rise' (it plays the screenshake and ambient noise).")] public UnityEvent onEndRise;
+	[Tooltip("When the doors are closed, if the player in inside, the elevator will 'rise' (it plays the screenshake and ambient noise). Use this to call TeleportTo() or LoadScene().")] public UnityEvent onEndRise;
+	[Tooltip("Called when the doors are closed and the elevator is empty (use this to re-open the doors if there is no exterior button)")] public UnityEvent onEmpty;
 	PositionAndScale leftOpen, leftClosed, rightOpen, rightClosed;
 	Coroutine crtLeft, crtRight, crtPlayer;
 	Screenshake screenshake;
 	new AudioPool audio;
+	bool isOpen;
 
 	public bool IsFullyOpen => isOpen && crtRight == null;
 	public bool IsFullyClosed => !isOpen && crtRight == null;
@@ -51,8 +53,9 @@ public class ElevatorDoor : UnityEventHelper
 	{
 		if (enableDoors)
 		{
-			ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
-			ResetRoutine(LerpToPosLocal(rightOpen, moveTime, rightDoor, () => { isOpen = true; crtRight = null; }, EasingFunction.Get(doorEasing)), ref crtRight);
+			isOpen = true;
+			ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor, () => crtLeft = null, EasingFunction.Get(doorEasing)), ref crtLeft);
+			ResetRoutine(LerpToPosLocal(rightOpen, moveTime, rightDoor, () => crtRight = null, EasingFunction.Get(doorEasing)), ref crtRight);
 		}
 	}
 
@@ -60,8 +63,9 @@ public class ElevatorDoor : UnityEventHelper
 	{
 		if (enableDoors)
 		{
-			ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
-			ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; CheckForPlayer(); }, EasingFunction.Get(doorEasing)), ref crtRight);
+			isOpen = false;
+			ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor, () => crtLeft = null, EasingFunction.Get(doorEasing)), ref crtLeft);
+			ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { crtRight = null; CheckForPlayer(); }, EasingFunction.Get(doorEasing)), ref crtRight);
 		}
 	}
 
@@ -78,6 +82,10 @@ public class ElevatorDoor : UnityEventHelper
 		{
 			if (crtPlayer == null) crtPlayer = StartCoroutine(PlayerInElevatorDoorClosed());
 			else Debug.LogWarning("PlayerInElevatorDoorClosed called twice! This is bad.", this);
+		}
+		else
+		{
+			onEmpty.Invoke();
 		}
 	}
 
