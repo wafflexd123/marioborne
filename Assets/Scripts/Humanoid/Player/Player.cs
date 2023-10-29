@@ -196,6 +196,7 @@ public class Player : Humanoid
 			crtMoveToEnemy = StartCoroutine(LerpToPos(new Position(enemy.transform), Mathf.Clamp(0, maxTime, Vector3.Distance(enemy.transform.position, transform.position) / teleportSpeed), transform, () =>
 			{
 				if (enemy.weapon) enemy.weapon.Pickup(this, true);
+				enemy.Kill();
 				cameraController.enabled = true;
 				movement.EnableCollider(true);
 				movement.enabled = true;

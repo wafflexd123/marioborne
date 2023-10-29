@@ -10,6 +10,7 @@ public class EnemyManager : UnityEventHelper
 
 	public void RegisterDeath()
 	{
+		Debug.Log(deadEnemies + "   " + transform.childCount);
 		deadEnemies++;
 		if (deadEnemies >= transform.childCount)
 		{
