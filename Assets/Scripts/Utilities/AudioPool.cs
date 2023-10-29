@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +9,7 @@ using UnityEngine;
 /// 2) AudioPool audioPool = AddComponent(AudioPool).Initialise(...);
 /// 3) Call Clip.Play(audioPool) or Clips.PlayRandom(audioPool).
 /// </summary>
-public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
+public class AudioPool : MonoBehaviourPlus, ITimeScaleListener, IRewindListener
 {
 	static readonly float timeSlowPitchReduction = .3f;
 	AudioPlayer[] audioPlayers;
@@ -19,24 +20,34 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 	/// <param name="maxAudioSources">The maximum amount of AudioSources that will be instantiated. More than 5 may have diminishing returns for short tracks.</param>
 	public AudioPool Initialise(float timeBetweenShots, float maxShotLength, int maxAudioSources = 5)
 	{
-		if (timeBetweenShots < 0.01f) timeBetweenShots = 0.01f;
+		if (timeBetweenShots < 0.01f) timeBetweenShots = 0.01f;//clamp to above 0
+		return Initialise(Mathf.Clamp(Mathf.CeilToInt(maxShotLength / timeBetweenShots), 1, maxAudioSources));//create enough audiosources so clips will not cancel already playing ones, clamped to a max of 5 by default
+	}
+
+	public AudioPool Initialise(int audioSourceCount)
+	{
 		Time.timeScaleListeners.Add(this);
 		Time.rewindListeners.Add(this);
-		int amount = Mathf.Clamp(Mathf.CeilToInt(maxShotLength / timeBetweenShots), 1, maxAudioSources);//create enough audiosources so clips will not cancel already playing ones, clamped to a max of 5 by default
-		audioPlayers = new AudioPlayer[amount];
+		audioPlayers = new AudioPlayer[audioSourceCount];
 		GameObject g = new GameObject("Audio");
 		g.transform.SetParent(transform);
 		g.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-		for (int i = 0; i < amount; i++)
-		{
-			audioPlayers[i] = new AudioPlayer(this, g.AddComponent<AudioSource>());
-			audioPlayers[i].source.spatialBlend = 1;
-			audioPlayers[i].source.dopplerLevel = 0;
-			audioPlayers[i].source.rolloffMode = AudioRolloffMode.Linear;
-			audioPlayers[i].source.minDistance = 2;
-			audioPlayers[i].source.maxDistance = 40;
-		}
+		for (int i = 0; i < audioSourceCount; i++) audioPlayers[i] = new AudioPlayer(this, AddAudioSource(g));
 		return this;
+	}
+
+	/// <summary>
+	/// Adds an audiosource to Gameobject g, setting its values to a better default
+	/// </summary>
+	public static AudioSource AddAudioSource(GameObject g)
+	{
+		AudioSource a = g.AddComponent<AudioSource>();
+		a.spatialBlend = 1;
+		a.dopplerLevel = 0;
+		a.rolloffMode = AudioRolloffMode.Linear;
+		a.minDistance = 2;
+		a.maxDistance = 40;
+		return a;
 	}
 
 	AudioPlayer NextAudioPlayer()
@@ -78,6 +89,7 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 		public readonly AudioSource source;
 		public float startVolume, startPitch;
 		readonly AudioPool pool;
+		Coroutine crtVolume;
 
 		public AudioPlayer(AudioPool audioPool, AudioSource audioSource)
 		{
@@ -85,13 +97,28 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 			this.pool = audioPool;
 		}
 
-		public void Play(AudioClip clip, float volume, float pitch, float maxDistance)
+		/// <returns>True while audio is playing (any audio on the audioSource, not necessarily this clip)</returns>
+		public Func<bool> Play(AudioClip clip, float volume, float pitch, float maxDistance, bool loop, AnimationCurve volumeCurve, float volumeCurveTime)
 		{
 			source.volume = startVolume = volume;
 			source.pitch = startPitch = pitch;
 			source.maxDistance = maxDistance;
+			source.loop = loop;
+			source.clip = clip;
 			TimePitch();
-			source.PlayOneShot(clip);
+			if (volumeCurve.length > 0 && volumeCurveTime > 0) pool.ResetRoutine(VolumeCurve(volumeCurve, volumeCurveTime), ref crtVolume);
+			else pool.StopCoroutine(ref crtVolume);
+			source.Play();
+			return () => source.isPlaying;
+		}
+
+		IEnumerator VolumeCurve(AnimationCurve volumeCurve, float volumeCurveTime)
+		{
+			for (float i = 0; i < source.clip.length; i += Time.deltaTime)
+			{
+				source.volume = Mathf.Lerp(0, startVolume, volumeCurve.Evaluate(i / volumeCurveTime));
+				yield return null;
+			}
 		}
 
 		public void TimePitch()
@@ -106,11 +133,13 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 	{
 		public Clip[] clips;
 
-		public void PlayRandom(AudioPool audioSource, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxVolume = 0)
+		/// <returns>True while audio is playing (any audio on the audioSource, not necessarily this clip)</returns>
+		public Func<bool> PlayRandom(AudioPool audioSource, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxVolume = 0)
 		{
-			if(clips.Length > 0) clips[UnityEngine.Random.Range(0, clips.Length)].Play(audioSource, additionalVolume, additionalPitch, additionalMaxVolume);
+			return clips.Length > 0 ? clips[UnityEngine.Random.Range(0, clips.Length)].Play(audioSource, additionalVolume, additionalPitch, additionalMaxVolume) : () => false;
 		}
 
+		/// <returns>Duration of longest clip in array</returns>
 		public float MaxShotLength()
 		{
 			float t = 0;
@@ -124,10 +153,14 @@ public class AudioPool : MonoBehaviour, ITimeScaleListener, IRewindListener
 	{
 		public AudioClip audio;
 		public float volume = 1, pitch = 1, maxDistance = 40;
+		public bool loop = false;
+		public AnimationCurve volumeCurve;
+		[Tooltip("Set to 0 to ignore volume curve")] public float volumeCurveTime = 0;
 
-		public void Play(AudioPool audioPool, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxDistance = 0)
+		/// <returns>True while audio is playing (any audio on the audioSource, not necessarily this clip)</returns>
+		public Func<bool> Play(AudioPool audioPool, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxDistance = 0)
 		{
-			audioPool.NextAudioPlayer().Play(audio, volume + additionalVolume, pitch + additionalPitch, maxDistance + additionalMaxDistance);
+			return audioPool.NextAudioPlayer().Play(audio, volume + additionalVolume, pitch + additionalPitch, maxDistance + additionalMaxDistance, loop, volumeCurve, volumeCurveTime);
 		}
 	}
 }

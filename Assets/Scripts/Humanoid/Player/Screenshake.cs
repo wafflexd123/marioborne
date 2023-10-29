@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Screenshake : MonoBehaviour
 {
-	[SerializeField] AnimationCurve curve;
-	[SerializeField] float strengthMultiplier, duration;
-	[SerializeField] bool shakeOnEnable;
-	[SerializeField] Transform objToShake;
+	public AnimationCurve curve;
+	public float strengthMultiplier, duration;
+	public bool shakeOnEnable;
+	public Transform objToShake;
 	Coroutine crtShake;
 	Vector3 startPos;
 

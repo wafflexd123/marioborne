@@ -1,22 +1,30 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ElevatorDoor : MonoBehaviourPlus
+[RequireComponent(typeof(Screenshake))]
+public class ElevatorDoor : UnityEventHelper
 {
-	public EasingFunction.Enum doorEasing;
+	public EasingFunction.Enum doorEasing = EasingFunction.Enum.EaseInOutSine;
 	public Transform leftDoor, rightDoor;
 	public TriggerCollider triggerCollider;
 	public float moveTime, zMovement;
-	public bool animateOnEnable, isOpen;
-	public UnityEvent playerInElevatorDoorClosedEvent, emptyElevatorDoorClosedEvent;
+	public bool isOpen, enableDoors = true;
+	public AudioPool.Clip audioDing, audioAmbient;
+	[Tooltip("When the doors are closed, if the player in inside, the elevator will 'rise' (it plays the screenshake and ambient noise).")] public UnityEvent onEndRise;
 	PositionAndScale leftOpen, leftClosed, rightOpen, rightClosed;
-	Coroutine crtLeft, crtRight;
+	Coroutine crtLeft, crtRight, crtPlayer;
+	Screenshake screenshake;
+	new AudioPool audio;
 
 	public bool IsFullyOpen => isOpen && crtRight == null;
 	public bool IsFullyClosed => !isOpen && crtRight == null;
 
 	private void Start()
 	{
+		screenshake = GetComponent<Screenshake>();
+		screenshake.objToShake = Player.singlePlayer.camera.transform;
+		audio = gameObject.AddComponent<AudioPool>().Initialise(1);
 		if (isOpen)
 		{
 			leftOpen = new PositionAndScale(leftDoor, true);
@@ -41,24 +49,48 @@ public class ElevatorDoor : MonoBehaviourPlus
 
 	public void Open()
 	{
-		ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
-		ResetRoutine(LerpToPosLocal(rightOpen, moveTime, rightDoor, () => { isOpen = true; crtRight = null; }, EasingFunction.Get(doorEasing)), ref crtRight);
+		if (enableDoors)
+		{
+			ResetRoutine(LerpToPosLocal(leftOpen, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
+			ResetRoutine(LerpToPosLocal(rightOpen, moveTime, rightDoor, () => { isOpen = true; crtRight = null; }, EasingFunction.Get(doorEasing)), ref crtRight);
+		}
 	}
 
 	public void Close()
 	{
-		ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
-		ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; CheckForPlayer(); }, EasingFunction.Get(doorEasing)), ref crtRight);
+		if (enableDoors)
+		{
+			ResetRoutine(LerpToPosLocal(leftClosed, moveTime, leftDoor, null, EasingFunction.Get(doorEasing)), ref crtLeft);
+			ResetRoutine(LerpToPosLocal(rightClosed, moveTime, rightDoor, () => { isOpen = false; crtRight = null; CheckForPlayer(); }, EasingFunction.Get(doorEasing)), ref crtRight);
+		}
+	}
+
+	public void TeleportTo(Transform teleportTo)
+	{
+		Player.singlePlayer.transform.parent = transform;
+		transform.position = teleportTo.position;
+		Player.singlePlayer.transform.parent = null;
 	}
 
 	void CheckForPlayer()
 	{
-		if (triggerCollider.isTriggered) playerInElevatorDoorClosedEvent.Invoke();
-		else emptyElevatorDoorClosedEvent.Invoke();
+		if (triggerCollider.isTriggered)
+		{
+			if (crtPlayer == null) crtPlayer = StartCoroutine(PlayerInElevatorDoorClosed());
+			else Debug.LogWarning("PlayerInElevatorDoorClosed called twice! This is bad.", this);
+		}
 	}
 
-	private void OnEnable()
+	IEnumerator PlayerInElevatorDoorClosed()
 	{
-		if (animateOnEnable) Toggle();
+		enableDoors = false;
+		screenshake.Shake();
+		audioAmbient.Play(audio);
+		yield return new WaitForSeconds(screenshake.duration);
+		System.Func<bool> isPlaying = audioDing.Play(audio);
+		yield return new WaitWhile(isPlaying);
+		enableDoors = true;
+		onEndRise.Invoke();
+		crtPlayer = null;
 	}
 }

@@ -33,8 +33,7 @@ Transform:
   m_LocalPosition: {x: -0.85, y: 1.375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4326654863809775259}
+  m_Children: []
   m_Father: {fileID: 7119252663072885158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8540280392889957326
@@ -1001,12 +1000,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7084445454776945704}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.8499999, y: 1.375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4511319590673729028}
+  m_Father: {fileID: 7119252663072885158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7637436220936974369
 BoxCollider:
@@ -1065,7 +1064,7 @@ GameObject:
   - component: {fileID: 7119252661462460978}
   - component: {fileID: 7119252661462460979}
   m_Layer: 0
-  m_Name: Door
+  m_Name: Right Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1167,6 +1166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7119252663072885158}
   - component: {fileID: 7119252663072885157}
+  - component: {fileID: 909545517228589808}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -1189,6 +1189,7 @@ Transform:
   m_Children:
   - {fileID: 7119252661462460976}
   - {fileID: 7119252663593818407}
+  - {fileID: 4326654863809775259}
   - {fileID: 4511319590673729028}
   - {fileID: 1363630525352020521}
   - {fileID: 936525270433180483}
@@ -1213,12 +1214,62 @@ MonoBehaviour:
   triggerCollider: {fileID: 4904235115776666547}
   moveTime: 2
   zMovement: 0.9
-  animateOnEnable: 0
   isOpen: 0
-  playerInElevatorDoorClosedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  emptyElevatorDoorClosedEvent:
+  enableDoors: 1
+  audioDing:
+    audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 500
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
+  audioAmbient:
+    audio: {fileID: 8300000, guid: b48543ca2d242b34894125892c2c470d, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 10
+    loop: 1
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -2
+        outSlope: -2
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 5
+  onEndRise:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7119252663072885157}
@@ -1233,6 +1284,55 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &909545517228589808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7119252663072885159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87339c4d99452c841be2c5782e94c9cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2
+      outSlope: -2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  strengthMultiplier: 0.005
+  duration: 5
+  shakeOnEnable: 0
+  objToShake: {fileID: 0}
 --- !u!1 &7119252663593818411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1246,7 +1346,7 @@ GameObject:
   - component: {fileID: 7119252663593818409}
   - component: {fileID: 7119252663593818410}
   m_Layer: 0
-  m_Name: Door
+  m_Name: Left Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
