@@ -1,18 +1,21 @@
 using UnityEngine;
 
-public class BulletReflectSurface : MonoBehaviourPlus, IBulletReceiver
+public class BulletReflectSurface : MonoBehaviourPlus, IAttackReceiver
 {
     public bool enableReflect;
     public Color bulletColor;
 
-    public void OnBulletHit(Collision collision, Bullet bullet)
+    public void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision)
     {
-        if (enableReflect)
+        if (weapon is Bullet bullet)
         {
-            bullet.direction = Vector3.Reflect(bullet.direction, collision.GetContact(0).normal);
-            bullet.shooter = this;
-            bullet.color = bulletColor;
+            if (enableReflect)
+            {
+                bullet.direction = Vector3.Reflect(bullet.direction, collision.GetContact(0).normal);
+                bullet.shooter = this;
+                bullet.color = bulletColor;
+            }
+            else Destroy(bullet.gameObject);
         }
-        else Destroy(bullet.gameObject);
     }
 }

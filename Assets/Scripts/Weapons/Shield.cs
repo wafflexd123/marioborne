@@ -1,11 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class Shield : MonoBehaviour, IBulletReceiver
+public class Shield : MonoBehaviour, IAttackReceiver
 {
-    public void OnBulletHit(Collision collision, Bullet bullet)
-    {
-        if (!bullet.penetrates) Destroy(bullet);
-        else Destroy(this.gameObject);
-    }
+	public void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision)
+	{
+		if (weapon is Bullet bullet && bullet.penetrates) Destroy(gameObject);
+	}
 }

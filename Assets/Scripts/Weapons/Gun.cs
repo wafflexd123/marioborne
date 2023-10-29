@@ -19,9 +19,8 @@ public class Gun : WeaponBase
 
 	protected Ammo ammo;
 	Coroutine crtDelay, crtReload;
-    AmmoCounter ac;
-    GameObject ammoCounter;
-    GunAnimator animator;
+	AmmoCounter ammoCounter;
+	GunAnimator animator;
 
 	public override bool IsFiring => false;
 
@@ -29,9 +28,8 @@ public class Gun : WeaponBase
 	{
 		base.Start();
 		animator = GetComponent<GunAnimator>();
-        ammoCounter = transform.Find("Ammo Counter").gameObject;
-        ac = ammoCounter.GetComponent<AmmoCounter>();
-        playerAmmo.amount = playerAmmo.startAmount;
+		ammoCounter = transform.Find("Ammo Counter").GetComponent<AmmoCounter>();
+		playerAmmo.amount = playerAmmo.startAmount;
 		aiAmmo.amount = aiAmmo.startAmount;
 
 		if (!Application.isEditor) playerAmmo.isInfinite = false;
@@ -48,19 +46,26 @@ public class Gun : WeaponBase
 		else if (wielder is Player)
 		{
 			animator.StartAnimations();
-            ammoCounter.SetActive(true);
-            ac.SetAmmo(playerAmmo.amount);
-            ammo = playerAmmo;
-            animator.StartAnimations();
-        }
+			ammoCounter.gameObject.SetActive(true);
+			ammoCounter.SetAmmo(playerAmmo.amount);
+			ammo = playerAmmo;
+			animator.StartAnimations();
+		}
 	}
 
 	protected override void OnWielderChange()
 	{
 		base.OnWielderChange();
-		if (wielder is AIController) wielder.model.holdingPistol = false;
-		else if (wielder is Player) animator.StopAnimations();
-		StopCoroutine(ref crtDelay);//if dropped while attacking
+		if (wielder != null)
+		{
+			if (wielder is AIController) wielder.model.holdingPistol = false;
+			else
+			{
+				animator.StopAnimations();
+				ammoCounter.gameObject.SetActive(false);
+			}
+			StopCoroutine(ref crtDelay);//if dropped while attacking
+		}
 	}
 
 	protected override void Attack()
@@ -69,8 +74,8 @@ public class Gun : WeaponBase
 		{
 			if (wielder is Player)
 			{
-                ac.SetAmmo(playerAmmo.amount);
-                animator.Shoot();
+				ammoCounter.SetAmmo(playerAmmo.amount);
+				animator.Shoot();
 				crtDelay = StartCoroutine(Delay());
 			}
 			else

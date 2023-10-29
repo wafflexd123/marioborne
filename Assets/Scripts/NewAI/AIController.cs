@@ -174,24 +174,16 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		}
 	}
 
-	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
+	public override bool OnPickupWeapon(WeaponBase weapon)
 	{
-		if (!this.weapon)
-		{
-			this.weapon = weapon;
-			onDrop = () => this.weapon = null;
-			return true;
-		}
-		onDrop = null;
-		return false;
+		return !this.weapon;
 	}
 
-	public override void OnBulletHit(Collision collision, Bullet bullet)
+	public override void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision)
 	{
-		if (!typeof(AIController).IsAssignableFrom(bullet.shooter.GetType()))//if not shot by an AI (no friendly fire)
+		if (!typeof(AIController).IsAssignableFrom(attacker.GetType()))//if not shot by an AI (no friendly fire)
 		{
-			Kill(DeathType.Bullet);
-			if (!bullet.penetrates) Destroy(bullet.gameObject);
+			Kill(deathType);
 		}
 	}
 

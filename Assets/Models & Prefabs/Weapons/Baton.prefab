@@ -49,6 +49,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081258793bf398a44864fad001ca554e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  automatic: 0
+  fireDelay: 1
+  colliders:
+  - {fileID: 9209792048004995976}
+  - {fileID: 9184598180054694575}
+  throwFallDelay: 1
+  throwForce: 30
+  pickupSpeed: 10
+  disablePickupAfterDropSeconds: 2
+  playerHandPosition:
+    coords: {x: 0, y: 0, z: 0}
+    eulers: {x: 0, y: 0, z: 0}
+  enemyHandPosition:
+    coords: {x: 0, y: 0, z: 0}
+    eulers: {x: 0, y: 0, z: 0}
   IKHandTarget: {fileID: 0}
   modelRoot: {fileID: 3324473732510384776}
   animationName: hold_sword
@@ -57,29 +72,16 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     maxDistance: 10
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
   fireClips:
-    clips:
-    - audio: {fileID: 8300000, guid: 6cdae7ab499144e4c989745b1355245b, type: 3}
-      volume: 0
-      pitch: 0
-      maxDistance: 40
-  throwForce: 30
-  throwSpeed: 10
-  throwFallDelay: 1
-  automatic: 0
-  fireDelay: 1
-  colliders:
-  - {fileID: 9209792048004995976}
-  - {fileID: 9184598180054694575}
-  pickupSpeed: 10
-  dropForce: 2
-  disablePickupAfterDropSeconds: 2
-  playerHandPosition:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  enemyHandPosition:
-    coords: {x: 0, y: 0, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
+    clips: []
   reflectWindow: {fileID: 0}
   bladeColliders:
   - {fileID: 9209792048004995976}
@@ -1429,10 +1431,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2056
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 513143
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

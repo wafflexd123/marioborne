@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class FakeEnemy : UnityEventHelper, IBulletReceiver
+public class FakeEnemy : UnityEventHelper, IAttackReceiver
 {
 	public UnityEvent onHit;
 
-	public void OnBulletHit(Collision collision, Bullet bullet)
+	public void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision)
 	{
-		Destroy(bullet.gameObject);
+		Destroy(weapon.gameObject);
 		Destroy(gameObject);
 		onHit.Invoke();
 	}

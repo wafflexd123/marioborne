@@ -1,20 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
+//someone needs to rewrite this, a hurricane has gone through it multiple times
 public class Sword : WeaponBase
 {
 	[Header("Sword Specific")]
-	public ReflectWindow reflectWindow;
-	private bool reflectEnabled;
-	public Collider[] bladeColliders, hiltColliders;
-	Coroutine crtDelay, crtCooldown;
-	private Animator animator;
-
-	[field: Header("Enemy Variables")]
+	public Collider[] bladeColliders;
+	public Collider[] hiltColliders;
+	[Header("Enemy Variables")]
 	public float windUpTime;
 	public float enemyHitboxTime, jumpWindUpTime, enemyAirTime, cooldownTime;
+
+	Coroutine crtDelay, crtCooldown;
+	private Animator animator;
 	private float defaultAngularSpeed;
 	bool _isFiring;
+	ReflectWindow reflectWindow;
 
 	public override bool IsFiring => _isFiring;
 
@@ -22,22 +23,22 @@ public class Sword : WeaponBase
 	{
 		base.OnPickup();
 
-		if (wielder is AIController ai)
+		if (wielder is MeleeAI ai)
 		{
-			if (wielder.GetComponent<MeleeAI>().reflectWindow) reflectEnabled = true;
-			else reflectEnabled = false;
+			reflectWindow = ai.reflectWindow;
 			wielder.model.holdingMelee = true;
-			if (reflectEnabled) reflectWindow = wielder.GetComponent<MeleeAI>().reflectWindow;
 			defaultAngularSpeed = ai.agent.angularSpeed;
 		}
-		if (wielder is Player)
+		else
 		{
-			if (wielder.GetComponent<Player>().reflectWindowPrefab) reflectEnabled = true;
-			else reflectEnabled = false;
-			if (reflectEnabled) reflectWindow = wielder.GetComponent<Player>().reflectWindowPrefab;
+			reflectWindow = ((Player)wielder).reflectWindowPrefab;
 			animator.enabled = true;
 		}
-		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = false;
+
+		for (int i = 0; i < hiltColliders.Length; i++)
+		{
+			hiltColliders[i].enabled = false;
+		}
 		for (int i = 0; i < bladeColliders.Length; i++)
 		{
 			bladeColliders[i].enabled = false;
@@ -45,37 +46,33 @@ public class Sword : WeaponBase
 		}
 	}
 
-	protected override void OnDrop()
+	protected override void OnWielderChange()
 	{
+		base.OnWielderChange();
 		for (int i = 0; i < hiltColliders.Length; i++) hiltColliders[i].enabled = true;
 		for (int i = 0; i < bladeColliders.Length; i++)
 		{
 			bladeColliders[i].enabled = true;
 			bladeColliders[i].isTrigger = false;
 		}
-
-        if (wielder is Player)
-        {
-            animator.Play("unequipped");
-            animator.enabled = false;
-        }
-
-    }
-
-	protected override void OnWielderChange()
-	{
-		base.OnWielderChange();
-		if (crtDelay != null)
+		if (wielder != null)
 		{
-			StopCoroutine(crtDelay); //if dropped while attacking
-			crtDelay = null;
+			if (wielder is Player)
+			{
+				animator.Play("unequipped");
+				animator.enabled = false;
+			}
+			else
+			{
+				wielder.model.holdingMelee = false;
+			}
 		}
-		if (wielder is AIController) wielder.model.holdingMelee = false;
+		StopCoroutine(ref crtDelay);//if dropped while attacking
 	}
 
 	protected override void Attack()
-    {
-		if (reflectEnabled)
+	{
+		if (reflectWindow != null)
 		{
 			if (wielder is Player) reflectWindow.PlayerReflect(fireDelay);
 		}
@@ -90,6 +87,7 @@ public class Sword : WeaponBase
 				//THIS NEEDS REWRITING, TOO BUSY RN
 				if (wielder is AIController ai)
 				{
+					if (!ai.enabled) yield break;
 					wielder.model.slash = true;
 					ai.IsStopped = true;
 					ai.RotationSpeed = 0f;
@@ -97,12 +95,13 @@ public class Sword : WeaponBase
 				}
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = true;
 				_isFiring = true;
-				if(wielder is AIController) yield return new WaitForSeconds(enemyHitboxTime);
+				if (wielder is AIController) yield return new WaitForSeconds(enemyHitboxTime);
 				else yield return new WaitForSeconds(fireDelay);
 				_isFiring = false;
 				for (int i = 0; i < bladeColliders.Length; i++) bladeColliders[i].enabled = false;
 				if (wielder is AIController ai3)
 				{
+					if (!ai3.enabled) yield break;
 					yield return new WaitUntil(() => AnimStopped());
 					ai3.IsStopped = false;
 					ai3.RotationSpeed = defaultAngularSpeed;
@@ -114,38 +113,26 @@ public class Sword : WeaponBase
 
 	public void Trigger(TriggerCollider triggerCollider)
 	{
-		if (wielder != null && wielder.gameObject == triggerCollider.gameObject) return;
-		if (wielder is AIController)
-        {
-			if (FindComponent(triggerCollider.other.transform, out Player player))
-				player.Kill(DeathType.Melee);
-		}
-		else if (wielder is Player)
-        {
-			if (FindComponent(triggerCollider.other.transform, out AIController enemy))
-				enemy.Kill(DeathType.Melee);
-
-		}
-
+		if (wielder != null && FindComponent(triggerCollider.other.transform, out Humanoid human)) human.ReceiveAttack(wielder, this, DeathType.Melee, null);
 	}
 
-    protected override void Start() 
+	protected override void Start()
 	{
 		base.Start();
 		animator = GetComponent<Animator>();
 		JMEvents.Instance.OnPlayerDeflect += PlayerDeflect;
-    }
+	}
 
-    private void OnDisable()
-    {
-        JMEvents.Instance.OnPlayerDeflect -= PlayerDeflect;
-    }
+	private void OnDisable()
+	{
+		JMEvents.Instance.OnPlayerDeflect -= PlayerDeflect;
+	}
 
 	public void JumpAttack()
-    {
-        if (reflectEnabled)
-        {
-            if (crtDelay == null && crtCooldown == null) crtDelay = StartCoroutine(Delay());
+	{
+		if (reflectWindow)
+		{
+			if (crtDelay == null && crtCooldown == null) crtDelay = StartCoroutine(Delay());
 			IEnumerator Delay()
 			{
 				//THIS NEEDS REWRITING, TOO BUSY RN
@@ -172,17 +159,17 @@ public class Sword : WeaponBase
 			}
 
 			IEnumerator Cooldown()
-            {
+			{
 				yield return new WaitForSeconds(cooldownTime);
 				crtCooldown = null;
-            }
+			}
 		}
 	}
-		
-    private void PlayerDeflect()
+
+	private void PlayerDeflect()
 	{
-        if (reflectEnabled)
-        {
+		if (reflectWindow)
+		{
 			//print("I hear that player deflect is triggered");
 			DisableHitbox();
 			animator.Play("deflect");
@@ -193,11 +180,11 @@ public class Sword : WeaponBase
 				crtDelay = null;
 			}
 		}
-    }
+	}
 
 	public void EnemyDeflect()
 	{
-		if (reflectEnabled)
+		if (reflectWindow)
 		{
 			if (wielder is AIController) reflectWindow.EnemyReflect(enemyHitboxTime);
 		}
@@ -225,20 +212,20 @@ public class Sword : WeaponBase
 	}
 
 	public void DisableHitbox()
-    {
-        foreach (var col in bladeColliders)
-        {
-            col.enabled = false;
-        }
-    }
+	{
+		foreach (Collider col in bladeColliders)
+		{
+			col.enabled = false;
+		}
+	}
 
 	private float AnimLength()
-    {
+	{
 		return wielder.model.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
 	}
 
 	private bool AnimStopped()
-    {
+	{
 		return wielder.model.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.99f;
 	}
 }

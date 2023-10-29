@@ -19,22 +19,19 @@ public class FakeHuman : Humanoid
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		
 	}
 
-	public override void OnBulletHit(Collision collision, Bullet bullet)
+	public override bool OnPickupWeapon(WeaponBase weapon)
 	{
-	
-	}
-
-	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
-	{
-		onDrop = null;
 		return false;
 	}
 
 	private void OnDestroy()
 	{
 		onDestroy.Invoke();
+	}
+
+	public override void ReceiveAttack(MonoBehaviour attacker, MonoBehaviour weapon, DeathType deathType, Collision collision)
+	{
 	}
 }
