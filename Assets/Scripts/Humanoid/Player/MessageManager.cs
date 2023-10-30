@@ -66,6 +66,14 @@ public class MessageManager : MonoBehaviour
         UpdateMessageHistory(listName, message);
     }
 
+    public void DisplayRandomMessage(string listName)
+    {
+        NamedMessageList list = messageLists.Find(l => l.listName == listName);
+        string message = GetRandomMessage(list.messageList.messages, listName);
+        glitchyTextMain.FastRevealText(message);
+        UpdateMessageHistory(listName, message);
+    }
+
     public void Hide()
 	{
         glitchyTextMain.gameObject.SetActive(false);
