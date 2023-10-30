@@ -70,24 +70,28 @@ public class Gun : WeaponBase
 
 	protected override void Attack()
 	{
-		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity && ammo.TryFire())//not waiting for fireDelay && wielder is looking at something && can shoot
+		if (crtDelay == null && wielder.LookingAt != Vector3.negativeInfinity) //not waiting for fireDelay && wielder is looking at something && can shoot
 		{
-			if (wielder is Player)
+			if (ammo.TryFire())
 			{
-				ammoCounter.SetAmmo(playerAmmo.amount);
-				animator.Shoot();
-				crtDelay = StartCoroutine(Delay());
+				if (wielder is Player)
+				{
+					ammoCounter.SetAmmo(playerAmmo.amount);
+					animator.Shoot();
+					crtDelay = StartCoroutine(Delay());
+				}
+				else
+				{
+					if (aiAmmo.amount <= 0 && crtReload == null) crtReload = StartCoroutine(Reload());
+					else crtDelay = StartCoroutine(Delay());
+				}
+				if (OnFireEvent != null) OnFireEvent.Invoke();
+				fireClips.PlayRandom(audioPool);
+				BulletCasingSound();
+				Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
+				Shoot();
 			}
-			else
-			{
-				if (aiAmmo.amount <= 0 && crtReload == null) crtReload = StartCoroutine(Reload());
-				else crtDelay = StartCoroutine(Delay());
-			}
-			if (OnFireEvent != null) OnFireEvent.Invoke();
-			fireClips.PlayRandom(audioPool);
-			BulletCasingSound();
-			Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
-			Shoot();
+			else Drop();
 		}
 	}
 
