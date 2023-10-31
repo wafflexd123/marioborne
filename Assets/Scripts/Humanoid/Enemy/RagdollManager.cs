@@ -54,7 +54,7 @@ public class RagdollManager : MonoBehaviour
     public void ActivateRagdoll()
     {
         animator.enabled = false;
-        mainRigidbody.isKinematic = true;
+        //mainRigidbody.isKinematic = true;
         mainCollider.enabled = false;
         navMeshAgent.enabled = false;
 
@@ -89,7 +89,7 @@ public class RagdollManager : MonoBehaviour
         }
         
         animator.enabled = true;
-        mainRigidbody.isKinematic = false;
+        //mainRigidbody.isKinematic = false;
         mainCollider.enabled = true;
         navMeshAgent.enabled = true;
 

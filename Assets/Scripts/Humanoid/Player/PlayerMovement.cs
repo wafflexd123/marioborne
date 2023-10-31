@@ -460,7 +460,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
 		velocity *= Time.timeScale;
 		rigidbody.velocity = velocity;
-		Debug.Log(animator);
 		animator.velocity = velocity;
 		PrintForce(velocity);
 	}
