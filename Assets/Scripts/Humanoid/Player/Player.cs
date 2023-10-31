@@ -54,6 +54,7 @@ public class Player : Humanoid
 
 	public override Vector3 LookDirection => camera.transform.forward;
 	public override Vector3 LookingAt => raycast.point;
+	public override Vector3 Velocity => movement.rigidbody.velocity;
 
 	protected override void Awake()
 	{

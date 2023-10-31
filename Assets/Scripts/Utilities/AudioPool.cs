@@ -147,6 +147,15 @@ public class AudioPool : MonoBehaviourPlus, ITimeScaleListener, IRewindListener
 			return clips.Length > 0 ? clips[UnityEngine.Random.Range(0, clips.Length)].Play(audioSource, additionalVolume, additionalPitch, additionalMaxVolume) : () => false;
 		}
 
+		/// <summary>
+		/// Automatically finds or creates an AudioPool on the gameObject. Not as efficient as supplying the AudioPool directly.
+		/// </summary>
+		/// <returns>True while audio is playing (any audio on the audioSource, not necessarily this clip)</returns>
+		public Func<bool> PlayRandom(GameObject audioSource, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxVolume = 0)
+		{
+			return clips.Length > 0 ? clips[UnityEngine.Random.Range(0, clips.Length)].Play(audioSource, additionalVolume, additionalPitch, additionalMaxVolume) : () => false;
+		}
+
 		/// <returns>Duration of longest clip in array</returns>
 		public float MaxShotLength()
 		{
@@ -168,6 +177,16 @@ public class AudioPool : MonoBehaviourPlus, ITimeScaleListener, IRewindListener
 		/// <returns>True while audio is playing (any audio on the audioSource, not necessarily this clip)</returns>
 		public Func<bool> Play(AudioPool audioPool, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxDistance = 0)
 		{
+			return audioPool.NextAudioPlayer().Play(audio, volume + additionalVolume, pitch + additionalPitch, maxDistance + additionalMaxDistance, loop, volumeCurve, volumeCurveTime);
+		}
+
+		/// <summary>
+		/// Automatically finds or creates an AudioPool on the gameObject. Not as efficient as supplying the AudioPool directly.
+		/// </summary>
+		/// <returns>True while audio is playing (any audio on the audioSource, not necessarily this clip)</returns>
+		public Func<bool> Play(GameObject gameObject, float additionalVolume = 0, float additionalPitch = 0, float additionalMaxDistance = 0)
+		{
+			if (!gameObject.TryGetComponent(out AudioPool audioPool)) audioPool = gameObject.AddComponent<AudioPool>().Initialise(1);
 			return audioPool.NextAudioPlayer().Play(audio, volume + additionalVolume, pitch + additionalPitch, maxDistance + additionalMaxDistance, loop, volumeCurve, volumeCurveTime);
 		}
 	}
