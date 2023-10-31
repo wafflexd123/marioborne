@@ -28,6 +28,7 @@ public class SniperSweepState : AIState
 
     public override void Tick()
 	{
+		controller.lookingAt = controller.weapon.transform.position + controller.weapon.transform.forward * 5;
 		if (controller.transform.eulerAngles.y > startAngle - 1f && controller.transform.eulerAngles.y < startAngle + 1f) angleSet = true; //checks if enemy has rotated back to starting angle
 
 		if (angleSet) Sweep();

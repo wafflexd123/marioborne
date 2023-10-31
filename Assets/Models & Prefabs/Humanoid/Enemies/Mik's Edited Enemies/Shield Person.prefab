@@ -137,16 +137,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8085354733742175187}
+  - component: {fileID: 1849673281476403059}
+  - component: {fileID: 8708937127419931715}
+  - component: {fileID: 8860527167591149802}
+  - component: {fileID: 2257951228532225929}
+  - component: {fileID: 4271334031561594613}
+  - component: {fileID: 2718539295145303307}
   - component: {fileID: 5435660223673497450}
   - component: {fileID: 6358637903241247876}
   - component: {fileID: 8581875518651017214}
   - component: {fileID: 7538578601763982215}
-  - component: {fileID: 2718539295145303307}
-  - component: {fileID: 8708937127419931715}
-  - component: {fileID: 2257951228532225929}
-  - component: {fileID: 8860527167591149802}
-  - component: {fileID: 4271334031561594613}
-  - component: {fileID: 1849673281476403059}
   m_Layer: 11
   m_Name: Shield Person
   m_TagString: Untagged
@@ -170,6 +170,110 @@ Transform:
   - {fileID: 1601027699612774023}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1849673281476403059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356778018200048369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92fbb422f0c496c4bbaeaff351159d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 0}
+  weapon: {fileID: 0}
+  alertRadius: 5
+  coverPointsManager: {fileID: 0}
+  <CurrentState>k__BackingField: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
+  lookingAt: {x: 0, y: 0, z: 0}
+  defaultSpeed: 1
+--- !u!114 &8708937127419931715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356778018200048369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5245a51751b214aa67c0d688812dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints: {fileID: 0}
+  pingPong: 1
+  startAt: 1
+  patrolIndex: 0
+--- !u!114 &8860527167591149802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356778018200048369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f74aaa280dc2664f96ca14361c694b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBeforePursuingPlayer: 5
+  approachSpeed: 1
+  rotationSpeed: 1
+  viewRadius: 40
+  viewAngle: 30
+  meleeDistance: 2
+--- !u!114 &2257951228532225929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356778018200048369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInvestigateTime: 3
+  maxInvestigateTime: 7
+--- !u!114 &4271334031561594613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356778018200048369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7a95720b236af4b96680d7bd87716e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitBeforePatrollingDuration: 5
+--- !u!114 &2718539295145303307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356778018200048369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657317f491bd9314081209e37d71aec4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewRadius: 40
+  viewAngle: 181
+  eyes: {fileID: 9076039513362273864}
+  playerLocation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 16577
+  canSeePlayer: 0
 --- !u!54 &5435660223673497450
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -252,111 +356,6 @@ MonoBehaviour:
   delayBeforeDeactivation: 5
   struggleIntensity: 5
   struggleFrequency: 0.5
---- !u!114 &2718539295145303307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356778018200048369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 657317f491bd9314081209e37d71aec4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewRadius: 40
-  viewAngle: 170
-  eyes: {fileID: 9076039513362273864}
-  playerLocation: {x: 0, y: 0, z: 0}
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 8
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 16577
-  canSeePlayer: 0
---- !u!114 &8708937127419931715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356778018200048369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d5245a51751b214aa67c0d688812dcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolPoints: {fileID: 0}
-  pingPong: 1
-  startAt: 1
-  patrolIndex: 0
---- !u!114 &2257951228532225929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356778018200048369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minInvestigateTime: 3
-  maxInvestigateTime: 7
---- !u!114 &8860527167591149802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356778018200048369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f74aaa280dc2664f96ca14361c694b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeBeforePursuingPlayer: 5
-  approachSpeed: 1
-  rotationSpeed: 1
-  viewRadius: 40
-  viewAngle: 30
-  meleeDistance: 2
---- !u!114 &4271334031561594613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356778018200048369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c7a95720b236af4b96680d7bd87716e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waitBeforePatrollingDuration: 5
---- !u!114 &1849673281476403059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356778018200048369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92fbb422f0c496c4bbaeaff351159d03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 0}
-  weapon: {fileID: 0}
-  alertRadius: 5
-  <CurrentState>k__BackingField: {fileID: 0}
-  coverPointsManager: {fileID: 0}
-  currentCoverPoint: {x: 0, y: 0, z: 0}
-  lookingAt: {x: 0, y: 0, z: 0}
-  defaultSpeed: 1
-  heldWeapon: {fileID: 0}
 --- !u!1 &427651746180893895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1036,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2495101565749614124}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.61679053, y: -0.09255386, z: 0.05885714, w: 0.7794479}
+  m_LocalRotation: {x: 0.6167904, y: -0.09255389, z: 0.058857117, w: 0.7794481}
   m_LocalPosition: {x: 0.3268757, y: 0.7320753, z: 0.024838448}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1532,7 +1531,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4160412724319200069}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.082726054, y: -0.49763054, z: 0.8134818, w: 0.28942648}
+  m_LocalRotation: {x: -0.0827261, y: -0.49763042, z: 0.81348175, w: 0.28942654}
   m_LocalPosition: {x: -0.4426012, y: 0.7316597, z: 0.092502594}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1973,7 +1972,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 19649260bd37b284081981f379486877, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
