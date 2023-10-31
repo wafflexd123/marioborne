@@ -158,20 +158,23 @@ public class Player : Humanoid
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
 		if (invincibility) Debug.Log("You would have died, but no one can kill John Matrix.");
-		else if (!hasDied) KillInternal(deathType);
+		else KillInternal(deathType);
 	}
 
 	void KillInternal(DeathType deathType)
 	{
-		Time.timeScale = 0;
-		powers.SelectPower<Rewinder>(true);
-		hasDied = true;
-		messageManager.DisplayRandomMessage(deathType, true);
-		model.dying = true;
-		movement.enabled = false;
-		cameraController.enabled = false;
-		input.enableInput = false;
-		rewinder.AddFrameAction(() => ResetDeath());
+		if (!hasDied)
+		{
+			Time.timeScale = 0;
+			powers.SelectPower<Rewinder>(true);
+			hasDied = true;
+			messageManager.DisplayRandomMessage(deathType, true);
+			model.dying = true;
+			movement.enabled = false;
+			cameraController.enabled = false;
+			input.enableInput = false;
+			rewinder.AddFrameAction(() => ResetDeath());
+		}
 	}
 
 	public void ResetDeath()
