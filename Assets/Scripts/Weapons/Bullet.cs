@@ -38,15 +38,16 @@ public class Bullet : MonoBehaviourPlus
 		}
 	}
 
-	public virtual Bullet Initialise(float speed, Vector3 direction, Humanoid shooter, Color color, bool penetrates)
+	public virtual Bullet Spawn(Transform position, float speed, Vector3 direction, Humanoid shooter, Color color, bool penetrates)
 	{
-		this.speed = speed;
-		this.direction = direction;
-		this.shooter = shooter;
-		this.color = color;
-		this.penetrates = penetrates;
-		enabled = true;
-		return this;
+		Bullet b = Instantiate(gameObject, position.position, position.rotation).GetComponent<Bullet>();
+		b.speed = speed;
+		b.direction = direction;
+		b.shooter = shooter;
+		b.color = color;
+		b.penetrates = penetrates;
+		b.enabled = true;
+		return b;
 	}
 
 	protected virtual void Awake()

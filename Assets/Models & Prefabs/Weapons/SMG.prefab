@@ -32,6 +32,37 @@ Transform:
   - {fileID: 6251255828885843306}
   m_Father: {fileID: 8295090146877519379}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &939581123883018254
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3616844436849353830}
+  m_Layer: 12
+  m_Name: CasingPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3616844436849353830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939581123883018254}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.021, y: 0.0741, z: 0.0076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8295090146877519379}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2966268093051042035
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +88,7 @@ Transform:
   m_GameObject: {fileID: 2966268093051042035}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0741, z: 0.3435}
+  m_LocalPosition: {x: 0, y: 0.0666, z: 0.2766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -101,6 +132,7 @@ Transform:
   - {fileID: 770569218030393573}
   - {fileID: 5277695636188619445}
   - {fileID: 8955094706218905194}
+  - {fileID: 3616844436849353830}
   - {fileID: 4331511476273035316}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -160,58 +192,6 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       volumeCurveTime: 0
-  bulletCasingClips:
-    clips:
-    - audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-      loop: 0
-      volumeCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      volumeCurveTime: 0
-    - audio: {fileID: 8300000, guid: 357b74282c0aab8498012bdd3624100e, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-      loop: 0
-      volumeCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      volumeCurveTime: 0
-    - audio: {fileID: 8300000, guid: a24cb8b6107232b49adb8393d99651af, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-      loop: 0
-      volumeCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      volumeCurveTime: 0
-    - audio: {fileID: 8300000, guid: 71e73cc34ab51504599cac6c7b811a8b, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-      loop: 0
-      volumeCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      volumeCurveTime: 0
-  bulletCasingSoundChance: 0.2
-  bulletCasingSoundDelay: 0.5
   reloadDelay: 0
   penetrates: 0
   playerAmmo:
@@ -229,7 +209,10 @@ MonoBehaviour:
     bulletSpeed: 30
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
+  bulletCasingPrefab: {fileID: 8784528248510007769, guid: b3da901507cd3d74a84c640af181ffe3, type: 3}
   firePosition: {fileID: 8955094706218905194}
+  bulletCasingPosition: {fileID: 3616844436849353830}
+  casingEjectForce: {x: 1.5, y: 1.5, z: 0}
   OnFireEvent:
     m_PersistentCalls:
       m_Calls: []

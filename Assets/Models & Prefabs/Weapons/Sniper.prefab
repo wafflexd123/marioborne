@@ -25,7 +25,38 @@ Transform:
   m_GameObject: {fileID: 267911179747850943}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0365, z: 0.886}
+  m_LocalPosition: {x: 0, y: 0.0365, z: 0.8501}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2001561854974429128}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &538649015650649913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30784589436982187}
+  m_Layer: 12
+  m_Name: CasingPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &30784589436982187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538649015650649913}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0291, y: 0.0365, z: -0.282}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -67,6 +98,7 @@ Transform:
   m_Children:
   - {fileID: 2437910022093311891}
   - {fileID: 3689162234156928206}
+  - {fileID: 30784589436982187}
   - {fileID: 6880688236993685662}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82,6 +114,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d29d302d4a9a2649a0b100531937099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  automatic: 0
+  fireDelay: 2
+  colliders:
+  - {fileID: 9065933078033995514}
+  - {fileID: 4883643525526498020}
+  - {fileID: 5839925845333659699}
+  throwFallDelay: 1
+  throwForce: 30
+  pickupSpeed: 5
+  disablePickupAfterDropSeconds: 2
+  playerHandPosition:
+    coords: {x: 0.23, y: -0.19, z: 0.78}
+    eulers: {x: 0, y: 0, z: 0}
+  enemyHandPosition:
+    coords: {x: 0.15, y: -0.15, z: 0.4}
+    eulers: {x: 20, y: 15, z: 0}
   IKHandTarget: {fileID: 1289862788891083049}
   modelRoot: {fileID: 2437910022093311891}
   animationName: hold_awp
@@ -90,50 +138,28 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     maxDistance: 10
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
   fireClips:
     clips:
     - audio: {fileID: 8300000, guid: 0999b4b63bcd9f14699b8208408a7ee7, type: 3}
       volume: 1
       pitch: 1
       maxDistance: 40
-  throwForce: 30
-  throwSpeed: 10
-  throwFallDelay: 1
-  automatic: 0
-  fireDelay: 2
-  colliders:
-  - {fileID: 9065933078033995514}
-  - {fileID: 4883643525526498020}
-  - {fileID: 5839925845333659699}
-  pickupSpeed: 5
-  dropForce: 2
-  disablePickupAfterDropSeconds: 2
-  playerHandPosition:
-    coords: {x: 0.23, y: -0.19, z: 0.78}
-    eulers: {x: 0, y: 0, z: 0}
-  enemyHandPosition:
-    coords: {x: 0.15, y: -0.15, z: 0.4}
-    eulers: {x: 20, y: 15, z: 0}
-  bulletCasingClips:
-    clips:
-    - audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-    - audio: {fileID: 8300000, guid: 357b74282c0aab8498012bdd3624100e, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-    - audio: {fileID: 8300000, guid: a24cb8b6107232b49adb8393d99651af, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-    - audio: {fileID: 8300000, guid: 71e73cc34ab51504599cac6c7b811a8b, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-  bulletCasingSoundChance: 1
-  bulletCasingSoundDelay: 0.5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      volumeCurveTime: 0
   reloadDelay: 0
   penetrates: 1
   playerAmmo:
@@ -151,7 +177,10 @@ MonoBehaviour:
     bulletSpeed: 40
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
+  bulletCasingPrefab: {fileID: 8784528248510007769, guid: b3da901507cd3d74a84c640af181ffe3, type: 3}
   firePosition: {fileID: 3689162234156928206}
+  bulletCasingPosition: {fileID: 30784589436982187}
+  casingEjectForce: {x: -1.5, y: 1.5, z: 0}
   OnFireEvent:
     m_PersistentCalls:
       m_Calls: []

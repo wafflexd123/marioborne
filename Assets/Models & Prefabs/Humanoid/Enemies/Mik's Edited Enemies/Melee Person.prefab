@@ -688,16 +688,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3401608029892879639}
+  - component: {fileID: 1988324485021397955}
+  - component: {fileID: 8168134445483390891}
+  - component: {fileID: 124178023951897330}
+  - component: {fileID: 4651130936469173832}
+  - component: {fileID: 2245647475681194144}
+  - component: {fileID: 9116865313237708567}
   - component: {fileID: 1163633113215636227}
   - component: {fileID: 3649634319425395021}
   - component: {fileID: 1268790756096388803}
   - component: {fileID: 7318454664979109104}
-  - component: {fileID: 9116865313237708567}
-  - component: {fileID: 1988324485021397955}
-  - component: {fileID: 8168134445483390891}
-  - component: {fileID: 4651130936469173832}
-  - component: {fileID: 124178023951897330}
-  - component: {fileID: 2245647475681194144}
   m_Layer: 11
   m_Name: Melee Person
   m_TagString: Untagged
@@ -721,6 +721,111 @@ Transform:
   - {fileID: 1616601182856912808}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1988324485021397955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603566370375615163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c61e6125a9c63a4cbf51ecb093c29b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 0}
+  weapon: {fileID: 0}
+  alertRadius: 5
+  coverPointsManager: {fileID: 0}
+  <CurrentState>k__BackingField: {fileID: 0}
+  currentCoverPoint: {x: 0, y: 0, z: 0}
+  lookingAt: {x: 0, y: 0, z: 0}
+  defaultSpeed: 1
+  reflectWindow: {fileID: 0}
+--- !u!114 &8168134445483390891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603566370375615163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5245a51751b214aa67c0d688812dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints: {fileID: 0}
+  pingPong: 0
+  startAt: 0
+  patrolIndex: 0
+--- !u!114 &124178023951897330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603566370375615163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dee92c5fa11b1ac459b22eabec7ac0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBeforePursuingPlayer: 5
+  chaseSpeed: 5
+  meleeDistance: 2
+  minJumpDistance: 5
+  maxJumpDistance: 6
+  reflectWindow: {fileID: 0}
+--- !u!114 &4651130936469173832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603566370375615163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInvestigateTime: 10
+  maxInvestigateTime: 15
+--- !u!114 &2245647475681194144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603566370375615163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7a95720b236af4b96680d7bd87716e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitBeforePatrollingDuration: 5
+--- !u!114 &9116865313237708567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603566370375615163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657317f491bd9314081209e37d71aec4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewRadius: 40
+  viewAngle: 181
+  eyes: {fileID: 891935280572018552}
+  playerLocation: {x: 0, y: 0, z: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 16577
+  canSeePlayer: 0
 --- !u!54 &1163633113215636227
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -744,7 +849,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
@@ -803,112 +908,6 @@ MonoBehaviour:
   delayBeforeDeactivation: 5
   struggleIntensity: 5
   struggleFrequency: 0.5
---- !u!114 &9116865313237708567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603566370375615163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 657317f491bd9314081209e37d71aec4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewRadius: 40
-  viewAngle: 170
-  eyes: {fileID: 891935280572018552}
-  playerLocation: {x: 0, y: 0, z: 0}
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 8
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 16577
-  canSeePlayer: 0
---- !u!114 &1988324485021397955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603566370375615163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c61e6125a9c63a4cbf51ecb093c29b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 0}
-  weapon: {fileID: 0}
-  alertRadius: 5
-  <CurrentState>k__BackingField: {fileID: 0}
-  coverPointsManager: {fileID: 0}
-  currentCoverPoint: {x: 0, y: 0, z: 0}
-  lookingAt: {x: 0, y: 0, z: 0}
-  defaultSpeed: 1
-  heldWeapon: {fileID: 0}
-  reflectWindow: {fileID: 0}
---- !u!114 &8168134445483390891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603566370375615163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d5245a51751b214aa67c0d688812dcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  patrolPoints: {fileID: 0}
-  pingPong: 0
-  startAt: 0
-  patrolIndex: 0
---- !u!114 &4651130936469173832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603566370375615163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613d0e42218038f4f8d663d6893fce5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minInvestigateTime: 10
-  maxInvestigateTime: 15
---- !u!114 &124178023951897330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603566370375615163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dee92c5fa11b1ac459b22eabec7ac0ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeBeforePursuingPlayer: 5
-  chaseSpeed: 5
-  meleeDistance: 2
-  minJumpDistance: 5
-  maxJumpDistance: 6
-  reflectWindow: {fileID: 0}
---- !u!114 &2245647475681194144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603566370375615163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c7a95720b236af4b96680d7bd87716e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waitBeforePatrollingDuration: 5
 --- !u!1 &1639910422343385787
 GameObject:
   m_ObjectHideFlags: 0
@@ -2124,7 +2123,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 19649260bd37b284081981f379486877, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

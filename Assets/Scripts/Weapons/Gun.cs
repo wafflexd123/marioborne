@@ -1,20 +1,18 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(GunAnimator))]
 public class Gun : WeaponBase
 {
 	[Header("Gun Specific")]
-	public AudioPool.Clips bulletCasingClips;
-	[Range(0f, 1f)] public float bulletCasingSoundChance;
-	public float bulletCasingSoundDelay = 1f, reloadDelay;
+	public float reloadDelay;
 	public bool penetrates;
 	public Ammo playerAmmo, aiAmmo;
 	public Bullet bulletPrefab;
-	public Transform firePosition;
+	public BulletCasing bulletCasingPrefab;
+	public Transform firePosition, bulletCasingPosition;
+	public Vector3 casingEjectForce;
 	public UnityEvent OnFireEvent;
 
 	protected Ammo ammo;
@@ -87,7 +85,6 @@ public class Gun : WeaponBase
 				}
 				if (OnFireEvent != null) OnFireEvent.Invoke();
 				fireClips.PlayRandom(audioPool);
-				BulletCasingSound();
 				Sound.MakeSound(transform.position, fireClips.clips.Length > 0 ? fireClips.clips[0].maxDistance : 0, wielder);
 				Shoot();
 			}
@@ -97,17 +94,8 @@ public class Gun : WeaponBase
 
 	protected virtual void Shoot()
 	{
-		Instantiate(bulletPrefab, firePosition.position, Quaternion.identity).Initialise(ammo.bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, penetrates);
-	}
-
-	protected virtual void BulletCasingSound()
-	{
-		if (Random.Range(0f, 1f) <= bulletCasingSoundChance) StartCoroutine(E());
-		IEnumerator E()
-		{
-			yield return new WaitForSeconds(bulletCasingSoundDelay);
-			bulletCasingClips.PlayRandom(audioPool);
-		}
+		bulletCasingPrefab.Spawn(bulletCasingPosition, wielder.Velocity + transform.TransformDirection(casingEjectForce));
+		bulletPrefab.Spawn(firePosition, ammo.bulletSpeed, DirectionWithSpread(ammo.maxSpread), wielder, ammo.color, penetrates);
 	}
 
 	protected Vector3 DirectionWithSpread(float maxSpread)

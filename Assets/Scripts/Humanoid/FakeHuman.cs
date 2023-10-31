@@ -12,6 +12,8 @@ public class FakeHuman : Humanoid
 
 	public override Vector3 LookingAt => Vector3.zero;
 
+	public override Vector3 Velocity => Vector3.zero;
+
 	private void Start()
 	{
 		enabled = true;

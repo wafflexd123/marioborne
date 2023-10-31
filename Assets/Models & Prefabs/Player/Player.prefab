@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 575953091305061169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.6402931, z: -0.01519537}
+  m_LocalPosition: {x: -0.0000000018626451, y: 1.640295, z: -0.015197756}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4113,7 +4113,7 @@ Transform:
   m_GameObject: {fileID: 4360871117464955069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.71333313, y: 1.4406128, z: -0.05548477}
+  m_LocalPosition: {x: 0.7133332, y: 1.4406137, z: -0.055481017}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6053,7 +6053,7 @@ Transform:
   m_GameObject: {fileID: 7210201921843458528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.6402931, z: -0.01519537}
+  m_LocalPosition: {x: -0.0000000018626451, y: 1.640295, z: -0.015197756}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11600,7 +11600,7 @@ Transform:
   m_GameObject: {fileID: 8405350625105107529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5992928, z: -0.01519537}
+  m_LocalPosition: {x: -0.0000000018626451, y: 1.5992947, z: -0.015197756}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11644,6 +11644,7 @@ MonoBehaviour:
   minAngle: -90
   maxAngle: 60
   rotationOffset: {x: 0, y: 0, z: 0}
+  rotX: 0
 --- !u!1 &8405350625490031523
 GameObject:
   m_ObjectHideFlags: 0
@@ -12307,7 +12308,7 @@ MonoBehaviour:
   <ledgeClimbTime>k__BackingField: 1
   <minLedgeClimbHeight>k__BackingField: 1.5
   <maxLedgeClimbHeight>k__BackingField: 2
-  <maxAirJumps>k__BackingField: 1
+  <maxJumps>k__BackingField: 2
   <maxAirDashes>k__BackingField: 1
   <dashForce>k__BackingField: 12.5
   <rollQueueTime>k__BackingField: 0.3
@@ -12428,7 +12429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewindSpeed: 1
-  minRewindTime: 0
+  minRewindTime: 0.5
   inputAxis: Rewind
   singleFrameDebugInputAxis: 8
   handShakeLevel: 0.5

@@ -4,6 +4,7 @@ public class PlayerCamera : MonoBehaviour
 {
     public float sensitivity, minAngle, maxAngle;
     [HideInInspector] public Vector3 rotationOffset;
+    [HideInInspector] public float rotX;
     Vector3 rotation;
 
     //for the UI slider
@@ -17,6 +18,7 @@ public class PlayerCamera : MonoBehaviour
     void OnEnable()
     {
         rotation = new Vector3(transform.localEulerAngles.x, transform.parent.localEulerAngles.y);
+        rotation.x = rotX;
     }
 
     void Update()
@@ -25,6 +27,7 @@ public class PlayerCamera : MonoBehaviour
         rotation.y += Input.GetAxisRaw("Mouse X") * sensitivity % 360;
         transform.localEulerAngles = new Vector3(rotation.x, 0) + rotationOffset;
         transform.parent.localEulerAngles = new Vector3(0, rotation.y);
+        rotX = rotation.x;
 
         if (Input.GetKeyDown(KeyCode.Tab)) Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
     }

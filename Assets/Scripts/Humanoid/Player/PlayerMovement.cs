@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	[field: SerializeField, Tooltip("Anything higher above you than this can't be climbed")] public float maxLedgeClimbHeight { get; set; }
 
 	[field: Header("Air")]
-	[field: SerializeField] public int maxAirJumps { get; set; }
+	[field: SerializeField] public int maxJumps { get; set; }
 	[field: SerializeField] public int maxAirDashes { get; set; }
 	[field: SerializeField] public float dashForce { get; set; }
 	[field: SerializeField, Tooltip("How many seconds before you hit the ground that a roll can be registered")] public float rollQueueTime { get; set; }
@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	public bool isOnWall => wallDirection != -2;
 
 	//Private
-	int wallDirection, airJumpCount, airDashCount;
+	int wallDirection, jumpCount, airDashCount;
 	float mass, _tilt, currentDrag, health;
 	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f /*doubleKeyPressTime = .2f*/;
 	bool queueJump, queueRoll, queueDash, _isGrounded;
@@ -262,10 +262,12 @@ public class PlayerMovement : MonoBehaviourPlus
 			},
 			jump: () =>
 			{
+				jumpCount++;
 				State.DefaultJump(this, wall, wallHit.normal);
 			},
 			enterState: () =>
 			{
+				jumpCount = 0;
 				animator.wallRunning = true;
 				if (yVelocity.y > maxWallUpwardsVelocity) yVelocity.vector.y = maxWallUpwardsVelocity;//prevent player from going over wall when hitting it
 				ResetRoutine(TweenFloat(() => currentTilt, (float tilt) => currentTilt = tilt, wallTilt * wallDirection, tiltPerSecond), ref crtTilt);
@@ -293,10 +295,12 @@ public class PlayerMovement : MonoBehaviourPlus
 			},
 			jump: () =>
 			{
+				jumpCount++;
 				State.DefaultJump(this, slide, Vector3.zero);
 			},
 			enterState: () =>
 			{
+				jumpCount = 0;
 				isSliding = true;
 				animator.sliding = true;
 			},
@@ -322,11 +326,13 @@ public class PlayerMovement : MonoBehaviourPlus
 			},
 			jump: () =>
 			{
+				jumpCount++;
 				State.DefaultJump(this, ground, Vector3.zero);
 				if (onConveyorBelt && enableInput) yVelocity.AddForce(onConveyorBelt.direction * onConveyorBelt.speed, ForceMode.VelocityChange);
 			},
 			enterState: () =>
 			{
+				jumpCount = 0;
 			},
 			exitState: () =>
 			{
@@ -422,14 +428,14 @@ public class PlayerMovement : MonoBehaviourPlus
 			},
 			jump: () =>
 			{
-				if (airJumpCount < maxAirJumps)
+				if (jumpCount < maxJumps)
 				{
 					State.DefaultJump(this, air, Vector3.zero);
-					airJumpCount++;
+					jumpCount++;
 					rewinder.AddFrameAction(() =>
 					{
-						airJumpCount--;
-						if (airJumpCount < 0) airJumpCount = 0;
+						jumpCount--;
+						if (jumpCount < 0) jumpCount = 0;
 					});
 				}
 			},
@@ -438,7 +444,6 @@ public class PlayerMovement : MonoBehaviourPlus
 			},
 			exitState: () =>
 			{
-				airJumpCount = 0;
 				airDashCount = 0;
 				queueDash = false;
 			},
@@ -460,7 +465,6 @@ public class PlayerMovement : MonoBehaviourPlus
 		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
 		velocity *= Time.timeScale;
 		rigidbody.velocity = velocity;
-		Debug.Log(animator);
 		animator.velocity = velocity;
 		PrintForce(velocity);
 	}
@@ -547,7 +551,7 @@ public class PlayerMovement : MonoBehaviourPlus
 				$"Intended velocity: {intendedVelocity.magnitude:#.00} {intendedVelocity}\n" +
 				$"Actual velocity: {lastActualVelocity.magnitude:#.00} {lastActualVelocity}\n" +
 				$"Drag: {currentDrag:#00.00}, state: {currentState.name}, last ground/wall: {currentGroundPosition}\n" +
-				$"Air jumps: {airJumpCount}/{maxAirJumps}, air dashes: {airDashCount}/{maxAirDashes}\n" +
+				$"Air jumps: {jumpCount}/{maxJumps}, air dashes: {airDashCount}/{maxAirDashes}\n" +
 				$"Health: {health:#0.00}";
 		}
 	}

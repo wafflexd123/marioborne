@@ -23,6 +23,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	public bool IsStopped { get => isStopped; set { isStopped = value; agent.isStopped = value; } }
 	public override Vector3 LookDirection => fieldOfView.eyes.forward;
 	public override Vector3 LookingAt => lookingAt;
+	public override Vector3 Velocity => rigidbody.velocity;
 
 	//Script
 	protected Vector3 velocity;

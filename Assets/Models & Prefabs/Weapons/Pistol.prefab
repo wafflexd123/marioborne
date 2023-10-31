@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &377573054883514253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5352671034140420270}
+  m_Layer: 12
+  m_Name: CasingPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5352671034140420270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377573054883514253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.0298, y: 0.077, z: 0.0361}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6459212967476039814}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2580040634849368395
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,6 +98,7 @@ Transform:
   m_Children:
   - {fileID: 6459212968234832315}
   - {fileID: 1628130774508101737}
+  - {fileID: 5352671034140420270}
   - {fileID: 6337550712269206872}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82,6 +114,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd21d103dab8e14b9cf8e8a59355c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  automatic: 0
+  fireDelay: 0.5
+  colliders:
+  - {fileID: 8869820690184937078}
+  throwFallDelay: 1
+  throwForce: 30
+  pickupSpeed: 5
+  disablePickupAfterDropSeconds: 5
+  playerHandPosition:
+    coords: {x: 0.19, y: -0.23, z: 0.43}
+    eulers: {x: 0, y: 0, z: 0}
+  enemyHandPosition:
+    coords: {x: 0, y: -0.1, z: 0}
+    eulers: {x: 0, y: 0, z: 0}
   IKHandTarget: {fileID: 2731609474143621697}
   modelRoot: {fileID: 6459212968234832315}
   animationName: hold_glock
@@ -90,48 +136,28 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     maxDistance: 10
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
   fireClips:
     clips:
     - audio: {fileID: 8300000, guid: b81dac3fe37ddbb478bb60a4a558efa9, type: 3}
       volume: 1
       pitch: 1
       maxDistance: 40
-  throwForce: 30
-  throwSpeed: 10
-  throwFallDelay: 1
-  automatic: 0
-  fireDelay: 0.5
-  colliders:
-  - {fileID: 8869820690184937078}
-  pickupSpeed: 5
-  dropForce: 2
-  disablePickupAfterDropSeconds: 5
-  playerHandPosition:
-    coords: {x: 0.19, y: -0.23, z: 0.43}
-    eulers: {x: 0, y: 0, z: 0}
-  enemyHandPosition:
-    coords: {x: 0, y: -0.1, z: 0}
-    eulers: {x: 0, y: 0, z: 0}
-  bulletCasingClips:
-    clips:
-    - audio: {fileID: 8300000, guid: 1cae6e74504b87447846f4f92d58eb53, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-    - audio: {fileID: 8300000, guid: 357b74282c0aab8498012bdd3624100e, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-    - audio: {fileID: 8300000, guid: a24cb8b6107232b49adb8393d99651af, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-    - audio: {fileID: 8300000, guid: 71e73cc34ab51504599cac6c7b811a8b, type: 3}
-      volume: 1
-      pitch: 1
-      maxDistance: 10
-  bulletCasingSoundChance: 1
-  bulletCasingSoundDelay: 0.5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      volumeCurveTime: 0
   reloadDelay: 0
   penetrates: 0
   playerAmmo:
@@ -149,7 +175,10 @@ MonoBehaviour:
     bulletSpeed: 30
     amount: 0
   bulletPrefab: {fileID: 1470589054315451325, guid: e12f8be6f511f8f4ea659b03e86a9e9c, type: 3}
+  bulletCasingPrefab: {fileID: 8784528248510007769, guid: b3da901507cd3d74a84c640af181ffe3, type: 3}
   firePosition: {fileID: 1628130774508101737}
+  bulletCasingPosition: {fileID: 5352671034140420270}
+  casingEjectForce: {x: 1.5, y: 1.5, z: 0}
   OnFireEvent:
     m_PersistentCalls:
       m_Calls:
