@@ -9,7 +9,7 @@ public class LevelSelector : MonoBehaviour
     public List<string> levelDescriptions = new List<string>();
     public List<string> levelNames = new List<string>();
 
-    private int currentLevelIndex = 0;
+    private int currentLevelIndex = 1;
     public int totalLevels;
 
     public GlitchyText levelNameText;
@@ -35,19 +35,19 @@ public class LevelSelector : MonoBehaviour
 
     public void IncreaseLevelIndex()
     {
-        if (currentLevelIndex + 1 < totalLevels)
+        if (currentLevelIndex + 1 <= totalLevels)
         {
             currentLevelIndex++;
         }
         else
         {
-            currentLevelIndex = 0;
+            currentLevelIndex = 1;
         }
     }
 
     public void DecreaseLevelIndex()
     {
-        if (currentLevelIndex - 1 >= 0)
+        if (currentLevelIndex - 1 > 1)
         {
             currentLevelIndex--;
         }
