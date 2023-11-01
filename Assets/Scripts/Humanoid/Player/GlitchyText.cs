@@ -11,6 +11,7 @@ public class GlitchyText : MonoBehaviour
 
     private float glitchDuration;
     private int maxGlitchIterations;
+    private Coroutine currentCoroutine; // Reference to the current running coroutine
 
     private void Awake()
     {
@@ -20,14 +21,22 @@ public class GlitchyText : MonoBehaviour
 
     public void DisplayTextWithGlitch(string message)
     {
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
         gameObject.SetActive(true);
-        StartCoroutine(GlitchyTextRoutine(message));
+        currentCoroutine = StartCoroutine(GlitchyTextRoutine(message));
     }
 
     public void FastRevealText(string message)
     {
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
         gameObject.SetActive(true);
-        StartCoroutine(FastRevealRoutine(message));
+        currentCoroutine = StartCoroutine(FastRevealRoutine(message));
     }
 
     private IEnumerator GlitchyTextRoutine(string message)
@@ -60,6 +69,8 @@ public class GlitchyText : MonoBehaviour
 
             textMesh.text = textMesh.text.Substring(0, i) + message[i];
         }
+
+        currentCoroutine = null; // Reset the coroutine reference when done
     }
 
     private IEnumerator FastRevealRoutine(string message)
@@ -84,6 +95,7 @@ public class GlitchyText : MonoBehaviour
             textMesh.text += message[i];
             yield return new WaitForSecondsRealtime(fastRevealTime / message.Length);
         }
-    }
 
+        currentCoroutine = null; // Reset the coroutine reference when done
+    }
 }
