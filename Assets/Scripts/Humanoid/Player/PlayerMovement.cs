@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	[Header("Misc")]
 	[Tooltip("Curve where x=magnitude of velocity and y=magnitude of FOV")] public ForceCurve fovCurve;
 	[field: SerializeField, Tooltip("Max change in FOV per second")] public float fovPerSecond { get; set; }
+	[field: SerializeField, Tooltip("Max change in FOV per second")] public float minTimeScale { get; set; }
 	[field: SerializeField, Tooltip("Do not use rigidbody.gravity, use this!")] public bool useGravity { get; set; }
 	[SerializeField] LayerMask invisibleWallLayer;
 
@@ -463,7 +464,9 @@ public class PlayerMovement : MonoBehaviourPlus
 	void ControlRigidbody()
 	{
 		Vector3 velocity = xzVelocity.Drag(currentDrag) + yVelocity.Drag(currentDrag);//return sum of x,y and z velocities after subtracting drag
-		velocity *= Time.timeScale;
+		float timeScale = Time.timeScale;
+		if (timeScale > 0 && timeScale < minTimeScale) timeScale = minTimeScale;
+		velocity *= timeScale;
 		rigidbody.velocity = velocity;
 		animator.velocity = velocity;
 		PrintForce(velocity);
