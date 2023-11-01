@@ -433,6 +433,54 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 171838423}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: New Game
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1062628663}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Level Select
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 657766869}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Prepare for Time Punch
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1610762636}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Back
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 33753696}
         m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
         m_MethodName: set_interactable
@@ -478,7 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 783976859}
-  timePerCharacter: 0.1
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &33753700
 MonoBehaviour:
@@ -561,7 +609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 41573505}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &41573505
 MonoBehaviour:
@@ -712,7 +760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 70930944}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &70930944
 MonoBehaviour:
@@ -913,7 +961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 1508332599}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &123168152
 MonoBehaviour:
@@ -972,6 +1020,66 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1909963693}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 657766869}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Prepare for Time Punch
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 171838423}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: New Game
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1062628663}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Level Select
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1610762636}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Back
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 952914216}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -1049,71 +1157,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   awake:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Start
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Settings
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Credits
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Quit
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 517616570}
-        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
-        m_MethodName: DisplayRandomMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Titles
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   start:
     m_PersistentCalls:
       m_Calls: []
-  deleteAfterStart: 1
+  deleteAfterStart: 0
 --- !u!114 &145621497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1322,7 +1370,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 33753698}
         m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
+        m_MethodName: FastRevealText
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1334,7 +1382,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1763208837}
         m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
+        m_MethodName: FastRevealText
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1346,7 +1394,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1671016633}
         m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
+        m_MethodName: FastRevealText
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1358,7 +1406,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1055634832}
         m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
+        m_MethodName: FastRevealText
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1383,7 +1431,7 @@ MonoBehaviour:
   start:
     m_PersistentCalls:
       m_Calls: []
-  deleteAfterStart: 1
+  deleteAfterStart: 0
 --- !u!1 &166949056
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,7 +1786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 912579721}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &171838424
 MonoBehaviour:
@@ -2113,7 +2161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 236466970}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &236466973
 MonoBehaviour:
@@ -2166,7 +2214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 28080590}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!224 &245486021
 RectTransform:
@@ -2875,7 +2923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 517616572}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &517616572
 MonoBehaviour:
@@ -3197,7 +3245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 585253570}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &585253570
 MonoBehaviour:
@@ -3337,7 +3385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 657766870}
-  timePerCharacter: 0.01
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &657766870
 MonoBehaviour:
@@ -3659,7 +3707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 786430907}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &786430907
 MonoBehaviour:
@@ -3828,7 +3876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 799367123}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &799367123
 MonoBehaviour:
@@ -3965,71 +4013,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   awake:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Start
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Settings
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Credits
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Quit
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 70930942}
-        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
-        m_MethodName: DisplayRandomMessage
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Titles
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   start:
     m_PersistentCalls:
       m_Calls: []
-  deleteAfterStart: 1
+  deleteAfterStart: 0
 --- !u!114 &833345832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4201,7 +4189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 2129202856}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &895277672
 MonoBehaviour:
@@ -4260,6 +4248,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 147978433}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 952914216}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -4599,30 +4599,6 @@ MonoBehaviour:
   start:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1436707357}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: FastRevealText
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Level Selector
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 245486020}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Play Level
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 982954632}
         m_TargetAssemblyTypeName: LevelSelector, Assembly-CSharp
         m_MethodName: UpdateLevelDescription
@@ -4647,7 +4623,7 @@ MonoBehaviour:
           m_StringArgument: New Game
           m_BoolArgument: 0
         m_CallState: 2
-  deleteAfterStart: 1
+  deleteAfterStart: 0
 --- !u!114 &982954628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4935,7 +4911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 2023894486}
-  timePerCharacter: 0.1
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &1055634833
 MonoBehaviour:
@@ -5050,7 +5026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 1722975221}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &1062628664
 MonoBehaviour:
@@ -5119,6 +5095,54 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1436707357}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: LEVEL SELECT
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 245486020}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Play Level
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 123168151}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Back
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 952914216}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -5794,8 +5818,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 1399984936}
-  timePerCharacter: 0.5
-  fastRevealTime: 0.5
+  totalGlitchTime: 1
+  fastRevealTime: 1
 --- !u!1 &1436707356
 GameObject:
   m_ObjectHideFlags: 0
@@ -5828,7 +5852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 1436707358}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &1436707358
 MonoBehaviour:
@@ -6131,7 +6155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 1562579274}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &1562579274
 MonoBehaviour:
@@ -6263,7 +6287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 173699523}
-  timePerCharacter: 0.05
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!224 &1610762637
 RectTransform:
@@ -6383,17 +6407,65 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 952914216}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 236466973}
+        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
+        m_MethodName: DisplayRandomMessage
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
+          m_StringArgument: Titles
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 33753698}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Start
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1763208837}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Settings
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1671016633}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Credits
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1055634832}
+        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
+        m_MethodName: FastRevealText
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Quit
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 1610762639}
         m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
@@ -6511,17 +6583,41 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 833345830}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 147978433}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 952914216}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1671016631}
         m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
@@ -6568,7 +6664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 531570693}
-  timePerCharacter: 0.1
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &1671016634
 MonoBehaviour:
@@ -6863,7 +6959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 171765153}
-  timePerCharacter: 0.1
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &1763208838
 MonoBehaviour:
@@ -7245,56 +7341,8 @@ MonoBehaviour:
       m_Calls: []
   start:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 657766869}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: FastRevealText
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Prepare for Time Punch
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 171838423}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: New Game
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1062628663}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Level Select
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1610762636}
-        m_TargetAssemblyTypeName: GlitchyText, Assembly-CSharp
-        m_MethodName: DisplayTextWithGlitch
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Back
-          m_BoolArgument: 0
-        m_CallState: 2
-  deleteAfterStart: 1
+      m_Calls: []
+  deleteAfterStart: 0
 --- !u!114 &1909963695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7731,7 +7779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 2133299477}
-  timePerCharacter: 0.5
+  totalGlitchTime: 1
   fastRevealTime: 1
 --- !u!114 &2133299477
 MonoBehaviour:

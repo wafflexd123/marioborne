@@ -5,19 +5,11 @@ using UnityEngine;
 public class GlitchyText : MonoBehaviour
 {
     [SerializeField] private TMP_Text textMesh;
-    [SerializeField] private float timePerCharacter = 0.5f;
+    [SerializeField] private float totalGlitchTime = 1.0f; // Total time for the glitch effect to complete
     [SerializeField] private float fastRevealTime = 1.0f;
     private const char PLACEHOLDER = '_';
 
-    private float glitchDuration;
-    private int maxGlitchIterations;
     private Coroutine currentCoroutine; // Reference to the current running coroutine
-
-    private void Awake()
-    {
-        glitchDuration = timePerCharacter / 10f;
-        maxGlitchIterations = Mathf.Max(1, (int)(timePerCharacter / glitchDuration));
-    }
 
     public void DisplayTextWithGlitch(string message)
     {
@@ -42,6 +34,10 @@ public class GlitchyText : MonoBehaviour
     private IEnumerator GlitchyTextRoutine(string message)
     {
         textMesh.text = "";
+        int totalGlitches = message.Length * 10; // For example, 10 glitches per character
+        float glitchDuration = totalGlitchTime / totalGlitches;
+
+        int glitchCount = 0;
 
         for (int i = 0; i < message.Length; i++)
         {
@@ -58,20 +54,30 @@ public class GlitchyText : MonoBehaviour
                 }
             }
 
+            // Placeholder character
             textMesh.text += PLACEHOLDER;
 
-            for (int j = 0; j < maxGlitchIterations; j++)
+            // Perform glitches
+            for (int j = 0; j < 10; j++) // Glitch 10 times per character
             {
                 char randomChar = (char)Random.Range(33, 127);
-                textMesh.text = textMesh.text.Substring(0, i) + randomChar;
-                yield return new WaitForSecondsRealtime(glitchDuration);
+                textMesh.text = textMesh.text.Substring(0, i) + randomChar + textMesh.text.Substring(i + 1);
+                glitchCount++;
+
+                // Wait for glitch duration
+                if (glitchCount < totalGlitches)
+                {
+                    yield return new WaitForSecondsRealtime(glitchDuration);
+                }
             }
 
-            textMesh.text = textMesh.text.Substring(0, i) + message[i];
+            // Reveal the actual character
+            textMesh.text = textMesh.text.Substring(0, i) + message[i] + textMesh.text.Substring(i + 1);
         }
 
         currentCoroutine = null; // Reset the coroutine reference when done
     }
+
 
     private IEnumerator FastRevealRoutine(string message)
     {
