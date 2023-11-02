@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BodySwapBullet : MonoBehaviourPlus
@@ -7,6 +8,10 @@ public class BodySwapBullet : MonoBehaviourPlus
     [SerializeField] private float daggerGravity;
     private Vector3 gravityForce = Vector3.zero;
     //[SerializeField] private float daggerSpeed;
+    private MeshRenderer mr;
+    private TrailRenderer tr;
+    private CapsuleCollider cap;
+    private ParticleSystem particles;
 
     private Rigidbody rb;
 
@@ -14,6 +19,10 @@ public class BodySwapBullet : MonoBehaviourPlus
     {
         rb = GetComponent<Rigidbody>();
         gravityForce = Vector3.up * -daggerGravity;
+        mr = transform.GetChild(0).GetComponent<MeshRenderer>();
+        tr = transform.GetChild(0).GetComponent<TrailRenderer>();
+        cap = transform.GetChild(0).GetComponent<CapsuleCollider>();
+        particles = transform.GetChild(1).GetComponent<ParticleSystem>();
     }
 
     public void Fire()
@@ -35,6 +44,17 @@ public class BodySwapBullet : MonoBehaviourPlus
         {
             Player.singlePlayer.TeleportToEnemy(man, teleportSpeed, maxTeleportTime);
         }
+        StartCoroutine(Destruction());
+    }
+
+    private IEnumerator Destruction()
+    {
+        mr.enabled = false;
+        tr.emitting = false;
+        cap.enabled = false;
+        particles.Play();
+        //Debug.Break();
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 
