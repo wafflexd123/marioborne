@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 {
-	public Bullet projectile;
+	public GameObject projectile;
 	public float projectileSpeed, fireDelay;
 	public Transform firePosition;
 	Player player;
@@ -31,7 +31,10 @@ public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 		if (crtDelay == null) crtDelay = StartCoroutine(E());
 		IEnumerator E()
 		{
-			bullets.Add(projectile.Spawn(firePosition, projectileSpeed, (player.LookingAt - firePosition.position).normalized, player, Color.green, false));
+			//bullets.Add(projectile.Spawn(firePosition, projectileSpeed, (player.LookingAt - firePosition.position).normalized, player, Color.green, false));
+			GameObject proj = Instantiate(projectile, firePosition.position, Quaternion.Euler((player.LookingAt - firePosition.position).normalized));
+			BodySwapBullet bullet = proj.GetComponent<BodySwapBullet>();
+			bullet.Fire();
 			yield return new WaitForSeconds(fireDelay);
 			crtDelay = null;
 		}

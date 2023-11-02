@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BasicRewindable : MonoBehaviourPlus, IRewindListener
+public class BasicRewindable : UnityEventHelper, IRewindListener
 {
 	public UnityEvent onFullyRewound;
 	bool hasFullyRewound;
