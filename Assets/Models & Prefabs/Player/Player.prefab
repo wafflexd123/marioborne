@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 575953091305061169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
+  m_LocalPosition: {x: -0.00000024400654, y: 1.6402944, z: -0.015195342}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3174,7 +3174,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 1551203828745959550, guid: ad19309b4cd1fad4a8c919a0477ba0f9, type: 3}
-  projectileSpeed: 30
   fireDelay: 1
   firePosition: {fileID: 8001047710145832541}
   playerEnergy: {fileID: 8187349920545106518}
@@ -4182,7 +4181,7 @@ Transform:
   m_GameObject: {fileID: 4360871117464955069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.7133317, y: 1.4406136, z: -0.05548489}
+  m_LocalPosition: {x: 0.7133318, y: 1.4406136, z: -0.05548489}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5706,7 +5705,7 @@ MonoBehaviour:
   concreteSounds:
     clips:
     - audio: {fileID: 8300000, guid: 6fd031a9d561dc4448521dcb81b4eb6c, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5718,7 +5717,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: b1271c70d49641e488b6fed0c960ffaf, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5730,7 +5729,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: e6dd3b0e694f0a1499d6dfcf983201a1, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5742,7 +5741,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: e764334608168784dbdf6a6299a6b110, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5754,7 +5753,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: 33c38779035d79748a1c49ded22441cc, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5766,7 +5765,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: 89a883211f123624da38a7d061d065fd, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5778,7 +5777,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: 6b68785f1ad4494459bdfadaf8485d47, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5792,7 +5791,7 @@ MonoBehaviour:
   metalSounds:
     clips:
     - audio: {fileID: 8300000, guid: 2d9c4e927a99b5a48819fccd824c608e, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5804,7 +5803,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: 2cf33612f88a42346abf72d3193e5959, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5816,7 +5815,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: 2a796b1b3e7b1404ea6671c00323b8ef, type: 3}
-      volume: 0
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5828,7 +5827,7 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: a2e6467cc9e2a5748acc7294e3d15159, type: 3}
-      volume: 1
+      volume: 0.25
       pitch: 1
       maxDistance: 5
       loop: 0
@@ -5843,12 +5842,14 @@ MonoBehaviour:
     clips: []
   landingSounds:
     clips: []
+  enemyDeathSounds:
+    clips: []
   walkSpeed: 1
   runSpeed: 6.5
   colliderCrouchTime: 0.25
   crouchHeightMultiplier: 0.55
   footStepSoundRadius: 5
-  maxAdditionalStepVolume: 0.5
+  maxAdditionalStepVolume: 0
   velocityAtMaxStepVolume: 10
   deathPosePrefab: {fileID: 6723186651781824147, guid: c3fcd6d9d58c92e41829b9b1ad2b7368, type: 3}
   metals:
@@ -5856,6 +5857,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b1a91ed7652170c40b359558343bde26, type: 2}
   - {fileID: 2100000, guid: 036390653caaef644b548c6875a44591, type: 2}
   - {fileID: 2100000, guid: 8ea7b6e44512c8a4f90a84de64145e65, type: 2}
+  enemyDeath: 0
   collider: {fileID: 0}
 --- !u!114 &1727486885413383923
 MonoBehaviour:
@@ -6276,7 +6278,7 @@ Transform:
   m_GameObject: {fileID: 7210201921843458528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
+  m_LocalPosition: {x: -0.00000024400654, y: 1.6402944, z: -0.015195342}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11823,7 +11825,7 @@ Transform:
   m_GameObject: {fileID: 8405350625105107529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.5992944, z: -0.015195336}
+  m_LocalPosition: {x: -0.00000024400654, y: 1.5992944, z: -0.015195342}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
