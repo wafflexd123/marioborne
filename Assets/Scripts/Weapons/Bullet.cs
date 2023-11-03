@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviourPlus
 	[HideInInspector] public float speed;
 	[HideInInspector] public MonoBehaviour shooter;
 	[HideInInspector] public bool penetrates;
+	private PlayerEnergy playerEnergy;
 	float timer;
 	//new ParticleSystem particleSystem;
 	new Renderer renderer;
@@ -56,6 +57,7 @@ public class Bullet : MonoBehaviourPlus
 		renderer = transform.Find("Model").GetComponent<Renderer>();
 		collider = renderer.GetComponent<Collider>();
 		rigidbody = GetComponent<Rigidbody>();
+		playerEnergy = GameObject.Find("/Player").GetComponent<PlayerEnergy>();
 		GetComponent<BasicRewindable>().onFullyRewound.AddListener(() => Destroy(gameObject));
 	}
 
@@ -85,6 +87,7 @@ public class Bullet : MonoBehaviourPlus
 		if (FindComponent(collision.transform, out IAttackReceiver bulletReceiver))
 		{
 			bulletReceiver.ReceiveAttack(shooter, this, DeathType.Bullet, collision);
+			if (shooter.CompareTag("Player")) playerEnergy.IncreaseEnergy(10);
 			if (!penetrates) Destroy(gameObject);
 		}
 		else Destroy(gameObject);

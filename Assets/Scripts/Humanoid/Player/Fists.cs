@@ -7,11 +7,13 @@ public class Fists : MonoBehaviourPlus
     Coroutine crtPunch;
     Player player;
     new Collider collider;
+    private PlayerEnergy playerEnergy;
 
     private void Start()
     {
         collider = GetComponent<Collider>();
         player = GetComponentInParent<Player>();
+        playerEnergy = GameObject.Find("/Player").GetComponent<PlayerEnergy>();
     }
 
     void Update()
@@ -38,6 +40,7 @@ public class Fists : MonoBehaviourPlus
         if (FindComponent(collider.transform, out AIController enemy))
         {
             enemy.Kill(DeathType.Melee);
+            playerEnergy.IncreaseEnergy(40);
         }
     }
 }
