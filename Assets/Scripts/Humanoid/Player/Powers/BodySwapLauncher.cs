@@ -11,7 +11,11 @@ public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 	Coroutine crtDelay;
 	List<Bullet> bullets = new List<Bullet>();
 
-	public bool CanDisable => true;
+    [Header("Energy Variables")]
+    [SerializeField] private PlayerEnergy playerEnergy;
+    [SerializeField] private int bodySwapEnergyCost = 60;
+
+    public bool CanDisable => true;
 
 	private void Awake()
 	{
@@ -26,21 +30,25 @@ public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 		if (Input.GetButtonDown("Ability")) Shoot();
 	}
 
-	public void Shoot()
-	{
-		if (crtDelay == null) crtDelay = StartCoroutine(E());
-		IEnumerator E()
-		{
-			//bullets.Add(projectile.Spawn(firePosition, projectileSpeed, (player.LookingAt - firePosition.position).normalized, player, Color.green, false));
-			GameObject proj = Instantiate(projectile, firePosition.position, Quaternion.Euler((player.LookingAt - firePosition.position).normalized));
-			BodySwapBullet bullet = proj.GetComponent<BodySwapBullet>();
-			bullet.Fire();
-			yield return new WaitForSeconds(fireDelay);
-			crtDelay = null;
-		}
-	}
+    public void Shoot()
+    {
+        if (crtDelay == null && playerEnergy.GetEnergy() >= bodySwapEnergyCost)
+        {
+            crtDelay = StartCoroutine(E());
+        }
+        else playerEnergy.FlashEnergyText();
+        IEnumerator E()
+        {
+            playerEnergy.DecreaseEnergy(bodySwapEnergyCost);
+            GameObject proj = Instantiate(projectile, firePosition.position, Quaternion.Euler((player.LookingAt - firePosition.position).normalized));
+            BodySwapBullet bullet = proj.GetComponent<BodySwapBullet>();
+            bullet.Fire();
+            yield return new WaitForSeconds(fireDelay);
+            crtDelay = null;
+        }
+    }
 
-	private void OnDisable()
+    private void OnDisable()
 	{
 		for (int i = 0; i < bullets.Count; i++)
 		{

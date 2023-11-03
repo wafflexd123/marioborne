@@ -25,6 +25,14 @@ public class PlayerEnergy : MonoBehaviour
     [Tooltip("Time it takes for the displayed energy to lerp to the current energy value.")]
     [SerializeField] private float lerpDuration = 1f;
 
+    [Header("Flash Properties")]
+    [Tooltip("The color to flash when energy is insufficient.")]
+    [SerializeField] private Color flashColor = Color.red;
+    [Tooltip("Duration of the flash effect.")]
+    [SerializeField] private float flashDuration = 0.5f;
+
+    private Material energyTextMaterial;
+    private Color originalEmissionColor;
     private int currentEnergy;
     private float displayedEnergy;
     private float lerpStartTime;
@@ -34,6 +42,8 @@ public class PlayerEnergy : MonoBehaviour
     {
         currentEnergy = maxEnergy;
         displayedEnergy = maxEnergy;
+        energyTextMaterial = energyText.fontMaterial;
+        originalEmissionColor = energyTextMaterial.GetColor("_GlowColor");
         StartCoroutine(PassiveRegen());
     }
 
@@ -48,13 +58,64 @@ public class PlayerEnergy : MonoBehaviour
     }
 
     /// <summary>
+    /// Flashes the energy text color when the player doesn't have enough energy.
+    /// </summary>
+    public void FlashEnergyText()
+    {
+        StartCoroutine(FlashEnergyTextCoroutine());
+    }
+
+    private IEnumerator FlashEnergyTextCoroutine()
+    {
+        // Save the original vertex color
+        Color originalVertexColor = energyText.color;
+        // Save the original glow color and intensity
+        Color originalGlowColor = energyTextMaterial.GetColor("_GlowColor");
+        float originalGlowIntensity = energyTextMaterial.GetFloat("_GlowPower");
+
+        // Set the vertex color to red (or any flash color you want)
+        energyText.color = flashColor;
+
+        // Set the glow color with increased intensity
+        Color highIntensityGlowColor = flashColor * 2.0f; // Increase intensity by multiplying the color
+        energyTextMaterial.SetColor("_GlowColor", highIntensityGlowColor);
+        energyTextMaterial.SetFloat("_GlowPower", 2.0f); // Adjust this value as needed for your desired intensity
+
+        // Update the material properties
+        energyTextMaterial.EnableKeyword("_EMISSION");
+        energyText.UpdateMeshPadding(); // Update padding in case glow affects text bounds
+
+        // Wait for the duration of the flash
+        yield return new WaitForSeconds(flashDuration);
+
+        // Restore the original vertex color
+        energyText.color = originalVertexColor;
+        // Restore the original glow color and intensity
+        energyTextMaterial.SetColor("_GlowColor", originalGlowColor);
+        energyTextMaterial.SetFloat("_GlowPower", originalGlowIntensity);
+
+        // Update the material properties
+        energyTextMaterial.DisableKeyword("_EMISSION");
+        energyText.UpdateMeshPadding(); // Update padding to original
+    }
+
+    /// <summary>
     /// Decreases the player's energy by the specified amount and starts the energy UI update.
+    /// If the player does not have enough energy, flash the energy text.
     /// </summary>
     /// <param name="amount">Amount to decrease energy by.</param>
     public void DecreaseEnergy(int amount)
     {
-        currentEnergy = Mathf.Max(currentEnergy - amount, 0);
-        StartEnergyLerp();
+        if (currentEnergy >= amount)
+        {
+            currentEnergy = Mathf.Max(currentEnergy - amount, 0);
+            StartEnergyLerp();
+        }
+        else
+        {
+            // Player tried to use more energy than they have, flash the energy text
+            FlashEnergyText();
+        }
     }
 
     /// <summary>
@@ -65,6 +126,11 @@ public class PlayerEnergy : MonoBehaviour
     {
         currentEnergy = Mathf.Clamp(amount, 0, maxEnergy);
         StartEnergyLerp();
+    }
+
+    public int GetEnergy()
+    {
+        return currentEnergy;
     }
 
     /// <summary>
