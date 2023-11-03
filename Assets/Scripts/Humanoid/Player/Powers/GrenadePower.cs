@@ -50,6 +50,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
             thrownTime = UnityEngine.Time.timeSinceLevelLoad;
             playerEnergy.DecreaseEnergy(grenadeEnergyCost);
         }
+        else playerEnergy.FlashEnergyText();
     }
 
     private void OnEnable()
