@@ -1992,12 +1992,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a45499e1875f3e4a91844562a15e3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSounds:
+  concreteSounds:
+    clips: []
+  metalSounds:
     clips: []
   jumpingSounds:
     clips: []
   landingSounds:
     clips: []
+  enemyDeathSounds:
+    clips:
+    - audio: {fileID: 8300000, guid: 6af46e92422e6294abf2eed6deac2c2a, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 20
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 3a5f12fe1267cc146ae17a2868b2491a, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 20
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: f0879bcc8443fa6499d8cf796917767b, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 20
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
   walkSpeed: 1
   runSpeed: 6.5
   colliderCrouchTime: 0.25
@@ -2006,6 +2046,8 @@ MonoBehaviour:
   maxAdditionalStepVolume: 0.5
   velocityAtMaxStepVolume: 10
   deathPosePrefab: {fileID: 6723186651781824147, guid: c3fcd6d9d58c92e41829b9b1ad2b7368, type: 3}
+  metals: []
+  enemyDeath: 0
   collider: {fileID: 2986787310675695523}
 --- !u!114 &6712161604108142435
 MonoBehaviour:

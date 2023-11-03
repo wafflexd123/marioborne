@@ -8,14 +8,16 @@ using UnityEngine;
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
 	//Inspector
-	public AudioPool.Clips concreteSounds, metalSounds, jumpingSounds, landingSounds;
+	public AudioPool.Clips concreteSounds, metalSounds, jumpingSounds, landingSounds, enemyDeathSounds;
 	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, footStepSoundRadius, maxAdditionalStepVolume, velocityAtMaxStepVolume;
 	public GameObject deathPosePrefab;
 	public List<Material> metals = new List<Material>();
 
+
 	//Script
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
 	private bool _punching, _deflect, _slashing, _jumpAttack, _backflip, _shieldLayer, _sniperLayer;
+	[HideInInspector] public bool enemyDeath;
 	private Vector3 colliderCentre;
 	private Animator animator;
 	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash, crtJumpAttack, crtBackflip;
@@ -122,7 +124,13 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		}
 	}
 
-	IEnumerator Crouch(bool crouch)
+    private void Update()
+    {
+        if (enemyDeath)
+			PlayEnemyDeathSound();
+    }
+
+    IEnumerator Crouch(bool crouch)
 	{
 		animator.SetBool("sliding", crouch);
 		float percent, timer = 0;
@@ -171,13 +179,11 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
                 {
 					metalSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
 					Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
-					Debug.Log("metal sound");
 					return;
 				}
 			}
 			concreteSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
 			Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
-			Debug.Log("concrete sound");
 		}
 	}
 
@@ -190,4 +196,11 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	{
 		landingSounds.PlayRandom(audioPool);
 	}
+
+	public void PlayEnemyDeathSound()
+    {
+        if (enemyDeath)
+			enemyDeathSounds.PlayRandom(audioPool);
+		enemyDeath = false;
+    }
 }

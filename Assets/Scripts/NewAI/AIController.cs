@@ -130,6 +130,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
+		model.enemyDeath = true;
 		if (weapon) input.Press("Drop");//drop weapon if holding one
 		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
 		model.dying = true;
