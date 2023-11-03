@@ -47,7 +47,7 @@ public class LevelSelector : MonoBehaviour
 
     public void DecreaseLevelIndex()
     {
-        if (currentLevelIndex - 1 > 1)
+        if (currentLevelIndex - 1 >= 1)
         {
             currentLevelIndex--;
         }
