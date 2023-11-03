@@ -26,7 +26,7 @@ public class MaterialGlitcher : MonoBehaviour
 					yield return new WaitForSeconds(Random.Range(minGlitchTime, maxGlitchTime));
 					r.material = temp;
 				}
-				else Debug.LogWarning("MaterialGlitcher must be attached to a renderer!");
+				else Debug.LogWarning("MaterialGlitcher must be attached to a renderer!", this);
 			}
 			yield return new WaitForSeconds(Random.Range(minTimeBetweenChecks, maxTimeBetweenChecks));
 		}
