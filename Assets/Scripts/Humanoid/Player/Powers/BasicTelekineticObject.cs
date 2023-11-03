@@ -16,6 +16,7 @@ public class BasicTelekineticObject : MonoBehaviour, ITelekinetic
 
 	public void TelekineticGrab(Telekinesis t)
 	{
+		rigidbody.isKinematic = false;
 		rigidbody.useGravity = false;
 		gameObject.layer = 17;
 	}

@@ -71,9 +71,10 @@ public class ElevatorDoor : UnityEventHelper
 
 	public void TeleportTo(Transform teleportTo)
 	{
-		Player.singlePlayer.transform.parent = transform;
-		transform.position = teleportTo.position;
-		Player.singlePlayer.transform.parent = null;
+		transform.SetPositionAndRotation(teleportTo.position, teleportTo.rotation);
+		Player.singlePlayer.cameraController.enabled = false;
+		Player.singlePlayer.transform.SetPositionAndRotation(teleportTo.position, teleportTo.rotation);
+		Player.singlePlayer.cameraController.enabled = true;
 	}
 
 	void CheckForPlayer()
@@ -98,6 +99,8 @@ public class ElevatorDoor : UnityEventHelper
 		System.Func<bool> isPlaying = audioDing.Play(audio);
 		yield return new WaitWhile(isPlaying);
 		enableDoors = true;
+		Open();
+		enableDoors = false;
 		onEndRise.Invoke();
 		crtPlayer = null;
 	}

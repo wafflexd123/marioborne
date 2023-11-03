@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class FadeText : MonoBehaviourPlus
 {
-	[SerializeField] bool fadeInAll, zeroAlphasOnStart, fadeInOnStart, fadeInOnTriggerEnter, fadeOutOnTriggerExit, disableMultipleFadeIns, constraintToPlayer;
+	[SerializeField] bool fadeInAll, zeroAlphasOnStart, fadeInOnStart, fadeInOnTriggerEnter, fadeOutOnTriggerExit, disableMultipleFadeIns;
 	[SerializeField] Vector3 constraintAxes;
 	[SerializeField] private float fadeTime = 1.0f;
 	public UnityEvent onEnter, onExit;
@@ -132,7 +132,7 @@ public class FadeText : MonoBehaviourPlus
 			onEnter.Invoke();
 			if (fadeInAll) FadeInAllText();
 			else FadeInTextByWord();
-			if (constraintToPlayer) ConstraintTo(p.transform);
+			if (constraintAxes != Vector3.zero) ConstraintTo(p.transform);
 		}
 	}
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class BodySwapLauncher : MonoBehaviourPlus, IPlayerPower
 {
 	public GameObject projectile;
-	public float projectileSpeed, fireDelay;
+	public float fireDelay;
 	public Transform firePosition;
 	Player player;
 	Coroutine crtDelay;

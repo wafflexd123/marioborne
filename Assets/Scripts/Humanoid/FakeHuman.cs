@@ -21,6 +21,7 @@ public class FakeHuman : Humanoid
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
+		Destroy(gameObject);
 	}
 
 	public override bool OnPickupWeapon(WeaponBase weapon)
