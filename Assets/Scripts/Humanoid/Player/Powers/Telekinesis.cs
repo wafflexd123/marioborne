@@ -40,6 +40,9 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
     public Color inRangeColor = Color.green;
     private float chargeTime;
 
+    [Header("Energy Variables")]
+    public PlayerEnergy playerEnergy;
+
     //Script
     private ITelekinetic grabbedObject;
     private ITelekinetic hoveredObject;
@@ -80,18 +83,26 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
                 else if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out raycast, grabDistance) &&
                          FindComponent(raycast.transform, out grabbedObject))
                 {
-                    grabbedObject.TelekineticGrab(this);
-                    objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
+                    int energyCost = raycast.transform.CompareTag("Enemy") ? 40 : 10;
+                    if (playerEnergy.GetEnergy() >= energyCost)
+                    {
+                        grabbedObject.TelekineticGrab(this);
+                        playerEnergy.DecreaseEnergy(energyCost);
+                        objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
+                    }
                 }
             }
             else
             {
-                var chargedPushStrength = Mathf.Lerp(minPushStrength, pushStrength, chargeTime / maxChargeTime);
-                if (grabbedObject != null) PushGrabbedObject(chargedPushStrength);
-                else PushObjects(chargedPushStrength);
+                if (playerEnergy.GetEnergy() >= 10) // Check if enough energy to push
+                {
+                    var chargedPushStrength = Mathf.Lerp(minPushStrength, pushStrength, chargeTime / maxChargeTime);
+                    if (grabbedObject != null) PushGrabbedObject(chargedPushStrength);
+                    else PushObjects(chargedPushStrength);
+                    playerEnergy.DecreaseEnergy(10); // Deduct energy for push
+                }
             }
         }
-
         if (grabbedObject != null) ControlObject();
     }
 

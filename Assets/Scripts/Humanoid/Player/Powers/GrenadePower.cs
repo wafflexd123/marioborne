@@ -7,7 +7,6 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     private Player player;
     [SerializeField] private GameObject grenadePrefab;
     [SerializeField] private float chargeTime = 10f;
-    //private float chargeTimeRemaining = 0f;
     private float thrownTime = -100f;
     [Header("Throw Stats")]
     [SerializeField] private float throwForce = 30f;
@@ -17,12 +16,17 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
 
     private GrenadeObject grenadeObject;
 
+    [Header("Energy Variables")]
+    [SerializeField] private PlayerEnergy playerEnergy; // Reference to the PlayerEnergy script
+    [SerializeField] private int grenadeEnergyCost = 30; // Energy cost to throw a grenade
+
     public bool CanDisable => true; // TODO
 
     private void Awake()
     {
         player = GetComponentInParent<Player>();
     }
+
     private void Start()
     {
         grenadeObject = GetComponentInChildren<GrenadeObject>();
@@ -36,7 +40,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
 
     private void ThrowGrenade()
     {
-        if (UnityEngine.Time.timeSinceLevelLoad - thrownTime >= chargeTime)
+        if (UnityEngine.Time.timeSinceLevelLoad - thrownTime >= chargeTime && playerEnergy.GetEnergy() >= grenadeEnergyCost)
         {
             GameObject grenadeObj = Instantiate(grenadePrefab, transform.GetChild(0).position, Quaternion.identity);
             Rigidbody rb = grenadeObj.GetComponent<Rigidbody>();
@@ -44,6 +48,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
             grenadeObject.Thrown();
             inhand = false;
             thrownTime = UnityEngine.Time.timeSinceLevelLoad;
+            playerEnergy.DecreaseEnergy(grenadeEnergyCost);
         }
     }
 
@@ -69,7 +74,7 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
         inhand = true;
     }
 
-	public void OnWeaponPickup()
+    public void OnWeaponPickup()
 	{
 	}
 }

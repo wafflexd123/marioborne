@@ -67,6 +67,11 @@ public class PlayerEnergy : MonoBehaviour
         StartEnergyLerp();
     }
 
+    public int GetEnergy()
+    {
+        return currentEnergy;
+    }
+
     /// <summary>
     /// Periodically regenerates energy over time.
     /// </summary>
