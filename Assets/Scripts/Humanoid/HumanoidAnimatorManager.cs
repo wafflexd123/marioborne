@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -7,9 +8,10 @@ using UnityEngine;
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
 	//Inspector
-	public AudioPool.Clips footstepSounds, jumpingSounds, landingSounds;
+	public AudioPool.Clips concreteSounds, metalSounds, jumpingSounds, landingSounds;
 	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, footStepSoundRadius, maxAdditionalStepVolume, velocityAtMaxStepVolume;
 	public GameObject deathPosePrefab;
+	public List<Material> metals = new List<Material>();
 
 	//Script
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
@@ -93,7 +95,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 	private void Awake()
 	{
-		float maxTime = footstepSounds.MaxShotLength();
+		float maxTime = concreteSounds.MaxShotLength();
 		float temp = jumpingSounds.MaxShotLength();
 		if (temp > maxTime) maxTime = temp;
 		temp = landingSounds.MaxShotLength();
@@ -161,8 +163,22 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public void PlayFootstepSound()
 	{
 		float velocityMagnitude = Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z));//need to fix so this works on ramps
-		footstepSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
-		Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
+		if (GetComponentInParent<PlayerMovement>().isGrounded)
+        {
+			foreach (Material mat in metals)
+			{
+				if (mat == GetComponentInParent<PlayerMovement>().groundHit.transform.GetComponent<MeshRenderer>().sharedMaterial)
+                {
+					metalSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
+					Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
+					Debug.Log("metal sound");
+					return;
+				}
+			}
+			concreteSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
+			Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
+			Debug.Log("concrete sound");
+		}
 	}
 
 	public void PlayJumpSound()

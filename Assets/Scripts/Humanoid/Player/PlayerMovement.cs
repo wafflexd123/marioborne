@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviourPlus
 	readonly float groundCheckYOffset = .01f, groundCheckDistance = .001f /*doubleKeyPressTime = .2f*/;
 	bool queueJump, queueRoll, queueDash, _isGrounded;
 	Vector3 moveDirection, currentGroundPosition, lastActualVelocity;
-	RaycastHit groundHit, wallHit;
+	public RaycastHit groundHit, wallHit;
 	Player player;
 	PlayerRewinder rewinder;
 	Coroutine crtTilt, crtQueueRoll, crtHealth;

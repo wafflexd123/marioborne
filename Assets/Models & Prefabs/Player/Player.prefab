@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 575953091305061169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.640295, z: -0.015197754}
+  m_LocalPosition: {x: -0.00000047683716, y: 1.6402969, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2267,7 +2267,73 @@ MonoBehaviour:
   maxChargeColor: {r: 1, g: 0, b: 0, a: 1}
   minChargeColor: {r: 0, g: 0, b: 1, a: 1}
   inRangeColor: {r: 0, g: 1, b: 0, a: 1}
-  playerEnergy: {fileID: 0}
+  audioPickup:
+    audio: {fileID: 8300000, guid: 6330fd5614ad53e4d8e52e6891f8381d, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 5
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
+  audioRelease:
+    audio: {fileID: 8300000, guid: 8af07f08a0b95f046b4fcb019cca02db, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 5
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
+  audioHeld:
+    audio: {fileID: 8300000, guid: c0776a25135a5c149bb27c2caf3c32a3, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 5
+    loop: 1
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.024610337
+        outSlope: 0.024610337
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.5833594
+      - serializedVersion: 3
+        time: 0.49700072
+        value: 0.9979272
+        inSlope: -0.011615019
+        outSlope: -0.011615019
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.34694654
+      - serializedVersion: 3
+        time: 0.9708252
+        value: 0.002357483
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
+  playerEnergy: {fileID: 8187349920545106518}
 --- !u!1 &2603711515221558719
 GameObject:
   m_ObjectHideFlags: 0
@@ -4116,7 +4182,7 @@ Transform:
   m_GameObject: {fileID: 4360871117464955069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.71333313, y: 1.4406137, z: -0.055488586}
+  m_LocalPosition: {x: 0.7133317, y: 1.4406128, z: -0.055488586}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5551,8 +5617,21 @@ MonoBehaviour:
   throwForce: 30
   throwUpForce: 8
   throwOffset: {x: 0, y: 0, z: 0}
-  playerEnergy: {fileID: 0}
+  playerEnergy: {fileID: 8187349920545106518}
   grenadeEnergyCost: 30
+  audioPin:
+    audio: {fileID: 8300000, guid: 70c1885ab75b33b46b1552f211440b84, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 5
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
 --- !u!1 &6432734802949595765
 GameObject:
   m_ObjectHideFlags: 0
@@ -5624,8 +5703,142 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a45499e1875f3e4a91844562a15e3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSounds:
-    clips: []
+  concreteSounds:
+    clips:
+    - audio: {fileID: 8300000, guid: 6fd031a9d561dc4448521dcb81b4eb6c, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: b1271c70d49641e488b6fed0c960ffaf, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: e6dd3b0e694f0a1499d6dfcf983201a1, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: e764334608168784dbdf6a6299a6b110, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 33c38779035d79748a1c49ded22441cc, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 89a883211f123624da38a7d061d065fd, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 6b68785f1ad4494459bdfadaf8485d47, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+  metalSounds:
+    clips:
+    - audio: {fileID: 8300000, guid: 2d9c4e927a99b5a48819fccd824c608e, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 2cf33612f88a42346abf72d3193e5959, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 2a796b1b3e7b1404ea6671c00323b8ef, type: 3}
+      volume: 0
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: a2e6467cc9e2a5748acc7294e3d15159, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 5
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
   jumpingSounds:
     clips: []
   landingSounds:
@@ -5638,6 +5851,11 @@ MonoBehaviour:
   maxAdditionalStepVolume: 0.5
   velocityAtMaxStepVolume: 10
   deathPosePrefab: {fileID: 6723186651781824147, guid: c3fcd6d9d58c92e41829b9b1ad2b7368, type: 3}
+  metals:
+  - {fileID: 2100000, guid: bb378935b3a5e17409ce86732be7b7d0, type: 2}
+  - {fileID: 2100000, guid: b1a91ed7652170c40b359558343bde26, type: 2}
+  - {fileID: 2100000, guid: 036390653caaef644b548c6875a44591, type: 2}
+  - {fileID: 2100000, guid: 8ea7b6e44512c8a4f90a84de64145e65, type: 2}
   collider: {fileID: 0}
 --- !u!114 &1727486885413383923
 MonoBehaviour:
@@ -6058,7 +6276,7 @@ Transform:
   m_GameObject: {fileID: 7210201921843458528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.640295, z: -0.015197754}
+  m_LocalPosition: {x: -0.00000047683716, y: 1.6402969, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11605,7 +11823,7 @@ Transform:
   m_GameObject: {fileID: 8405350625105107529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5992947, z: -0.015197754}
+  m_LocalPosition: {x: -0.00000047683716, y: 1.5992966, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11767,7 +11985,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 0}
   weapon: {fileID: 0}
-  invincibility: 0
+  invincibility: 1
   maxInteractDistance: 5
   raycastIgnore:
     serializedVersion: 2
@@ -12422,6 +12640,46 @@ MonoBehaviour:
   scaleDuration: 15
   recoveryDelay: 1
   imgTimeleft: {fileID: 5267165890062321969}
+  audioTimeSlow:
+    audio: {fileID: 8300000, guid: d44b94706dbb48e48a5e794e16ac9e0f, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 4
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.030361248
+        outSlope: 0.030361248
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.80059814
+      - serializedVersion: 3
+        time: 0.5062286
+        value: 0.9967909
+        inSlope: -0.0032155334
+        outSlope: -0.0032155334
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9750061
+        value: -0.002357483
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
 --- !u!114 &3039665087734150562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12435,7 +12693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewindSpeed: 1
-  minRewindTime: 0.5
+  minRewindTime: 1
   inputAxis: Rewind
   singleFrameDebugInputAxis: 8
   handShakeLevel: 0.5
