@@ -2267,6 +2267,7 @@ MonoBehaviour:
   maxChargeColor: {r: 1, g: 0, b: 0, a: 1}
   minChargeColor: {r: 0, g: 0, b: 1, a: 1}
   inRangeColor: {r: 0, g: 1, b: 0, a: 1}
+  playerEnergy: {fileID: 0}
 --- !u!1 &2603711515221558719
 GameObject:
   m_ObjectHideFlags: 0
@@ -3110,6 +3111,8 @@ MonoBehaviour:
   projectileSpeed: 30
   fireDelay: 1
   firePosition: {fileID: 8001047710145832541}
+  playerEnergy: {fileID: 8187349920545106518}
+  bodySwapEnergyCost: 60
 --- !u!1 &3331461802808243573
 GameObject:
   m_ObjectHideFlags: 0
@@ -5548,6 +5551,8 @@ MonoBehaviour:
   throwForce: 30
   throwUpForce: 8
   throwOffset: {x: 0, y: 0, z: 0}
+  playerEnergy: {fileID: 0}
+  grenadeEnergyCost: 30
 --- !u!1 &6432734802949595765
 GameObject:
   m_ObjectHideFlags: 0
@@ -12451,6 +12456,8 @@ MonoBehaviour:
   regenInterval: 1
   energyText: {fileID: 645358758408323952}
   lerpDuration: 0.5
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.5
 --- !u!1 &8461582146712657230
 GameObject:
   m_ObjectHideFlags: 0
