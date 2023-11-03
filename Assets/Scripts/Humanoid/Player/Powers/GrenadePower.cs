@@ -20,6 +20,10 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     [SerializeField] private PlayerEnergy playerEnergy; // Reference to the PlayerEnergy script
     [SerializeField] private int grenadeEnergyCost = 30; // Energy cost to throw a grenade
 
+    [Header("Sounds")]
+    new AudioPool audio;
+    public AudioPool.Clip audioPin;
+
     public bool CanDisable => true; // TODO
 
     private void Awake()
@@ -30,12 +34,17 @@ public class GrenadePower : MonoBehaviour, IPlayerPower
     private void Start()
     {
         grenadeObject = GetComponentInChildren<GrenadeObject>();
+        audio = gameObject.AddComponent<AudioPool>().Initialise(1);
     }
 
     private void Update()
     {
         CheckInHand();
-        if (Input.GetButtonDown("Ability")) ThrowGrenade();
+        if (Input.GetButtonDown("Ability"))
+        {
+            ThrowGrenade();
+            audioPin.Play(audio);
+        }
     }
 
     private void ThrowGrenade()

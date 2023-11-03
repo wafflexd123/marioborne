@@ -38,6 +38,11 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
     public Color maxChargeColor = Color.red;
     public Color minChargeColor = Color.blue;
     public Color inRangeColor = Color.green;
+    
+    [Header("Audio")]
+    new AudioPool audio;
+    public AudioPool.Clip audioPickup, audioRelease, audioHeld;
+
     private float chargeTime;
 
     [Header("Energy Variables")]
@@ -55,6 +60,7 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
     private void Start()
     {
         mainCamera = Player.singlePlayer.camera;
+        audio = gameObject.AddComponent<AudioPool>().Initialise(1);
     }
 
     private void Update()
@@ -88,6 +94,8 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
                     {
                         grabbedObject.TelekineticGrab(this);
                         playerEnergy.DecreaseEnergy(energyCost);
+                        audioPickup.Play(audio);
+                        audioHeld.Play(audio);
                         objectDistance = Vector3.Distance(mainCamera.transform.position, grabbedObject.transform.position);
                     }
                 }
@@ -103,7 +111,10 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
                 }
             }
         }
-        if (grabbedObject != null) ControlObject();
+        if (grabbedObject != null)
+        {
+            ControlObject();
+        }
     }
 
     private void OnEnable()
@@ -127,6 +138,7 @@ public class Telekinesis : MonoBehaviourPlus, IPlayerPower
         grabbedObject.TelekineticRelease();
         grabbedObject = null;
         objectDistance = 0;
+        audioRelease.Play(audio);
         StopCharge();
     }
 

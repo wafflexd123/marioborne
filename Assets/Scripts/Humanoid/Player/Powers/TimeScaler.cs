@@ -6,13 +6,17 @@ public class TimeScaler : MonoBehaviourPlus
 	public string inputButton;
 	public float timeScaleSpeed, scaleDuration, recoveryDelay;
 	public Image imgTimeleft;
+	new AudioPool audio;
+	public AudioPool.Clip audioTimeSlow;
 	float currentScaleDuration, recoveryTimer;
+	private bool audioPlayed;
 	//Console.Line cnsTime;
 
 	void Awake()
 	{
 		//cnsTime = Console.AddLine();
 		imgTimeleft.gameObject.SetActive(false);
+		audio = gameObject.AddComponent<AudioPool>().Initialise(1);
 		//startUIWidth = -ui.rect.width;
 	}
 
@@ -41,6 +45,11 @@ public class TimeScaler : MonoBehaviourPlus
 	{
 		if (Input.GetButton(inputButton) && currentScaleDuration < scaleDuration)//1.scale time down, increment scale duration, reset recovery timer
 		{
+            if (audioPlayed)
+            {
+				audioTimeSlow.Play(audio);
+				audioPlayed = false;
+            }
 			if (Time.timeScale > Time.minTimeScale)
 			{
 				Time.timeScale -= timeScaleSpeed * Time.deltaTime;
@@ -55,6 +64,7 @@ public class TimeScaler : MonoBehaviourPlus
 		}
 		else if (!Input.GetButton(inputButton) || currentScaleDuration >= scaleDuration)//2.scale time up, increment resetdelay timer
 		{
+			audioPlayed = true;
 			if (Time.timeScale < 1)
 			{
 				Time.timeScale += timeScaleSpeed * Time.deltaTime;

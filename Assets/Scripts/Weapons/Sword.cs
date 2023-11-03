@@ -10,6 +10,7 @@ public class Sword : WeaponBase
 	[Header("Enemy Variables")]
 	public float windUpTime;
 	public float enemyHitboxTime, jumpWindUpTime, enemyAirTime, cooldownTime;
+	public AudioPool.Clip deflectClip;
 
 	Coroutine crtDelay, crtCooldown;
 	private Animator animator;
@@ -173,6 +174,7 @@ public class Sword : WeaponBase
 			//print("I hear that player deflect is triggered");
 			DisableHitbox();
 			animator.Play("deflect");
+			deflectClip.Play(audioPool);
 			// TODO reset cooldown or something
 			if (crtDelay != null)
 			{
@@ -197,6 +199,7 @@ public class Sword : WeaponBase
 			{
 				if (wielder is AIController ai)
 				{
+					deflectClip.Play(audioPool);
 					Debug.Log("deflecting");
 					wielder.model.deflect = true;
 					ai.IsStopped = true;
