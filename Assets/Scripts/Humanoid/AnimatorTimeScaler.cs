@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AnimatorTimeScaler : MonoBehaviour, ITimeScaleListener
 {
+    public string timeScaleParam = "timeScale"; 
     Animator animator;
 
     void Awake()
@@ -12,7 +13,7 @@ public class AnimatorTimeScaler : MonoBehaviour, ITimeScaleListener
 
     public void OnTimeSlow()
     {
-        animator.SetFloat("timeScale", Time.timeScale);
+        animator.SetFloat(timeScaleParam, Time.timeScale);
     }
 
     private void OnDestroy()

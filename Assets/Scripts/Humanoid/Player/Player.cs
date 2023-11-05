@@ -18,7 +18,6 @@ public class Player : Humanoid
 	[HideInInspector] public bool hasDied;
 	[HideInInspector] public PlayerMovement movement;
 	[HideInInspector] public PlayerCamera cameraController;
-	[HideInInspector] public Fists fists;
 	[HideInInspector] public new Camera camera;
 	[HideInInspector] public PowerManager powers;
 
@@ -36,7 +35,7 @@ public class Player : Humanoid
 	[SerializeField] private Transform handTarget_R;
 	private HandFollowObject handFollower_L;
 	private HandFollowObject handFollower_R;
-	private Animator handAnimator;
+	[HideInInspector] public Animator handAnimator;//curse you john stop making things private
 
 	public void IKEquip(bool leftHand, Transform newParent, string animName = "")
 	{
@@ -66,7 +65,6 @@ public class Player : Humanoid
 		weaponHand = transform.Find("Right Hand");
 		cameraController = transform.Find("Head").GetComponent<PlayerCamera>();
 		camera = cameraController.transform.Find("Eyes").Find("Camera").GetComponent<Camera>();
-		fists = transform.Find("Body").Find("Hand").GetComponent<Fists>();
 		singlePlayer = this;
 		cnsRaycast = Console.AddLine();
 		movement = GetComponent<PlayerMovement>();
