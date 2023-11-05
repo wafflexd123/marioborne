@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITelekinetic
 {
 	//Inspector
+	public AudioPool.Clips deathAudio;
 	public float alertRadius;
 	[Tooltip("Only needs assigning to enemies who use cover. It's now done in the controller script because it needs access in more than one state.")] public CoverPoints coverPointsManager;
 
@@ -28,6 +29,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	//Script
 	protected Vector3 velocity;
 	protected RagdollManager ragdoll;
+	protected new AudioPool audio;
 	float agentSpeed, rotationSpeed, defaultRotSpeed;
 	bool isStopped;
 	int layer;
@@ -136,6 +138,7 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		model.dying = true;
 		model.RandomiseAnim();
 		model.transform.SetParent(transform.parent);
+		deathAudio.PlayRandom(model.audioPool);
 		if (transform.parent != null && transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
 		Destroy(gameObject);
 	}

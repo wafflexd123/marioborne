@@ -195,6 +195,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 0}
   weapon: {fileID: 0}
+  deathAudio:
+    clips:
+    - audio: {fileID: 8300000, guid: 6af46e92422e6294abf2eed6deac2c2a, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 3a5f12fe1267cc146ae17a2868b2491a, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: f0879bcc8443fa6499d8cf796917767b, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
   alertRadius: 5
   coverPointsManager: {fileID: 0}
   <CurrentState>k__BackingField: {fileID: 0}
@@ -1991,6 +2029,7 @@ MonoBehaviour:
   metals: []
   enemyDeath: 0
   collider: {fileID: 4712409741138317795}
+  audioPool: {fileID: 0}
 --- !u!114 &6352871495056250289
 MonoBehaviour:
   m_ObjectHideFlags: 0

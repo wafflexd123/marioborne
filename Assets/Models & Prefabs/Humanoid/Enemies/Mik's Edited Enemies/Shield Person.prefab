@@ -184,6 +184,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 0}
   weapon: {fileID: 0}
+  deathAudio:
+    clips:
+    - audio: {fileID: 8300000, guid: 6af46e92422e6294abf2eed6deac2c2a, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 3a5f12fe1267cc146ae17a2868b2491a, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: f0879bcc8443fa6499d8cf796917767b, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
   alertRadius: 5
   coverPointsManager: {fileID: 0}
   <CurrentState>k__BackingField: {fileID: 0}
@@ -1036,7 +1074,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2495101565749614124}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6167904, y: -0.09255389, z: 0.058857117, w: 0.7794481}
+  m_LocalRotation: {x: 0.61679053, y: -0.09255386, z: 0.05885714, w: 0.7794479}
   m_LocalPosition: {x: 0.3268757, y: 0.7320753, z: 0.024838448}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1531,7 +1569,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4160412724319200069}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0827261, y: -0.49763042, z: 0.81348175, w: 0.28942654}
+  m_LocalRotation: {x: -0.082726054, y: -0.49763054, z: 0.8134818, w: 0.28942648}
   m_LocalPosition: {x: -0.4426012, y: 0.7316597, z: 0.092502594}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2049,6 +2087,7 @@ MonoBehaviour:
   metals: []
   enemyDeath: 0
   collider: {fileID: 2986787310675695523}
+  audioPool: {fileID: 0}
 --- !u!114 &6712161604108142435
 MonoBehaviour:
   m_ObjectHideFlags: 0

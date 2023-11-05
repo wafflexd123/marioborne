@@ -24,7 +24,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	[SerializeField] new private CapsuleCollider collider;
 	private Vector3 _velocity;
 	Humanoid humanoid;
-	AudioPool audioPool;
+	[HideInInspector] public AudioPool audioPool;
 
 	//PROPERTIES
 
@@ -67,7 +67,7 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		get => _backflip;
 	}
 	public bool shieldLayer
-    {
+	{
 		set { if (value) { animator.SetLayerWeight(2, 1); } }
 		get => _shieldLayer;
 	}
@@ -105,8 +105,8 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 
 		audioPool = GetComponent<AudioPool>().Initialise(1f, maxTime);//assuming sounds wont overlap after 1 second
 		animator = GetComponent<Animator>();
-        collider = collider == null ? transform.parent.GetComponent<CapsuleCollider>() : collider;
-        colliderHeight = collider.height;
+		collider = collider == null ? transform.parent.GetComponent<CapsuleCollider>() : collider;
+		colliderHeight = collider.height;
 		colliderHeightCrouch = colliderHeight * crouchHeightMultiplier;
 		colliderCentre = collider.center;
 		colliderCentreCrouch = colliderCentre.y * crouchHeightMultiplier;
@@ -124,13 +124,13 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		}
 	}
 
-    private void Update()
-    {
-        if (enemyDeath)
+	private void Update()
+	{
+		if (enemyDeath)
 			PlayEnemyDeathSound();
-    }
+	}
 
-    IEnumerator Crouch(bool crouch)
+	IEnumerator Crouch(bool crouch)
 	{
 		animator.SetBool("sliding", crouch);
 		float percent, timer = 0;
@@ -172,11 +172,11 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	{
 		float velocityMagnitude = Mathf.Sqrt((_velocity.x * _velocity.x) + (_velocity.z * _velocity.z));//need to fix so this works on ramps
 		if (GetComponentInParent<PlayerMovement>().isGrounded)
-        {
+		{
 			foreach (Material mat in metals)
 			{
 				if (mat == GetComponentInParent<PlayerMovement>().groundHit.transform.GetComponent<MeshRenderer>().sharedMaterial)
-                {
+				{
 					metalSounds.PlayRandom(audioPool, Mathf.Lerp(0, maxAdditionalStepVolume, velocityMagnitude / velocityAtMaxStepVolume));
 					Sound.MakeSound(transform.position, footStepSoundRadius * velocityMagnitude, humanoid);
 					return;
@@ -198,9 +198,9 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	}
 
 	public void PlayEnemyDeathSound()
-    {
-        if (enemyDeath)
+	{
+		if (enemyDeath)
 			enemyDeathSounds.PlayRandom(audioPool);
 		enemyDeath = false;
-    }
+	}
 }
