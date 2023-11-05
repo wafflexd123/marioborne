@@ -6,10 +6,12 @@ public class EnemyManager : UnityEventHelper
 	[Tooltip("Amount of enemies that can be alive when onAllEnemiesDead is called")] public int buffer;
 	public UnityEvent onAllEnemiesDead;
 	int deadEnemies;
+	[SerializeField, ReadOnly] string debug;
 
 	public void RegisterDeath()
 	{
 		deadEnemies++;
+		debug = $"Enemies Dead: {deadEnemies}, required: {transform.childCount - 1 - buffer}";
 		if (deadEnemies == transform.childCount - 1 - buffer)
 		{
 			onAllEnemiesDead.Invoke();

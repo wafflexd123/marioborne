@@ -13,7 +13,7 @@ public class Fists : MonoBehaviourPlus
     {
         collider = GetComponent<Collider>();
         player = GetComponentInParent<Player>();
-        playerEnergy = GameObject.Find("/Player").GetComponent<PlayerEnergy>();
+        playerEnergy = Player.singlePlayer.GetComponent<PlayerEnergy>();
     }
 
     void Update()
