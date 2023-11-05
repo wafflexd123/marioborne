@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &178353097480695739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592179789361627502}
+  m_Layer: 0
+  m_Name: IK Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1592179789361627502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178353097480695739}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3324473732510384776}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &476110213012068789
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,11 +95,11 @@ MonoBehaviour:
   enemyHandPosition:
     coords: {x: 0, y: 0, z: 0}
     eulers: {x: 0, y: 0, z: 0}
-  IKHandTarget: {fileID: 0}
+  IKHandTarget: {fileID: 1592179789361627502}
   modelRoot: {fileID: 3324473732510384776}
   animationName: hold_sword
   equipClip:
-    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
+    audio: {fileID: 8300000, guid: e84364a750fc5a9409e74e224ccf1ac2, type: 3}
     volume: 1
     pitch: 1
     maxDistance: 10
@@ -81,7 +112,43 @@ MonoBehaviour:
       m_RotationOrder: 4
     volumeCurveTime: 0
   fireClips:
-    clips: []
+    clips:
+    - audio: {fileID: 8300000, guid: ab0b7f0cebdcdff4da0de2e8f953940b, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 4
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: b585ca5faab864f4b991dfd06ac3b4ad, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 4
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 4d3facc64e6262145b21b14c10c729ac, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 4
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
   bladeColliders:
   - {fileID: 9209792048004995976}
   hiltColliders:
@@ -91,6 +158,19 @@ MonoBehaviour:
   jumpWindUpTime: 0
   enemyAirTime: 0
   cooldownTime: 0
+  deflectClip:
+    audio: {fileID: 0}
+    volume: 1
+    pitch: 1
+    maxDistance: 40
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
 --- !u!54 &688164216268494363
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1385,6 +1465,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8552991878369475280}
+  - {fileID: 1592179789361627502}
   m_Father: {fileID: 7955406248816546796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6866704488829717043

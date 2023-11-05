@@ -221,7 +221,7 @@ MonoBehaviour:
   modelRoot: {fileID: 1879311152797145875}
   animationName: hold_sword
   equipClip:
-    audio: {fileID: 8300000, guid: de45a60b40c40f844802390265dc84f6, type: 3}
+    audio: {fileID: 8300000, guid: e84364a750fc5a9409e74e224ccf1ac2, type: 3}
     volume: 1
     pitch: 1
     maxDistance: 10
@@ -280,6 +280,19 @@ MonoBehaviour:
   jumpWindUpTime: 0
   enemyAirTime: 0
   cooldownTime: 0
+  deflectClip:
+    audio: {fileID: 0}
+    volume: 1
+    pitch: 1
+    maxDistance: 40
+    loop: 0
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
 --- !u!54 &170543770905169419
 Rigidbody:
   m_ObjectHideFlags: 0

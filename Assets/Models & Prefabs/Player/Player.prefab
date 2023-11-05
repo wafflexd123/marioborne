@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 575953091305061169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
+  m_LocalPosition: {x: 0, y: 1.640295, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4181,7 +4181,7 @@ Transform:
   m_GameObject: {fileID: 4360871117464955069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.7133317, y: 1.4406136, z: -0.05548489}
+  m_LocalPosition: {x: 0.71333313, y: 1.4406128, z: -0.055488586}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5859,6 +5859,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 8ea7b6e44512c8a4f90a84de64145e65, type: 2}
   enemyDeath: 0
   collider: {fileID: 0}
+  audioPool: {fileID: 0}
 --- !u!114 &1727486885413383923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6278,7 +6279,7 @@ Transform:
   m_GameObject: {fileID: 7210201921843458528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
+  m_LocalPosition: {x: 0, y: 1.640295, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11825,7 +11826,7 @@ Transform:
   m_GameObject: {fileID: 8405350625105107529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.5992944, z: -0.015195336}
+  m_LocalPosition: {x: 0, y: 1.5992947, z: -0.015197754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11993,6 +11994,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 17420
   reflectWindowPrefab: {fileID: 4862965222740863655, guid: 6cb7d01168cff574faa67af9bbb72494, type: 3}
+  deathSounds:
+    clips:
+    - audio: {fileID: 8300000, guid: 1ae8e43c9617bbf40abd6e588e4cb4d9, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 40
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
   hasDied: 0
   movement: {fileID: 0}
   cameraController: {fileID: 0}

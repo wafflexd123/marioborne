@@ -11,6 +11,7 @@ public class Player : Humanoid
 	public float maxInteractDistance;
 	[SerializeField] LayerMask raycastIgnore;
 	[SerializeField] public ReflectWindow reflectWindowPrefab;
+	public AudioPool.Clips deathSounds;
 
 	//Public
 	public RaycastHit raycast;
@@ -173,6 +174,7 @@ public class Player : Humanoid
 			movement.enabled = false;
 			cameraController.enabled = false;
 			input.enableInput = false;
+			deathSounds.PlayRandom(model.audioPool);
 			rewinder.AddFrameAction(() => ResetDeath());
 		}
 	}
