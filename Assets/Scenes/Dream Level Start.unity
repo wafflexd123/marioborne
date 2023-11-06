@@ -10529,20 +10529,32 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
+      propertyPath: onFull.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onFull.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 324957967}
+      objectReference: {fileID: 1057311631}
+    - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
+      propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 324957971}
+      objectReference: {fileID: 1057311631}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onFull.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
+      propertyPath: onFull.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: FadeOutThomasMusic
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -10554,15 +10566,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: Transition
+      value: LoadScene
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: playerInElevatorDoorClosedEvent.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
+      propertyPath: onFull.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ElevatorDoor, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
+      propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEventHelper, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: MusicTransition, Assembly-CSharp
+      value: UnityEventHelper, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -10571,7 +10591,7 @@ PrefabInstance:
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8300000, guid: e5c20561733e7b540a4ed7d2c21c78e7, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
       value: Tutorial
@@ -10625,8 +10645,12 @@ PrefabInstance:
       value: set_enabled
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
+      propertyPath: onFull.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: onEndRise.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.AudioClip, UnityEngine
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7119252663072885157, guid: 7c8ace9f461be7a4689c29a071bd8fe5, type: 3}
       propertyPath: playerInElevatorDoorClosedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

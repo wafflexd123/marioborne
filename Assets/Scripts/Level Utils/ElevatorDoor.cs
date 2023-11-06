@@ -70,6 +70,16 @@ public class ElevatorDoor : UnityEventHelper
 		}
 	}
 
+	public void FadeInThomasMusic()
+	{
+		GameObject.FindGameObjectWithTag("Music").GetComponent<MusicTransition>().FadeIn();
+	}
+
+	public void FadeOutThomasMusic()
+	{
+		GameObject.FindGameObjectWithTag("Music").GetComponent<MusicTransition>().FadeOut();
+	}
+
 	public void TeleportTo(Transform teleportTo)
 	{
 		transform.SetPositionAndRotation(teleportTo.position, teleportTo.rotation);
@@ -97,7 +107,7 @@ public class ElevatorDoor : UnityEventHelper
 		enableDoors = false;
 		screenshake.Shake();
 		audioAmbient.Play(audio);
-		audioMusic.Play(audio);
+		if (audioMusic.audio != null) audioMusic.Play(audio);
 		yield return new WaitForSeconds(screenshake.duration);
 		audio.StopAllAudio();
 		System.Func<bool> isPlaying = audioDing.Play(audio);
