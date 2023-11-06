@@ -10,9 +10,10 @@ public class ElevatorDoor : UnityEventHelper
 	public TriggerCollider triggerCollider;
 	public float moveTime, zMovement;
 	public bool enableDoors = true;
-	public AudioPool.Clip audioDing, audioAmbient;
+	public AudioPool.Clip audioDing, audioAmbient, audioMusic;
 	[Tooltip("When the doors are closed, if the player in inside, the elevator will 'rise' (it plays the screenshake and ambient noise). Use this to call TeleportTo() or LoadScene().")] public UnityEvent onEndRise;
 	[Tooltip("Called when the doors are closed and the elevator is empty (use this to re-open the doors if there is no exterior button)")] public UnityEvent onEmpty;
+	[Tooltip("Called when the doors are closed and the elevator has a player in it (use this to play elevator music or whatever)")] public UnityEvent onFull;
 	PositionAndScale leftOpen, leftClosed, rightOpen, rightClosed;
 	Coroutine crtLeft, crtRight, crtPlayer;
 	Screenshake screenshake;
@@ -26,7 +27,7 @@ public class ElevatorDoor : UnityEventHelper
 	{
 		screenshake = GetComponent<Screenshake>();
 		screenshake.objToShake = Player.singlePlayer.camera.transform;
-		audio = gameObject.AddComponent<AudioPool>().Initialise(1);
+		audio = gameObject.AddComponent<AudioPool>().Initialise(2);
 		if (isOpen)
 		{
 			leftOpen = new PositionAndScale(leftDoor, true);
@@ -92,9 +93,11 @@ public class ElevatorDoor : UnityEventHelper
 
 	IEnumerator PlayerInElevatorDoorClosed()
 	{
+		onFull.Invoke();
 		enableDoors = false;
 		screenshake.Shake();
 		audioAmbient.Play(audio);
+		audioMusic.Play(audio);
 		yield return new WaitForSeconds(screenshake.duration);
 		System.Func<bool> isPlaying = audioDing.Play(audio);
 		yield return new WaitWhile(isPlaying);

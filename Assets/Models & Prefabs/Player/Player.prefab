@@ -4240,8 +4240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a669cd8ca5ad6724997413449f99de3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  punchTime: 1
-  punchReloadTime: 1
+  punchTime: 0.25
+  punchReloadTime: 0.75
   punchVector: {x: 0, y: 0, z: 3}
   punchEffect: {fileID: 9073484259718000717, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
   punchClips:
@@ -4271,6 +4271,32 @@ MonoBehaviour:
         m_RotationOrder: 0
       volumeCurveTime: 0
     - audio: {fileID: 8300000, guid: 09e9a59f235b6dd43bd39f7597fed755, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 10
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+  punchHitClips:
+    clips:
+    - audio: {fileID: 8300000, guid: 8fb2d881cca816d48aa290e8a90dc0a2, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 10
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 679a82b9090cd724595122ddafdd2cac, type: 3}
       volume: 1
       pitch: 1
       maxDistance: 10

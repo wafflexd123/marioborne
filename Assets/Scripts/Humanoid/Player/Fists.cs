@@ -6,7 +6,7 @@ public class Fists : MonoBehaviourPlus
 	public float punchTime, punchReloadTime;
 	public Vector3 punchVector;
 	public GameObject punchEffect;
-	public AudioPool.Clips punchClips;
+	public AudioPool.Clips punchClips, punchHitClips;
 	Coroutine crtPunch;
 	new Collider collider;
 	PlayerEnergy playerEnergy;
@@ -17,7 +17,7 @@ public class Fists : MonoBehaviourPlus
 		collider = GetComponent<Collider>();
 		playerEnergy = Player.singlePlayer.GetComponent<PlayerEnergy>();
 		punchEffect = Instantiate(punchEffect);
-		audio = gameObject.AddComponent<AudioPool>().Initialise(punchTime + punchReloadTime, punchClips.MaxShotLength());
+		audio = gameObject.AddComponent<AudioPool>().Initialise(punchTime + punchReloadTime, punchClips.MaxShotLength() + punchHitClips.MaxShotLength());
 	}
 
 	void Update()
@@ -48,8 +48,10 @@ public class Fists : MonoBehaviourPlus
 	{
 		if (FindComponent(collider.transform, out AIController enemy))
 		{
+			punchHitClips.PlayRandom(audio);
 			enemy.Kill(DeathType.Melee);
 			playerEnergy.IncreaseEnergy(100);
+
 		}
 	}
 
