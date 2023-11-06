@@ -29,6 +29,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 	protected RigidbodyStore rigidbodyStore;
 	int layer;
 	bool canPickUp = true;
+	Action onDrop;
 	Telekinesis telekinesis;
 	Humanoid _wielder, lastWielder;
 	List<UniInput.InputAction> inputActions = new List<UniInput.InputAction>();
@@ -51,7 +52,7 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 
 	public virtual bool Pickup(Humanoid humanoid, bool forceWielderChange = false)
 	{
-		if (canPickUp && (!wielder || forceWielderChange) && humanoid.OnPickupWeapon(this))//if has been dropped for long enough, isnt being held and humanoid can pick it up
+		if (canPickUp && (!wielder || forceWielderChange) && humanoid.OnPickupWeapon(this, out onDrop))//if has been dropped for long enough, isnt being held and humanoid can pick it up
 		{
 			StopCoroutine(ref crtThrow);
 			wielder = humanoid;
@@ -69,12 +70,9 @@ public abstract class WeaponBase : MonoBehaviourPlus, ITelekinetic
 		crtThrow = StartCoroutine(E()); // Start Coroutine to gradually apply gravity
 		IEnumerator E()
 		{
-			if (wielder is Player)
-			{
-				Player.singlePlayer.IKUnequip(false);
-				SetRenderMode(false);
-			}
-			wielder.weapon = null;
+			onDrop?.Invoke();
+			onDrop = null;
+			wielder.weapon = null;//TODO: move to onDrop action in Humanoid script
 			wielder = null;
 			transform.parent = null;
 			EnableRigidbody(true);

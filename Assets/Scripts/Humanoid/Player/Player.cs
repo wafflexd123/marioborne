@@ -28,6 +28,7 @@ public class Player : Humanoid
 	Coroutine crtMoveToEnemy;
 	Transform weaponHand;
 	PlayerRewinder rewinder;
+	Fists fists;
 
 	[Header("IK")]
 	[SerializeField] private GameObject armObject;
@@ -60,6 +61,7 @@ public class Player : Humanoid
 	{
 		base.Awake();
 		if (invincibility && !Application.isEditor) invincibility = false;
+		fists = transform.Find("Punch").GetComponent<Fists>();
 		rewinder = GetComponent<PlayerRewinder>();
 		powers = transform.Find("Left Hand").GetComponent<PowerManager>();
 		weaponHand = transform.Find("Right Hand");
@@ -136,16 +138,24 @@ public class Player : Humanoid
 
 	/// <summary>Method called by a weapon when it detects the player walking over it (do not call otherwise)</summary>
 	/// <returns>True if object is picked up, sets parent of weapon</returns>
-	public override bool OnPickupWeapon(WeaponBase weapon)
+	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
 	{
 		if (!this.weapon)//if nothing in hand
 		{
+			fists.enabled = false;
 			weapon.transform.SetParent(weaponHand);
 			IKEquip(false, weapon.IKHandTarget);
 			weapon.SetRenderMode(true);
 			if (weapon.animationName != "") handAnimator.Play(weapon.animationName, 2);
+			onDrop = () =>
+			{
+				fists.enabled = true;
+				IKUnequip(false);
+				weapon.SetRenderMode(false);
+			};
 			return true;
 		}
+		onDrop = null;
 		return false;
 	}
 

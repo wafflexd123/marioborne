@@ -24,8 +24,9 @@ public class FakeHuman : Humanoid
 		Destroy(gameObject);
 	}
 
-	public override bool OnPickupWeapon(WeaponBase weapon)
+	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
 	{
+		onDrop = null;
 		return false;
 	}
 

@@ -143,8 +143,9 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 		Destroy(gameObject);
 	}
 
-	public override bool OnPickupWeapon(WeaponBase weapon)
+	public override bool OnPickupWeapon(WeaponBase weapon, out Action onDrop)
 	{
+		onDrop = null;
 		return !this.weapon;
 	}
 

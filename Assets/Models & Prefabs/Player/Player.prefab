@@ -4240,7 +4240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a669cd8ca5ad6724997413449f99de3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  punchDelay: 0
+  punchReloadTime: 0
 --- !u!1 &4466325662335684791
 GameObject:
   m_ObjectHideFlags: 0
@@ -5726,6 +5726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7441b6f700f1c084891134ed06d07d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeScaleParam: timeScale
 --- !u!114 &7873740831268508704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11863,7 +11864,6 @@ MonoBehaviour:
   hasDied: 0
   movement: {fileID: 0}
   cameraController: {fileID: 0}
-  fists: {fileID: 0}
   camera: {fileID: 0}
   powers: {fileID: 0}
   armObject: {fileID: 1378327231096007714}
@@ -13508,6 +13508,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1759533051799008920}
+  - {fileID: 8211177686904895101}
   m_Father: {fileID: 4711001672136959304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &7128536131670575118
@@ -13605,6 +13606,68 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!1001 &971460659977709159
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7283938978413156876}
+    m_Modifications:
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073484259718000717, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+      propertyPath: m_Name
+      value: Punch Effect V2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+--- !u!4 &8211177686904895101 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8973603450405818394, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+  m_PrefabInstance: {fileID: 971460659977709159}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2297298161136603507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14905,6 +14968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7441b6f700f1c084891134ed06d07d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeScaleParam: timeScale
 --- !u!4 &1443220231170050686 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 857651672195324685, guid: afed9126d0703c844b8f0cd775b88802, type: 3}

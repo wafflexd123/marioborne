@@ -1,49 +1,51 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicTransition : MonoBehaviour
+[RequireComponent(typeof(AudioSource))]
+public class MusicTransition : MonoBehaviourPlus
 {
-    private AudioSource audioSource;
-    private bool fadeOut;
-    private float time;
-    public float fadeToVolume = 0.25f;
-    public float fadeFactor;
-    [HideInInspector] public AudioClip clip;
+	public float fadeToVolume = 0.25f, fadeFactor;
+	public bool allowMultipleFades;
+	private AudioSource audioSource;
+	Coroutine crtFade;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		audioSource = GetComponent<AudioSource>();
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (fadeOut) //fade out by [fadeFactor] per second
-        {
-            if(audioSource.volume > fadeToVolume + 0.01f)
-                audioSource.volume -= fadeFactor * Time.fixedDeltaTime;
-            else
-            {
-                time = audioSource.time;
-                audioSource.clip = clip;
-                audioSource.time = time;
-                audioSource.Play();
-                fadeOut = false;
-            }
-        }
+	public void Transition(AudioClip song)
+	{
+		if (crtFade == null || allowMultipleFades) ResetRoutine(Fade(), ref crtFade);
+		IEnumerator Fade()
+		{
+			while (true)//fade out by [fadeFactor] per second
+			{
+				audioSource.volume -= fadeFactor * Time.deltaTime;
+				if (audioSource.volume <= fadeToVolume)
+				{
+					audioSource.volume = fadeToVolume;
+					break;
+				}
+				else yield return null;
+			}
 
-        if (!fadeOut) //fade in by [fadeFactor] per second
-        {
-            if (audioSource.volume < 1f)
-                audioSource.volume += fadeFactor * Time.fixedDeltaTime;
-        }
-    }
+			float time = audioSource.time;
+			audioSource.clip = song;
+			audioSource.time = time;
+			audioSource.Play();
 
-    public void Transition(AudioClip song)
-    {
-        clip = song;
-        fadeOut = true;
-    }
+			while (true)//fade in by [fadeFactor] per second
+			{
+				audioSource.volume += fadeFactor * Time.deltaTime;
+				if (audioSource.volume >= 1)
+				{
+					audioSource.volume = 1;
+					break;
+				}
+				else yield return null;
+			}
+		}
+	}
 }
