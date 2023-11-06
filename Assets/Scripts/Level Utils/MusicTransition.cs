@@ -48,4 +48,42 @@ public class MusicTransition : MonoBehaviourPlus
 			}
 		}
 	}
+
+	public void FadeOut()
+    {
+		if (crtFade == null || allowMultipleFades) ResetRoutine(Fade(), ref crtFade);
+		IEnumerator Fade()
+		{
+			while (true)//fade out by [fadeFactor] per second
+			{
+				audioSource.volume -= fadeFactor * Time.deltaTime;
+				if (audioSource.volume <= 0.01f)
+				{
+					audioSource.volume = 0f;
+					audioSource.Pause();
+					break;
+				}
+				else yield return null;
+			}
+		}
+	}
+
+	public void FadeIn()
+	{
+		if (crtFade == null || allowMultipleFades) ResetRoutine(Fade(), ref crtFade);
+		IEnumerator Fade()
+		{
+			while (true)//fade in by [fadeFactor] per second
+			{
+				audioSource.Play();
+				audioSource.volume += fadeFactor * Time.deltaTime;
+				if (audioSource.volume >= 1)
+				{
+					audioSource.volume = 1;
+					break;
+				}
+				else yield return null;
+			}
+		}
+	}
 }
