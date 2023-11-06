@@ -134,12 +134,9 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 	{
 		if (weapon) input.Press("Drop");//drop weapon if holding one
 		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
-		Vector3 pos = model.transform.position;
-		Debug.Log(pos);
-		model.transform.SetParent(transform.parent);
-		model.transform.position = pos;
-		model.dying = true;
+		model.transform.SetParent(transform.parent, true);
 		model.RandomiseAnim();
+		model.dying = true;
 		deathAudio.PlayRandom(model.audioPool);
 		if (transform.parent != null && transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
 		Destroy(gameObject);
