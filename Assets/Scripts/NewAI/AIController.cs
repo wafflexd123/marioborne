@@ -132,12 +132,14 @@ public class AIController : Humanoid, ITimeScaleListener, IRewindListener, ITele
 
 	public override void Kill(DeathType deathType = DeathType.General)
 	{
-		model.enemyDeath = true;
 		if (weapon) input.Press("Drop");//drop weapon if holding one
 		if (DeathParticlesManager.Current != null) DeathParticlesManager.Current.PlayAtLocation(transform.position);
+		Vector3 pos = model.transform.position;
+		Debug.Log(pos);
+		model.transform.SetParent(transform.parent);
+		model.transform.position = pos;
 		model.dying = true;
 		model.RandomiseAnim();
-		model.transform.SetParent(transform.parent);
 		deathAudio.PlayRandom(model.audioPool);
 		if (transform.parent != null && transform.parent.TryGetComponent(out EnemyManager e)) e.RegisterDeath();
 		Destroy(gameObject);

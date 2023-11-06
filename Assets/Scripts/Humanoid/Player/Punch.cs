@@ -29,7 +29,7 @@ public class Punch : MonoBehaviourPlus
 
 	void OnTriggerEnter(Collider collider)
 	{
-		if (FindComponent(collider.transform, out AIController enemy))
+		if (FindComponent(collider.transform, out Humanoid enemy) && enemy is not Player)
 		{
 			punchHitClips.PlayRandom(audio);
 			enemy.Kill(DeathType.Melee);

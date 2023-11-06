@@ -8,7 +8,7 @@ using UnityEngine;
 public class HumanoidAnimatorManager : MonoBehaviourPlus
 {
 	//Inspector
-	public AudioPool.Clips concreteSounds, metalSounds, jumpingSounds, landingSounds, enemyDeathSounds;
+	public AudioPool.Clips concreteSounds, metalSounds, jumpingSounds, landingSounds;
 	public float walkSpeed, runSpeed, colliderCrouchTime, crouchHeightMultiplier, footStepSoundRadius, maxAdditionalStepVolume, velocityAtMaxStepVolume;
 	public GameObject deathPosePrefab;
 	public List<Material> metals = new List<Material>();
@@ -17,7 +17,6 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	//Script
 	private float colliderHeight, colliderHeightCrouch, colliderCentreCrouch;
 	private bool _punching, _deflect, _slashing, _jumpAttack, _backflip, _shieldLayer, _sniperLayer;
-	[HideInInspector] public bool enemyDeath;
 	private Vector3 colliderCentre;
 	private Animator animator;
 	private Coroutine crtCrouch, crtPunch, crtDeflect, crtSlash, crtJumpAttack, crtBackflip;
@@ -124,12 +123,6 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 		}
 	}
 
-	private void Update()
-	{
-		if (enemyDeath)
-			PlayEnemyDeathSound();
-	}
-
 	IEnumerator Crouch(bool crouch)
 	{
 		animator.SetBool("sliding", crouch);
@@ -195,12 +188,5 @@ public class HumanoidAnimatorManager : MonoBehaviourPlus
 	public void PlayLandingSound()
 	{
 		landingSounds.PlayRandom(audioPool);
-	}
-
-	public void PlayEnemyDeathSound()
-	{
-		if (enemyDeath)
-			enemyDeathSounds.PlayRandom(audioPool);
-		enemyDeath = false;
 	}
 }
