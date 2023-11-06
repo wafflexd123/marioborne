@@ -1268,6 +1268,19 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     volumeCurveTime: 5
+  audioMusic:
+    audio: {fileID: 8300000, guid: b4d52fb5e60a66f4ab88be2814160829, type: 3}
+    volume: 1
+    pitch: 1
+    maxDistance: 10
+    loop: 1
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    volumeCurveTime: 0
   onEndRise:
     m_PersistentCalls:
       m_Calls:
@@ -1298,6 +1311,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onFull:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &909545517228589808
 MonoBehaviour:
   m_ObjectHideFlags: 0
