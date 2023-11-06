@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 575953091305061169}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
+  m_LocalPosition: {x: -0.00000024373003, y: 1.6402946, z: -0.015195338}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4181,7 +4181,7 @@ Transform:
   m_GameObject: {fileID: 4360871117464955069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000033527613, y: 0.000000028300876, z: -0.0000001043949, w: 1}
-  m_LocalPosition: {x: 0.67983145, y: 1.30084, z: -0.013322916}
+  m_LocalPosition: {x: 0.6798314, y: 1.3008399, z: -0.013322949}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4240,7 +4240,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a669cd8ca5ad6724997413449f99de3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  punchReloadTime: 0
+  punchTime: 1
+  punchReloadTime: 1
+  punchVector: {x: 0, y: 0, z: 3}
+  punchEffect: {fileID: 9073484259718000717, guid: 0ada9d439f0d7c246b941fccce8c39bb, type: 3}
+  punchClips:
+    clips:
+    - audio: {fileID: 8300000, guid: c257e4044e5c45b4bb4788f644b8ebe6, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 10
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 6adedddfed5958d43bddd565958899be, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 10
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
+    - audio: {fileID: 8300000, guid: 09e9a59f235b6dd43bd39f7597fed755, type: 3}
+      volume: 1
+      pitch: 1
+      maxDistance: 10
+      loop: 0
+      volumeCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      volumeCurveTime: 0
 --- !u!1 &4466325662335684791
 GameObject:
   m_ObjectHideFlags: 0
@@ -6134,7 +6175,7 @@ Transform:
   m_GameObject: {fileID: 7210201921843458528}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.6402944, z: -0.015195336}
+  m_LocalPosition: {x: -0.00000024373003, y: 1.6402946, z: -0.015195338}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11681,7 +11722,7 @@ Transform:
   m_GameObject: {fileID: 8405350625105107529}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00000024443796, y: 1.5992944, z: -0.015195336}
+  m_LocalPosition: {x: -0.00000024373003, y: 1.5992944, z: -0.015195337}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
