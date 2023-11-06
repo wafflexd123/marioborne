@@ -50,6 +50,14 @@ public class AudioPool : MonoBehaviourPlus, ITimeScaleListener, IRewindListener
 		return a;
 	}
 
+	public void StopAllAudio()
+	{
+		foreach (AudioPlayer item in audioPlayers)
+		{
+			item.source.Stop();
+		}
+	}
+
 	AudioPlayer NextAudioPlayer()
 	{
 		AudioPlayer source = audioPlayers[pos];

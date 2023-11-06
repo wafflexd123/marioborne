@@ -99,6 +99,7 @@ public class ElevatorDoor : UnityEventHelper
 		audioAmbient.Play(audio);
 		audioMusic.Play(audio);
 		yield return new WaitForSeconds(screenshake.duration);
+		audio.StopAllAudio();
 		System.Func<bool> isPlaying = audioDing.Play(audio);
 		yield return new WaitWhile(isPlaying);
 		enableDoors = true;
